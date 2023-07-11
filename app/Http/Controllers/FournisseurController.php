@@ -26,13 +26,13 @@ class FournisseurController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Formulaire de création de forunisseur
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        
     }
 
     /**

@@ -21,9 +21,13 @@ class CreateIndividusTable extends Migration
             $table->string("contact1")->nullable();
             $table->string("contact2")->nullable();
             $table->string("adresse")->nullable();
+            $table->string("complement_adresse")->nullable();
             $table->string("code_postal")->nullable();
             $table->string("ville")->nullable();        
+            $table->string("profession")->nullable();        
+            $table->date("date_naissance")->nullable();        
             $table->integer("contact_id");
+            $table->boolean("archive")->default(false);            
             $table->timestamps();
         });
     }

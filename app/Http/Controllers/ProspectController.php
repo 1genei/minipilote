@@ -9,6 +9,10 @@ use App\Models\Individu;
 use App\Models\Entite;
 use App\Models\Client;
 use App\Models\Fournisseur;
+use Auth;
+use DB;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class ProspectController extends Controller
 {
@@ -19,21 +23,59 @@ class ProspectController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
         
-        $contactentites = Contact::where([["type","entite"], ['est_prospect', true], ['archive', false]])->get();
-        $contactindividus = Contact::where([["type","individu"], ['est_prospect', true], ['archive', false]])->get();
+        
+
+            
+      
+        
+        if ($user->is_admin){
+           
+           // On réccupère tous les contacts
+            $contactentites = Contact::whereHas('typecontacts', function( Builder $query){            
+                $query->where('type', 'Prospect');
+            })
+            ->where([["type","entite"],  ['archive', false]])
+            ->get();
+            
+            $contactindividus = Contact::whereHas('typecontacts', function( Builder $query){            
+                $query->where('type', 'Prospect');
+            })
+            ->where([["type","individu"],  ['archive', false]])
+            ->get();
+           
+        }else{
+        //   On réccupère uniquement les contacts de l'utilisateur connecté
+            $contactentites = Contact::whereHas('typecontacts', function( Builder $query){            
+                $query->where('type', 'Prospect');
+            })
+            ->where([["type","entite"],  ['archive', false], ["user_id", $user->id]])
+            ->get();
+            
+            $contactindividus = Contact::whereHas('typecontacts', function( Builder $query){            
+                $query->where('type', 'Prospect');
+            })
+            ->where([["type","individu"],  ['archive', false], ["user_id", $user->id]])
+            ->get();
+        }
+        
+       
 
         return view('prospect.index', compact('contactentites', 'contactindividus'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Formulaire de création de prospect
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+    
+        // if(Auth::user()->role())
+        $contacts = Contact::where('user_id', Auth::id())->get();        
+        return view('prospect.add', compact('contacts'));
     }
 
     /**
@@ -54,19 +96,12 @@ class ProspectController extends Controller
         
         $contact = Contact::create([
             "type"=> $request->type,
-            "est_prospect"=> true,
            
         ]);
     
-        Client::create([
-            "contact_id"=> $contact->id,
-            "numero"=> $request->numero,            
-            "est_prospect"=> true  ,          
-            "est_demarrage_prospect"=> true  ,          
-            "date_passage_client"=> date("Y-m-d")  ,          
-        ]);     
+   
                   
-        if($request->type =="individu"){
+        if($request->type == "individu"){
             
             Individu::create([
                 "email" => $request->email,
@@ -82,6 +117,7 @@ class ProspectController extends Controller
             ]);
             
         }else{
+        
             Entite::create([
                 "type" => $request->type_entite,
                 "email" => $request->email,

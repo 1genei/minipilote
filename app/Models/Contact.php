@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use \Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Contact extends Model
 {
@@ -30,6 +31,15 @@ class Contact extends Model
         return $this->hasOne(Entite::class);
     }
     
+    /**
+     * The typecontacts that belong to the Contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function typecontacts(): BelongsToMany
+    {
+        return $this->belongsToMany(Typecontact::class,);
+    }
 
     /**
      * Retourne les infos du contact

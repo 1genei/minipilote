@@ -26,6 +26,7 @@ class CreateAgendasTable extends Migration
             $table->boolean('est_lie')->default(false);
             $table->integer('contact_id')->nullable();
             $table->boolean('est_terminee')->default(false);
+            $table->boolean("archive")->default(false);            
             $table->timestamps();
         });
     }
