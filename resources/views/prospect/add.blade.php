@@ -73,132 +73,538 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-12 col-xl-9">
-                                <div class="card">
-                                    <div class="card-body">
-
-                                        <div class="row">
-                                            <div class="col-xl-6">
-                                                <div class="mb-3">
-                                                    <label for="projectname" class="form-label">Name</label>
-                                                    <input type="text" id="projectname" class="form-control"
-                                                        placeholder="Enter project name">
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label for="project-overview" class="form-label">Overview</label>
-                                                    <textarea class="form-control" id="project-overview" rows="5" placeholder="Enter some brief about project.."></textarea>
-                                                </div>
-
-                                                <!-- Date View -->
-                                                <div class="mb-3 position-relative" id="datepicker1">
-                                                    <label class="form-label">Start Date</label>
-                                                    <input type="text" class="form-control" data-provide="datepicker"
-                                                        data-date-container="#datepicker1" data-date-format="d-M-yyyy"
-                                                        data-date-autoclose="true">
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label for="project-budget" class="form-label">Budget</label>
-                                                    <input type="text" id="project-budget" class="form-control"
-                                                        placeholder="Enter project budget">
-                                                </div>
-
-                                                <div class="mb-0">
-                                                    <label for="project-overview" class="form-label">Team Members</label>
-
-                                                    <select class="form-control select2" data-toggle="select2">
-                                                        <option>Select</option>
-                                                        <option value="AZ">Mary Scott</option>
-                                                        <option value="CO">Holly Campbell</option>
-                                                        <option value="ID">Beatrice Mills</option>
-                                                        <option value="MT">Melinda Gills</option>
-                                                        <option value="NE">Linda Garza</option>
-                                                        <option value="NM">Randy Ortez</option>
-                                                        <option value="ND">Lorene Block</option>
-                                                        <option value="UT">Mike Baker</option>
-                                                    </select>
+                        <form action="{{ route('prospect.store') }}" method="post">
+                            @csrf
 
 
+                            <div class="row">
+                                <div class="col-9 mb-3" style="background:#7e7b7b; color:white!important; padding:10px ">
+                                    <strong>Informations principales
+                                </div>
+                                <div class="col-md-12 col-lg-9">
+                                    <div class="card">
+                                        <div class="card-body">
 
-                                                </div>
+                                            <div class="row mb-3">
 
-                                            </div> <!-- end col-->
+                                                <div class="col-sm-3">
 
-                                            <div class="col-xl-6">
-                                                <div class="mb-3 mt-3 mt-xl-0">
-                                                    <label for="projectname" class="mb-0">Avatar</label>
-                                                    <p class="text-muted font-14">Recommended thumbnail size 800x400 (px).
-                                                    </p>
-
-                                                    <form action="/" method="post" class="dropzone"
-                                                        id="myAwesomeDropzone" data-plugin="dropzone"
-                                                        data-previews-container="#file-previews"
-                                                        data-upload-preview-template="#uploadPreviewTemplate">
-                                                        <div class="fallback">
-                                                            <input name="file" type="file" />
-                                                        </div>
-
-                                                        <div class="dz-message needsclick">
-                                                            <i class="h3 text-muted dripicons-cloud-upload"></i>
-                                                            <h4>Drop files here or click to upload.</h4>
-                                                        </div>
-                                                    </form>
-
-                                                    <!-- Preview -->
-                                                    <div class="dropzone-previews mt-3" id="file-previews"></div>
-
-                                                    <!-- file preview template -->
-                                                    <div class="d-none" id="uploadPreviewTemplate">
-                                                        <div class="card mt-1 mb-0 shadow-none border">
-                                                            <div class="p-2">
-                                                                <div class="row align-items-center">
-                                                                    <div class="col-auto">
-                                                                        <img data-dz-thumbnail src="#"
-                                                                            class="avatar-sm rounded bg-light"
-                                                                            alt="">
-                                                                    </div>
-                                                                    <div class="col ps-0">
-                                                                        <a href="javascript:void(0);"
-                                                                            class="text-muted fw-bold" data-dz-name></a>
-                                                                        <p class="mb-0" data-dz-size></p>
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <!-- Button -->
-                                                                        <a href=""
-                                                                            class="btn btn-link btn-lg text-muted"
-                                                                            data-dz-remove>
-                                                                            <i class="dripicons-cross"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="radio" id="nature1" name="nature" checked
+                                                            value="Personne morale" required class="form-check-input">
+                                                        <label class="form-check-label" for="nature1">
+                                                            Personne morale
+                                                        </label>
+                                                        @if ($errors->has('nature'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('nature') }}</strong>
                                                             </div>
-                                                        </div>
+                                                        @endif
                                                     </div>
-                                                    <!-- end file preview template -->
+
+                                                </div>
+                                                <div class="col-sm-3">
+
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="radio" id="nature2" name="nature"
+                                                            value="Personne physique" required class="form-check-input">
+                                                        <label class="form-check-label" for="nature2">
+                                                            Personne physique
+                                                        </label>
+                                                        @if ($errors->has('nature'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('nature') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-sm-3">
+
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="radio" id="nature3" name="nature" value="Couple"
+                                                            required class="form-check-input">
+                                                        <label class="form-check-label" for="nature3">
+                                                            Couple
+                                                        </label>
+                                                        @if ($errors->has('nature'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('nature') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="radio" id="nature4" name="nature"
+                                                            value="Groupe" required class="form-check-input">
+                                                        <label class="form-check-label" for="nature4">
+                                                            Groupe
+                                                        </label>
+                                                        @if ($errors->has('nature'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('nature') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
                                                 </div>
 
-                                                <!-- Date View -->
-                                                <div class="mb-3 position-relative" id="datepicker2">
-                                                    <label class="form-label">Due Date</label>
-                                                    <input type="text" class="form-control" data-provide="datepicker"
-                                                        data-date-container="#datepicker2" data-date-format="d-M-yyyy"
-                                                        data-date-autoclose="true">
+
+                                            </div>
+
+
+
+
+
+                                            <div class="row">
+
+
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3 div_personne_morale">
+                                                        <label for="raison_sociale" class="form-label">
+                                                            Raison sociale
+                                                        </label>
+                                                        <input type="text" id="raison_sociale" name="raison_sociale"
+                                                            value="{{ old('raison_sociale') ? old('raison_sociale') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('raison_sociale'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('raison_sociale') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="mb-3 div_personne_physique">
+                                                        <label for="nom" class="form-label">
+                                                            Nom
+                                                        </label>
+                                                        <input type="text" id="nom" name="nom"
+                                                            value="{{ old('nom') ? old('nom') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('nom'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('nom') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+
+
+
+                                                    <div class="mb-3">
+                                                        <label for="email" class="form-label">
+                                                            Email
+                                                        </label>
+                                                        <input type="email" id="email" name="email"
+                                                            value="{{ old('email') ? old('email') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('email'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('email') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="contact1" class="form-label">
+                                                            Téléphone Fixe
+                                                        </label>
+                                                        <input type="text" id="contact1" name="contact1"
+                                                            value="{{ old('contact1') ? old('contact1') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('contact1'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('contact1') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="contact2" class="form-label">
+                                                            Téléphone Mobile
+                                                        </label>
+                                                        <input type="text" id="contact2" name="contact2"
+                                                            value="{{ old('contact2') ? old('contact2') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('contact2'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('contact2') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+
+
                                                 </div>
-                                            </div> <!-- end col-->
-                                        </div>
-                                        <!-- end row -->
-
-                                    </div> <!-- end card-body -->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                        </div>
-                        <!-- end row-->
 
 
 
+                                                <div class="col-sm-6">
 
+
+
+                                                    <div class="mb-3 div_personne_morale">
+                                                        <label for="forme_juridique" class="form-label">
+                                                            Forme juridique
+                                                        </label>
+
+                                                        <select class="form-select select2" id="forme_juridique"
+                                                            name="forme_juridique">
+                                                            <option value="{{ old('forme_juridique') }}">
+                                                                {{ old('forme_juridique') }}</option>
+
+                                                            <option value="">Non défini</option>
+                                                            <option value="EURL">
+                                                                EURL - Entreprise unipersonnelle à responsabilité limitée
+                                                            </option>
+                                                            <option value="EI">EI - Entreprise individuelle</option>
+                                                            <option value="SARL">SARL - Société à responsabilité limitée
+                                                            </option>
+                                                            <option value="SA">SA - Société anonyme</option>
+                                                            <option value="SAS">SAS - Société par actions simplifiée
+                                                            </option>
+                                                            <option value="SCI">SCI - Société civile immobilière
+                                                            </option>
+                                                            <option value="SNC">SNC - Société en nom collectif</option>
+                                                            <option value="EARL">
+                                                                EARL - Entreprise agricole à responsabilité limitée
+                                                            </option>
+                                                            <option value="EIRL">
+                                                                EIRL - Entreprise individuelle à responsabilité limitée
+                                                            </option>
+                                                            <option value="GAEC">GAEC - Groupement agricole
+                                                                d'exploitation en
+                                                                commun</option>
+                                                            <option value="GEIE">GEIE - Groupement européen d'intérêt
+                                                                économique</option>
+                                                            <option value="GIE">GIE - Groupement d'intérêt économique
+                                                            </option>
+                                                            <option value="SASU">SASU - Société par actions simplifiée
+                                                                unipersonnelle</option>
+                                                            <option value="SC">SC - Société civile</option>
+                                                            <option value="SCA">
+                                                                SCA - Société en commandite par actions
+                                                            </option>
+                                                            <option value="SCIC">
+                                                                SCIC - Société coopérative d'intérêt collectif
+                                                            </option>
+                                                            <option value="SCM">SCM - Société civile de moyens</option>
+                                                            <option value="SCOP">
+                                                                SCOP - Société coopérative ouvrière de production
+                                                            </option>
+                                                            <option value="SCP">SCP - Société civile professionnelle
+                                                            </option>
+                                                            <option value="SCS">SCS - Société en commandite simple
+                                                            </option>
+                                                            <option value="SEL">SEL - Société d'exercice libéral
+                                                            </option>
+                                                            <option value="SELAFA">
+                                                                SELAFA - Société d'exercice libéral à forme anonyme
+                                                            </option>
+                                                            <option value="SELARL">
+                                                                SELARL - Société d'exercice libéral à responsabilité limitée
+                                                            </option>
+                                                            <option value="SELAS">
+                                                                SELAS - Société d'exercice libéral par actions simplifiée
+                                                            </option>
+                                                            <option value="SELCA">
+                                                                SELCA - Société d'exercice libéral en commandite par actions
+                                                            </option>
+                                                            <option value="SEM">SEM - Société d'économie mixte</option>
+                                                            <option value="SEML">
+                                                                SEML - Société d'économie mixte locale
+                                                            </option>
+                                                            <option value="SEP">SEP - Société en participation</option>
+                                                            <option value="SICA">SICA - Société d'intérêt collectif
+                                                                agricole
+                                                            </option>
+
+                                                        </select>
+
+                                                        @if ($errors->has('type'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('type') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="mb-3 div_personne_physique">
+                                                        <label for="prenom" class="form-label">
+                                                            Prénom(s)
+                                                        </label>
+                                                        <input type="text" id="prenom" name="prenom"
+                                                            value="{{ old('prenom') ? old('prenom') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('prenom'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('prenom') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+
+                                                    <div class="mb-3 div_personne_morale">
+                                                        <label for="numero_siret" class="form-label">
+                                                            Numéro siret
+                                                        </label>
+                                                        <input type="text" id="numero_siret" name="numero_siret"
+                                                            value="{{ old('numero_siret') ? old('numero_siret') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('numero_siret'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('numero_siret') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="mb-3 div_personne_morale">
+                                                        <label for="numero_tva" class="form-label">
+                                                            Numéro TVA
+                                                        </label>
+                                                        <input type="text" id="numero_tva" name="numero_tva"
+                                                            value="{{ old('numero_tva') ? old('numero_tva') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('numero_tva'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('numero_tva') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mb-3"
+                                                    style="background:#7e7b7b; color:white!important; padding:10px ">
+                                                    <strong>Informations Complémentaires
+                                                </div>
+
+                                                <div class="col-6">
+
+
+
+                                                    <div class="mb-3">
+                                                        <label for="adresse" class="form-label">
+                                                            Adresse
+                                                        </label>
+                                                        <input type="text" id="adresse" name="adresse"
+                                                            value="{{ old('adresse') ? old('adresse') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('adresse'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('adresse') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="code_postal" class="form-label">
+                                                            Code Postal
+                                                        </label>
+                                                        <input type="text" id="code_postal" name="code_postal"
+                                                            value="{{ old('code_postal') ? old('code_postal') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('code_postal'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('code_postal') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                </div>
+
+
+
+                                                <div class="col-6">
+
+
+
+
+                                                    <div class="mb-3">
+                                                        <label for="pays" class="form-label">
+                                                            Pays
+                                                        </label>
+                                                        <input type="text" id="pays" name="pays"
+                                                            value="{{ old('pays') ? old('pays') : 'France' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('pays'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('pays') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+
+
+                                                    <div class="mb-3">
+                                                        <label for="complement_adresse" class="form-label">
+                                                            Complément d'adresse
+                                                        </label>
+                                                        <input type="text" id="complement_adresse"
+                                                            name="complement_adresse"
+                                                            value="{{ old('complement_adresse') ? old('complement_adresse') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('complement_adresse'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('complement_adresse') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="ville" class="form-label">
+                                                            Ville
+                                                        </label>
+                                                        <input type="text" id="ville" name="ville"
+                                                            value="{{ old('ville') ? old('ville') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('ville'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('ville') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="notes" class="form-label">Notes</label>
+                                                        <textarea name="notes" class="form-control" id="notes" rows="5" placeholder="..">{{ old('notes') ? old('notes') : '' }}</textarea>
+                                                        @if ($errors->has('notes'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('notes') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <div class="row div_associer" style="margin-top:30px;">
+                                                <div class="col-12 mb-3"
+                                                    style="background:#7e7b7b; color:white!important; padding:10px ">
+                                                    <strong>Associer d'autres contacts
+                                                    </strong>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mt-3">
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Fermer</button>
+                                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+
+                                                </div>
+                                            </div>
+                                            <!-- end row -->
+
+                                        </div> <!-- end card-body -->
+                                    </div> <!-- end card-->
+                                </div> <!-- end col-->
+                            </div>
+                            <!-- end row-->
+
+
+
+                        </form>
+
+                        <style>
+                            .select2-container .select2-selection--single {
+                                height: calc(1.69em + 0.9rem + 2px);
+                            }
+                        </style>
 
 
 
@@ -208,458 +614,8 @@
         </div>
         <!-- end row -->
 
-        {{-- Ajout d'un rôle --}}
-        <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="standard-modalLabel">Ajouter un prospect</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <form action="{{ route('prospect.store') }}" method="post">
-                        <div class="modal-body">
-
-                            @csrf
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <select name="type" id="type" class="form-select">
-                                            <option value="individu">individu</option>
-                                            <option value="entité">entité</option>
-                                        </select>
-                                        <label for="floatingInput">Type</label>
-                                        @if ($errors->has('type'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('type') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                </div>
-
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="email" name="email"
-                                            value="{{ old('email') ? old('email') : '' }}" class="form-control"
-                                            id="floatingInput" required>
-                                        <label for="floatingInput">Email</label>
-                                        @if ($errors->has('email'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('email') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-
-                            <hr><br>
-
-                            <div class="row">
-
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" name="nom" value="{{ old('nom') ? old('nom') : '' }}"
-                                            class="form-control" id="floatingInput" required>
-                                        <label for="floatingInput">Nom</label>
-                                        @if ($errors->has('nom'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('nom') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-6 div-individu">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" name="prenom"
-                                            value="{{ old('prenom') ? old('prenom') : '' }}" class="form-control"
-                                            id="floatingInput">
-                                        <label for="floatingInput">Prénom(s)</label>
-                                        @if ($errors->has('prenom'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('prenom') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-6 div-entite">
-                                    <div class="form-floating mb-3">
-                                        <select name="type_entite" id="type_entite" class="form-select">
-                                            <option value="entreprise">entreprise</option>
-                                            <option value="CE">CE</option>
-                                            <option value="association">association</option>
-                                            <option value="groupe">groupe</option>
-                                            <option value="autre">autre</option>
-                                        </select>
-                                        <label for="floatingInput">Type d'entité</label>
-                                        @if ($errors->has('type_entite'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('type_entite') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                </div>
-
-                            </div>
 
 
-                            <div class="row">
-
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="contact1"
-                                            value="{{ old('contact1') ? old('contact1') : '' }}" class="form-control"
-                                            id="floatingInput">
-                                        <label for="floatingInput">Téléphone1</label>
-                                        @if ($errors->has('contact1'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('contact1') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="contact2"
-                                            value="{{ old('contact2') ? old('contact2') : '' }}" class="form-control"
-                                            id="floatingInput">
-                                        <label for="floatingInput">Téléphone2</label>
-                                        @if ($errors->has('contact2'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('contact2') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <br>
-                            <hr><br>
-
-                            <div class="row">
-
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="adresse"
-                                            value="{{ old('adresse') ? old('adresse') : '' }}" class="form-control"
-                                            id="floatingInput">
-                                        <label for="floatingInput">Adresse</label>
-                                        @if ($errors->has('adresse'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('adresse') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="code_postal"
-                                            value="{{ old('code_postal') ? old('code_postal') : '' }}"
-                                            class="form-control" id="floatingInput">
-                                        <label for="floatingInput">Code postal</label>
-                                        @if ($errors->has('code_postal'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('code_postal') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="ville"
-                                            value="{{ old('ville') ? old('ville') : '' }}" class="form-control"
-                                            id="floatingInput">
-                                        <label for="floatingInput">Ville</label>
-                                        @if ($errors->has('ville'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('ville') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-
-                        </div>
-                    </form>
-
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
-
-        {{-- Modification d'un rôle --}}
-        <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="standard-modalLabel">Modifier le prospect</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <form action="" method="post" id="form-edit">
-                        <div class="modal-body">
-
-                            @csrf
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <select name="type" id="edit-type" class="form-select">
-                                            <option value="individu">individu</option>
-                                            <option value="entité">entité</option>
-                                        </select>
-                                        <label for="floatingInput">Type</label>
-                                        @if ($errors->has('type'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('type') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                </div>
-
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="email" name="email"
-                                            value="{{ old('email') ? old('email') : '' }}" class="form-control"
-                                            id="edit-email" required>
-                                        <label for="floatingInput">Email</label>
-                                        @if ($errors->has('email'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('email') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-
-                            <hr><br>
-
-                            <div class="row">
-
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" name="nom" value="{{ old('nom') ? old('nom') : '' }}"
-                                            class="form-control" id="edit-nom" required>
-                                        <label for="floatingInput">Nom</label>
-                                        @if ($errors->has('nom'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('nom') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-6 div-edit-individu">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" name="prenom"
-                                            value="{{ old('prenom') ? old('prenom') : '' }}" class="form-control"
-                                            id="edit-prenom">
-                                        <label for="floatingInput">Prénom(s)</label>
-                                        @if ($errors->has('prenom'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('prenom') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-6 div-edit-entite">
-                                    <div class="form-floating mb-3">
-                                        <select name="type_entite" id="edit-type_entite" class="form-select">
-                                            <option value="entreprise">entreprise</option>
-                                            <option value="CE">CE</option>
-                                            <option value="association">association</option>
-                                            <option value="groupe">groupe</option>
-                                            <option value="autre">autre</option>
-                                        </select>
-                                        <label for="floatingInput">Type d'entité</label>
-                                        @if ($errors->has('type_entite'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('type_entite') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="row">
-
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="contact1"
-                                            value="{{ old('contact1') ? old('contact1') : '' }}" class="form-control"
-                                            id="edit-contact1">
-                                        <label for="floatingInput">Téléphone1</label>
-                                        @if ($errors->has('contact1'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('contact1') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="contact2"
-                                            value="{{ old('contact2') ? old('contact2') : '' }}" class="form-control"
-                                            id="edit-contact2">
-                                        <label for="floatingInput">Téléphone2</label>
-                                        @if ($errors->has('contact2'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('contact2') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <br>
-                            <hr><br>
-
-                            <div class="row">
-
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="adresse"
-                                            value="{{ old('adresse') ? old('adresse') : '' }}" class="form-control"
-                                            id="edit-adresse">
-                                        <label for="floatingInput">Adresse</label>
-                                        @if ($errors->has('adresse'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('adresse') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="code_postal"
-                                            value="{{ old('code_postal') ? old('code_postal') : '' }}"
-                                            class="form-control" id="edit-code_postal">
-                                        <label for="floatingInput">Code postal</label>
-                                        @if ($errors->has('code_postal'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('code_postal') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" name="ville"
-                                            value="{{ old('ville') ? old('ville') : '' }}" class="form-control"
-                                            id="edit-ville">
-                                        <label for="floatingInput">Ville</label>
-                                        @if ($errors->has('ville'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('ville') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
-                            <button type="submit" class="btn btn-success">Modifier</button>
-
-                        </div>
-                    </form>
-
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
 
 
     </div> <!-- End Content -->
@@ -687,280 +643,241 @@
     {{-- selection du type de prospect --}}
 
     <script>
-        $('.div-entite').hide();
+        $(document).ready(function() {
 
-        $('#type').change(function(e) {
-
-            if (e.currentTarget.value == "entité") {
-                $('.div-entite').show();
-                $('.div-individu').hide();
-
-            } else {
-                $('.div-entite').hide();
-                $('.div-individu').show();
-            }
-
-        });
-    </script>
+            $(".div_personne_morale").show();
+            $(".div_personne_physique").hide();
+            $(".div_couple").hide();
+            $(".div_groupe").hide();
 
 
-    {{-- Modification d'un prospect --}}
-    <script>
-        $('.edit-contact').click(function(e) {
-
-            let that = $(this);
-
-            $('#edit-nom').val(that.data('nom'));
-            $('#edit-prenom').val(that.data('prenom'));
-
-
-            $('#edit-email').val(that.data('email'));
-            $('#edit-contact1').val(that.data('contact1'));
-            $('#edit-contact2').val(that.data('contact2'));
-            $('#edit-adresse').val(that.data('adresse'));
-            $('#edit-code_postal').val(that.data('code-postal'));
-            $('#edit-ville').val(that.data('ville'));
-
-
-            let currentFormAction = that.data('href');
-            $('#form-edit').attr('action', currentFormAction);
+            $(".div_associer_contact").show();
 
 
 
+            $("input[type='radio']").click(function(e) {
 
-            //    selection du type de prospect
+                let nature = e.currentTarget.value;
+
+                if (nature == "Personne morale") {
+
+                    $("input[type='text']").removeAttr("required");
+                    $("select").removeAttr("required");
+                    $("#type").val("entité");
+
+                    $(".div_personne_physique").hide();
+                    $(".div_personne_morale").show();
+                    $(".div_couple").hide();
+                    $(".div_groupe").hide();
+                    $(".div_personne_tout").show();
+                    $(".div_associer_contact").show();
+
+                    $("#forme_juridique").attr("required", "required");
+                    $("#raison_sociale").attr("required", "required");
+                    $("#email").attr("required", "required");
+
+                } else if (nature == "Personne physique") {
+                    $("input[type='text']").removeAttr("required");
+                    $("select").removeAttr("required");
+
+                    $(".div_personne_physique").show();
+                    $(".div_personne_morale").hide();
+                    $(".div_couple").hide();
+                    $(".div_groupe").hide();
+                    $(".div_personne_tout").show();
+
+                    $("#civilite").attr("required", "required");
+                    $("#nom").attr("required", "required");
+                    $("#prenom").attr("required", "required");
+                    $("#email").attr("required", "required");
+
+                    $("#type").val("individu");
+                    $(".div_associer_contact").hide();
 
 
-            let currentType = that.data('type-contact');
-            let currentTypeentite = that.data('typeentite');
 
-            console.log(currentType);
+                } else if (nature == "Couple") {
+                    $("input[type='text']").removeAttr("required");
+                    $("select").removeAttr("required");
 
-            $('#edit-type option[value=' + currentType + ']').attr('selected', 'selected');
+                    $(".div_personne_physique").hide();
+                    $(".div_personne_morale").hide();
+                    $(".div_couple").show();
+                    $(".div_groupe").hide();
+                    $(".div_personne_tout").hide();
 
+                    $("#civilite1").attr("required", "required");
+                    $("#nom1").attr("required", "required");
+                    $("#prenom1").attr("required", "required");
+                    $("#email1").attr("required", "required");
 
-            if (currentType == "entité") {
-                $('.div-edit-entite').show();
-                $('.div-edit-individu').hide();
+                    $("#civilite2").attr("required", "required");
+                    $("#nom2").attr("required", "required");
+                    $("#prenom2").attr("required", "required");
+                    $("#email2").attr("required", "required");
 
-            } else {
-                $('.div-edit-entite').hide();
-                $('.div-edit-individu').show();
-                console.log("yesss");
-            }
+                    $("#type").val("individu");
+                    $(".div_associer_contact").hide();
 
-            $('#edit-type').change(function(e) {
+                } else if (nature == "Groupe") {
+                    $("input[type='text']").removeAttr("required");
+                    $("select").removeAttr("required");
 
-                if (e.currentTarget.value == "entité") {
-                    $('.div-edit-entite').show();
-                    $('.div-edit-individu').hide();
+                    $(".div_personne_physique").hide();
+                    $(".div_personne_morale").hide();
+                    $(".div_couple").hide();
+                    $(".div_personne_tout").show();
+                    $(".div_groupe").show();
 
-                } else {
-                    $('.div-edit-entite').hide();
-                    $('.div-edit-individu').show();
+                    $(".div_associer_contact").show();
+
+                    $("#nom_groupe").attr("required", "required");
+                    $("#email").attr("required", "required");
+                    $("#type").val("entité");
+
                 }
 
             });
 
 
-            $('#edit-type_entite option[value=' + currentTypeentite + ']').attr('selected', 'selected');
+        });
+    </script>
 
 
 
-        })
+    <script>
+        function autocomplete(inp, arr) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            var currentFocus;
+            /*execute a function when someone writes in the text field:*/
+            inp.addEventListener("input", function(e) {
+                var a, b, i, val = this.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) {
+                    return false;
+                }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function(e) {
+                            /*insert the value for the autocomplete text field:*/
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            (or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function(e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
 
-
-
-        // selection des statuts du prospect  Modal modifier
-        $('#edit-client').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-prospect').prop('checked', false);
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
             }
 
-        });
-
-        $('#edit-prospect').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-client').prop('checked', false);
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
             }
 
-        });
-    </script>
-
-
-    <script>
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            })
-            $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive-role', function(event) {
-                let that = $(this)
-                event.preventDefault();
-
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
-
-                swalWithBootstrapButtons.fire({
-                    title: 'Archiver',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        $('[data-toggle="tooltip"]').tooltip('hide')
-                        $.ajax({
-                                url: that.attr('data-href'),
-                                type: 'PUT',
-                                success: function(data) {
-                                    // document.location.reload();
-                                },
-                                error: function(data) {
-                                    console.log(data);
-                                }
-                            })
-                            .done(function() {
-
-                                swalWithBootstrapButtons.fire(
-                                    'Archivé',
-                                    '',
-                                    'success'
-                                )
-                                document.location.reload();
-
-                                // that.parents('tr').remove();
-                            })
-
-
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulé',
-                            'Rôle non archivé :)',
-                            'error'
-                        )
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
                     }
-                });
-            })
-
-        });
-    </script>
-
-    <script>
-        // Désarchiver
-
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-            })
-            $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.unarchive-role', function(event) {
-                let that = $(this)
-                event.preventDefault();
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function(e) {
+                closeAllLists(e.target);
+            });
+        }
 
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
+        /*An array containing all the country names in the world:*/
+        // var countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
 
-                swalWithBootstrapButtons.fire({
-                    title: 'Désarchiver',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        $('[data-toggle="tooltip"]').tooltip('hide')
-                        $.ajax({
-                                url: that.attr('data-href'),
-                                // url:"/role/desarchiver/2",
-
-                                type: 'POST',
-                                success: function(data) {
-
-                                    // document.location.reload();
-                                },
-                                error: function(data) {
-                                    console.log(data);
-                                }
-                            })
-                            .done(function() {
-
-                                swalWithBootstrapButtons.fire(
-                                    'Désarchivé',
-                                    '',
-                                    'success'
-                                )
-                                document.location.reload();
-                            })
-
-
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulé',
-                            'Rôle non désarchivé :)',
-                            'error'
-                        )
-                    }
-                });
-            })
-
-        });
-    </script>
-
-
-    <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/responsive.bootstrap5.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            "use strict";
-            $("#tab1").
-            DataTable({
-                language: {
-                    paginate: {
-                        previous: "<i class='mdi mdi-chevron-left'>",
-                        next: "<i class='mdi mdi-chevron-right'>"
-                    },
-                    info: "Showing actions _START_ to _END_ of _TOTAL_",
-                    lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
-                },
-                pageLength: 100,
-
-                select: {
-                    style: "multi"
-                },
-                drawCallback: function() {
-                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                        document.querySelector(".dataTables_wrapper .row").querySelectorAll(".col-md-6")
-                        .forEach(function(e) {
-                            e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
-                                .classList.remove("col-md-6")
-                        })
-                }
-            })
-        });
+        var countries = ["Afghanistan", "Afrique du Sud", "Albanie", "Algérie", "Allemagne", "Andorre", "Angola",
+            "Anguilla", "Arabie Saoudite", "Argentine", "Arménie", "Australie", "Autriche", "Azerbaidjan", "Bahamas",
+            "Bangladesh", "Barbade", "Bahrein", "Belgique", "Bélize", "Bénin", "Biélorussie", "Bolivie", "Botswana",
+            "Bhoutan", "Boznie-Herzégovine", "Brésil", "Brunei", "Bulgarie", "Burkina Faso", "Burundi", "Cambodge",
+            "Cameroun", "Canada", "Cap-Vert", "Chili", "Chine", "Chypre", "Colombie", "Comores", "République du Congo",
+            "République Démocratique du Congo", "Corée du Nord", "Corée du Sud", "Costa Rica", "Côte d’Ivoire",
+            "Croatie", "Cuba", "Danemark", "Djibouti", "Dominique", "Egypte", "Emirats Arabes Unis", "Equateur",
+            "Erythrée", "Espagne", "Estonie", "Etats-Unis d’Amérique", "Ethiopie", "Fidji", "Finlande", "France",
+            "Gabon", "Gambie", "Géorgie", "Ghana", "Grèce", "Grenade", "Guatémala", "Guinée", "Guinée Bissau",
+            "Guinée Equatoriale", "Guyana", "Haïti", "Honduras", "Hongrie", "Inde", "Indonésie", "Iran", "Iraq",
+            "Irlande", "Islande", "Israël", "italie", "Jamaïque", "Japon", "Jordanie", "Kazakhstan", "Kenya",
+            "Kirghizistan", "Kiribati", "Koweït", "Laos", "Lesotho", "Lettonie", "Liban", "Liberia", "Liechtenstein",
+            "Lituanie", "Luxembourg", "Lybie", "Macédoine", "Madagascar", "Malaisie", "Malawi", "Maldives", "Mali",
+            "Malte", "Maroc", "Marshall", "Maurice", "Mauritanie", "Mexique", "Micronésie", "Moldavie", "Monaco",
+            "Mongolie", "Mozambique", "Namibie", "Nauru", "Nepal", "Nicaragua", "Niger", "Nigéria", "Nioué", "Norvège",
+            "Nouvelle Zélande", "Oman", "Ouganda", "Ouzbékistan", "Pakistan", "Palau", "Palestine", "Panama",
+            "Papouasie Nouvelle Guinée", "Paraguay", "Pays-Bas", "Pérou", "Philippines", "Pologne", "Portugal", "Qatar",
+            "République centrafricaine", "République Dominicaine", "République Tchèque", "Roumanie", "Royaume Uni",
+            "Russie", "Rwanda", "Saint-Christophe-et-Niévès", "Sainte-Lucie", "Saint-Marin",
+            "Saint-Vincent-et-les Grenadines", "Iles Salomon", "Salvador", "Samoa Occidentales", "Sao Tomé et Principe",
+            "Sénégal", "Serbie", "Seychelles", "Sierra Léone", "Singapour", "Slovaquie", "Slovénie", "Somalie",
+            "Soudan", "Sri Lanka", "Suède", "Suisse", "Suriname", "Swaziland", "Syrie", "Tadjikistan", "Taiwan",
+            "Tanzanie", "Tchad", "Thailande", "Timor Oriental", "Togo", "Tonga", "Trinité et Tobago", "Tunisie",
+            "Turkménistan", "Turquie", "Tuvalu", "Ukraine", "Uruguay", "Vanuatu", "Vatican", "Vénézuela", "Vietnam",
+            "Yemen", "Zambie", "Zimbabwe"
+        ]
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+        autocomplete(document.getElementById("pays"), countries);
     </script>
 @endsection

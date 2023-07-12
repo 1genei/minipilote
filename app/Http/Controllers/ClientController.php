@@ -7,6 +7,7 @@ use App\Models\Entite;
 use App\Models\Client;
 use App\Models\Fournisseur;
 use Illuminate\Http\Request;
+use Auth;
 
 class ClientController extends Controller
 {
@@ -31,7 +32,9 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+         // if(Auth::user()->role())
+         $contacts = Contact::where('user_id', Auth::id())->get();        
+         return view('client.add', compact('contacts'));
     }
 
     /**

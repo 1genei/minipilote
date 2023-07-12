@@ -26,6 +26,7 @@ class CreateIndividusTable extends Migration
             $table->string("ville")->nullable();        
             $table->string("profession")->nullable();        
             $table->date("date_naissance")->nullable();        
+            $table->text("notes")->nullable();        
             $table->integer("contact_id");
             $table->boolean("archive")->default(false);            
             $table->timestamps();

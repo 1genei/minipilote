@@ -89,10 +89,12 @@ class ProspectController extends Controller
 
         $request->validate([
             "email"=>"required|email",
-            "nom"=>"required|string"
+            "nom"=>"required|string",
+            "contact1"=>"required|string"
         ]);
         
 
+dd($request->all());
         
         $contact = Contact::create([
             "type"=> $request->type,

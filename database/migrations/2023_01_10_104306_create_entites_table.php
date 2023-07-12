@@ -26,6 +26,7 @@ class CreateEntitesTable extends Migration
             $table->string("code_postal")->nullable();
             $table->string("ville")->nullable();        
             $table->string("site_web")->nullable();        
+            $table->text("notes")->nullable();        
             $table->integer("contact_id");
             $table->boolean("archive")->default(false);            
             $table->timestamps();
