@@ -92,11 +92,7 @@ class ProspectController extends Controller
       
       dd($params);
         unset($params["nom"]) ;
-        unset($params["url_graphe"]) ;
-        // unset($params["seuil_alerte"]) ;
-        unset($params["_token"]) ;
-        unset($params["seuil_pourcentage"]) ;
-        // unset($params["heure_delais_achat"]) ;
+        
         
         $palier = array_chunk($params, 4);
         $palier = json_encode($palier);
