@@ -180,6 +180,7 @@
                                                             Raison sociale
                                                         </label>
                                                         <input type="text" id="raison_sociale" name="raison_sociale"
+                                                            required
                                                             value="{{ old('raison_sociale') ? old('raison_sociale') : '' }}"
                                                             class="form-control">
 
@@ -214,15 +215,65 @@
                                                     </div>
 
 
+                                                    <style>
+                                                        .container_email_label {
+                                                            display: flex;
+                                                            flex-flow: row wrap;
+                                                            gap: 5px;
+                                                        }
 
+                                                        .container_email_input {
+                                                            display: flex;
+                                                            flex-flow: row nowrap;
+                                                            justify-content: space-between;
+                                                            /* gap: 5px; */
+                                                        }
 
+                                                        .item_email {
+                                                            flex-grow: 11;
+                                                        }
+
+                                                        .item_btn_remove {
+                                                            flex-grow: 1;
+                                                        }
+                                                    </style>
+
+                                                    <input type="text" name="emailx" id="emailx" value=""
+                                                        hidden>
                                                     <div class="mb-3">
-                                                        <label for="email" class="form-label">
-                                                            Email
-                                                        </label>
-                                                        <input type="email" id="email" name="email"
-                                                            value="{{ old('email') ? old('email') : '' }}"
-                                                            class="form-control">
+                                                        <div class=" container_email_label">
+                                                            <div class="">
+                                                                <label for="email1" class="form-label">
+                                                                    Email
+                                                                </label>
+                                                            </div>
+                                                            <div class="">
+                                                                <a class="btn btn-warning add_field_button"
+                                                                    style=" margin-top:-10px; padding: 0.2rem 0.4rem;"><i
+                                                                        class="mdi mdi-plus-thick "></i> </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input_fields_wrap">
+                                                            <div class="container_email_input">
+                                                                <div class="item_email">
+                                                                    <input type="email" id="email" name="email"
+                                                                        required
+                                                                        value="{{ old('email') ? old('email') : '' }}"
+                                                                        class="form-control emails">
+                                                                </div>
+                                                                {{-- <div class="item_btn_remove">
+                                                                    <a class="btn btn-danger add_field_button"
+                                                                        style="padding: 0.55rem 0.9rem;"><i
+                                                                            class="mdi mdi-close-thick "></i> </a>
+
+                                                                </div> --}}
+                                                            </div>
+                                                        </div>
+
+
+
+
+
 
                                                         @if ($errors->has('email'))
                                                             <br>
@@ -436,11 +487,15 @@
 
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-12 mb-3"
+                                            <div class="row mb-3">
+                                                <div class="col-12 "
                                                     style="background:#7e7b7b; color:white!important; padding:10px ">
                                                     <strong>Informations Complémentaires
                                                 </div>
+                                            </div>
+
+                                            <div class="row">
+
 
                                                 <div class="col-6">
 
@@ -482,36 +537,30 @@
                                                             </div>
                                                         @endif
                                                     </div>
+                                                    <div class="mb-3">
+                                                        <label for="ville" class="form-label">
+                                                            Ville
+                                                        </label>
+                                                        <input type="text" id="ville" name="ville"
+                                                            value="{{ old('ville') ? old('ville') : '' }}"
+                                                            class="form-control">
+
+                                                        @if ($errors->has('ville'))
+                                                            <br>
+                                                            <div class="alert alert-warning text-secondary "
+                                                                role="alert">
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                <strong>{{ $errors->first('ville') }}</strong>
+                                                            </div>
+                                                        @endif
+                                                    </div>
 
                                                 </div>
 
 
 
                                                 <div class="col-6">
-
-
-
-
-                                                    <div class="mb-3">
-                                                        <label for="pays" class="form-label">
-                                                            Pays
-                                                        </label>
-                                                        <input type="text" id="pays" name="pays"
-                                                            value="{{ old('pays') ? old('pays') : 'France' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('pays'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('pays') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-
 
                                                     <div class="mb-3">
                                                         <label for="complement_adresse" class="form-label">
@@ -534,23 +583,25 @@
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label for="ville" class="form-label">
-                                                            Ville
+                                                        <label for="pays" class="form-label">
+                                                            Pays
                                                         </label>
-                                                        <input type="text" id="ville" name="ville"
-                                                            value="{{ old('ville') ? old('ville') : '' }}"
+                                                        <input type="text" id="pays" name="pays"
+                                                            value="{{ old('pays') ? old('pays') : 'France' }}"
                                                             class="form-control">
 
-                                                        @if ($errors->has('ville'))
+                                                        @if ($errors->has('pays'))
                                                             <br>
                                                             <div class="alert alert-warning text-secondary "
                                                                 role="alert">
                                                                 <button type="button" class="btn-close btn-close-white"
                                                                     data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('ville') }}</strong>
+                                                                <strong>{{ $errors->first('pays') }}</strong>
                                                             </div>
                                                         @endif
                                                     </div>
+
+
 
                                                     <div class="mb-3">
                                                         <label for="notes" class="form-label">Notes</label>
@@ -582,9 +633,9 @@
 
                                             <div class="row mt-3">
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-light"
-                                                        data-bs-dismiss="modal">Fermer</button>
-                                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+
+                                                    <button type="submit" id="enregistrer"
+                                                        class="btn btn-primary">Enregistrer</button>
 
                                                 </div>
                                             </div>
@@ -622,6 +673,82 @@
 @endsection
 
 @section('script')
+    {{-- Lorsqu'on submit le formulaire --}}
+    <script>
+        $('#enregistrer').click(function(e) {
+
+            e.preventDefault();
+            var emails = [];
+
+            var email_inputs = $('.emails');
+            email_inputs.each((index, input) => {
+                if (input.value != "") emails.push(input.value)
+            });
+            console.log();
+            if (emails.length == 0) {
+                swal.fire(
+                    'Erreur',
+                    'Veuillez renseigner au moins une adresse mail',
+                    'error'
+                )
+            } else {
+                $('#emailx').val(JSON.stringify(emails));
+                $('form').submit();
+            }
+
+
+
+        });
+    </script>
+
+
+
+    {{-- Suppression ou Ajout de champ email --}}
+    <script>
+        var x = 1;
+
+        $(".cacher_btn_remove_field").hide();
+        $(document).ready(function() {
+            var max_fields = 5;
+            var wrapper = $(".input_fields_wrap");
+            var add_button = $(".add_field_button");
+
+            $(add_button).click(function(e) {
+                e.preventDefault();
+                if (x < max_fields) {
+                    x++;
+
+                    $(wrapper).append(`
+                
+                        <div class="container_email_input mt-1 field${x}">
+                            <div class="item_email">
+                                <input type="email" id="email${x}" name="email${x}"
+                                    value=""
+                                    class="form-control emails" >
+                            </div>
+                            <div class="item_btn_remove">
+                                <a class="btn btn-danger add_field_button"
+                                    style="padding: 0.55rem 0.9rem;"><i
+                                        class="mdi mdi-close-thick "></i> </a>
+                            </div>
+                        </div>
+                
+                `);
+
+                }
+            });
+            $(wrapper).on("click", ".item_btn_remove", function(e) {
+                e.preventDefault();
+                // if (x > 2) $("#pal_starter" + (x - 1) + '').show();
+                if (x > 1) $(this).parent('div').remove();
+                x--;
+            })
+        });
+    </script>
+
+
+
+
     {{-- selection des statuts du prospect --}}
 
     <script>

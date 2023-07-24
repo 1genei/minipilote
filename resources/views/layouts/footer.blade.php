@@ -32,6 +32,8 @@
 
 
 <!-- bundle -->
+<script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
+
 <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
 <script src="{{ asset('assets/js/app.min.js') }}"></script>
 
