@@ -23,6 +23,7 @@
 
     @yield('css')
 
+    @livewireStyles
 </head>
 
 <body class="loading" data-layout-color="light" data-layout="detached" data-rightbar-onstart="true">

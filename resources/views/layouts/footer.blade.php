@@ -30,6 +30,7 @@
 <div class="rightbar-overlay"></div>
 <!-- /End-bar -->
 
+@livewireScripts
 
 <!-- bundle -->
 <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
