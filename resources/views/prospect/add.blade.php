@@ -73,583 +73,10 @@
                             </div>
                         </div>
 
-                        <form action="{{ route('prospect.store') }}" method="post">
-                            @csrf
 
+                        <livewire:prospect.add-form />
 
-                            <div class="row">
-                                <div class="col-9 mb-3" style="background:#7e7b7b; color:white!important; padding:10px ">
-                                    <strong>Informations principales
-                                </div>
-                                <div class="col-md-12 col-lg-9">
-                                    <div class="card">
-                                        <div class="card-body">
 
-                                            <div class="row mb-3">
-
-                                                <div class="col-sm-3">
-
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" id="nature1" name="nature" checked
-                                                            value="Personne morale" required class="form-check-input">
-                                                        <label class="form-check-label" for="nature1">
-                                                            Personne morale
-                                                        </label>
-                                                        @if ($errors->has('nature'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('nature') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                </div>
-                                                <div class="col-sm-3">
-
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" id="nature2" name="nature"
-                                                            value="Personne physique" required class="form-check-input">
-                                                        <label class="form-check-label" for="nature2">
-                                                            Personne physique
-                                                        </label>
-                                                        @if ($errors->has('nature'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('nature') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                </div>
-                                                <div class="col-sm-3">
-
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" id="nature3" name="nature" value="Couple"
-                                                            required class="form-check-input">
-                                                        <label class="form-check-label" for="nature3">
-                                                            Couple
-                                                        </label>
-                                                        @if ($errors->has('nature'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('nature') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-check form-check-inline">
-                                                        <input type="radio" id="nature4" name="nature"
-                                                            value="Groupe" required class="form-check-input">
-                                                        <label class="form-check-label" for="nature4">
-                                                            Groupe
-                                                        </label>
-                                                        @if ($errors->has('nature'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('nature') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                </div>
-
-
-                                            </div>
-
-
-
-
-
-                                            <div class="row">
-
-
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3 div_personne_morale">
-                                                        <label for="raison_sociale" class="form-label">
-                                                            Raison sociale
-                                                        </label>
-                                                        <input type="text" id="raison_sociale" name="raison_sociale"
-                                                            required
-                                                            value="{{ old('raison_sociale') ? old('raison_sociale') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('raison_sociale'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('raison_sociale') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="mb-3 div_personne_physique">
-                                                        <label for="nom" class="form-label">
-                                                            Nom
-                                                        </label>
-                                                        <input type="text" id="nom" name="nom"
-                                                            value="{{ old('nom') ? old('nom') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('nom'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('nom') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-
-                                                    <style>
-                                                        .container_email_label {
-                                                            display: flex;
-                                                            flex-flow: row wrap;
-                                                            gap: 5px;
-                                                        }
-
-                                                        .container_email_input {
-                                                            display: flex;
-                                                            flex-flow: row nowrap;
-                                                            justify-content: space-between;
-                                                            /* gap: 5px; */
-                                                        }
-
-                                                        .item_email {
-                                                            flex-grow: 11;
-                                                        }
-
-                                                        .item_btn_remove {
-                                                            flex-grow: 1;
-                                                        }
-                                                    </style>
-
-                                                    <input type="text" name="emailx" id="emailx" value=""
-                                                        hidden>
-                                                    <div class="mb-3">
-                                                        <div class=" container_email_label">
-                                                            <div class="">
-                                                                <label for="email1" class="form-label">
-                                                                    Email
-                                                                </label>
-                                                            </div>
-                                                            <div class="">
-                                                                <a class="btn btn-warning add_field_button"
-                                                                    style=" margin-top:-10px; padding: 0.2rem 0.4rem;"><i
-                                                                        class="mdi mdi-plus-thick "></i> </a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="input_fields_wrap">
-                                                            <div class="container_email_input">
-                                                                <div class="item_email">
-                                                                    <input type="email" id="email" name="email"
-                                                                        required
-                                                                        value="{{ old('email') ? old('email') : '' }}"
-                                                                        class="form-control emails">
-                                                                </div>
-                                                                {{-- <div class="item_btn_remove">
-                                                                    <a class="btn btn-danger add_field_button"
-                                                                        style="padding: 0.55rem 0.9rem;"><i
-                                                                            class="mdi mdi-close-thick "></i> </a>
-
-                                                                </div> --}}
-                                                            </div>
-                                                        </div>
-
-
-
-
-
-
-                                                        @if ($errors->has('email'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('email') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="contact1" class="form-label">
-                                                            Téléphone Fixe
-                                                        </label>
-                                                        <input type="text" id="contact1" name="contact1"
-                                                            value="{{ old('contact1') ? old('contact1') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('contact1'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('contact1') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="contact2" class="form-label">
-                                                            Téléphone Mobile
-                                                        </label>
-                                                        <input type="text" id="contact2" name="contact2"
-                                                            value="{{ old('contact2') ? old('contact2') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('contact2'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('contact2') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-
-
-                                                </div>
-
-
-
-                                                <div class="col-sm-6">
-
-
-
-                                                    <div class="mb-3 div_personne_morale">
-                                                        <label for="forme_juridique" class="form-label">
-                                                            Forme juridique
-                                                        </label>
-
-                                                        <select class="form-select select2" id="forme_juridique"
-                                                            name="forme_juridique">
-                                                            <option value="{{ old('forme_juridique') }}">
-                                                                {{ old('forme_juridique') }}</option>
-
-                                                            <option value="">Non défini</option>
-                                                            <option value="EURL">
-                                                                EURL - Entreprise unipersonnelle à responsabilité limitée
-                                                            </option>
-                                                            <option value="EI">EI - Entreprise individuelle</option>
-                                                            <option value="SARL">SARL - Société à responsabilité limitée
-                                                            </option>
-                                                            <option value="SA">SA - Société anonyme</option>
-                                                            <option value="SAS">SAS - Société par actions simplifiée
-                                                            </option>
-                                                            <option value="SCI">SCI - Société civile immobilière
-                                                            </option>
-                                                            <option value="SNC">SNC - Société en nom collectif</option>
-                                                            <option value="EARL">
-                                                                EARL - Entreprise agricole à responsabilité limitée
-                                                            </option>
-                                                            <option value="EIRL">
-                                                                EIRL - Entreprise individuelle à responsabilité limitée
-                                                            </option>
-                                                            <option value="GAEC">GAEC - Groupement agricole
-                                                                d'exploitation en
-                                                                commun</option>
-                                                            <option value="GEIE">GEIE - Groupement européen d'intérêt
-                                                                économique</option>
-                                                            <option value="GIE">GIE - Groupement d'intérêt économique
-                                                            </option>
-                                                            <option value="SASU">SASU - Société par actions simplifiée
-                                                                unipersonnelle</option>
-                                                            <option value="SC">SC - Société civile</option>
-                                                            <option value="SCA">
-                                                                SCA - Société en commandite par actions
-                                                            </option>
-                                                            <option value="SCIC">
-                                                                SCIC - Société coopérative d'intérêt collectif
-                                                            </option>
-                                                            <option value="SCM">SCM - Société civile de moyens</option>
-                                                            <option value="SCOP">
-                                                                SCOP - Société coopérative ouvrière de production
-                                                            </option>
-                                                            <option value="SCP">SCP - Société civile professionnelle
-                                                            </option>
-                                                            <option value="SCS">SCS - Société en commandite simple
-                                                            </option>
-                                                            <option value="SEL">SEL - Société d'exercice libéral
-                                                            </option>
-                                                            <option value="SELAFA">
-                                                                SELAFA - Société d'exercice libéral à forme anonyme
-                                                            </option>
-                                                            <option value="SELARL">
-                                                                SELARL - Société d'exercice libéral à responsabilité limitée
-                                                            </option>
-                                                            <option value="SELAS">
-                                                                SELAS - Société d'exercice libéral par actions simplifiée
-                                                            </option>
-                                                            <option value="SELCA">
-                                                                SELCA - Société d'exercice libéral en commandite par actions
-                                                            </option>
-                                                            <option value="SEM">SEM - Société d'économie mixte</option>
-                                                            <option value="SEML">
-                                                                SEML - Société d'économie mixte locale
-                                                            </option>
-                                                            <option value="SEP">SEP - Société en participation</option>
-                                                            <option value="SICA">SICA - Société d'intérêt collectif
-                                                                agricole
-                                                            </option>
-
-                                                        </select>
-
-                                                        @if ($errors->has('type'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('type') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="mb-3 div_personne_physique">
-                                                        <label for="prenom" class="form-label">
-                                                            Prénom(s)
-                                                        </label>
-                                                        <input type="text" id="prenom" name="prenom"
-                                                            value="{{ old('prenom') ? old('prenom') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('prenom'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('prenom') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-
-                                                    <div class="mb-3 div_personne_morale">
-                                                        <label for="numero_siret" class="form-label">
-                                                            Numéro siret
-                                                        </label>
-                                                        <input type="text" id="numero_siret" name="numero_siret"
-                                                            value="{{ old('numero_siret') ? old('numero_siret') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('numero_siret'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('numero_siret') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="mb-3 div_personne_morale">
-                                                        <label for="numero_tva" class="form-label">
-                                                            Numéro TVA
-                                                        </label>
-                                                        <input type="text" id="numero_tva" name="numero_tva"
-                                                            value="{{ old('numero_tva') ? old('numero_tva') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('numero_tva'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('numero_tva') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-
-                                                </div>
-
-
-                                            </div>
-
-                                            <div class="row mb-3">
-                                                <div class="col-12 "
-                                                    style="background:#7e7b7b; color:white!important; padding:10px ">
-                                                    <strong>Informations Complémentaires
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-
-
-                                                <div class="col-6">
-
-
-
-                                                    <div class="mb-3">
-                                                        <label for="adresse" class="form-label">
-                                                            Adresse
-                                                        </label>
-                                                        <input type="text" id="adresse" name="adresse"
-                                                            value="{{ old('adresse') ? old('adresse') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('adresse'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('adresse') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="code_postal" class="form-label">
-                                                            Code Postal
-                                                        </label>
-                                                        <input type="text" id="code_postal" name="code_postal"
-                                                            value="{{ old('code_postal') ? old('code_postal') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('code_postal'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('code_postal') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="ville" class="form-label">
-                                                            Ville
-                                                        </label>
-                                                        <input type="text" id="ville" name="ville"
-                                                            value="{{ old('ville') ? old('ville') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('ville'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('ville') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                </div>
-
-
-
-                                                <div class="col-6">
-
-                                                    <div class="mb-3">
-                                                        <label for="complement_adresse" class="form-label">
-                                                            Complément d'adresse
-                                                        </label>
-                                                        <input type="text" id="complement_adresse"
-                                                            name="complement_adresse"
-                                                            value="{{ old('complement_adresse') ? old('complement_adresse') : '' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('complement_adresse'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('complement_adresse') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="pays" class="form-label">
-                                                            Pays
-                                                        </label>
-                                                        <input type="text" id="pays" name="pays"
-                                                            value="{{ old('pays') ? old('pays') : 'France' }}"
-                                                            class="form-control">
-
-                                                        @if ($errors->has('pays'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('pays') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-
-
-                                                    <div class="mb-3">
-                                                        <label for="notes" class="form-label">Notes</label>
-                                                        <textarea name="notes" class="form-control" id="notes" rows="5" placeholder="..">{{ old('notes') ? old('notes') : '' }}</textarea>
-                                                        @if ($errors->has('notes'))
-                                                            <br>
-                                                            <div class="alert alert-warning text-secondary "
-                                                                role="alert">
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                                <strong>{{ $errors->first('notes') }}</strong>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-
-                                            <div class="row div_associer" style="margin-top:30px;">
-                                                <div class="col-12 mb-3"
-                                                    style="background:#7e7b7b; color:white!important; padding:10px ">
-                                                    <strong>Associer d'autres contacts
-                                                    </strong>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="row mt-3">
-                                                <div class="modal-footer">
-
-                                                    <button type="submit" id="enregistrer"
-                                                        class="btn btn-primary">Enregistrer</button>
-
-                                                </div>
-                                            </div>
-                                            <!-- end row -->
-
-                                        </div> <!-- end card-body -->
-                                    </div> <!-- end card-->
-                                </div> <!-- end col-->
-                            </div>
-                            <!-- end row-->
-
-
-
-                        </form>
 
                         <style>
                             .select2-container .select2-selection--single {
@@ -677,14 +104,15 @@
     <script>
         $('#enregistrer').click(function(e) {
 
-            e.preventDefault();
+            // e.preventDefault();
             var emails = [];
 
             var email_inputs = $('.emails');
             email_inputs.each((index, input) => {
                 if (input.value != "") emails.push(input.value)
             });
-            console.log();
+
+
             if (emails.length == 0) {
                 swal.fire(
                     'Erreur',
@@ -693,7 +121,7 @@
                 )
             } else {
                 $('#emailx').val(JSON.stringify(emails));
-                $('form').submit();
+                // $('form').submit();
             }
 
 
@@ -772,99 +200,99 @@
     <script>
         $(document).ready(function() {
 
-            $(".div_personne_morale").show();
-            $(".div_personne_physique").hide();
-            $(".div_couple").hide();
-            $(".div_groupe").hide();
+            // $(".div_personne_morale").show();
+            // $(".div_personne_physique").hide();
+            // $(".div_couple").hide();
+            // $(".div_groupe").hide();
 
 
             $(".div_associer_contact").show();
 
 
 
-            $("input[type='radio']").click(function(e) {
+            // $("input[type='radio']").click(function(e) {
 
-                let nature = e.currentTarget.value;
+            //     let nature = e.currentTarget.value;
 
-                if (nature == "Personne morale") {
+            //     if (nature == "Personne morale") {
 
-                    $("input[type='text']").removeAttr("required");
-                    $("select").removeAttr("required");
-                    $("#type").val("entité");
+            //         $("input[type='text']").removeAttr("required");
+            //         $("select").removeAttr("required");
+            //         $("#type").val("entité");
 
-                    $(".div_personne_physique").hide();
-                    $(".div_personne_morale").show();
-                    $(".div_couple").hide();
-                    $(".div_groupe").hide();
-                    $(".div_personne_tout").show();
-                    $(".div_associer_contact").show();
+            //         $(".div_personne_physique").hide();
+            //         $(".div_personne_morale").show();
+            //         $(".div_couple").hide();
+            //         $(".div_groupe").hide();
+            //         $(".div_personne_tout").show();
+            //         $(".div_associer_contact").show();
 
-                    $("#forme_juridique").attr("required", "required");
-                    $("#raison_sociale").attr("required", "required");
-                    $("#email").attr("required", "required");
+            //         $("#forme_juridique").attr("required", "required");
+            //         $("#raison_sociale").attr("required", "required");
+            //         $("#email").attr("required", "required");
 
-                } else if (nature == "Personne physique") {
-                    $("input[type='text']").removeAttr("required");
-                    $("select").removeAttr("required");
+            //     } else if (nature == "Personne physique") {
+            //         $("input[type='text']").removeAttr("required");
+            //         $("select").removeAttr("required");
 
-                    $(".div_personne_physique").show();
-                    $(".div_personne_morale").hide();
-                    $(".div_couple").hide();
-                    $(".div_groupe").hide();
-                    $(".div_personne_tout").show();
+            //         $(".div_personne_physique").show();
+            //         $(".div_personne_morale").hide();
+            //         $(".div_couple").hide();
+            //         $(".div_groupe").hide();
+            //         $(".div_personne_tout").show();
 
-                    $("#civilite").attr("required", "required");
-                    $("#nom").attr("required", "required");
-                    $("#prenom").attr("required", "required");
-                    $("#email").attr("required", "required");
+            //         $("#civilite").attr("required", "required");
+            //         $("#nom").attr("required", "required");
+            //         $("#prenom").attr("required", "required");
+            //         $("#email").attr("required", "required");
 
-                    $("#type").val("individu");
-                    $(".div_associer_contact").hide();
+            //         $("#type").val("individu");
+            //         $(".div_associer_contact").hide();
 
 
 
-                } else if (nature == "Couple") {
-                    $("input[type='text']").removeAttr("required");
-                    $("select").removeAttr("required");
+            //     } else if (nature == "Couple") {
+            //         $("input[type='text']").removeAttr("required");
+            //         $("select").removeAttr("required");
 
-                    $(".div_personne_physique").hide();
-                    $(".div_personne_morale").hide();
-                    $(".div_couple").show();
-                    $(".div_groupe").hide();
-                    $(".div_personne_tout").hide();
+            //         $(".div_personne_physique").hide();
+            //         $(".div_personne_morale").hide();
+            //         $(".div_couple").show();
+            //         $(".div_groupe").hide();
+            //         $(".div_personne_tout").hide();
 
-                    $("#civilite1").attr("required", "required");
-                    $("#nom1").attr("required", "required");
-                    $("#prenom1").attr("required", "required");
-                    $("#email1").attr("required", "required");
+            //         $("#civilite1").attr("required", "required");
+            //         $("#nom1").attr("required", "required");
+            //         $("#prenom1").attr("required", "required");
+            //         $("#email1").attr("required", "required");
 
-                    $("#civilite2").attr("required", "required");
-                    $("#nom2").attr("required", "required");
-                    $("#prenom2").attr("required", "required");
-                    $("#email2").attr("required", "required");
+            //         $("#civilite2").attr("required", "required");
+            //         $("#nom2").attr("required", "required");
+            //         $("#prenom2").attr("required", "required");
+            //         $("#email2").attr("required", "required");
 
-                    $("#type").val("individu");
-                    $(".div_associer_contact").hide();
+            //         $("#type").val("individu");
+            //         $(".div_associer_contact").hide();
 
-                } else if (nature == "Groupe") {
-                    $("input[type='text']").removeAttr("required");
-                    $("select").removeAttr("required");
+            //     } else if (nature == "Groupe") {
+            //         $("input[type='text']").removeAttr("required");
+            //         $("select").removeAttr("required");
 
-                    $(".div_personne_physique").hide();
-                    $(".div_personne_morale").hide();
-                    $(".div_couple").hide();
-                    $(".div_personne_tout").show();
-                    $(".div_groupe").show();
+            //         $(".div_personne_physique").hide();
+            //         $(".div_personne_morale").hide();
+            //         $(".div_couple").hide();
+            //         $(".div_personne_tout").show();
+            //         $(".div_groupe").show();
 
-                    $(".div_associer_contact").show();
+            //         $(".div_associer_contact").show();
 
-                    $("#nom_groupe").attr("required", "required");
-                    $("#email").attr("required", "required");
-                    $("#type").val("entité");
+            //         $("#nom_groupe").attr("required", "required");
+            //         $("#email").attr("required", "required");
+            //         $("#type").val("entité");
 
-                }
+            //     }
 
-            });
+            // });
 
 
         });
