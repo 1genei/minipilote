@@ -10,7 +10,7 @@
     @if(filled($select))
         <div class="@if(!$inline) pt-2 p-2 @endif">
             @if(!$inline)
-                <label for="input_{{ data_get($select, 'dataField') }}" class="text-gray-700 dark:text-gray-300">{{ data_get($select, 'label')  }}</label>
+                <label for="input_{{ data_get($select, 'dataField') }}" class="text-gray-700">{{ data_get($select, 'label')  }}</label>
             @endif
             <div class="relative">
                 <select id="input_{!! data_get($select, 'displayField') !!}"

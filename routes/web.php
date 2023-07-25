@@ -1,19 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\DashboardController;
-
-use App\Http\Controllers\ParametreController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\FournisseurController;
-use App\Http\Controllers\ProspectController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\Autho365Controller;
-use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FournisseurController;
+use App\Http\Controllers\ParametreController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProspectController;
+use App\Http\Controllers\RoleController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,20 +19,32 @@ use Illuminate\Support\Facades\Redirect;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 //   Authentification office 365
-
 
 Route::get('/login/o365', [Autho365Controller::class, 'login'])->name('logino365');
 Route::get('/login/o365/callback', [Autho365Controller::class, 'redirect'])->name('redirecto365');
 
-
 // Dashboard
-Route::controller(DashboardController::class)->group(function (){
+Route::controller(DashboardController::class)->group(function () {
     Route::get('/', 'index')->name('welcome')->middleware(['auth']);
 });
 
@@ -42,17 +52,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-
 // Paramètres
-Route::controller(ParametreController::class)->group(function (){
+Route::controller(ParametreController::class)->group(function () {
     Route::get('/parametres', 'index')->name('parametre.index')->middleware(['auth']);
     Route::post('/parametres', 'update')->name('parametre.update')->middleware(['auth']);
-   
+
 });
 
-
-// Rôles 
-Route::controller(RoleController::class)->group(function (){
+// Rôles
+Route::controller(RoleController::class)->group(function () {
     Route::get('/roles', 'index')->name('role.index')->middleware(['auth']);
     Route::post('/role/ajouter', 'store')->name('role.store')->middleware(['auth']);
     Route::post('/role/desarchiver/{roleId}', 'unarchive')->name('role.unarchive')->middleware(['auth']);
@@ -62,20 +70,19 @@ Route::controller(RoleController::class)->group(function (){
     Route::post('/role/permissions/{roleId}', 'updatePermissions')->name('role.update_permissions')->middleware(['auth']);
 });
 
-// Permissions 
-Route::controller(PermissionController::class)->group(function (){
+// Permissions
+Route::controller(PermissionController::class)->group(function () {
     Route::get('/permissions', 'index')->name('permission.index')->middleware(['auth']);
     Route::post('/permission/ajouter', 'store')->name('permission.store')->middleware(['auth']);
     Route::post('/permission/desarchiver/{roleId}', 'unarchive')->name('permission.unarchive')->middleware(['auth']);
     Route::post('/permission/modifier/{permission_id}', 'update')->name('permission.update')->middleware(['auth']);
     Route::post('/permission/modifier', 'updateRolePermission')->name('permission_role.update')->middleware(['auth']);
     Route::put('/permission/archiver/{roleId}', 'archive')->name('permission.archive')->middleware(['auth']);
-    
+
 });
 
-
-// Contacts 
-Route::controller(ContactController::class)->group(function (){
+// Contacts
+Route::controller(ContactController::class)->group(function () {
     Route::get('/contacts', 'index')->name('contact.index')->middleware(['auth']);
     Route::post('/contact/ajouter', 'store')->name('contact.store')->middleware(['auth']);
     Route::get('/contact/detail/{contactId}', 'show')->name('contact.show')->middleware(['auth']);
@@ -86,8 +93,8 @@ Route::controller(ContactController::class)->group(function (){
     Route::post('/contact/desassocier/{entiteId}/{individuId}', 'deassocier_individu')->name('contact.deassociate')->middleware(['auth']);
 });
 
-// Prospect 
-Route::controller(ProspectController::class)->group(function (){
+// Prospect
+Route::controller(ProspectController::class)->group(function () {
     Route::get('/prospects', 'index')->name('prospect.index')->middleware(['auth']);
     Route::get('/prospect/ajouter', 'create')->name('prospect.create')->middleware(['auth']);
     Route::get('/prospect/modifier/{prospectId}', 'edit')->name('prospect.edit')->middleware(['auth']);
@@ -96,8 +103,8 @@ Route::controller(ProspectController::class)->group(function (){
     Route::put('/prospect/archiver/{prospectId}', 'archive')->name('prospect.archive')->middleware(['auth']);
     Route::post('/prospect/desarchiver/{prospectId}', 'unarchive')->name('prospect.unarchive')->middleware(['auth']);
 });
-// Client 
-Route::controller(ClientController::class)->group(function (){
+// Client
+Route::controller(ClientController::class)->group(function () {
     Route::get('/clients', 'index')->name('client.index')->middleware(['auth']);
     Route::post('/client/ajouter', 'store')->name('client.store')->middleware(['auth']);
     Route::get('/client/ajouter', 'create')->name('client.create')->middleware(['auth']);
@@ -106,8 +113,8 @@ Route::controller(ClientController::class)->group(function (){
     Route::put('/client/archiver/{clientId}', 'archive')->name('client.archive')->middleware(['auth']);
     Route::post('/client/desarchiver/{clientId}', 'unarchive')->name('client.unarchive')->middleware(['auth']);
 });
-// Fournisseur 
-Route::controller(FournisseurController::class)->group(function (){
+// Fournisseur
+Route::controller(FournisseurController::class)->group(function () {
     Route::get('/fournisseurs', 'index')->name('fournisseur.index')->middleware(['auth']);
     Route::post('/fournisseur/ajouter', 'store')->name('fournisseur.store')->middleware(['auth']);
     Route::get('/fournisseur/ajouter', 'create')->name('fournisseur.create')->middleware(['auth']);
@@ -118,7 +125,7 @@ Route::controller(FournisseurController::class)->group(function (){
 });
 
 // Agenda général
-Route::controller(AgendaController::class)->group(function (){
+Route::controller(AgendaController::class)->group(function () {
     Route::get('/agendas/general', 'index')->name('agenda.index')->middleware(['auth']);
     Route::get('/agendas/general/listing', 'listing')->name('agenda.listing')->middleware(['auth']);
     Route::get('/agendas/general/listing-a-faire', 'listing_a_faire')->name('agenda.listing_a_faire')->middleware(['auth']);
@@ -129,7 +136,4 @@ Route::controller(AgendaController::class)->group(function (){
     Route::put('/agenda/delete/{agenda_id}', 'destroy')->name('agenda.destroy')->middleware(['auth']);
 });
 
-
-
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

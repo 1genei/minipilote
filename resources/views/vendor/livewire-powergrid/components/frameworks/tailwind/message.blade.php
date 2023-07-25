@@ -1,11 +1,11 @@
 <div class="message">
     @if(session()->has('success') || session()->has('error'))
     <div
-        class="pb-2 dark:bg-gray-800 border px-4 py-3 rounded relative
+        class="pb-2 border px-4 py-3 rounded relative
         @if (session()->has('success'))
-            bg-green-100 border-green-600 text-green-700 dark:bg-green-300 dark:text-green-900
+            bg-green-100 border-green-600 text-green-700
         @elseif (session()->has('error'))
-            bg-red-100 border border-red-600 text-red-700 dark:bg-red-300 dark:text-red-900
+            bg-red-100 border border-red-600 text-red-700
         @endif" role="alert">
         <span class="block sm:inline">
             @if (session()->has('success'))

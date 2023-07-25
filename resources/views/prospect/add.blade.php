@@ -143,6 +143,7 @@
 
             $(add_button).click(function(e) {
                 e.preventDefault();
+
                 if (x < max_fields) {
                     x++;
 

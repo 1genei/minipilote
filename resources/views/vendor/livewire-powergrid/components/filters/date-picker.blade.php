@@ -27,7 +27,7 @@
     <div class="{{ $theme->divClassNotInline }}" @if($inline)  @endif>
         @if(!$inline)
             <label for="input_{{ data_get($date, 'field') }}"
-                   class="text-gray-700 dark:text-gray-300">
+                   class="text-gray-700">
                 {{ data_get($date, 'label') }}
             </label>
         @endif

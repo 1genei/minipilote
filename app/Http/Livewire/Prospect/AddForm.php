@@ -6,7 +6,6 @@ use Livewire\Component;
 
 class AddForm extends Component
 {
-
     public $raison_sociale;
     public $nom;
     public $prenom;
@@ -69,9 +68,9 @@ class AddForm extends Component
 
         $this->validate();
     }
+
     public function render()
     {
         return view('livewire.prospect.add-form');
     }
-
 }

@@ -9,7 +9,7 @@
     @if(filled($booleanFilter))
         <div class="@if($inline) {{ $theme->divClassInline }} @endif {{ $theme->divClassNotInline }}{!! ($booleanFilter['class'] != '') ?? '' !!}">
             @if(!$inline)
-                <label class="text-gray-700 dark:text-gray-300"
+                <label class="text-gray-700"
                        for="input_boolean_filter_{{ data_get($booleanFilter, 'field') }}">
                     {{ data_get($booleanFilter, 'label') }}
                 </label>

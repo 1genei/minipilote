@@ -14,7 +14,7 @@
     @if(filled($inputText))
         <div class="@if(!$inline) pt-2 p-2 @endif">
             @if(!$inline)
-                <label class="text-gray-700 dark:text-gray-300">{{ data_get($inputText, 'label') }}</label>
+                <label class="text-gray-700">{{ data_get($inputText, 'label') }}</label>
             @endif
             <div class="@if($inline) flex flex-col @else flex flex-row justify-between @endif">
                 <div class="@if(!$inline) pl-0 pt-1 pr-3 @endif">
@@ -29,7 +29,7 @@
                             @endforeach
                         </select>
                         <div class="{{ $theme->relativeDivClass }}">
-                            <x-livewire-powergrid::icons.down class="w-4 h-4 dark:text-gray-300"/>
+                            <x-livewire-powergrid::icons.down class="w-4 h-4"/>
                         </div>
                     </div>
                 </div>
