@@ -121,7 +121,7 @@
 
                         <div class="tab-content">
                             <div class="tab-pane show active" id="home-b1">
-                                @include('prospect.index_individu')
+                            @include('prospect.index_individu', ['data' => $contactindividus])
                             </div>
                             <div class="tab-pane " id="profile-b1">
                                 @include('prospect.index_entite')
