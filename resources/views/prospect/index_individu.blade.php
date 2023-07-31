@@ -1,3 +1,5 @@
 <div class="table-responsive">
-    <livewire:prospect-individu-power-grid data="{{ $data }}" />
+
+    <livewire:prospect-individu-table :data="$contactindividus" />
+
 </div>

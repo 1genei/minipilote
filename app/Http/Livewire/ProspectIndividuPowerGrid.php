@@ -30,9 +30,10 @@ final class ProspectIndividuPowerGrid extends PowerGridComponent
     public $toggleColumns = false;
     public $searchInput = false;
     public $queues = false;
+    public $contactindividus ;
     public $inputTextOptions = false;
     
-
+    
     /*
     |--------------------------------------------------------------------------
     |  Datasource
@@ -42,6 +43,8 @@ final class ProspectIndividuPowerGrid extends PowerGridComponent
     */
     public function datasource(): Collection
     {
+        
+        dd($this->data);
         return collect($this->data);
     }
 

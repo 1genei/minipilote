@@ -53,6 +53,7 @@ class ProspectController extends Controller
                 ->get();
         }
 
+
         return view('prospect.index', compact('contactentites', 'contactindividus'));
     }
 
