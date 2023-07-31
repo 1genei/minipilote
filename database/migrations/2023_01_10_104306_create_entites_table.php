@@ -15,18 +15,22 @@ class CreateEntitesTable extends Migration
     {
         Schema::create('entites', function (Blueprint $table) {
             $table->id();
-            // entreprise, CE, groupe de personne, autre
+            $table->integer("contact_id")->unsigned()->nullable();
+            // CE, groupe de personne, autre
             $table->string("type")->nullable();
             $table->string("nom")->nullable();
             $table->string('forme_juridique')->nullable();
             $table->string('raison_sociale')->nullable();
             $table->string("email")->nullable();
+            $table->string('indicatif_fixe')->nullable();
+            $table->string('indicatif_mobile')->nullable();
             $table->string('telephone_fixe')->nullable();
             $table->string('telephone_mobile')->nullable();
             $table->string("adresse")->nullable();
             $table->string("complement_adresse")->nullable();
             $table->string("code_postal")->nullable();
             $table->string("ville")->nullable();
+            $table->string("pays")->nullable();
             $table->string("site_web")->nullable();
             $table->string('numero_siret')->nullable();
             $table->string('code_naf')->nullable();
@@ -39,7 +43,6 @@ class CreateEntitesTable extends Migration
             $table->string('iban')->nullable();
             $table->string('bic')->nullable();
             $table->text("notes")->nullable();
-            $table->integer("contact_id")->unsigned()->nullable();
             $table->boolean("archive")->default(false);
             $table->timestamps();
 

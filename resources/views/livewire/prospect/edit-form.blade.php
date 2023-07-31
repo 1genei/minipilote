@@ -1,4 +1,4 @@
-<form action="{{ route('prospect.store') }}" method="post">
+<form action="{{ route('prospect.update', Crypt::encrypt($contact->id)) }}" method="post">
     @csrf
 
 
@@ -16,7 +16,8 @@
 
                             <div class="form-check form-check-inline">
                                 <input type="radio" id="nature1" name="nature" wire:model="nature"
-                                    @if (old('nature') == 'Personne morale') checked @endif value="Personne morale" required
+                                    @if (old('nature') == 'Personne morale') checked @endif
+                                    @if ($contact->nature == 'Personne morale') checked @endif value="Personne morale" required
                                     class="form-check-input">
                                 <label class="form-check-label" for="nature1">
                                     Personne morale
@@ -29,7 +30,8 @@
 
                             <div class="form-check form-check-inline">
                                 <input type="radio" id="nature2" name="nature" wire:model="nature"
-                                    @if (old('nature') == 'Personne physique') checked @endif value="Personne physique" required
+                                    @if (old('nature') == 'Personne physique') checked @endif
+                                    @if ($contact->nature == 'Personne physique') checked @endif value="Personne physique" required
                                     class="form-check-input">
                                 <label class="form-check-label" for="nature2">
                                     Personne physique
@@ -42,7 +44,8 @@
 
                             <div class="form-check form-check-inline">
                                 <input type="radio" id="nature3" name="nature" wire:model="nature" value="Couple"
-                                    @if (old('nature') == 'Couple') checked @endif required class="form-check-input">
+                                    @if (old('nature') == 'Couple') checked @endif
+                                    @if ($contact->nature == 'Couple') checked @endif required class="form-check-input">
                                 <label class="form-check-label" for="nature3">
                                     Couple
                                 </label>
@@ -53,7 +56,8 @@
                         <div class="col-sm-3">
                             <div class="form-check form-check-inline">
                                 <input type="radio" id="nature4" name="nature" wire:model="nature" value="Groupe"
-                                    @if (old('nature') == 'Groupe') checked @endif required class="form-check-input">
+                                    @if (old('nature') == 'Groupe') checked @endif
+                                    @if ($contact->nature == 'Groupe') checked @endif required class="form-check-input">
                                 <label class="form-check-label" for="nature4">
                                     Groupe
                                 </label>
@@ -87,8 +91,7 @@
                                         Raison sociale <span class="text-danger">*</span>
                                     </label>
                                     <input type="text" id="raison_sociale" name="raison_sociale"
-                                        wire:model.defer="raison_sociale" required
-                                        value="{{ old('raison_sociale') ? old('raison_sociale') : '' }}"
+                                        wire:model.defer="raison_sociale" required {{-- value="{{ old('raison_sociale') ? old('raison_sociale') : '' }}" --}}
                                         class="form-control">
 
                                     @if ($errors->has('raison_sociale'))
@@ -293,12 +296,7 @@
                                                     value="{{ old('email') ? old('email') : '' }}"
                                                     class="form-control emails">
                                             </div>
-                                            {{-- <div class="item_btn_remove">
-                                            <a class="btn btn-danger add_field_button"
-                                                style="padding: 0.55rem 0.9rem;"><i
-                                                    class="mdi mdi-close-thick "></i> </a>
 
-                                        </div> --}}
                                         </div>
                                     </div>
 
@@ -933,21 +931,12 @@
                     </div>
 
 
-                    {{-- 
-
-                    <div class="row div_associer" style="margin-top:30px;">
-                        <div class="col-12 mb-3" style="background:#7e7b7b; color:white!important; padding:10px ">
-                            <strong>Associer d'autres contacts
-                            </strong>
-                        </div>
-
-                    </div> --}}
 
                     <div class="row mt-3">
                         <div class="modal-footer">
 
-                            <button type="submit" id="enregistrer" wire:click="submit"
-                                class="btn btn-primary">Enregistrer</button>
+                            <button type="submit" id="modifier" wire:click="submit"
+                                class="btn btn-success">Modifier</button>
 
                         </div>
                     </div>

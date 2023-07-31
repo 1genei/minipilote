@@ -33,11 +33,12 @@
 
                                     </td>
                                     <td><a href="#"
-                                            class="text-body fw-bold">{{ $contactentite->entite->email }}</a> </td>
+                                            class="text-body fw-bold">{{ decode_string($contactentite->entite->email) }}</a>
+                                    </td>
                                     <td><a href="#"
-                                            class="text-body fw-bold">{{ $contactentite->entite->contact1 }}
+                                            class="text-body fw-bold">{{ $contactentite->entite->telephone_mobile }}
                                             @if ($contactentite->contact2 != null)
-                                                / {{ $contactentite->contact2 }}
+                                                / {{ $contactentite->telephone_fixe }}
                                             @endif
                                         </a> </td>
                                     <td><a href="#"
@@ -52,18 +53,8 @@
                                     <td>
                                         <a href="{{ route('contact.show', Crypt::encrypt($contactentite->id)) }}"
                                             class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                        <a data-href="{{ route('prospect.update', $contactentite->id) }}"
-                                            data-nom="{{ $contactentite->entite->nom }}"
-                                            data-type-contact="{{ $contactentite->type }}"
-                                            data-typeentite="{{ $contactentite->entite->type }}"
-                                            data-id="{{ $contactentite->id }}"
-                                            data-email="{{ $contactentite->entite->email }}"
-                                            data-contact1="{{ $contactentite->entite->contact1 }}"
-                                            data-contact2="{{ $contactentite->entite->contact2 }}"
-                                            data-adresse="{{ $contactentite->entite->adresse }}"
-                                            data-code-postal="{{ $contactentite->entite->code_postal }}"
-                                            data-ville="{{ $contactentite->entite->ville }}" data-bs-toggle="modal"
-                                            data-bs-target="#edit-modal" class="action-icon edit-contact text-success">
+                                        <a href="{{ route('prospect.edit', Crypt::encrypt($contactentite->id)) }}"
+                                            class="action-icon edit-contact text-success">
                                             <i class="mdi mdi-square-edit-outline"></i></a>
 
                                         @if ($contactentite->archive == false)

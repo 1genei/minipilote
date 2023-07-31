@@ -20,7 +20,6 @@ class CreateContactsTable extends Migration
             $table->integer('user_id')->unsigned()->nullable();
             // 'Personne physique', 'couple', 'Personne morale', 'groupe', 'autre'
             $table->string("nature")->nullable();
-            $table->text('note')->nullable();
             $table->boolean("archive")->default(false);
             $table->timestamps();
         });
