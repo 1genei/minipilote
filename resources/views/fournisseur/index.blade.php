@@ -667,8 +667,6 @@
             let currentType = that.data('type-contact');
             let currentTypeentite = that.data('typeentite');
 
-            console.log(currentType);
-
             $('#edit-type option[value=' + currentType + ']').attr('selected', 'selected');
 
 
@@ -679,7 +677,6 @@
             } else {
                 $('.div-edit-entite').hide();
                 $('.div-edit-individu').show();
-                console.log("yesss");
             }
 
             $('#edit-type').change(function(e) {

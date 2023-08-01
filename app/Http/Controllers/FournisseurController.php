@@ -9,7 +9,9 @@ use App\Models\Entite;
 use App\Models\Client;
 use App\Models\Fournisseur;
 use Auth;
+use Crypt;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Typecontact;
 
 class FournisseurController extends Controller
 {
