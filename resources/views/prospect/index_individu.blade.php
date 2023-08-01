@@ -1,5 +1,3 @@
 <div class="table-responsive">
-
-    <livewire:prospect-individu-table :data="$contactindividus" />
-
+    <livewire:prospect.individu-table />
 </div>

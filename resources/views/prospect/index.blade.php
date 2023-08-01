@@ -121,7 +121,7 @@
 
                         <div class="tab-content">
                             <div class="tab-pane show active" id="home-b1">
-                            @include('prospect.index_individu', ['data' => $contactindividus])
+                                @include('prospect.index_individu')
                             </div>
                             <div class="tab-pane " id="profile-b1">
                                 @include('prospect.index_entite')
@@ -729,7 +729,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive-role', function(event) {
+            $('body').on('click', 'a.archive_contact', function(event) {
                 let that = $(this)
                 event.preventDefault();
 
@@ -768,9 +768,9 @@
                                     '',
                                     'success'
                                 )
-                                document.location.reload();
+                                // document.location.reload();
 
-                                // that.parents('tr').remove();
+                                that.parents('tr').remove();
                             })
 
 
@@ -780,7 +780,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulé',
-                            'Rôle non archivé :)',
+                            'Contact non archivé :)',
                             'error'
                         )
                     }

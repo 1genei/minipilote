@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^2.12",
+        "openspout/openspout": "^4.15",
         "power-components/livewire-powergrid": "^4.8"
     },
     "require-dev": {

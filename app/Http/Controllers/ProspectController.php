@@ -7,6 +7,7 @@ use App\Models\Entite;
 use App\Models\Individu;
 use App\Models\Typecontact;
 use Auth;
+use DB;
 use Crypt;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -20,41 +21,52 @@ class ProspectController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        if ($user->is_admin) {
+        // if ($user->is_admin) {
 
-            // On réccupère tous les contacts
-            $contactentites = Contact::whereHas('typecontacts', function (Builder $query) {
-                $query->where('type', 'Prospect');
-            })
-                ->where([["type", "entite"], ['archive', false]])
-                ->get();
+        //     // On réccupère tous les contacts
+        //     $contactentites = Contact::whereHas('typecontacts', function (Builder $query) {
+        //         $query->where('type', 'Prospect');
+        //     })
+        //         ->where([["type", "entite"], ['archive', false]])
+        //         ->get();
 
-            $contactindividus = Contact::whereHas('typecontacts', function (Builder $query) {
-                $query->where('type', 'Prospect');
-            })
-                ->where([["type", "individu"], ['archive', false]])
-                ->get();
+        //     $contactindividus = Contact::whereHas('typecontacts', function (Builder $query) {
+        //         $query->where('type', 'Prospect');
+        //     })
+        //         ->where([["type", "individu"], ['archive', false]])
+        //         ->get();
 
-        } else {
-            //   On réccupère uniquement les contacts de l'utilisateur connecté
-            $contactentites = Contact::whereHas('typecontacts', function (Builder $query) {
-                $query->where('type', 'Prospect');
-            })
-                ->where([["type", "entité"], ['archive', false], ["user_id", $user->id]])
-                ->get();
-
-
-            $contactindividus = Contact::whereHas('typecontacts', function (Builder $query) {
-                $query->where('type', 'Prospect');
-            })
-                ->where([["type", "individu"], ['archive', false], ["user_id", $user->id]])
-                ->get();
-        }
+        // } else {
+        //     //   On réccupère uniquement les contacts de l'utilisateur connecté
+        //     $contactentites = Contact::whereHas('typecontacts', function (Builder $query) {
+        //         $query->where('type', 'Prospect');
+        //     })
+        //         ->where([["type", "entité"], ['archive', false], ["user_id", $user->id]])
+        //         ->get();
 
 
-        return view('prospect.index', compact('contactentites', 'contactindividus'));
+        //     $contactindividus = Contact::whereHas('typecontacts', function (Builder $query) {
+        //         $query->where('type', 'Prospect');
+        //     })
+        //         ->where([["type", "individu"], ['archive', false], ["user_id", $user->id]])
+        //         ->get();
+
+                
+        //         $contactindividus = Individu::select('individus.*','contacts.*')
+        //                             ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+        //                             ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+        //                             ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+        //                             ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+        //                             ->where('typecontacts.type', 'prospect')
+        //                             ->get();
+        // }
+
+
+        //  dd($contactindividus);
+
+        return view('prospect.index');
     }
 
     /**

@@ -283,4 +283,21 @@ class ContactController extends Controller
     {
         //
     }
+    
+     /**
+     * Archiver un contact
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function archiver($contact_id)
+    {
+        $contact = Contact::where('id', Crypt::decrypt($contact_id))->first();
+        
+        
+        $contact->archive = true;
+        $contact->update();
+        
+        return "200";
+    }
 }

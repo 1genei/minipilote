@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Prospect;
 
 use App\Models\Contact;
 use App\Models\Individu;
@@ -13,7 +13,7 @@ use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 
-final class ProspectIndividuTable extends PowerGridComponent
+final class IndividuTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
@@ -31,7 +31,7 @@ final class ProspectIndividuTable extends PowerGridComponent
 
         return [
             Exportable::make('export')
-                ->striped("#A6ACCD")
+                ->striped()
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
             Header::make()->showSearchInput(),
             Footer::make()
@@ -60,14 +60,7 @@ final class ProspectIndividuTable extends PowerGridComponent
 
         if ($user->is_admin) {
 
-            // On réccupère tous les contacts
-            $contactentites = Individu::select('individus.*','contacts.*')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false]])
-                ->where('typecontacts.type', 'Prospect')
-                ->get();
+            // On réccupère tous les contacts de type individu
                 
             $contactindividus = Individu::select('individus.*','contacts.*')
                 ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
@@ -79,14 +72,6 @@ final class ProspectIndividuTable extends PowerGridComponent
 
         } else {
             //   On réccupère uniquement les contacts de l'utilisateur connecté
-         
-            $contactentites = Individu::select('individus.*','contacts.*')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false], ["contacts.user_id", $user->id]])
-                ->where('typecontacts.type', 'Prospect')
-                ->get();
                 
             $contactindividus = Individu::select('individus.*','contacts.*')
                 ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
@@ -275,5 +260,4 @@ final class ProspectIndividuTable extends PowerGridComponent
                 ->hide(),
         ];
     }
-    
 }
