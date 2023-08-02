@@ -61,8 +61,7 @@
         <!-- end row-->
 
         {{-- <livewire:role-table tableName="roles" /> --}}
-        @livewire('power-grid-demo-table')
-        @livewire('role-table')
+
         <div class="row">
             <div class="col-12">
                 <div class="card">
