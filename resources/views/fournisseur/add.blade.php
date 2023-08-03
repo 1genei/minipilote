@@ -14,10 +14,10 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="">Clients</a></li>
+                            <li class="breadcrumb-item"><a href="">Fournisseurs</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Clients</h4>
+                    <h4 class="page-title">Fournisseurs</h4>
                 </div>
             </div>
 
@@ -30,9 +30,9 @@
                                 {{-- <a href="{{ URL::previous() }}" type="button" class="btn btn-outline-primary"><i
                                         class="uil-arrow-left"></i>
                                     Retour</a> --}}
-                                <a href="{{ route('client.index') }}" type="button" class="btn btn-outline-primary"><i
+                                <a href="{{ route('fournisseur.index') }}" type="button" class="btn btn-outline-primary"><i
                                         class="uil-arrow-left"></i>
-                                    Clients</a>
+                                    Fournisseurs</a>
 
                             </div>
                             @if (session('ok'))
@@ -79,7 +79,7 @@
                         </div>
 
 
-                        <livewire:client.add-form />
+                        <livewire:fournisseur.add-form />
 
 
 
@@ -183,17 +183,17 @@
 
 
 
-    {{-- selection des statuts du client --}}
+    {{-- selection des statuts du fournisseur --}}
 
     <script>
         $('#client').click(function(e) {
             if (e.currentTarget.checked == true) {
-                $('#client').prop('checked', false);
+                $('#fournisseur').prop('checked', false);
             }
 
         });
 
-        $('#client').click(function(e) {
+        $('#fournisseur').click(function(e) {
             if (e.currentTarget.checked == true) {
                 $('#client').prop('checked', false);
             }
@@ -201,7 +201,7 @@
         });
     </script>
 
-    {{-- selection du type de client --}}
+    {{-- selection du type de fournisseur --}}
 
     <script>
         $(document).ready(function() {
