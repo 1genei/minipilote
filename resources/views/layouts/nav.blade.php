@@ -74,7 +74,7 @@
             <div class="collapse" id="utilisateurs">
                 <ul class="side-nav-second-level">
                     <li>
-                        <a href="{{ route('role.index') }}">Gestion</a>
+                        <a href="{{ route('utilisateur.index') }}">Gestion</a>
                     </li>
                     <li>
                         <a href="{{ route('permission.index') }}">Droits</a>

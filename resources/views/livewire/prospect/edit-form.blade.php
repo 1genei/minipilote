@@ -890,7 +890,7 @@
                                 @endif
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-3" wire:ignore>
                                 <label for="pays" class="form-label">
                                     Pays
                                 </label>

@@ -892,13 +892,13 @@
                                 @endif
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-3" wire:ignore>
                                 <label for="pays" class="form-label">
                                     Pays
                                 </label>
 
-                                <select class="form-select select2" id="pays" name="pays" style="width:100%"
-                                    wire:model.defer="pays">
+                                <select class="form-control select2" data-toggle="select2" id="pays"
+                                    name="pays" style="width:100%" wire:model.defer="pays">
 
                                     @include('livewire.pays')
 

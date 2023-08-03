@@ -10,6 +10,7 @@ use App\Http\Controllers\ParametreController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProspectController;
+use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
@@ -92,6 +93,20 @@ Route::controller(ContactController::class)->group(function () {
     Route::post('/contact/desarchiver/{contactId}', 'unarchive')->name('contact.unarchive')->middleware(['auth']);
     Route::post('/contact/associer/{entiteId}', 'associer_individu')->name('contact.associate')->middleware(['auth']);
     Route::post('/contact/desassocier/{entiteId}/{individuId}', 'deassocier_individu')->name('contact.deassociate')->middleware(['auth']);
+});
+
+
+// Utilisateurs
+Route::controller(UtilisateurController::class)->group(function () {
+    Route::get('/utilisateurs', 'index')->name('utilisateur.index')->middleware(['auth']);
+    Route::get('/utilisateur/ajouter', 'create')->name('utilisateur.create')->middleware(['auth']);
+    Route::post('/utilisateur/ajouter', 'store')->name('utilisateur.store')->middleware(['auth']);
+    Route::get('/utilisateur/detail/{utilisateurId}', 'show')->name('utilisateur.show')->middleware(['auth']);
+    Route::post('/utilisateur/modifier/{utilisateurId}', 'update')->name('utilisateur.update')->middleware(['auth']);
+    Route::put('/utilisateur/archiver/{utilisateurId}', 'archiver')->name('utilisateur.archive')->middleware(['auth']);
+    Route::post('/utilisateur/desarchiver/{utilisateurId}', 'unarchive')->name('utilisateur.unarchive')->middleware(['auth']);
+    Route::post('/utilisateur/associer/{entiteId}', 'associer_individu')->name('utilisateur.associate')->middleware(['auth']);
+    Route::post('/utilisateur/desassocier/{entiteId}/{individuId}', 'deassocier_individu')->name('utilisateur.deassociate')->middleware(['auth']);
 });
 
 // Prospect
