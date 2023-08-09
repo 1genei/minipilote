@@ -10,7 +10,7 @@
     <div class="container-fluid">
 
         <!-- LOGO -->
-        <a href="index.html" class="topnav-logo">
+        <a href="#" class="topnav-logo">
             <span class="topnav-logo-lg">
                 <img src="{{ asset('assets/images/logo_sm.png') }}" alt="" height="16">
                 <span style="color: #fff; font-size:20px; font-weight: bold;">{{ env('APP_NAME') }}</span>

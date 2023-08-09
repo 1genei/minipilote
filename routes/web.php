@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\Autho365Controller;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CollaborateurController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FournisseurController;
@@ -86,8 +87,10 @@ Route::controller(PermissionController::class)->group(function () {
 // Contacts
 Route::controller(ContactController::class)->group(function () {
     Route::get('/contacts', 'index')->name('contact.index')->middleware(['auth']);
+    Route::get('/contact/ajouter', 'create')->name('contact.create')->middleware(['auth']);
     Route::post('/contact/ajouter', 'store')->name('contact.store')->middleware(['auth']);
     Route::get('/contact/detail/{contactId}', 'show')->name('contact.show')->middleware(['auth']);
+    Route::get('/contact/modifier/{contactId}', 'edit')->name('contact.edit')->middleware(['auth']);
     Route::post('/contact/modifier/{contactId}', 'update')->name('contact.update')->middleware(['auth']);
     Route::put('/contact/archiver/{contactId}', 'archiver')->name('contact.archive')->middleware(['auth']);
     Route::post('/contact/desarchiver/{contactId}', 'unarchive')->name('contact.unarchive')->middleware(['auth']);
@@ -129,6 +132,19 @@ Route::controller(ClientController::class)->group(function () {
     Route::put('/client/archiver/{clientId}', 'archive')->name('client.archive')->middleware(['auth']);
     Route::post('/client/desarchiver/{clientId}', 'unarchive')->name('client.unarchive')->middleware(['auth']);
 });
+
+// Collaborateurs
+Route::controller(CollaborateurController::class)->group(function () {
+    Route::get('/collaborateurs', 'index')->name('collaborateur.index')->middleware(['auth']);
+    Route::post('/collaborateur/ajouter', 'store')->name('collaborateur.store')->middleware(['auth']);
+    Route::get('/collaborateur/ajouter', 'create')->name('collaborateur.create')->middleware(['auth']);
+    Route::get('/collaborateur/modifier/{collaborateurId}', 'edit')->name('collaborateur.edit')->middleware(['auth']);
+    Route::post('/collaborateur/modifier/{collaborateurId}', 'update')->name('collaborateur.update')->middleware(['auth']);
+    Route::put('/collaborateur/archiver/{collaborateurId}', 'archive')->name('collaborateur.archive')->middleware(['auth']);
+    Route::post('/collaborateur/desarchiver/{collaborateurId}', 'unarchive')->name('collaborateur.unarchive')->middleware(['auth']);
+});
+
+
 // Fournisseur
 Route::controller(FournisseurController::class)->group(function () {
     Route::get('/fournisseurs', 'index')->name('fournisseur.index')->middleware(['auth']);

@@ -79,7 +79,7 @@
                         </div>
 
 
-                        <livewire:prospect.add-form />
+                        <livewire:utilisateur.add-form />
 
 
 
@@ -105,202 +105,19 @@
 @endsection
 
 @section('script')
-    {{-- Lorsqu'on submit le formulaire --}}
+    {{-- Ajout de contact existant --}}
     <script>
-        $('#enregistrer').click(function(e) {
+        $('.ancien_contact').hide();
+        $('#contact_existant').change(function() {
 
-            // e.preventDefault();
-            var emails = [];
+            if ($(this)[0].checked == true) {
+                $('.ancien_contact').show();
+                $('.nouveau_contact').hide();
 
-            var email_inputs = $('.emails');
-            email_inputs.each((index, input) => {
-                if (input.value != "") emails.push(input.value)
-            });
-
-
-            if (emails.length == 0) {
-                swal.fire(
-                    'Erreur',
-                    'Veuillez renseigner au moins une adresse mail',
-                    'error'
-                )
             } else {
-                $('#emailx').val(JSON.stringify(emails));
-                // $('form').submit();
+                $('.ancien_contact').hide();
+                $('.nouveau_contact').show();
             }
-
-
-
-        });
-    </script>
-
-
-
-    {{-- Suppression ou Ajout de champ email --}}
-    <script>
-        var x = 1;
-
-        $(".cacher_btn_remove_field").hide();
-        $(document).ready(function() {
-            var max_fields = 5;
-            var wrapper = $(".input_fields_wrap");
-            var add_button = $(".add_field_button");
-
-            $(add_button).click(function(e) {
-                e.preventDefault();
-
-                if (x < max_fields) {
-                    x++;
-
-                    $(wrapper).append(`
-                
-                        <div class="container_email_input mt-1 field${x}">
-                            <div class="item_email">
-                                <input type="email" id="email${x}" name="email${x}"
-                                    value=""
-                                    class="form-control emails" >
-                            </div>
-                            <div class="item_btn_remove">
-                                <a class="btn btn-danger add_field_button"
-                                    style="padding: 0.55rem 0.9rem;"><i
-                                        class="mdi mdi-close-thick "></i> </a>
-                            </div>
-                        </div>
-                
-                `);
-
-                }
-            });
-            $(wrapper).on("click", ".item_btn_remove", function(e) {
-                e.preventDefault();
-                // if (x > 2) $("#pal_starter" + (x - 1) + '').show();
-                if (x > 1) $(this).parent('div').remove();
-                x--;
-            })
-        });
-    </script>
-
-
-
-
-    {{-- selection des statuts du prospect --}}
-
-    <script>
-        $('#client').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#prospect').prop('checked', false);
-            }
-
-        });
-
-        $('#prospect').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#client').prop('checked', false);
-            }
-
-        });
-    </script>
-
-    {{-- selection du type de prospect --}}
-
-    <script>
-        $(document).ready(function() {
-
-            // $(".div_personne_morale").show();
-            // $(".div_personne_physique").hide();
-            // $(".div_couple").hide();
-            // $(".div_groupe").hide();
-
-
-            $(".div_associer_contact").show();
-
-
-
-            // $("input[type='radio']").click(function(e) {
-
-            //     let nature = e.currentTarget.value;
-
-            //     if (nature == "Personne morale") {
-
-            //         $("input[type='text']").removeAttr("required");
-            //         $("select").removeAttr("required");
-            //         $("#type").val("entité");
-
-            //         $(".div_personne_physique").hide();
-            //         $(".div_personne_morale").show();
-            //         $(".div_couple").hide();
-            //         $(".div_groupe").hide();
-            //         $(".div_personne_tout").show();
-            //         $(".div_associer_contact").show();
-
-            //         $("#forme_juridique").attr("required", "required");
-            //         $("#raison_sociale").attr("required", "required");
-            //         $("#email").attr("required", "required");
-
-            //     } else if (nature == "Personne physique") {
-            //         $("input[type='text']").removeAttr("required");
-            //         $("select").removeAttr("required");
-
-            //         $(".div_personne_physique").show();
-            //         $(".div_personne_morale").hide();
-            //         $(".div_couple").hide();
-            //         $(".div_groupe").hide();
-            //         $(".div_personne_tout").show();
-
-            //         $("#civilite").attr("required", "required");
-            //         $("#nom").attr("required", "required");
-            //         $("#prenom").attr("required", "required");
-            //         $("#email").attr("required", "required");
-
-            //         $("#type").val("individu");
-            //         $(".div_associer_contact").hide();
-
-
-
-            //     } else if (nature == "Couple") {
-            //         $("input[type='text']").removeAttr("required");
-            //         $("select").removeAttr("required");
-
-            //         $(".div_personne_physique").hide();
-            //         $(".div_personne_morale").hide();
-            //         $(".div_couple").show();
-            //         $(".div_groupe").hide();
-            //         $(".div_personne_tout").hide();
-
-            //         $("#civilite1").attr("required", "required");
-            //         $("#nom1").attr("required", "required");
-            //         $("#prenom1").attr("required", "required");
-            //         $("#email1").attr("required", "required");
-
-            //         $("#civilite2").attr("required", "required");
-            //         $("#nom2").attr("required", "required");
-            //         $("#prenom2").attr("required", "required");
-            //         $("#email2").attr("required", "required");
-
-            //         $("#type").val("individu");
-            //         $(".div_associer_contact").hide();
-
-            //     } else if (nature == "Groupe") {
-            //         $("input[type='text']").removeAttr("required");
-            //         $("select").removeAttr("required");
-
-            //         $(".div_personne_physique").hide();
-            //         $(".div_personne_morale").hide();
-            //         $(".div_couple").hide();
-            //         $(".div_personne_tout").show();
-            //         $(".div_groupe").show();
-
-            //         $(".div_associer_contact").show();
-
-            //         $("#nom_groupe").attr("required", "required");
-            //         $("#email").attr("required", "required");
-            //         $("#type").val("entité");
-
-            //     }
-
-            // });
-
-
-        });
+        })
     </script>
 @endsection

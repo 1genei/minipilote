@@ -79,7 +79,8 @@
                         </div>
 
 
-                        <livewire:fournisseur.edit-form :contact="$contact" :cont="$cont" :emails="$emails" />
+                        <livewire:contact.edit-form :typecontact="'Fournisseur'" :contact="$contact" :cont="$cont"
+                            :emails="$emails" />
 
 
 

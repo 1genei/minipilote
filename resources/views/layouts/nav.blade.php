@@ -93,6 +93,7 @@
                 <ul class="side-nav-second-level">
 
                     <li class="{{ $li_ordre_simule_algo1 }}">
+                        <a href="{{ route('collaborateur.index') }}">Collaborateurs</a>
                         <a href="{{ route('prospect.index') }}">Prospects</a>
                         <a href="{{ route('client.index') }}">Clients</a>
                         <a href="{{ route('fournisseur.index') }}">Fournisseurs</a>

@@ -79,7 +79,8 @@
                         </div>
 
 
-                        <livewire:client.edit-form :contact="$contact" :cont="$cont" :emails="$emails" />
+                        <livewire:contact.edit-form :typecontact="'Client'" :contact="$contact" :cont="$cont"
+                            :emails="$emails" />
 
 
 

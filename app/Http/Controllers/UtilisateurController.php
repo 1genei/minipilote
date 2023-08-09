@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use App\Models\User;
+use App\Models\Individu;
 
 class UtilisateurController extends Controller
 {
@@ -28,8 +30,81 @@ class UtilisateurController extends Controller
     public function create()
     {
         
-        $contactindividus = Contact::where([["type","individu"], ['archive', false]])->get();
+        $contactindividus = Contact::where([["type","individu"], ['archive', false]])->get();     
 
         return view('utilisateur.add', compact('contactindividus'));
+    }
+    
+    /**
+    *  
+    */
+    public function store(Request $request){
+    
+        dd($request->all());
+        
+        
+        
+        $typecontact = Typecontact::where('type', $request->type_contact)->first();
+
+        $contact = Contact::create([
+            "user_id" => Auth::user()->id,
+            "type" => $request->type_contact,
+            "nature" => $request->nature,
+
+        ]);
+        
+        $contact->typeContacts()->attach($typecontact->id);
+        
+        
+        $user = User::create([
+            // 'name' => $request->name,
+            'email' => $request->email,
+            'contact_id' => $contact->id,
+            'password' => Hash::make($request->password),
+        ]);
+        
+        
+        
+        
+        
+        
+        Individu::create([
+            "email" => $request->email,
+            "contact_id" => $contact->id,
+            "nom" => $request->nom,
+            "prenom" => $request->prenom,
+            "adresse" => $request->adresse,
+            "complement_adresse" => $request->complement_adresse,
+            "code_postal" => $request->code_postal,
+            "ville" => $request->ville,
+            "pays" => $request->pays,
+
+            "civilite" => $request->civilite,
+            "date_naissance" => $request->date_naissance,
+            "lieu_naissance" => $request->lieu_naissance,
+            "nationalite" => $request->nationalite,
+            "situation_matrimoniale" => $request->situation_matrimoniale,
+            "nom_jeune_fille" => $request->nom_jeune_fille,
+            "telephone_fixe" => $request->telephone_fixe,
+            "telephone_mobile" => $request->telephone_mobile,
+
+            "civilite1" => $request->civilite1,
+            "nom1" => $request->nom1,
+            "prenom1" => $request->prenom1,
+            "telephone_fixe1" => $request->telephone_fixe1,
+            "telephone_mobile1" => $request->telephone_mobile1,
+            "email1" => $request->email1,
+
+            "civilite2" => $request->civilite2,
+            "nom2" => $request->nom2,
+            "prenom2" => $request->prenom2,
+            "telephone_fixe2" => $request->telephone_fixe2,
+            "telephone_mobile2" => $request->telephone_mobile2,
+            "email2" => $request->email2,
+
+            "notes" => $request->notes,
+
+        ]);
+        
     }
 }

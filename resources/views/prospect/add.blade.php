@@ -79,7 +79,7 @@
                         </div>
 
 
-                        <livewire:prospect.add-form />
+                        <livewire:contact.add-form :typecontact="'Prospect'" />
 
 
 

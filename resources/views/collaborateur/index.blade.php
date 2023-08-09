@@ -13,10 +13,10 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="">Contacts</a></li>
+                            <li class="breadcrumb-item"><a href="">Collaborateurs</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Contacts</h4>
+                    <h4 class="page-title">Collaborateurs</h4>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
         <style>
             body {
 
-                font-size: 13px;
+                font-size: 14px;
             }
         </style>
 
@@ -65,8 +65,9 @@
                     <div class="card-body">
                         <div class="row mb-2">
                             <div class="col-sm-5">
-                                <a href="{{ route('contact.create') }}" class="btn btn-primary mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Nouveau contact
+                                <a href="{{ route('collaborateur.create') }}" class="btn btn-primary mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i>
+                                    Nouveau collaborateur
                                 </a>
                             </div>
                             <div class="col-sm-7">
@@ -102,37 +103,11 @@
                             </div>
                         </div>
 
-                        <ul class="nav nav-tabs nav-bordered mb-3">
 
-                            <li class="nav-item">
-                                <a href="#entite" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
-                                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Personnes morales</span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#individu" data-bs-toggle="tab" aria-expanded="false" class="nav-link ">
-                                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Individus</span>
-                                </a>
-                            </li>
-
-
-                        </ul>
-
-                        <div class="tab-content">
-
-                            <div class="tab-pane show active" id="entite">
-                                @include('contact.index_entite')
-                            </div>
-
-                            <div class="tab-pane " id="individu">
-                                @include('contact.index_individu')
-                            </div>
-
-
+                        <div class="table-responsive">
+                            <livewire:collaborateur.individu-table />
                         </div>
+
 
 
 
@@ -147,133 +122,10 @@
 
 
 
-
     </div> <!-- End Content -->
 @endsection
 
 @section('script')
-    <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
-
-    {{-- selection des statuts du contact --}}
-
-    <script>
-        $('#client').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#prospect').prop('checked', false);
-            }
-
-        });
-
-        $('#prospect').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#client').prop('checked', false);
-            }
-
-        });
-    </script>
-
-    {{-- selection du type de contact --}}
-
-    <script>
-        $('.div-entite').hide();
-
-        $('#type').change(function(e) {
-
-            if (e.currentTarget.value == "entité") {
-                $('.div-entite').show();
-                $('.div-individu').hide();
-
-            } else {
-                $('.div-entite').hide();
-                $('.div-individu').show();
-            }
-
-        });
-    </script>
-
-
-    {{-- Modification d'un contact --}}
-    <script>
-        $('.edit-contact').click(function(e) {
-
-            let that = $(this);
-
-            $('#edit-nom').val(that.data('nom'));
-            $('#edit-prenom').val(that.data('prenom'));
-
-            $('#edit-prospect').prop('checked', that.data('est-prospect'));
-            $('#edit-client').prop('checked', that.data('est-client'));
-            $('#edit-fournisseur').prop('checked', that.data('est-fournisseur'));
-
-            $('#edit-email').val(that.data('email'));
-            $('#edit-contact1').val(that.data('contact1'));
-            $('#edit-contact2').val(that.data('contact2'));
-            $('#edit-adresse').val(that.data('adresse'));
-            $('#edit-code_postal').val(that.data('code-postal'));
-            $('#edit-ville').val(that.data('ville'));
-
-
-            let currentFormAction = that.data('href');
-            $('#form-edit').attr('action', currentFormAction);
-
-
-
-
-            //    selection du type de contact
-
-
-            let currentType = that.data('type-contact');
-            let currentTypeentite = that.data('typeentite');
-            $('#edit-type option[value=' + currentType + ']').attr('selected', 'selected');
-
-
-            if (currentType == "entité") {
-                $('.div-edit-individu').hide();
-
-            } else {
-                $('.div-edit-entite').hide();
-
-            }
-
-            $('#edit-type').change(function(e) {
-
-                if (e.currentTarget.value == "entité") {
-                    $('.div-edit-entite').show();
-                    $('.div-edit-individu').hide();
-
-                } else {
-                    $('.div-edit-entite').hide();
-                    $('.div-edit-individu').show();
-                }
-
-            });
-
-            $('#edit-type_entite option[value=' + currentTypeentite + ']').attr('selected', 'selected');
-
-
-
-
-        })
-
-
-
-        // selection des statuts du contact  Modal modifier
-        $('#edit-client').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-prospect').prop('checked', false);
-            }
-
-        });
-
-        $('#edit-prospect').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-client').prop('checked', false);
-            }
-
-        });
-    </script>
-
-
     <script>
         $(function() {
             $.ajaxSetup({
@@ -282,7 +134,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive-role', function(event) {
+            $('body').on('click', 'a.archive_contact', function(event) {
                 let that = $(this)
                 event.preventDefault();
 
@@ -321,9 +173,9 @@
                                     '',
                                     'success'
                                 )
-                                document.location.reload();
+                                // document.location.reload();
 
-                                // that.parents('tr').remove();
+                                that.parents('tr').remove();
                             })
 
 
@@ -333,7 +185,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulé',
-                            'Rôle non archivé :)',
+                            'Contact non archivé :)',
                             'error'
                         )
                     }
@@ -412,41 +264,6 @@
                 });
             })
 
-        });
-    </script>
-
-
-    <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/responsive.bootstrap5.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            "use strict";
-            $("#tab1").
-            DataTable({
-                language: {
-                    paginate: {
-                        previous: "<i class='mdi mdi-chevron-left'>",
-                        next: "<i class='mdi mdi-chevron-right'>"
-                    },
-                    info: "Showing actions _START_ to _END_ of _TOTAL_",
-                    lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
-                },
-                pageLength: 100,
-
-                select: {
-                    style: "multi"
-                },
-                drawCallback: function() {
-                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                        document.querySelector(".dataTables_wrapper .row").querySelectorAll(".col-md-6")
-                        .forEach(function(e) {
-                            e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
-                                .classList.remove("col-md-6")
-                        })
-                }
-            })
         });
     </script>
 @endsection

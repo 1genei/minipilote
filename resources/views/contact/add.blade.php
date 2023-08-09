@@ -79,8 +79,9 @@
                         </div>
 
 
-                        <livewire:contact.edit-form :typecontact="'Prospect'" :contact="$contact" :cont="$cont"
-                            :emails="$emails" />
+                        <livewire:contact.add-form />
+
+
 
                         <style>
                             .select2-container .select2-selection--single {
@@ -96,11 +97,6 @@
         </div>
         <!-- end row -->
 
-        {{-- @php
-            
-            $nbemails = sizeof($emails);
-            
-        @endphp --}}
 
 
 
@@ -110,9 +106,8 @@
 
 @section('script')
     {{-- Lorsqu'on submit le formulaire --}}
-
     <script>
-        $('#modifier').click(function(e) {
+        $('#enregistrer').click(function(e) {
 
             // e.preventDefault();
             var emails = [];
@@ -143,9 +138,7 @@
 
     {{-- Suppression ou Ajout de champ email --}}
     <script>
-        var emails = @json($emails);
-
-        var x = emails != null ? emails.length : 0;
+        var x = 1;
 
         $(".cacher_btn_remove_field").hide();
         $(document).ready(function() {
@@ -153,40 +146,10 @@
             var wrapper = $(".input_fields_wrap");
             var add_button = $(".add_field_button");
 
-            //  Ajout dans inuts emails existants
-            if (emails != null) {
-
-                emails.forEach((email, index) => {
-
-                    if (index > 0) {
-
-                        $(wrapper).append(`
-                        
-                        <div class="container_email_input mt-1 field${index}">
-                            <div class="item_email">
-                                <input type="email" id="email${index}" name="email${index}" value="${email}"
-                                    class="form-control emails" >
-                            </div>
-                            <div class="item_btn_remove">
-                                <a class="btn btn-danger add_field_button"
-                                    style="padding: 0.55rem 0.9rem;"><i
-                                        class="mdi mdi-close-thick "></i> </a>
-                            </div>
-                        </div>
-                        `);
-                    };
-
-
-                });
-
-            }
-
-
-
             $(add_button).click(function(e) {
                 e.preventDefault();
 
-                if (x <= max_fields) {
+                if (x < max_fields) {
                     x++;
 
                     $(wrapper).append(`
@@ -239,4 +202,105 @@
     </script>
 
     {{-- selection du type de prospect --}}
+
+    <script>
+        $(document).ready(function() {
+
+            // $(".div_personne_morale").show();
+            // $(".div_personne_physique").hide();
+            // $(".div_couple").hide();
+            // $(".div_groupe").hide();
+
+
+            $(".div_associer_contact").show();
+
+
+
+            // $("input[type='radio']").click(function(e) {
+
+            //     let nature = e.currentTarget.value;
+
+            //     if (nature == "Personne morale") {
+
+            //         $("input[type='text']").removeAttr("required");
+            //         $("select").removeAttr("required");
+            //         $("#type").val("entité");
+
+            //         $(".div_personne_physique").hide();
+            //         $(".div_personne_morale").show();
+            //         $(".div_couple").hide();
+            //         $(".div_groupe").hide();
+            //         $(".div_personne_tout").show();
+            //         $(".div_associer_contact").show();
+
+            //         $("#forme_juridique").attr("required", "required");
+            //         $("#raison_sociale").attr("required", "required");
+            //         $("#email").attr("required", "required");
+
+            //     } else if (nature == "Personne physique") {
+            //         $("input[type='text']").removeAttr("required");
+            //         $("select").removeAttr("required");
+
+            //         $(".div_personne_physique").show();
+            //         $(".div_personne_morale").hide();
+            //         $(".div_couple").hide();
+            //         $(".div_groupe").hide();
+            //         $(".div_personne_tout").show();
+
+            //         $("#civilite").attr("required", "required");
+            //         $("#nom").attr("required", "required");
+            //         $("#prenom").attr("required", "required");
+            //         $("#email").attr("required", "required");
+
+            //         $("#type").val("individu");
+            //         $(".div_associer_contact").hide();
+
+
+
+            //     } else if (nature == "Couple") {
+            //         $("input[type='text']").removeAttr("required");
+            //         $("select").removeAttr("required");
+
+            //         $(".div_personne_physique").hide();
+            //         $(".div_personne_morale").hide();
+            //         $(".div_couple").show();
+            //         $(".div_groupe").hide();
+            //         $(".div_personne_tout").hide();
+
+            //         $("#civilite1").attr("required", "required");
+            //         $("#nom1").attr("required", "required");
+            //         $("#prenom1").attr("required", "required");
+            //         $("#email1").attr("required", "required");
+
+            //         $("#civilite2").attr("required", "required");
+            //         $("#nom2").attr("required", "required");
+            //         $("#prenom2").attr("required", "required");
+            //         $("#email2").attr("required", "required");
+
+            //         $("#type").val("individu");
+            //         $(".div_associer_contact").hide();
+
+            //     } else if (nature == "Groupe") {
+            //         $("input[type='text']").removeAttr("required");
+            //         $("select").removeAttr("required");
+
+            //         $(".div_personne_physique").hide();
+            //         $(".div_personne_morale").hide();
+            //         $(".div_couple").hide();
+            //         $(".div_personne_tout").show();
+            //         $(".div_groupe").show();
+
+            //         $(".div_associer_contact").show();
+
+            //         $("#nom_groupe").attr("required", "required");
+            //         $("#email").attr("required", "required");
+            //         $("#type").val("entité");
+
+            //     }
+
+            // });;
+
+
+        });
+    </script>
 @endsection

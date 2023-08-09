@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Client;
+namespace App\Http\Livewire\Contact;
 
 use Livewire\Component;
 
-class AddForm extends Component
+class EditForm extends Component
 {
+
     public $raison_sociale;
     public $nom;
     public $nom1;
@@ -43,8 +44,57 @@ class AddForm extends Component
     public $civilite1;
     public $civilite2;
     public $notes;
-    public $contactindividus;
 
+    public $contact;
+    public $cont;
+    public $emails;
+    public $typecontact;
+    
+    
+    
+    public function mount(){
+    
+
+        $this->nature = $this->contact->nature;
+        $this->raison_sociale = $this->cont->raison_sociale;
+        $this->forme_juridique = $this->cont->forme_juridique;
+        $this->nom =  $this->cont->nom;
+        $this->nom1 =  $this->cont->nom1;
+        $this->nom2 =  $this->cont->nom2;
+        $this->prenom =  $this->cont->prenom;
+        $this->prenom1 =  $this->cont->prenom1;
+        $this->prenom2 =  $this->cont->prenom2;
+        $this->emailx =  $this->cont->emailx;
+        $this->email =  sizeof($this->emails) > 0 ? $this->emails[0] : "" ;
+        $this->email1 =  $this->cont->email1;
+        $this->email2 =  $this->cont->email2;
+        $this->ville =  $this->cont->ville;
+        $this->code_postal =  $this->cont->code_postal;
+        $this->adresse =  $this->cont->adresse;
+        $this->complement_adresse =  $this->cont->complement_adresse;
+        $this->pays =  $this->cont->pays;
+        $this->numero_siret =  $this->cont->numero_siret;
+        $this->numero_tva =  $this->cont->numero_tva;
+        $this->telephone_fixe =  $this->cont->telephone_fixe;
+        $this->indicatif_fixe =  $this->cont->indicatif_fixe;
+        $this->telephone_fixe1 =  $this->cont->telephone_fixe1;
+        $this->indicatif_fixe1 =  $this->cont->indicatif_fixe1;
+        $this->telephone_fixe2 =  $this->cont->telephone_fixe2;
+        $this->indicatif_fixe2 =  $this->cont->indicatif_fixe2;
+        $this->telephone_mobile =  $this->cont->telephone_mobile;
+        $this->indicatif_mobile =  $this->cont->indicatif_mobile;
+        $this->telephone_mobile1 =  $this->cont->telephone_mobile1;
+        $this->indicatif_mobile1 =  $this->cont->indicatif_mobile1;
+        $this->telephone_mobile2 =  $this->cont->telephone_mobile2;
+        $this->indicatif_mobile2 =  $this->cont->indicatif_mobile2;
+        $this->type =  $this->cont->type;
+        $this->civilite =  $this->cont->civilite;
+        $this->civilite1 =  $this->cont->civilite1;
+        $this->civilite2 =  $this->cont->civilite2;
+        $this->notes =  $this->cont->notes;
+        
+    }
+    
     public function rules()
     {
 
@@ -54,20 +104,22 @@ class AddForm extends Component
                 'nature' => 'required',
                 'raison_sociale' => 'required|string',
                 'forme_juridique' => 'required|string',
-                'emailx' => 'required|string',
+                // 'emailx' => 'required|string',
                 'email' => 'required|email|unique:entites',
             ];
 
         } elseif ($this->nature == "Personne physique") {
-
+    
             return [
                 'nature' => 'required',
                 // 'civilite' => 'required|string',
                 'nom' => 'required|string',
                 'prenom' => 'required|string',
-                'emailx' => 'required|string',
+                // 'emailx' => 'required|string',
                 'email' => 'required|email|unique:individus',
             ];
+            
+     
 
         } elseif ($this->nature == "Couple") {
 
@@ -99,15 +151,15 @@ class AddForm extends Component
         }
 
     }
-
-    public function submit()
+    
+     public function submit()
     {
 
         $this->validate();
     }
-
+    
     public function render()
     {
-        return view('livewire.client.add-form');
+        return view('livewire.contact.edit-form');
     }
 }

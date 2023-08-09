@@ -1,4 +1,4 @@
-<form action="{{ route('prospect.update', Crypt::encrypt($contact->id)) }}" method="post">
+<form action="{{ route('contact.update', Crypt::encrypt($contact->id)) }}" method="post">
     @csrf
 
 
@@ -12,59 +12,76 @@
 
                     <div class="row mb-3">
 
-                        <div class="col-sm-3">
+                        @if ($typecontact == 'Collaborateur')
+                            <div class="col-sm-3">
 
-                            <div class="form-check form-check-inline">
-                                <input type="radio" id="nature1" name="nature" wire:model="nature"
-                                    @if (old('nature') == 'Personne morale') checked @endif
-                                    @if ($contact->nature == 'Personne morale') checked @endif value="Personne morale" required
-                                    class="form-check-input">
-                                <label class="form-check-label" for="nature1">
-                                    Personne morale
-                                </label>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="nature2" name="nature" wire:model="nature"
+                                        value="Personne physique" required class="form-check-input">
+                                    <label class="form-check-label" for="nature2">
+                                        Personne physique
+                                    </label>
 
-                            </div>
-
-                        </div>
-                        <div class="col-sm-3">
-
-                            <div class="form-check form-check-inline">
-                                <input type="radio" id="nature2" name="nature" wire:model="nature"
-                                    @if (old('nature') == 'Personne physique') checked @endif
-                                    @if ($contact->nature == 'Personne physique') checked @endif value="Personne physique" required
-                                    class="form-check-input">
-                                <label class="form-check-label" for="nature2">
-                                    Personne physique
-                                </label>
+                                </div>
 
                             </div>
+                        @else
+                            <div class="col-sm-3">
 
-                        </div>
-                        <div class="col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="nature1" name="nature" wire:model="nature"
+                                        @if (old('nature') == 'Personne morale') checked @endif
+                                        @if ($contact->nature == 'Personne morale') checked @endif value="Personne morale"
+                                        required class="form-check-input">
+                                    <label class="form-check-label" for="nature1">
+                                        Personne morale
+                                    </label>
 
-                            <div class="form-check form-check-inline">
-                                <input type="radio" id="nature3" name="nature" wire:model="nature" value="Couple"
-                                    @if (old('nature') == 'Couple') checked @endif
-                                    @if ($contact->nature == 'Couple') checked @endif required class="form-check-input">
-                                <label class="form-check-label" for="nature3">
-                                    Couple
-                                </label>
-
-                            </div>
-
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-check form-check-inline">
-                                <input type="radio" id="nature4" name="nature" wire:model="nature" value="Groupe"
-                                    @if (old('nature') == 'Groupe') checked @endif
-                                    @if ($contact->nature == 'Groupe') checked @endif required class="form-check-input">
-                                <label class="form-check-label" for="nature4">
-                                    Groupe
-                                </label>
+                                </div>
 
                             </div>
+                            <div class="col-sm-3">
 
-                        </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="nature2" name="nature" wire:model="nature"
+                                        @if (old('nature') == 'Personne physique') checked @endif
+                                        @if ($contact->nature == 'Personne physique') checked @endif value="Personne physique"
+                                        required class="form-check-input">
+                                    <label class="form-check-label" for="nature2">
+                                        Personne physique
+                                    </label>
+
+                                </div>
+
+                            </div>
+                            <div class="col-sm-3">
+
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="nature3" name="nature" wire:model="nature"
+                                        value="Couple" @if (old('nature') == 'Couple') checked @endif
+                                        @if ($contact->nature == 'Couple') checked @endif required
+                                        class="form-check-input">
+                                    <label class="form-check-label" for="nature3">
+                                        Couple
+                                    </label>
+
+                                </div>
+
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="nature4" name="nature" wire:model="nature"
+                                        value="Groupe" @if (old('nature') == 'Groupe') checked @endif
+                                        @if ($contact->nature == 'Groupe') checked @endif required
+                                        class="form-check-input">
+                                    <label class="form-check-label" for="nature4">
+                                        Groupe
+                                    </label>
+
+                                </div>
+
+                            </div>
+                        @endif
                         @if ($errors->has('nature'))
                             <br>
                             <div class="alert alert-warning text-secondary " role="alert">
@@ -895,8 +912,8 @@
                                     Pays
                                 </label>
 
-                                <select class="form-select select2" id="pays" name="pays" style="width:100%"
-                                    wire:model.defer="pays">
+                                <select class="form-control select2" data-toggle="select2" id="pays"
+                                    name="pays" style="width:100%" wire:model.defer="pays">
 
                                     @include('livewire.pays')
 

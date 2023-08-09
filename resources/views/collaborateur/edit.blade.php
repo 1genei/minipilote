@@ -14,10 +14,10 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="">Prospects</a></li>
+                            <li class="breadcrumb-item"><a href="">Collaborateurs</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Prospects</h4>
+                    <h4 class="page-title">Collaborateurs</h4>
                 </div>
             </div>
 
@@ -30,10 +30,11 @@
                                 {{-- <a href="{{ URL::previous() }}" type="button" class="btn btn-outline-primary"><i
                                         class="uil-arrow-left"></i>
                                     Retour</a> --}}
-                                <a href="{{ route('prospect.index') }}" type="button" class="btn btn-outline-primary"><i
-                                        class="uil-arrow-left"></i>
-                                    Prospects</a>
+                                <a href="{{ route('collaborateur.index') }}" type="button"
+                                    class="btn btn-outline-primary"><i class="uil-arrow-left"></i>
+                                    Collaborateurs</a>
 
+                                <strong> {{ session('message') }}</strong>
                             </div>
                             @if (session('ok'))
                                 <div class="col-6">
@@ -79,7 +80,7 @@
                         </div>
 
 
-                        <livewire:contact.edit-form :typecontact="'Prospect'" :contact="$contact" :cont="$cont"
+                        <livewire:contact.edit-form :typecontact="'Collaborateur'" :contact="$contact" :cont="$cont"
                             :emails="$emails" />
 
                         <style>
@@ -220,17 +221,17 @@
 
 
 
-    {{-- selection des statuts du prospect --}}
+    {{-- selection des statuts du collaborateur --}}
 
     <script>
         $('#client').click(function(e) {
             if (e.currentTarget.checked == true) {
-                $('#prospect').prop('checked', false);
+                $('#collaborateur').prop('checked', false);
             }
 
         });
 
-        $('#prospect').click(function(e) {
+        $('#collaborateur').click(function(e) {
             if (e.currentTarget.checked == true) {
                 $('#client').prop('checked', false);
             }
@@ -238,5 +239,5 @@
         });
     </script>
 
-    {{-- selection du type de prospect --}}
+    {{-- selection du type de collaborateur --}}
 @endsection
