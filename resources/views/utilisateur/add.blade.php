@@ -120,4 +120,79 @@
             }
         })
     </script>
+
+    {{-- Lorsqu'on submit le formulaire --}}
+    <script>
+        $('#enregistrer').click(function(e) {
+
+            // e.preventDefault();
+            var emails = [];
+
+            var email_inputs = $('.emails');
+            email_inputs.each((index, input) => {
+                if (input.value != "") emails.push(input.value)
+            });
+
+
+            if (emails.length == 0) {
+                swal.fire(
+                    'Erreur',
+                    'Veuillez renseigner au moins une adresse mail',
+                    'error'
+                )
+            } else {
+                $('#emailx').val(JSON.stringify(emails));
+                // $('form').submit();
+            }
+
+
+
+        });
+    </script>
+
+
+
+    {{-- Suppression ou Ajout de champ email --}}
+    <script>
+        var x = 1;
+
+        $(".cacher_btn_remove_field").hide();
+        $(document).ready(function() {
+            var max_fields = 5;
+            var wrapper = $(".input_fields_wrap");
+            var add_button = $(".add_field_button");
+
+            $(add_button).click(function(e) {
+                e.preventDefault();
+
+                if (x < max_fields) {
+                    x++;
+
+                    $(wrapper).append(`
+                    
+                            <div class="container_email_input mt-1 field${x}">
+                                <div class="item_email">
+                                    <input type="email" id="email${x}" name="email${x}"
+                                        value=""
+                                        class="form-control emails" >
+                                </div>
+                                <div class="item_btn_remove">
+                                    <a class="btn btn-danger add_field_button"
+                                        style="padding: 0.55rem 0.9rem;"><i
+                                            class="mdi mdi-close-thick "></i> </a>
+                                </div>
+                            </div>
+                    
+                    `);
+
+                }
+            });
+            $(wrapper).on("click", ".item_btn_remove", function(e) {
+                e.preventDefault();
+                // if (x > 2) $("#pal_starter" + (x - 1) + '').show();
+                if (x > 1) $(this).parent('div').remove();
+                x--;
+            })
+        });
+    </script>
 @endsection

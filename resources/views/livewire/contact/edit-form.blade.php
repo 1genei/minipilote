@@ -10,6 +10,34 @@
             <div class="card">
                 <div class="card-body">
 
+                    @if ($displaytypecontact == true)
+                        <div class="row">
+                            <div class="col-6">
+
+                                <div class="mb-3 ">
+                                    <label for="typecontact" class="form-label">
+                                        Type de contact <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-select select2" id="typecontact" name="typecontact"
+                                        wire:model="typecontact">
+                                        @foreach ($typecontacts as $type)
+                                            <option value="{{ $type->type }}">{{ $type->type }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @if ($errors->has('typecontact'))
+                                        <br>
+                                        <div class="alert alert-warning text-secondary " role="alert">
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <strong>{{ $errors->first('typecontact') }}</strong>
+                                        </div>
+                                    @endif
+                                </div>
+
+                            </div>
+                        </div>
+                    @endif
                     <div class="row mb-3">
 
                         @if ($typecontact == 'Collaborateur')

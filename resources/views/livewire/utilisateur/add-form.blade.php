@@ -111,6 +111,10 @@
                                 <strong>Informations principales</strong>
                             </div>
                         </div>
+
+                        <input type="hidden" name="nature" value="Personne physique">
+                        <input type="hidden" name="type_contact" value="Collaborateur">
+
                         <div class="row">
 
                             <div class="col-sm-6">
@@ -161,6 +165,27 @@
 
 
                                 <style>
+                                    .container_email_label {
+                                        display: flex;
+                                        flex-flow: row wrap;
+                                        gap: 5px;
+                                    }
+
+                                    .container_email_input {
+                                        display: flex;
+                                        flex-flow: row nowrap;
+                                        justify-content: space-between;
+                                        /* gap: 5px; */
+                                    }
+
+                                    .item_email {
+                                        flex-grow: 11;
+                                    }
+
+                                    .item_btn_remove {
+                                        flex-grow: 1;
+                                    }
+
                                     .container_indicatif {
                                         display: flex;
                                         flex-flow: row wrap;
@@ -176,6 +201,49 @@
                                         flex-grow: 10;
                                     }
                                 </style>
+
+                                <input type="text" name="emailx" wire:model.defer="emailx" id="emailx"
+                                    value="" hidden>
+                                <div class="mb-3">
+                                    <div class=" container_email_label">
+                                        <div class="">
+                                            <label for="email" class="form-label">
+                                                Email <span class="text-danger">*</span>
+                                            </label>
+                                        </div>
+                                        <div class="">
+                                            <a class="btn btn-warning add_field_button"
+                                                style=" margin-top:-10px; padding: 0.2rem 0.4rem;"><i
+                                                    class="mdi mdi-plus-thick "></i> </a>
+                                        </div>
+                                    </div>
+                                    <div class="input_fields_wrap">
+                                        <div class="container_email_input">
+                                            <div class="item_email">
+                                                <input type="email" id="email" name="email"
+                                                    wire:model.defer="email" required
+                                                    value="{{ old('email') ? old('email') : '' }}"
+                                                    class="form-control emails">
+                                            </div>
+                                            {{-- <div class="item_btn_remove">
+                                                <a class="btn btn-danger add_field_button"
+                                                    style="padding: 0.55rem 0.9rem;"><i
+                                                        class="mdi mdi-close-thick "></i> </a>
+    
+                                            </div> --}}
+                                        </div>
+                                    </div>
+
+                                    @if ($errors->has('email'))
+                                        <br>
+                                        <div class="alert alert-warning text-secondary " role="alert">
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <strong>{{ $errors->first('email') }}</strong>
+                                        </div>
+                                    @endif
+                                </div>
+
 
 
                                 <div class="mb-3">

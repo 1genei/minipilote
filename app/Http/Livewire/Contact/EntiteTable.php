@@ -34,7 +34,10 @@ final class EntiteTable extends PowerGridComponent
             Exportable::make('export')
                 ->striped()
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
-            Header::make()->showSearchInput(),
+            Header::make()
+            ->showSearchInput()
+            ->showToggleColumns(),
+            
             Footer::make()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -84,7 +87,7 @@ final class EntiteTable extends PowerGridComponent
                 
         
         }
-        
+
         
     
         return $contactentites;
@@ -126,6 +129,22 @@ final class EntiteTable extends PowerGridComponent
     
         return PowerGrid::columns()
             // ->addColumn('id')
+            ->addColumn('type', function (Entite $model) {
+                if($model->type == "Prospect"){
+                    $color = "btn-secondary ";
+                }elseif($model->type == "Client"){
+                    $color = "btn-info";                
+                }elseif($model->type == "Fournisseur"){
+                    $color = "btn-warning";                
+                }
+                elseif($model->type == "Collaborateur"){
+                    $color = "btn-danger";                
+                }
+                else{
+                    $color = "btn-light ";                
+                }
+                return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
+            } )
             ->addColumn('raison_sociale')
             ->addColumn('forme_juridique')
             ->addColumn('email',fn (Entite $model) => decode_string($model->email))
@@ -155,6 +174,7 @@ final class EntiteTable extends PowerGridComponent
     {
         return [
             // Column::make('Id', 'id'),
+            Column::make('Type', 'type')->sortable()->searchable(),
             Column::make('Raison sociale', 'raison_sociale')->sortable()->searchable(),
             Column::make('Forme juridique', 'forme_juridique')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),

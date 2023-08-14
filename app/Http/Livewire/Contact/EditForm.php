@@ -49,7 +49,9 @@ class EditForm extends Component
     public $cont;
     public $emails;
     public $typecontact;
-    
+       
+    public $typecontacts;
+    public $displaytypecontact;
     
     
     public function mount(){
@@ -160,6 +162,10 @@ class EditForm extends Component
     
     public function render()
     {
+
+        if($this->typecontact == "Collaborateur"){
+            $this->nature = "Personne physique";
+        }
         return view('livewire.contact.edit-form');
     }
 }

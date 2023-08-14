@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Contact;
+namespace App\Http\Livewire\Utilisateur;
 
 use App\Models\Contact;
 use App\Models\Individu;
@@ -68,7 +68,7 @@ final class IndividuTable extends PowerGridComponent
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
                 ->where([['contacts.type', 'individu'],['contacts.archive', false]])
-                // ->where('typecontacts.type', 'Fournisseur')
+                ->where('typecontacts.type', 'Collaborateur')
                 ->get();
 
         } else {
@@ -79,7 +79,7 @@ final class IndividuTable extends PowerGridComponent
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
                 ->where([['contacts.type', 'individu'],['contacts.archive', false], ["contacts.user_id", $user->id]])
-                // ->where('typecontacts.type', 'Fournisseur')
+                ->where('typecontacts.type', 'Collaborateur')
                 ->get();
         }
     // dd($contactindividus);

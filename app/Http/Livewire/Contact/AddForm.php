@@ -46,7 +46,8 @@ class AddForm extends Component
     public $contactindividus;
     
     public $typecontact;
-
+    public $typecontacts;
+    public $displaytypecontact;
     public function rules()
     {
     

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use App\Models\Typecontact;
 use App\Models\User;
 use App\Models\Individu;
-
+use Auth;
+use Hash;
 class UtilisateurController extends Controller
 {
     /**
@@ -40,7 +42,9 @@ class UtilisateurController extends Controller
     */
     public function store(Request $request){
     
-        dd($request->all());
+    
+       
+      
         
         
         
@@ -55,21 +59,21 @@ class UtilisateurController extends Controller
         
         $contact->typeContacts()->attach($typecontact->id);
         
+        $rand=rand();
+        $password = base64_encode($rand);
+        
         
         $user = User::create([
             // 'name' => $request->name,
             'email' => $request->email,
             'contact_id' => $contact->id,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($password),
         ]);
         
         
         
-        
-        
-        
         Individu::create([
-            "email" => $request->email,
+            "email" => $request->emailx,
             "contact_id" => $contact->id,
             "nom" => $request->nom,
             "prenom" => $request->prenom,
@@ -105,6 +109,8 @@ class UtilisateurController extends Controller
             "notes" => $request->notes,
 
         ]);
+        
+        return back()->with('ok', 'Contact ajouté');
         
     }
 }

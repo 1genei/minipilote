@@ -42,8 +42,8 @@ class ContactController extends Controller
       
        $contacts = Contact::where('user_id', Auth::id())->get();
        $contactindividus = Contact::where([["type","individu"], ['archive', false]])->get();
-       
-       return view('contact.add', compact('contactindividus','contacts'));
+       $typecontacts = Typecontact::where('archive', false)->get();
+       return view('contact.add', compact('contactindividus','contacts','typecontacts'));
     }
 
     /**
@@ -62,7 +62,7 @@ class ContactController extends Controller
         } else {
             $type_contact = "individu";
         }
-
+ 
         $contact = Contact::create([
             "user_id" => Auth::user()->id,
             "type" => $type_contact,
@@ -201,9 +201,12 @@ class ContactController extends Controller
             $cont = $contact->entite;
         
         }
-        $emails = $cont->email != null ? json_decode($cont->email) : [];
+        $typecontact = $contact->typecontacts[0]->type;
         
-        return view('contact.edit', compact('contact','cont','emails'));
+        $emails = $cont->email != null ? json_decode($cont->email) : [];
+        $typecontacts = Typecontact::where('archive', false)->get();
+        
+        return view('contact.edit', compact('contact','cont','emails','typecontacts','typecontact'));
     }
 
     /**
@@ -226,8 +229,14 @@ class ContactController extends Controller
         $entite = $contact->entite;
 
       
-        // dd($contact);
-
+        // modifier le type du contact
+        
+        $typecontact = Typecontact::where('type', $request->typecontact)->first();
+        
+        
+        $contact->typeContacts()->detach();
+        $contact->typeContacts()->attach($typecontact->id);
+        
         $contact->update();
 
         if ($type_contact == "individu") {

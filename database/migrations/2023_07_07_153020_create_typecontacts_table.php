@@ -15,7 +15,9 @@ class CreateTypecontactsTable extends Migration
     {
         Schema::create('typecontacts', function (Blueprint $table) {
             $table->id();
-            $table->string('type')->nullable();            
+            $table->string('type')->nullable();    
+            $table->boolean("archive")->default(false);
+            
             $table->timestamps();
         });
     }
