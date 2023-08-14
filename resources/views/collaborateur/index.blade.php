@@ -4,6 +4,8 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
+@section('title', 'Collaborateurs')
+
 @section('content')
     <div class="content">
 
