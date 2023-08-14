@@ -169,6 +169,7 @@ class ContactController extends Controller
         
             $individus_existants = EntiteIndividu::where([['entite_id', $contact->entite->id]])->get();
             $ids_existant = array();
+            $entite_id = $contact->entite->id;
            
           
             foreach ($individus_existants as $ind) {
@@ -177,7 +178,7 @@ class ContactController extends Controller
             
             $newcontacts = Contact::where([['archive', false], ['type', 'individu']])->whereNotIn('id', $ids_existant)->get();
 
-            return view('contact.show_entite', compact('contact', 'newcontacts'));
+            return view('contact.show_entite', compact('contact', 'newcontacts', 'entite_id'));
         }
     }
 
