@@ -129,6 +129,7 @@
 
 @section('script')
     <script>
+        // Archiver
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -147,13 +148,13 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver',
+                    title: 'Archiver le collaborateur',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Oui',
                     cancelButtonText: 'Non',
-                    reverseButtons: true
+                    reverseButtons: false
                 }).then((result) => {
                     if (result.isConfirmed) {
 
@@ -171,8 +172,8 @@
                             .done(function() {
 
                                 swalWithBootstrapButtons.fire(
-                                    'Archivé',
-                                    '',
+                                    'Confirmation',
+                                    'Collaborateur archivé avec succès',
                                     'success'
                                 )
                                 // document.location.reload();
@@ -186,8 +187,8 @@
                         result.dismiss === Swal.DismissReason.cancel
                     ) {
                         swalWithBootstrapButtons.fire(
-                            'Annulé',
-                            'Contact non archivé :)',
+                            'Annulation',
+                            'Collaborateur non archivé',
                             'error'
                         )
                     }

@@ -112,6 +112,8 @@ Route::controller(UtilisateurController::class)->group(function () {
     Route::post('/utilisateur/desassocier/{entiteId}/{individuId}', 'deassocier_individu')->name('utilisateur.deassociate')->middleware(['auth']);
 });
 
+// Supprimer les routes d'archivage qui ne sont pas contacts
+
 // Prospect
 Route::controller(ProspectController::class)->group(function () {
     Route::get('/prospects', 'index')->name('prospect.index')->middleware(['auth']);
@@ -122,6 +124,7 @@ Route::controller(ProspectController::class)->group(function () {
     Route::put('/prospect/archiver/{prospectId}', 'archive')->name('prospect.archive')->middleware(['auth']);
     Route::post('/prospect/desarchiver/{prospectId}', 'unarchive')->name('prospect.unarchive')->middleware(['auth']);
 });
+
 // Client
 Route::controller(ClientController::class)->group(function () {
     Route::get('/clients', 'index')->name('client.index')->middleware(['auth']);
