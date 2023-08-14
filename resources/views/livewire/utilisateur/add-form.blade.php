@@ -462,7 +462,7 @@
                                 <div class="mb-3">
                                     <label for="notes" class="form-label">Notes</label>
                                     <textarea name="notes" wire:model.defer="notes" class="form-control" id="notes" rows="5"
-                                        placeholder="..">{{ old('notes') ? old('notes') : '' }}</textarea>
+                                        placeholder="...">{{ old('notes') ? old('notes') : '' }}</textarea>
                                     @if ($errors->has('notes'))
                                         <br>
                                         <div class="alert alert-warning text-secondary " role="alert">
