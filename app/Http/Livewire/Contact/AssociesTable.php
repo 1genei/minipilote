@@ -59,16 +59,16 @@ final class AssociesTable extends PowerGridComponent
      */
     public function datasource()
     {
+        $user = Auth::user();
     
         $individus_existants = EntiteIndividu::where([['entite_id', intval($this->entite_id)]])->get();
         $ids_existant = array();
         
-        
         foreach ($individus_existants as $ind) {
-            array_push($ids_existant, $ind->individu->contact->id); 
+            array_push($ids_existant, $ind->individu_id); 
         }
         
-        $contactsassocies = Individu::select('individus.*','contacts.*','typecontacts.type')
+        $contactsassocies = Individu::select('individus.*','contacts.*','contact_typecontact.*','typecontacts.type')
                 ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
