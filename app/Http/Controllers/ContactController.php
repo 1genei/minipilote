@@ -33,6 +33,20 @@ class ContactController extends Controller
     }
 
     /**
+     * Affiche la liste des contacts archivés
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function archives()
+    {
+        
+        $contactentites = Contact::where([["type","entite"], ['archive', true]])->get();
+        $contactindividus = Contact::where([["type","individu"], ['archive', true]])->get();
+
+        return view('contact.archives', compact('contactentites', 'contactindividus'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -386,6 +400,23 @@ class ContactController extends Controller
         
         
         $contact->archive = true;
+        $contact->update();
+        
+        return "200";
+    }
+
+     /**
+     * Restaurer un contact
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function unarchive($contact_id)
+    {
+        $contact = Contact::where('id', Crypt::decrypt($contact_id))->first();
+        
+        
+        $contact->archive = false;
         $contact->update();
         
         return "200";

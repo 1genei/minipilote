@@ -15,7 +15,8 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="">Contacts</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('contact.index')}}">Contacts</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('contact.archives')}}">Archives</a></li>
                         </ol>
                     </div>
                     <h4 class="page-title">Contacts</h4>
@@ -72,8 +73,8 @@
                                 </a>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('contact.archives') }}" class="btn btn-warning mb-2">
-                                    <i class="mdi mdi-archive me-2"></i> Contact archivés
+                                <a href="{{ route('contact.index') }}" class="btn btn-success mb-2">
+                                    <i class="mdi mdi-account-group me-2"></i> Contact actifs
                                 </a>
                             </div>
                         </div>
@@ -121,11 +122,11 @@
                         <div class="tab-content">
 
                             <div class="tab-pane show active" id="entite">
-                                @include('contact.index_entite')
+                                @include('contact.archives_entite')
                             </div>
 
                             <div class="tab-pane " id="individu">
-                                @include('contact.index_individu')
+                                @include('contact.archives_individu')
                             </div>
 
 

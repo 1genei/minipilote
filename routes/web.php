@@ -87,6 +87,7 @@ Route::controller(PermissionController::class)->group(function () {
 // Contacts
 Route::controller(ContactController::class)->group(function () {
     Route::get('/contacts', 'index')->name('contact.index')->middleware(['auth']);
+    Route::get('/contacts/archives', 'archives')->name('contact.archives')->middleware(['auth']);
     Route::get('/contact/ajouter', 'create')->name('contact.create')->middleware(['auth']);
     Route::post('/contact/ajouter', 'store')->name('contact.store')->middleware(['auth']);
     Route::get('/contact/detail/{contactId}', 'show')->name('contact.show')->middleware(['auth']);
