@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Utilisateur;
 
 use App\Models\Contact;
 use App\Models\Individu;
+use App\Models\User;
 use Crypt;
 use Auth;
 
@@ -58,37 +59,8 @@ final class IndividuTable extends PowerGridComponent
      */
     public function datasource()
     {
-    
-        $user = Auth::user();
-
-        if ($user->is_admin) {
-
-            // On réccupère tous les contacts de type individu
-                
-            $contactindividus = Individu::select('individus.*','contacts.*','typecontacts.type')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
-                ->where('typecontacts.type', 'Collaborateur')
-                ->get();
-
-        } else {
-            //   On réccupère uniquement les contacts de l'utilisateur connecté
-                
-            $contactindividus = Individu::select('individus.*','contacts.*','typecontacts.type')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false], ["contacts.user_id", $user->id]])
-                ->where('typecontacts.type', 'Collaborateur')
-                ->get();
-        }
-    // dd($contactindividus);
-       
-        
-        return $contactindividus;
-
+        $users = User::where([['archive', false]])->get();
+        return $users;
     }
 
     /*
@@ -125,32 +97,10 @@ final class IndividuTable extends PowerGridComponent
     {
     
         return PowerGrid::columns()
-            // ->addColumn('id')
-            ->addColumn('type', function (Individu $model) {
-                if($model->type == "Prospect"){
-                    $color = "btn-secondary ";
-                }elseif($model->type == "Client"){
-                    $color = "btn-info";                
-                }elseif($model->type == "Fournisseur"){
-                    $color = "btn-warning";                
-                }
-                elseif($model->type == "Collaborateur"){
-                    $color = "btn-danger";                
-                }
-                else{
-                    $color = "btn-light ";                
-                }
-                return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
-            } )
-            ->addColumn('nom')
-            ->addColumn('prenom')
-            ->addColumn('email',fn (Individu $model) => decode_string($model->email))
-            ->addColumn('telephone_fixe')
-            ->addColumn('telephone_mobile')
-            ->addColumn('adresse')
-            ->addColumn('code_postal')
-            ->addColumn('ville')
-            ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
+            ->addColumn('name')
+            ->addColumn('email')
+            ->addColumn('contact_id', function (User $user) {return $user->contact_id === null ? 'Non' : 'Oui';})
+            ->addColumn('created_at_formatted', fn (User $user) => Carbon::parse($user->created_at)->format('d/m/Y'));
     }
 
     /*
@@ -169,20 +119,11 @@ final class IndividuTable extends PowerGridComponent
       */
     public function columns(): array
     {
-        return [
-            // Column::make('Id', 'id'),
-            Column::make('Type', 'type')->sortable()->searchable(),            
-            Column::make('Nom', 'nom')->sortable()->searchable(),
-            Column::make('Prénom', 'prenom')->sortable()->searchable(),
+        return [           
+            Column::make('Nom', 'name')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
-            Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
-            Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
-            Column::make('Adresse', 'adresse')->sortable()->searchable(),
-            Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
-            Column::make('Ville', 'ville')->sortable()->searchable(),
-            Column::make('Date de création', 'created_at_formatted', 'created_at')
-                ->sortable(),
-
+            Column::make('Contact lié', 'contact_id')->sortable()->searchable(),
+            Column::make('Date de création', 'created_at_formatted', 'created_at')->sortable(),
         ];
     }
 
@@ -232,25 +173,28 @@ final class IndividuTable extends PowerGridComponent
         //             return $model->id;
         //        }),
 
-               
+            /*
                
             Button::add('Afficher')
-                ->bladeComponent('button-show', function(Individu $individu) {
-                    return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),
+                ->bladeComponent('button-show', function(User $user) {
+                    return ['route' => route('contact.show', Crypt::encrypt($user->contact_id)),
                     'tooltip' => "Afficher"];
                 }),
                 
             Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Individu $individu) {
-                return ['route' => route('contact.edit', Crypt::encrypt($individu->contact_id)),
+            ->bladeComponent('button-edit', function(User $user) {
+                return ['route' => route('contact.edit', Crypt::encrypt($user->contact_id)),
                 'tooltip' => "Modifier"];
             }),
+
+            */
             
             Button::add('Archiver')
-            ->bladeComponent('button-archive', function(Individu $individu) {
-                return ['route' => route('contact.archive', Crypt::encrypt($individu->contact_id)),
+            ->bladeComponent('button-archive', function(User $user) {
+                //dd($individu);
+                return ['route' => route('utilisateur.archive', Crypt::encrypt($user->id)),
                 'tooltip' => "Archiver",
-                'classarchive' => "archive_contact",
+                'classarchive' => "archive_user",
                 ];
             }),
         ];

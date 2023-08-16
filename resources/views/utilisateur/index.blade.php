@@ -4,6 +4,8 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
+@section('title', 'Utilisateurs')
+
 @section('content')
     <div class="content">
 
@@ -13,7 +15,7 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="">Utilisateurs</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('utilisateur.index')}}">Utilisateurs</a></li>
                         </ol>
                     </div>
                     <h4 class="page-title">Utilisateurs</h4>
@@ -65,20 +67,17 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row mb-2">
-                            <div class="col-sm-5">
-                                <a href="{{ route('utilisateur.create') }}" class="btn btn-primary mb-2"><i
-                                        class="mdi mdi-plus-circle me-2"></i> Nouveau
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-start">
+                                <a href="{{ route('utilisateur.create') }}" class="btn btn-primary mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Nouvel utilisateur
                                 </a>
                             </div>
-                            <div class="col-sm-7">
-                                <div class="text-sm-end">
-                                    <button type="button" class="btn btn-success mb-2 me-1"><i
-                                            class="mdi mdi-cog"></i></button>
-                                    {{-- <button type="button" class="btn btn-light mb-2 me-1">Import</button> --}}
-                                    <a type="button" href="#" class="btn btn-light mb-2">Archives</a>
-                                </div>
-                            </div><!-- end col-->
+                            <div class="d-flex justify-content-end">
+                                <a href="{{ route('utilisateur.archives') }}" class="btn btn-warning mb-2">
+                                    <i class="mdi mdi-archive me-2"></i> Utilisateurs archivés
+                                </a>
+                            </div>
                         </div>
                         <div class="row">
 
@@ -90,14 +89,6 @@
                                         <a href="#" class="alert-link"><strong> {{ session('message') }}</strong></a>
                                     </div>
                                 @endif
-
-                                <div id="div-role-message"
-                                    class="alert alert-success text-secondary alert-dismissible fade in">
-                                    <i class="dripicons-checkmark me-2"></i>
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <a href="#" class="alert-link"><strong> <span
-                                                id="role-message"></span></strong></a>
-                                </div>
 
                             </div>
                         </div>
@@ -132,7 +123,8 @@
     </script>
 
 
-    <script>
+<script>
+        // Archiver
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -140,7 +132,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive-role', function(event) {
+            $('body').on('click', 'a.archive_user', function(event) {
                 let that = $(this)
                 event.preventDefault();
 
@@ -151,13 +143,13 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver',
+                    title: 'Archiver l\'utilisateur',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Oui',
                     cancelButtonText: 'Non',
-                    reverseButtons: true
+                    reverseButtons: false
                 }).then((result) => {
                     if (result.isConfirmed) {
 
@@ -175,13 +167,13 @@
                             .done(function() {
 
                                 swalWithBootstrapButtons.fire(
-                                    'Archivé',
-                                    '',
+                                    'Confirmation',
+                                    'Utilisateur archivé avec succès',
                                     'success'
                                 )
-                                document.location.reload();
+                                // document.location.reload();
 
-                                // that.parents('tr').remove();
+                                that.parents('tr').remove();
                             })
 
 
@@ -190,8 +182,8 @@
                         result.dismiss === Swal.DismissReason.cancel
                     ) {
                         swalWithBootstrapButtons.fire(
-                            'Annulé',
-                            'Rôle non archivé :)',
+                            'Annulation',
+                            'Utilisateur non archivé',
                             'error'
                         )
                     }
@@ -200,79 +192,6 @@
 
         });
     </script>
-
-    <script>
-        // Désarchiver
-
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            })
-            $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.unarchive-role', function(event) {
-                let that = $(this)
-                event.preventDefault();
-
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
-
-                swalWithBootstrapButtons.fire({
-                    title: 'Désarchiver',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        $('[data-toggle="tooltip"]').tooltip('hide')
-                        $.ajax({
-                                url: that.attr('data-href'),
-                                // url:"/role/desarchiver/2",
-
-                                type: 'POST',
-                                success: function(data) {
-
-                                    // document.location.reload();
-                                },
-                                error: function(data) {
-                                    console.log(data);
-                                }
-                            })
-                            .done(function() {
-
-                                swalWithBootstrapButtons.fire(
-                                    'Désarchivé',
-                                    '',
-                                    'success'
-                                )
-                                document.location.reload();
-                            })
-
-
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulé',
-                            'Rôle non désarchivé :)',
-                            'error'
-                        )
-                    }
-                });
-            })
-
-        });
-    </script>
-
 
     <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>

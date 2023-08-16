@@ -23,6 +23,16 @@ class UtilisateurController extends Controller
 
         return view('utilisateur.index', compact('contactindividus'));
     }
+
+        /**
+     * Affiche la liste des utilisateurs archivés
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function archives()
+    {
+        return view('utilisateur.archives');
+    }
     
      /**
      *Page de création d'un utilisateur
@@ -41,13 +51,7 @@ class UtilisateurController extends Controller
     *  
     */
     public function store(Request $request){
-    
-    
-       
-      
-        
-        
-        
+
         $typecontact = Typecontact::where('type', $request->type_contact)->first();
 
         $contact = Contact::create([
@@ -112,5 +116,39 @@ class UtilisateurController extends Controller
         
         return back()->with('ok', 'Contact ajouté');
         
+    }
+
+    /**
+     * Archiver un user
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function archiver($user_id)
+    {
+        $user = User::where('id', Crypt::decrypt($user_id))->first();
+        
+        
+        $user->archive = true;
+        $user->update();
+        
+        return "200";
+    }
+
+     /**
+     * Restaurer un user
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function unarchive($user_id)
+    {
+        $user = User::where('id', Crypt::decrypt($user_id))->first();
+        
+        
+        $user->archive = false;
+        $user->update();
+        
+        return "200";
     }
 }

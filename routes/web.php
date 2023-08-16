@@ -103,6 +103,7 @@ Route::controller(ContactController::class)->group(function () {
 // Utilisateurs
 Route::controller(UtilisateurController::class)->group(function () {
     Route::get('/utilisateurs', 'index')->name('utilisateur.index')->middleware(['auth']);
+    Route::get('/utilisateurs/archives', 'archives')->name('utilisateur.archives')->middleware(['auth']);
     Route::get('/utilisateur/ajouter', 'create')->name('utilisateur.create')->middleware(['auth']);
     Route::post('/utilisateur/ajouter', 'store')->name('utilisateur.store')->middleware(['auth']);
     Route::get('/utilisateur/detail/{utilisateurId}', 'show')->name('utilisateur.show')->middleware(['auth']);
