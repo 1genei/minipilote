@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
 @endsection
 
+@section('title', 'Modification contact')
+
 @section('content')
     <div class="content">
 

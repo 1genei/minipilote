@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Livewire\Fournisseur;
+namespace App\Http\Livewire\Contact;
+
 
 use App\Models\Contact;
 use App\Models\Entite;
@@ -13,7 +14,7 @@ use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 
-final class EntiteTable extends PowerGridComponent
+final class EntiteArchiveTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
@@ -36,6 +37,7 @@ final class EntiteTable extends PowerGridComponent
             Header::make()
             ->showSearchInput()
             ->showToggleColumns(),
+            
             Footer::make()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -63,32 +65,31 @@ final class EntiteTable extends PowerGridComponent
         if ($user->is_admin) {
 
             // On réccupère tous les contacts de type entité
-            $contactentites = Entite::select('entites.*','contacts.*')
+            $contactentites = Entite::select('entites.*','contacts.*','typecontacts.type')
                 ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false]])
-                ->where('typecontacts.type', 'Fournisseur')
+                ->where([['contacts.type', 'entité'],['contacts.archive', true]])
+                // ->where('typecontacts.type', 'Fournisseur')
                 ->get();
                 
-         
 
         } else {
             //   On réccupère uniquement les contacts de l'utilisateur connecté
          
-            $contactentites = Entite::select('entites.*','contacts.*')
+            $contactentites = Entite::select('entites.*','contacts.*', 'typecontacts.type')
                 ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false], ["contacts.user_id", $user->id]])
-                ->where('typecontacts.type', 'Fournisseur')
+                ->where([['contacts.type', 'entité'],['contacts.archive', true], ["contacts.user_id", $user->id]])
+                // ->where('typecontacts.type', 'Fournisseur')
                 ->get();
                 
         
         }
-    
-       
+
         
+    
         return $contactentites;
 
     }
@@ -128,6 +129,22 @@ final class EntiteTable extends PowerGridComponent
     
         return PowerGrid::columns()
             // ->addColumn('id')
+            ->addColumn('type', function (Entite $model) {
+                if($model->type == "Prospect"){
+                    $color = "btn-secondary ";
+                }elseif($model->type == "Client"){
+                    $color = "btn-info";                
+                }elseif($model->type == "Fournisseur"){
+                    $color = "btn-warning";                
+                }
+                elseif($model->type == "Collaborateur"){
+                    $color = "btn-danger";                
+                }
+                else{
+                    $color = "btn-light ";                
+                }
+                return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
+            } )
             ->addColumn('raison_sociale')
             ->addColumn('forme_juridique')
             ->addColumn('email',fn (Entite $model) => decode_string($model->email))
@@ -157,6 +174,7 @@ final class EntiteTable extends PowerGridComponent
     {
         return [
             // Column::make('Id', 'id'),
+            Column::make('Type', 'type')->sortable()->searchable(),
             Column::make('Raison sociale', 'raison_sociale')->sortable()->searchable(),
             Column::make('Forme juridique', 'forme_juridique')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
@@ -224,18 +242,12 @@ final class EntiteTable extends PowerGridComponent
                     return ['route' => route('contact.show', Crypt::encrypt($entite->contact_id)),
                     'tooltip' => "Afficher"];
                 }),
-                
-            Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Entite $entite) {
-                return ['route' => route('fournisseur.edit', Crypt::encrypt($entite->contact_id)),
-                'tooltip' => "Modifier"];
-            }),
             
-            Button::add('Archiver')
-            ->bladeComponent('button-archive', function(Entite $entite) {
-                return ['route' => route('contact.archive', Crypt::encrypt($entite->contact_id)),
-                'tooltip' => "Archiver",
-                'classarchive' => "archive_contact",
+            Button::add('Restaurer')
+            ->bladeComponent('button-unarchive', function(Entite $entite) {
+                return ['route' => route('contact.unarchive', Crypt::encrypt($entite->contact_id)),
+                'tooltip' => "Restaurer",
+                'classunarchive' => "unarchive_contact",
                 ];
             }),
         ];

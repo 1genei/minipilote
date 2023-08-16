@@ -33,6 +33,20 @@ class ContactController extends Controller
     }
 
     /**
+     * Affiche la liste des contacts archivés
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function archives()
+    {
+        
+        $contactentites = Contact::where([["type","entite"], ['archive', true]])->get();
+        $contactindividus = Contact::where([["type","individu"], ['archive', true]])->get();
+
+        return view('contact.archives', compact('contactentites', 'contactindividus'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -169,6 +183,7 @@ class ContactController extends Controller
         
             $individus_existants = EntiteIndividu::where([['entite_id', $contact->entite->id]])->get();
             $ids_existant = array();
+            $entite_id = $contact->entite->id;
            
           
             foreach ($individus_existants as $ind) {
@@ -177,7 +192,7 @@ class ContactController extends Controller
             
             $newcontacts = Contact::where([['archive', false], ['type', 'individu']])->whereNotIn('id', $ids_existant)->get();
 
-            return view('contact.show_entite', compact('contact', 'newcontacts'));
+            return view('contact.show_entite', compact('contact', 'newcontacts', 'entite_id'));
         }
     }
 
@@ -385,6 +400,23 @@ class ContactController extends Controller
         
         
         $contact->archive = true;
+        $contact->update();
+        
+        return "200";
+    }
+
+     /**
+     * Restaurer un contact
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function unarchive($contact_id)
+    {
+        $contact = Contact::where('id', Crypt::decrypt($contact_id))->first();
+        
+        
+        $contact->archive = false;
         $contact->update();
         
         return "200";

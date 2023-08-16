@@ -4,6 +4,8 @@
 <link href="{{asset('assets/css/vendor/responsive.bootstrap5.css')}}" rel="stylesheet" type="text/css" />
 @endsection
 
+@section('title', 'Contact')
+
 @section('content')
 <div class="content">
     
@@ -16,7 +18,7 @@
                         <li class="breadcrumb-item"><a href="">Contact</a></li>
                     </ol>
                 </div>
-                <h4 class="page-title">Contact - {{$contact->entite->nom}}</h4>
+                <h4 class="page-title">Contact - {{$contact->entite->nom}}</h4> <!-- entite->nom ??? -->
             </div>
         </div>
     </div>
@@ -191,62 +193,7 @@
                     </div>
 
 
-                    <div class="table-responsive">
-                        <table class="table table-centered table-nowrap table-hover mb-0" id="tab1">
-                        
-                            <thead class="table-light">
-                                <tr>
-                               
-                                    <th>Nom</th>                                    
-                                    <th>Email</th>
-                                    <th>Téléphone</th>
-                                    <th>Adresse</th>
-                                    <th>Code Postal</th>
-                                    <th>Ville</th>
-
-                                    <th style="width: 125px;">Action</th>
-                                </tr>
-                            </thead>
-                            
-                            
-                            <tbody>
-                            
-                            @foreach ($contact->entite->individus as $individu )
-                                
-                           
-                                <tr>
-                                    <td>                                        
-                                        <span class="">{{$individu->nom}} {{$individu->prenom}}</span>
-                                    </td>
-                                    
-                                    <td>                                        
-                                        <span class="">{{$individu->email}}</span>
-                                    </td>
-                                    <td>                                        
-                                        <span class="">{{$individu->contact1}} - {{$individu->contact2}}</span>
-                                    </td>
-                                    <td>                                        
-                                        <span class="">{{$individu->adresse}}</span>
-                                    </td>
-                                    <td>                                        
-                                        <span class="">{{$individu->code_postal}}</span>
-                                    </td>
-                                    
-                                    <td>                                        
-                                        <span class="">{{$individu->ville}}</span>
-                                    </td>
-
-                                  
-                                    <td class="table-action" style="width: 90px;">
-                                        <a href="{{route('contact.show', Crypt::encrypt($individu->contact->id))}}" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                        <a href="#" data-href="{{route('contact.deassociate',[$contact->entite->id, $individu->id])}}"  class="action-icon desassocier"> <i class="mdi mdi-close-thick"></i></a>
-                                    </td>
-                                </tr>
-                                
-                            @endforeach   
-                            </tbody>
-                        </table>
-                    </div> <!-- end table-responsive-->
+                    <livewire:contact.associes-table entite_id="{{$entite_id}}" />
 
                 </div> <!-- end card body-->
             </div> <!-- end card -->
@@ -724,77 +671,75 @@
 </script>
 
 <script>
-    
-    // Désarchiver
+        // Retirer
 
-    $(function() {
-        $.ajaxSetup({
-            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
-        })
-        $('[data-toggle="tooltip"]').tooltip()
-        $('body').on('click','a.desassocier',function(event) {
-            let that = $(this)
-            event.preventDefault();
-            
-            const swalWithBootstrapButtons = swal.mixin({
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-            buttonsStyling: false,
-            });
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+            $('[data-toggle="tooltip"]').tooltip()
+            $('body').on('click', 'a.deassocier_individu', function(event) {
+                let that = $(this)
+                event.preventDefault();
 
-            swalWithBootstrapButtons.fire({
-            title: 'Supprimer de la liste ?',
-            text: "",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Oui',
-            cancelButtonText: 'Non',
-            reverseButtons: true
-            }).then((result) => {
-            if (result.isConfirmed) {
-                
-                $('[data-toggle="tooltip"]').tooltip('hide')
-                    $.ajax({                        
-                        url:that.attr('data-href'),
-                        // url:"/role/desarchiver/2",
-                        
-                        type: 'POST',
-                        success: function(data){
-                           
-                            // document.location.reload();
-                        },
-                        error : function(data){
-                        console.log(data);
-                        }
-                    })
-                    .done(function () {
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
 
+                swalWithBootstrapButtons.fire({
+                    title: 'Retirer l\'individu',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $('[data-toggle="tooltip"]').tooltip('hide')
+                        $.ajax({
+                                url: that.attr('data-href'),
+                                // url:"/role/desarchiver/2",
+
+                                type: 'POST',
+                                success: function(data) {
+
+                                    // document.location.reload();
+                                },
+                                error: function(data) {
+                                    console.log(data);
+                                }
+                            })
+                            .done(function() {
+
+                                swalWithBootstrapButtons.fire(
+                                    'Confirmation',
+                                    'Individu retiré',
+                                    'success'
+                                )
+                                document.location.reload();
+                            })
+
+
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
                         swalWithBootstrapButtons.fire(
-                            'Supprimé',
-                            '',
-                            'success'
-                            )
-                        document.location.reload();
-                    })
-                
-
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                'Annulé',
-                'Individu non supprimé :)',
-                'error'
-                )
-            }
-            }); 
+                            'Annulation',
+                            'Individu conservé',
+                            'error'
+                        )
+                    }
+                });
             })
 
-    });
-   
-
-</script>
+        });
+    </script>
 
 
 <script src="{{asset('assets/js/vendor/jquery.dataTables.min.js')}}"></script>

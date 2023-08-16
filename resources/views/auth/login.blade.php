@@ -63,18 +63,18 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3 mb-3">
+                                <div class="mb-3">
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="checkbox-signin" checked>
                                         <label class="form-check-label" for="checkbox-signin">Se souvenir de moi</label>
                                     </div>
                                 </div>
 
-                                <div class="mb-3 mb-0 text-center">
+                                <div class="mb-3 text-center">
                                     <button class="btn btn-primary" type="submit"> Se connecter </button>
                                 </div>
 
-                                <div class="mb-3 mt-15 mb-0 text-center">
+                                <div class="mb-3 mt-15 text-center">
                                     <a href="{{ route('logino365') }}" class="btn btn-danger" type="submit"> Se
                                         connecter avec Office 365</a>
                                 </div>

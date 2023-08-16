@@ -34,7 +34,9 @@ final class IndividuTable extends PowerGridComponent
             Exportable::make('export')
                 ->striped()
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
-            Header::make()->showSearchInput(),
+            Header::make()
+            ->showSearchInput()
+            ->showToggleColumns(),
             Footer::make()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -129,6 +131,7 @@ final class IndividuTable extends PowerGridComponent
             ->addColumn('email',fn (Individu $model) => decode_string($model->email))
             ->addColumn('telephone_fixe')
             ->addColumn('telephone_mobile')
+            ->addColumn('adresse')
             ->addColumn('code_postal')
             ->addColumn('ville')
             ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
@@ -157,6 +160,7 @@ final class IndividuTable extends PowerGridComponent
             Column::make('Email', 'email')->sortable()->searchable(),
             Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
             Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
+            Column::make('Adresse', 'adresse')->sortable()->searchable(),
             Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
             Column::make('Ville', 'ville')->sortable()->searchable(),
             Column::make('Date de création', 'created_at_formatted', 'created_at')

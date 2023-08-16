@@ -58,6 +58,16 @@ class ClientController extends Controller
     }
 
     /**
+     * Affiche la liste des contacts archivés
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function archives()
+    {
+        return view('client.archives');
+    }
+
+    /**
      * Formulaire de création de forunisseur
      *
      * @return \Illuminate\Http\Response

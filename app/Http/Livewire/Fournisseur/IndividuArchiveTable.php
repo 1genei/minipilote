@@ -3,9 +3,10 @@
 namespace App\Http\Livewire\Fournisseur;
 
 use App\Models\Contact;
-use App\Models\Entite;
+use App\Models\Individu;
 use Crypt;
 use Auth;
+
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
@@ -13,11 +14,11 @@ use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 
-final class EntiteTable extends PowerGridComponent
+final class IndividuArchiveTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
-    public $contactentites;
+    public $contactindividus;
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
@@ -62,34 +63,31 @@ final class EntiteTable extends PowerGridComponent
 
         if ($user->is_admin) {
 
-            // On réccupère tous les contacts de type entité
-            $contactentites = Entite::select('entites.*','contacts.*')
-                ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
+            // On réccupère tous les contacts de type individu
+                
+            $contactindividus = Individu::select('individus.*','contacts.*')
+                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false]])
+                ->where([['contacts.type', 'individu'],['contacts.archive', true]])
                 ->where('typecontacts.type', 'Fournisseur')
                 ->get();
-                
-         
 
         } else {
             //   On réccupère uniquement les contacts de l'utilisateur connecté
-         
-            $contactentites = Entite::select('entites.*','contacts.*')
-                ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
+                
+            $contactindividus = Individu::select('individus.*','contacts.*')
+                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false], ["contacts.user_id", $user->id]])
+                ->where([['contacts.type', 'individu'],['contacts.archive', true], ["contacts.user_id", $user->id]])
                 ->where('typecontacts.type', 'Fournisseur')
                 ->get();
-                
-        
         }
     
        
         
-        return $contactentites;
+        return $contactindividus;
 
     }
 
@@ -128,15 +126,15 @@ final class EntiteTable extends PowerGridComponent
     
         return PowerGrid::columns()
             // ->addColumn('id')
-            ->addColumn('raison_sociale')
-            ->addColumn('forme_juridique')
-            ->addColumn('email',fn (Entite $model) => decode_string($model->email))
+            ->addColumn('nom')
+            ->addColumn('prenom')
+            ->addColumn('email',fn (Individu $model) => decode_string($model->email))
             ->addColumn('telephone_fixe')
             ->addColumn('telephone_mobile')
             ->addColumn('adresse')
             ->addColumn('code_postal')
             ->addColumn('ville')
-            ->addColumn('created_at_formatted', fn (Entite $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
+            ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
     }
 
     /*
@@ -157,8 +155,8 @@ final class EntiteTable extends PowerGridComponent
     {
         return [
             // Column::make('Id', 'id'),
-            Column::make('Raison sociale', 'raison_sociale')->sortable()->searchable(),
-            Column::make('Forme juridique', 'forme_juridique')->sortable()->searchable(),
+            Column::make('Nom', 'nom')->sortable()->searchable(),
+            Column::make('Prénom', 'prenom')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
             Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
             Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
@@ -208,38 +206,32 @@ final class EntiteTable extends PowerGridComponent
      */
 
     
-    public function actions(): array
-    {
-       return [
-        //    Button::make('edit', 'Edit')
-        //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-        //        ->route('prospect.create', function(\App\Models\Entite $model) {
-        //             return $model->id;
-        //        }),
-
-               
-               
-            Button::add('Afficher')
-                ->bladeComponent('button-show', function(Entite $entite) {
-                    return ['route' => route('contact.show', Crypt::encrypt($entite->contact_id)),
-                    'tooltip' => "Afficher"];
-                }),
+     public function actions(): array
+     {
+        return [
+         //    Button::make('edit', 'Edit')
+         //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
+         //        ->route('prospect.create', function(\App\Models\Individu $model) {
+         //             return $model->id;
+         //        }),
+ 
                 
-            Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Entite $entite) {
-                return ['route' => route('fournisseur.edit', Crypt::encrypt($entite->contact_id)),
-                'tooltip' => "Modifier"];
-            }),
-            
-            Button::add('Archiver')
-            ->bladeComponent('button-archive', function(Entite $entite) {
-                return ['route' => route('contact.archive', Crypt::encrypt($entite->contact_id)),
-                'tooltip' => "Archiver",
-                'classarchive' => "archive_contact",
-                ];
-            }),
-        ];
-    }
+                
+             Button::add('Afficher')
+                 ->bladeComponent('button-show', function(Individu $individu) {
+                     return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),
+                     'tooltip' => "Afficher"];
+                 }),
+             
+             Button::add('Restaurer')
+             ->bladeComponent('button-unarchive', function(Individu $individu) {
+                 return ['route' => route('contact.unarchive', Crypt::encrypt($individu->contact_id)),
+                 'tooltip' => "Restaurer",
+                 'classunarchive' => "unarchive_contact",
+                 ];
+             }),
+         ];
+     }
     
 
     /*

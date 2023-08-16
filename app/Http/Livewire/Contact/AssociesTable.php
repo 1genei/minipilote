@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Fournisseur;
+namespace App\Http\Livewire\Contact;
 
 use App\Models\Contact;
-use App\Models\Entite;
+use App\Models\Individu;
+use App\Models\EntiteIndividu;
 use Crypt;
 use Auth;
+
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
@@ -13,11 +15,11 @@ use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 
-final class EntiteTable extends PowerGridComponent
+final class AssociesTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
-    public $contactentites;
+    public $entite_id;
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
@@ -57,39 +59,24 @@ final class EntiteTable extends PowerGridComponent
      */
     public function datasource()
     {
-    
         $user = Auth::user();
-
-        if ($user->is_admin) {
-
-            // On réccupère tous les contacts de type entité
-            $contactentites = Entite::select('entites.*','contacts.*')
-                ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false]])
-                ->where('typecontacts.type', 'Fournisseur')
-                ->get();
-                
-         
-
-        } else {
-            //   On réccupère uniquement les contacts de l'utilisateur connecté
-         
-            $contactentites = Entite::select('entites.*','contacts.*')
-                ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false], ["contacts.user_id", $user->id]])
-                ->where('typecontacts.type', 'Fournisseur')
-                ->get();
-                
-        
-        }
     
-       
+        $individus_existants = EntiteIndividu::where([['entite_id', intval($this->entite_id)]])->get();
+        $ids_existant = array();
         
-        return $contactentites;
+        foreach ($individus_existants as $ind) {
+            array_push($ids_existant, $ind->individu_id); 
+        }
+        
+        $contactsassocies = Individu::select('individus.*','contacts.*','contact_typecontact.*','typecontacts.type')
+                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+                ->whereIn('individus.id', $ids_existant)
+                ->get();
+
+        return $contactsassocies;
 
     }
 
@@ -128,15 +115,31 @@ final class EntiteTable extends PowerGridComponent
     
         return PowerGrid::columns()
             // ->addColumn('id')
-            ->addColumn('raison_sociale')
-            ->addColumn('forme_juridique')
-            ->addColumn('email',fn (Entite $model) => decode_string($model->email))
+            ->addColumn('type', function (Individu $model) {
+                if($model->type == "Prospect"){
+                    $color = "btn-secondary ";
+                }elseif($model->type == "Client"){
+                    $color = "btn-info";                
+                }elseif($model->type == "Fournisseur"){
+                    $color = "btn-warning";                
+                }
+                elseif($model->type == "Collaborateur"){
+                    $color = "btn-danger";                
+                }
+                else{
+                    $color = "btn-light ";                
+                }
+                return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
+            } )
+            ->addColumn('nom')
+            ->addColumn('prenom')
+            ->addColumn('email',fn (Individu $model) => decode_string($model->email))
             ->addColumn('telephone_fixe')
             ->addColumn('telephone_mobile')
             ->addColumn('adresse')
             ->addColumn('code_postal')
             ->addColumn('ville')
-            ->addColumn('created_at_formatted', fn (Entite $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
+            ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
     }
 
     /*
@@ -157,16 +160,16 @@ final class EntiteTable extends PowerGridComponent
     {
         return [
             // Column::make('Id', 'id'),
-            Column::make('Raison sociale', 'raison_sociale')->sortable()->searchable(),
-            Column::make('Forme juridique', 'forme_juridique')->sortable()->searchable(),
+            Column::make('Type', 'type')->sortable()->searchable(),            
+            Column::make('Nom', 'nom')->sortable()->searchable(),
+            Column::make('Prénom', 'prenom')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
-            Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
+            //Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
             Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
-            Column::make('Adresse', 'adresse')->sortable()->searchable(),
-            Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
+            //Column::make('Adresse', 'adresse')->sortable()->searchable(),
+            //Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
             Column::make('Ville', 'ville')->sortable()->searchable(),
-            Column::make('Date de création', 'created_at_formatted', 'created_at')
-                ->sortable(),
+            //Column::make('Date de création', 'created_at_formatted', 'created_at')->sortable(),
 
         ];
     }
@@ -213,29 +216,29 @@ final class EntiteTable extends PowerGridComponent
        return [
         //    Button::make('edit', 'Edit')
         //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-        //        ->route('prospect.create', function(\App\Models\Entite $model) {
+        //        ->route('prospect.create', function(\App\Models\Individu $model) {
         //             return $model->id;
         //        }),
 
                
                
             Button::add('Afficher')
-                ->bladeComponent('button-show', function(Entite $entite) {
-                    return ['route' => route('contact.show', Crypt::encrypt($entite->contact_id)),
+                ->bladeComponent('button-show', function(Individu $individu) {
+                    return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),
                     'tooltip' => "Afficher"];
                 }),
                 
             Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Entite $entite) {
-                return ['route' => route('fournisseur.edit', Crypt::encrypt($entite->contact_id)),
+            ->bladeComponent('button-edit', function(Individu $individu) {
+                return ['route' => route('contact.edit', Crypt::encrypt($individu->contact_id)),
                 'tooltip' => "Modifier"];
             }),
             
-            Button::add('Archiver')
-            ->bladeComponent('button-archive', function(Entite $entite) {
-                return ['route' => route('contact.archive', Crypt::encrypt($entite->contact_id)),
-                'tooltip' => "Archiver",
-                'classarchive' => "archive_contact",
+            Button::add('Retirer')
+            ->bladeComponent('button-delete', function(Individu $individu) {
+                return ['route' => route('contact.deassociate', [intval($this->entite_id), $individu->contact_id] ),
+                'tooltip' => "Retirer",
+                'class' => "deassocier_individu",
                 ];
             }),
         ];

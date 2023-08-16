@@ -13,7 +13,7 @@ use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 
-final class EntiteTable extends PowerGridComponent
+final class EntiteArchiveTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
@@ -67,7 +67,7 @@ final class EntiteTable extends PowerGridComponent
                 ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false]])
+                ->where([['contacts.type', 'entité'],['contacts.archive', true]])
                 ->where('typecontacts.type', 'Fournisseur')
                 ->get();
                 
@@ -80,7 +80,7 @@ final class EntiteTable extends PowerGridComponent
                 ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false], ["contacts.user_id", $user->id]])
+                ->where([['contacts.type', 'entité'],['contacts.archive', true], ["contacts.user_id", $user->id]])
                 ->where('typecontacts.type', 'Fournisseur')
                 ->get();
                 
@@ -208,38 +208,32 @@ final class EntiteTable extends PowerGridComponent
      */
 
     
-    public function actions(): array
-    {
-       return [
-        //    Button::make('edit', 'Edit')
-        //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-        //        ->route('prospect.create', function(\App\Models\Entite $model) {
-        //             return $model->id;
-        //        }),
-
-               
-               
-            Button::add('Afficher')
-                ->bladeComponent('button-show', function(Entite $entite) {
-                    return ['route' => route('contact.show', Crypt::encrypt($entite->contact_id)),
-                    'tooltip' => "Afficher"];
-                }),
+     public function actions(): array
+     {
+        return [
+         //    Button::make('edit', 'Edit')
+         //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
+         //        ->route('prospect.create', function(\App\Models\Entite $model) {
+         //             return $model->id;
+         //        }),
+ 
                 
-            Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Entite $entite) {
-                return ['route' => route('fournisseur.edit', Crypt::encrypt($entite->contact_id)),
-                'tooltip' => "Modifier"];
-            }),
-            
-            Button::add('Archiver')
-            ->bladeComponent('button-archive', function(Entite $entite) {
-                return ['route' => route('contact.archive', Crypt::encrypt($entite->contact_id)),
-                'tooltip' => "Archiver",
-                'classarchive' => "archive_contact",
-                ];
-            }),
-        ];
-    }
+                
+             Button::add('Afficher')
+                 ->bladeComponent('button-show', function(Entite $entite) {
+                     return ['route' => route('contact.show', Crypt::encrypt($entite->contact_id)),
+                     'tooltip' => "Afficher"];
+                 }),
+             
+             Button::add('Restaurer')
+             ->bladeComponent('button-unarchive', function(Entite $entite) {
+                 return ['route' => route('contact.unarchive', Crypt::encrypt($entite->contact_id)),
+                 'tooltip' => "Restaurer",
+                 'classunarchive' => "unarchive_contact",
+                 ];
+             }),
+         ];
+     }
     
 
     /*

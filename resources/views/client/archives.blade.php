@@ -4,7 +4,7 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
-@section('title', 'Prospects')
+@section('title', 'Clients')
 
 @section('content')
     <div class="content">
@@ -15,10 +15,11 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{route('prospect.index')}}">Prospects</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('client.index')}}">Clients</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('client.archives')}}">Archives</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Prospects</h4>
+                    <h4 class="page-title">Clients</h4>
                 </div>
             </div>
         </div>
@@ -65,15 +66,15 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                    <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between">
                             <div class="d-flex justify-content-start">
-                                <a href="{{ route('prospect.create') }}" class="btn btn-primary mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Nouveau prospect
+                                <a href="{{ route('client.create') }}" class="btn btn-primary mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Nouveau client
                                 </a>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('prospect.archives') }}" class="btn btn-warning mb-2">
-                                    <i class="mdi mdi-archive me-2"></i> Prospects archivés
+                                <a href="{{ route('client.index') }}" class="btn btn-success mb-2">
+                                    <i class="mdi mdi-account-group me-2"></i> Clients actifs
                                 </a>
                             </div>
                         </div>
@@ -119,13 +120,13 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="entite">
                                 <div class="table-responsive">
-                                    <livewire:prospect.entite-table />
+                                    <livewire:client.entite-archive-table />
                                 </div>
 
                             </div>
                             <div class="tab-pane show " id="individu">
                                 <div class="table-responsive">
-                                    <livewire:prospect.individu-table />
+                                    <livewire:client.individu-archive-table />
                                 </div>
                             </div>
 
@@ -143,9 +144,7 @@
 @endsection
 
 @section('script')
-
 <script>
-        // Archiver
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -153,7 +152,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive_contact', function(event) {
+            $('body').on('click', 'a.unarchive_contact', function(event) {
                 let that = $(this)
                 event.preventDefault();
 
@@ -164,7 +163,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver le prospect',
+                    title: 'Restaurer',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
@@ -177,7 +176,7 @@
                         $('[data-toggle="tooltip"]').tooltip('hide')
                         $.ajax({
                                 url: that.attr('data-href'),
-                                type: 'PUT',
+                                type: 'POST',
                                 success: function(data) {
                                     // document.location.reload();
                                 },
@@ -189,7 +188,7 @@
 
                                 swalWithBootstrapButtons.fire(
                                     'Confirmation',
-                                    'Prospect archivé avec succès',
+                                    'Client restauré avec succès',
                                     'success'
                                 )
                                 // document.location.reload();
@@ -204,7 +203,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Prospect non archivé',
+                            'Client non restauré',
                             'error'
                         )
                     }
@@ -213,4 +212,5 @@
 
         });
     </script>
+
 @endsection
