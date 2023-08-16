@@ -15,7 +15,7 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="">Contacts</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('contact.index')}}">Contacts</a></li>
                         </ol>
                     </div>
                     <h4 class="page-title">Contacts</h4>
@@ -121,11 +121,15 @@
                         <div class="tab-content">
 
                             <div class="tab-pane show active" id="entite">
-                                @include('contact.index_entite')
+                                <div class="table-responsive">
+                                    <livewire:contact.entite-table />
+                                </div>
                             </div>
 
                             <div class="tab-pane " id="individu">
-                                @include('contact.index_individu')
+                                <div class="table-responsive">
+                                    <livewire:contact.individu-table />
+                                </div>
                             </div>
 
 
@@ -270,8 +274,8 @@
         });
     </script>
 
-
     <script>
+        // Archiver
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -279,7 +283,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive-role', function(event) {
+            $('body').on('click', 'a.archive_contact', function(event) {
                 let that = $(this)
                 event.preventDefault();
 
@@ -290,13 +294,13 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver',
+                    title: 'Archiver le contact',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Oui',
                     cancelButtonText: 'Non',
-                    reverseButtons: true
+                    reverseButtons: false
                 }).then((result) => {
                     if (result.isConfirmed) {
 
@@ -314,13 +318,13 @@
                             .done(function() {
 
                                 swalWithBootstrapButtons.fire(
-                                    'Archivé',
-                                    '',
+                                    'Confirmation',
+                                    'Contact archivé avec succès',
                                     'success'
                                 )
-                                document.location.reload();
+                                // document.location.reload();
 
-                                // that.parents('tr').remove();
+                                that.parents('tr').remove();
                             })
 
 
@@ -329,8 +333,8 @@
                         result.dismiss === Swal.DismissReason.cancel
                     ) {
                         swalWithBootstrapButtons.fire(
-                            'Annulé',
-                            'Rôle non archivé :)',
+                            'Annulation',
+                            'Contact non archivé',
                             'error'
                         )
                     }
@@ -339,79 +343,6 @@
 
         });
     </script>
-
-    <script>
-        // Désarchiver
-
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            })
-            $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.unarchive-role', function(event) {
-                let that = $(this)
-                event.preventDefault();
-
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
-
-                swalWithBootstrapButtons.fire({
-                    title: 'Désarchiver',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        $('[data-toggle="tooltip"]').tooltip('hide')
-                        $.ajax({
-                                url: that.attr('data-href'),
-                                // url:"/role/desarchiver/2",
-
-                                type: 'POST',
-                                success: function(data) {
-
-                                    // document.location.reload();
-                                },
-                                error: function(data) {
-                                    console.log(data);
-                                }
-                            })
-                            .done(function() {
-
-                                swalWithBootstrapButtons.fire(
-                                    'Désarchivé',
-                                    '',
-                                    'success'
-                                )
-                                document.location.reload();
-                            })
-
-
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulé',
-                            'Rôle non désarchivé :)',
-                            'error'
-                        )
-                    }
-                });
-            })
-
-        });
-    </script>
-
 
     <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>

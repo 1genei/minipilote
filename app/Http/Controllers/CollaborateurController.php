@@ -26,6 +26,17 @@ class CollaborateurController extends Controller
         return view('collaborateur.index');
     }
 
+      /**
+     * Affiche la liste des contacts archivés
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function archives()
+    {
+    
+        return view('collaborateur.archives');
+    }
+
     /**
      * Formulaire de création de collaborateur
      *

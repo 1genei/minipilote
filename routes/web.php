@@ -118,6 +118,7 @@ Route::controller(UtilisateurController::class)->group(function () {
 // Prospect
 Route::controller(ProspectController::class)->group(function () {
     Route::get('/prospects', 'index')->name('prospect.index')->middleware(['auth']);
+    Route::get('/prospects/archives', 'archives')->name('prospect.archives')->middleware(['auth']);
     Route::get('/prospect/ajouter', 'create')->name('prospect.create')->middleware(['auth']);
     Route::get('/prospect/modifier/{prospectId}', 'edit')->name('prospect.edit')->middleware(['auth']);
     Route::post('/prospect/ajouter', 'store')->name('prospect.store')->middleware(['auth']);
@@ -129,6 +130,7 @@ Route::controller(ProspectController::class)->group(function () {
 // Client
 Route::controller(ClientController::class)->group(function () {
     Route::get('/clients', 'index')->name('client.index')->middleware(['auth']);
+    Route::get('/clients/archives', 'archives')->name('client.archives')->middleware(['auth']);
     Route::post('/client/ajouter', 'store')->name('client.store')->middleware(['auth']);
     Route::get('/client/ajouter', 'create')->name('client.create')->middleware(['auth']);
     Route::get('/client/modifier/{clientId}', 'edit')->name('client.edit')->middleware(['auth']);
@@ -140,6 +142,7 @@ Route::controller(ClientController::class)->group(function () {
 // Collaborateurs
 Route::controller(CollaborateurController::class)->group(function () {
     Route::get('/collaborateurs', 'index')->name('collaborateur.index')->middleware(['auth']);
+    Route::get('/collaborateurs/archives', 'archives')->name('collaborateur.archives')->middleware(['auth']);
     Route::post('/collaborateur/ajouter', 'store')->name('collaborateur.store')->middleware(['auth']);
     Route::get('/collaborateur/ajouter', 'create')->name('collaborateur.create')->middleware(['auth']);
     Route::get('/collaborateur/modifier/{collaborateurId}', 'edit')->name('collaborateur.edit')->middleware(['auth']);
@@ -152,6 +155,7 @@ Route::controller(CollaborateurController::class)->group(function () {
 // Fournisseur
 Route::controller(FournisseurController::class)->group(function () {
     Route::get('/fournisseurs', 'index')->name('fournisseur.index')->middleware(['auth']);
+    Route::get('/fournisseurs/archives', 'archives')->name('fournisseur.archives')->middleware(['auth']);
     Route::post('/fournisseur/ajouter', 'store')->name('fournisseur.store')->middleware(['auth']);
     Route::get('/fournisseur/ajouter', 'create')->name('fournisseur.create')->middleware(['auth']);
     Route::get('/fournisseur/modifier/{fournisseurId}', 'edit')->name('fournisseur.edit')->middleware(['auth']);

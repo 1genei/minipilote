@@ -4,7 +4,7 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
-@section('title', 'Contacts')
+@section('title', 'Prospects')
 
 @section('content')
     <div class="content">
@@ -15,11 +15,11 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{route('contact.index')}}">Contacts</a></li>
-                            <li class="breadcrumb-item"><a href="{{route('contact.archives')}}">Archives</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('prospect.index')}}">Prospects</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('prospect.archives')}}">Archives</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Contacts</h4>
+                    <h4 class="page-title">Prospects</h4>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
         <style>
             body {
 
-                font-size: 13px;
+                font-size: 14px;
             }
         </style>
 
@@ -68,13 +68,13 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div class="d-flex justify-content-start">
-                                <a href="{{ route('contact.create') }}" class="btn btn-primary mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Nouveau contact
+                                <a href="{{ route('prospect.create') }}" class="btn btn-primary mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Nouveau prospect
                                 </a>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('contact.index') }}" class="btn btn-success mb-2">
-                                    <i class="mdi mdi-account-group me-2"></i> Contact actifs
+                                <a href="{{ route('prospect.index') }}" class="btn btn-success mb-2">
+                                    <i class="mdi mdi-account-group me-2"></i> Prospects actifs
                                 </a>
                             </div>
                         </div>
@@ -101,14 +101,12 @@
                         </div>
 
                         <ul class="nav nav-tabs nav-bordered mb-3">
-
                             <li class="nav-item">
-                                <a href="#entite" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+                                <a href="#entite" data-bs-toggle="tab" aria-expanded="true" class="nav-link active ">
                                     <i class="mdi mdi-account-circle d-md-none d-block"></i>
                                     <span class="d-none d-md-block">Personnes morales</span>
                                 </a>
                             </li>
-
                             <li class="nav-item">
                                 <a href="#individu" data-bs-toggle="tab" aria-expanded="false" class="nav-link ">
                                     <i class="mdi mdi-home-variant d-md-none d-block"></i>
@@ -120,27 +118,20 @@
                         </ul>
 
                         <div class="tab-content">
-
-                            <div class="tab-pane show active" id="entite">
+                            <div class="tab-pane active" id="entite">
                                 <div class="table-responsive">
-                                    <livewire:contact.entite-archive-table />
+                                    <livewire:prospect.entite-archive-table />
                                 </div>
+
                             </div>
-
-                            <div class="tab-pane " id="individu">
+                            <div class="tab-pane show " id="individu">
                                 <div class="table-responsive">
-                                    <livewire:contact.individu-archive-table />
+                                    <livewire:prospect.individu-archive-table />
                                 </div>
-
                             </div>
 
 
                         </div>
-
-
-
-
-
 
                     </div> <!-- end card-body-->
                 </div> <!-- end card-->
@@ -149,53 +140,11 @@
         <!-- end row -->
 
 
-
-
     </div> <!-- End Content -->
 @endsection
 
 @section('script')
-    <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
-
-    {{-- selection des statuts du contact --}}
-
-    <script>
-        $('#client').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#prospect').prop('checked', false);
-            }
-
-        });
-
-        $('#prospect').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#client').prop('checked', false);
-            }
-
-        });
-    </script>
-
-    {{-- selection du type de contact --}}
-
-    <script>
-        $('.div-entite').hide();
-
-        $('#type').change(function(e) {
-
-            if (e.currentTarget.value == "entité") {
-                $('.div-entite').show();
-                $('.div-individu').hide();
-
-            } else {
-                $('.div-entite').hide();
-                $('.div-individu').show();
-            }
-
-        });
-    </script>
-
 <script>
-        // Restaurer
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -214,7 +163,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Restaurer le contact',
+                    title: 'Restaurer',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
@@ -239,7 +188,7 @@
 
                                 swalWithBootstrapButtons.fire(
                                     'Confirmation',
-                                    'Contact restauré avec succès',
+                                    'Prospect restauré avec succès',
                                     'success'
                                 )
                                 // document.location.reload();
@@ -254,7 +203,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Contact non restauré',
+                            'Prospect non restauré',
                             'error'
                         )
                     }
@@ -264,120 +213,4 @@
         });
     </script>
 
-
-    {{-- Modification d'un contact --}}
-    <script>
-        $('.edit-contact').click(function(e) {
-
-            let that = $(this);
-
-            $('#edit-nom').val(that.data('nom'));
-            $('#edit-prenom').val(that.data('prenom'));
-
-            $('#edit-prospect').prop('checked', that.data('est-prospect'));
-            $('#edit-client').prop('checked', that.data('est-client'));
-            $('#edit-fournisseur').prop('checked', that.data('est-fournisseur'));
-
-            $('#edit-email').val(that.data('email'));
-            $('#edit-contact1').val(that.data('contact1'));
-            $('#edit-contact2').val(that.data('contact2'));
-            $('#edit-adresse').val(that.data('adresse'));
-            $('#edit-code_postal').val(that.data('code-postal'));
-            $('#edit-ville').val(that.data('ville'));
-
-
-            let currentFormAction = that.data('href');
-            $('#form-edit').attr('action', currentFormAction);
-
-
-
-
-            //    selection du type de contact
-
-
-            let currentType = that.data('type-contact');
-            let currentTypeentite = that.data('typeentite');
-            $('#edit-type option[value=' + currentType + ']').attr('selected', 'selected');
-
-
-            if (currentType == "entité") {
-                $('.div-edit-individu').hide();
-
-            } else {
-                $('.div-edit-entite').hide();
-
-            }
-
-            $('#edit-type').change(function(e) {
-
-                if (e.currentTarget.value == "entité") {
-                    $('.div-edit-entite').show();
-                    $('.div-edit-individu').hide();
-
-                } else {
-                    $('.div-edit-entite').hide();
-                    $('.div-edit-individu').show();
-                }
-
-            });
-
-            $('#edit-type_entite option[value=' + currentTypeentite + ']').attr('selected', 'selected');
-
-
-
-
-        })
-
-
-
-        // selection des statuts du contact  Modal modifier
-        $('#edit-client').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-prospect').prop('checked', false);
-            }
-
-        });
-
-        $('#edit-prospect').click(function(e) {
-            if (e.currentTarget.checked == true) {
-                $('#edit-client').prop('checked', false);
-            }
-
-        });
-    </script>
-
-
-    <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/responsive.bootstrap5.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            "use strict";
-            $("#tab1").
-            DataTable({
-                language: {
-                    paginate: {
-                        previous: "<i class='mdi mdi-chevron-left'>",
-                        next: "<i class='mdi mdi-chevron-right'>"
-                    },
-                    info: "Showing actions _START_ to _END_ of _TOTAL_",
-                    lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
-                },
-                pageLength: 100,
-
-                select: {
-                    style: "multi"
-                },
-                drawCallback: function() {
-                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                        document.querySelector(".dataTables_wrapper .row").querySelectorAll(".col-md-6")
-                        .forEach(function(e) {
-                            e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
-                                .classList.remove("col-md-6")
-                        })
-                }
-            })
-        });
-    </script>
 @endsection

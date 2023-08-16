@@ -26,6 +26,17 @@ class ProspectController extends Controller
     }
 
     /**
+     * Affiche la liste des contacts archivés
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function archives()
+    {
+    
+        return view('prospect.archives');
+    }
+
+    /**
      * Formulaire de création de prospect
      *
      * @return \Illuminate\Http\Response
