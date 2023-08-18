@@ -121,15 +121,28 @@
             </div>
         </li>
 
+
+
         <li class="side-nav-item">
-            <a href="#" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
-                <i class="mdi mdi-beaker-outline"></i>
-                <span> Catalogue produits </span>
+            <a data-bs-toggle="collapse" href="#catalogue" aria-expanded="" aria-controls="catalogue"
+                class="side-nav-link">
+                <i class="mdi  mdi-beaker-outline"></i>
+                <span>Catalogue</span>
+                <span class="menu-arrow"></span>
             </a>
+            <div class="collapse @if ($li_simulations) show @endif" id="catalogue">
+                <ul class="side-nav-second-level">
+                    <li class=""><a href="#"> Produits </a></li>
+                    <li class=""><a href="#"> Catégories </a></li>
+                    <li class=""><a href="#"> Caractéristiques </a></li>
+                    <li class=""><a href="#"> Stock </a></li>
+                </ul>
+            </div>
         </li>
+
         <li class="side-nav-item">
-            <a data-bs-toggle="collapse" href="#affaires" aria-expanded="{{ $li_simulations }}"
-                aria-controls="affaires" class="side-nav-link">
+            <a data-bs-toggle="collapse" href="#affaires" aria-expanded="" aria-controls="affaires"
+                class="side-nav-link">
                 <i class="mdi mdi-book-edit-outline"></i>
                 <span>Affaires</span>
                 <span class="menu-arrow"></span>
@@ -137,7 +150,7 @@
             <div class="collapse @if ($li_simulations) show @endif" id="affaires">
                 <ul class="side-nav-second-level">
 
-                    <li class="{{ $li_ordre_simule_algo1 }}">
+                    <li class="">
                         <a href="#">Gestion</a>
                         <a href="#"> Propositions commerciales </a>
                         <a href="#"> Devis </a>

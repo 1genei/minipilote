@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProspectController;
 use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ProduitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -174,6 +175,18 @@ Route::controller(AgendaController::class)->group(function () {
     Route::post('/agenda/store', 'store')->name('agenda.store')->middleware(['auth']);
     Route::post('/agenda/update/{agenda_id}', 'update')->name('agenda.update')->middleware(['auth']);
     Route::put('/agenda/delete/{agenda_id}', 'destroy')->name('agenda.destroy')->middleware(['auth']);
+});
+
+// Produits
+Route::controller(ProduitController::class)->group(function () {
+    Route::get('/produits', 'index')->name('produit.index')->middleware(['auth']);
+    Route::get('/produits/archives', 'archives')->name('produit.archives')->middleware(['auth']);
+    Route::post('/produit/ajouter', 'store')->name('produit.store')->middleware(['auth']);
+    Route::get('/produit/ajouter', 'create')->name('produit.create')->middleware(['auth']);
+    Route::get('/produit/modifier/{produitId}', 'edit')->name('produit.edit')->middleware(['auth']);
+    Route::post('/produit/modifier/{produitId}', 'update')->name('produit.update')->middleware(['auth']);
+    Route::put('/produit/archiver/{produitId}', 'archive')->name('produit.archive')->middleware(['auth']);
+    Route::post('/produit/desarchiver/{produitId}', 'unarchive')->name('produit.unarchive')->middleware(['auth']);
 });
 
 require __DIR__ . '/auth.php';

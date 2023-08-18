@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer("contact_id")->unsigned()->nullable();            
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean("archive")->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
