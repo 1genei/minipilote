@@ -176,6 +176,24 @@
             </a>
         </li>
 
+        <li class="side-nav-item">
+            <a data-bs-toggle="collapse" href="#affaires" aria-expanded="" aria-controls="affaires"
+                class="side-nav-link">
+                <i class="mdi mdi-book-edit-outline"></i>
+                <span>Paramètres</span>
+                <span class="menu-arrow"></span>
+            </a>
+            <div class="collapse @if ($li_simulations) show @endif" id="affaires">
+                <ul class="side-nav-second-level">
+                    <li class="">
+                        <a href="{{ route('parametre.index') }}">Généraux</a>
+                        <a href="{{ route('parametre.contact') }}"> Contacts </a>
+                        <a href="{{ route('parametre.produit') }}"> Produits </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
 
     </ul>
 

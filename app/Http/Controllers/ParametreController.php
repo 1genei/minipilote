@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Parametre;
 
+
 class ParametreController extends Controller
 {
     
@@ -19,6 +20,30 @@ class ParametreController extends Controller
         return view('parametres.index', compact('parametre'));
     
     }
+    
+    /**
+    *   affichage de la page des paramètres des contacts
+    */
+    public function contact(){
+        
+       
+        return view('parametres.contact');
+    
+    }
+    
+    /**
+    *   affichage de la page des paramètres des produits
+    */
+    public function produit(){
+        
+      
+        
+        return view('parametres.produit');
+    
+    }
+    
+   
+    
     
     /**
     *   affichage de la page des paramètres

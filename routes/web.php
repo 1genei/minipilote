@@ -27,12 +27,12 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 Route::view('/powergrid', 'powergrid-demo');
 
-Route::get('/dashboard', function () {
+Route::get('/', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -59,6 +59,8 @@ Route::get('/dashboard', function () {
 // Paramètres
 Route::controller(ParametreController::class)->group(function () {
     Route::get('/parametres', 'index')->name('parametre.index')->middleware(['auth']);
+    Route::get('/parametres/contact', 'contact')->name('parametre.contact')->middleware(['auth']);
+    Route::get('/parametres/produit', 'produit')->name('parametre.produit')->middleware(['auth']);
     Route::post('/parametres', 'update')->name('parametre.update')->middleware(['auth']);
 
 });
@@ -188,5 +190,7 @@ Route::controller(ProduitController::class)->group(function () {
     Route::put('/produit/archiver/{produitId}', 'archive')->name('produit.archive')->middleware(['auth']);
     Route::post('/produit/desarchiver/{produitId}', 'unarchive')->name('produit.unarchive')->middleware(['auth']);
 });
+
+
 
 require __DIR__ . '/auth.php';

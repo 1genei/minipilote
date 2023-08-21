@@ -16,6 +16,8 @@ class Autho365Controller extends Controller
     public function login()
     {
 
+        // https://portal.azure.com
+
         $authUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
 
         $query = http_build_query([

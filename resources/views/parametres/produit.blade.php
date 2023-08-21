@@ -68,21 +68,21 @@
                                 <a href="#billing-information" data-bs-toggle="tab" aria-expanded="false"
                                     class="nav-link rounded-0 active">
                                     <i class="mdi mdi-account-circle font-18"></i>
-                                    <span class="d-none d-lg-block">Paramètres généraux</span>
+                                    <span class="d-none d-lg-block">Catégorie de produit</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#shipping-information" data-bs-toggle="tab" aria-expanded="true"
                                     class="nav-link rounded-0">
                                     <i class="mdi mdi-truck-fast font-18"></i>
-                                    <span class="d-none d-lg-block">Shipping Info</span>
+                                    <span class="d-none d-lg-block">Type de produit</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#payment-information" data-bs-toggle="tab" aria-expanded="false"
                                     class="nav-link rounded-0">
                                     <i class="mdi mdi-cash-multiple font-18"></i>
-                                    <span class="d-none d-lg-block">Payment Info</span>
+                                    <span class="d-none d-lg-block">Famille de produit</span>
                                 </a>
                             </li>
                         </ul>
@@ -588,65 +588,7 @@
 
 
                     ***********************************************
-                    <form action="{{ route('parametre.update') }}" method="post">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
 
-                                @csrf
-                                <fieldset class="form-group">
-                                    <div class="row">
-                                        <legend class="col-form-label col-sm-2 pt-0">Paramètres généraux</legend>
-                                        <div class="col-xs-12 col-sm-6 col-lg-4 ">
-                                            <div class="mb-3">
-                                                <label for="seuil_alerte" class="form-label">Nom de la société <i
-                                                        data-bs-toggle="tooltip" title=""
-                                                        class="text-danger uil-info-circle xl "></i> </label>
-                                                <input type="number" step="0.01" max="100" min="0"
-                                                    class="form-control" name="seuil_alerte"
-                                                    value="{{ old('seuil_alerte') ? old('seuil_alerte') : ($parametre != null ? $parametre->seuil_alerte : '') }}"
-                                                    id="seuil_alerte" required>
-                                                @if ($errors->has('seuil_alerte'))
-                                                    <br>
-                                                    <div class="alert alert-danger" role="alert">
-                                                        <i class="dripicons-wrong me-2"></i>
-                                                        <strong>{{ $errors->first('nom') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="heure_ouverture" class="form-label">Numéro TVA </label>
-                                                <input type="text" class="form-control" name="heure_ouverture"
-                                                    value="{{ old('heure_ouverture') ? old('heure_ouverture') : ($parametre != null ? $parametre->heure_ouverture : '') }}"
-                                                    id="heure_ouverture" required>
-                                                @if ($errors->has('heure_ouverture'))
-                                                    <br>
-                                                    <div class="alert alert-danger" role="alert">
-                                                        <i class="dripicons-wrong me-2"></i>
-                                                        <strong>{{ $errors->first('heure_ouverture') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-
-
-                                        </div>
-                                    </div>
-                                </fieldset>
-
-                                <hr style="color: rgb(45, 6, 103); height:5px; margin-bottom: 30px">
-
-
-                            </div>
-                            <div class="modal-footer">
-                                <a class="btn btn-light" href="{{ route('parametre.index') }}">Annuler</a>
-                                <button type="submit" class="btn btn-success">Modifier</button>
-                            </div>
-                        </div>
-                    </form>
 
                 </div>
             </div>
