@@ -15,7 +15,7 @@ use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 
-final class IndividuTable extends PowerGridComponent
+final class IndividuArchiveTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
@@ -59,7 +59,7 @@ final class IndividuTable extends PowerGridComponent
      */
     public function datasource()
     {
-        $users = User::where([['archive', false]])->get();
+        $users = User::where([['archive', true]])->get();
         return $users;
     }
 
@@ -189,12 +189,12 @@ final class IndividuTable extends PowerGridComponent
 
             */
             
-            Button::add('Archiver')
-            ->bladeComponent('button-archive', function(User $user) {
+            Button::add('Restaurer')
+            ->bladeComponent('button-unarchive', function(User $user) {
                 //dd($individu);
-                return ['route' => route('utilisateur.archive', Crypt::encrypt($user->id)),
-                'tooltip' => "Archiver",
-                'classarchive' => "archive_user",
+                return ['route' => route('utilisateur.unarchive', Crypt::encrypt($user->id)),
+                'tooltip' => "Restaurer",
+                'classunarchive' => "unarchive_user",
                 ];
             }),
         ];

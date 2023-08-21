@@ -9,6 +9,9 @@ use App\Models\User;
 use App\Models\Individu;
 use Auth;
 use Hash;
+use Illuminate\Support\Facades\Crypt;
+
+
 class UtilisateurController extends Controller
 {
     /**
@@ -22,6 +25,16 @@ class UtilisateurController extends Controller
         $contactindividus = Contact::where([["type","individu"], ['archive', false]])->get();
 
         return view('utilisateur.index', compact('contactindividus'));
+    }
+
+        /**
+     * Affiche la liste des utilisateurs archivés
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function archives()
+    {
+        return view('utilisateur.archives');
     }
     
      /**
@@ -41,13 +54,7 @@ class UtilisateurController extends Controller
     *  
     */
     public function store(Request $request){
-    
-    
-       
-      
-        
-        
-        
+
         $typecontact = Typecontact::where('type', $request->type_contact)->first();
 
         $contact = Contact::create([
@@ -112,5 +119,38 @@ class UtilisateurController extends Controller
         
         return back()->with('ok', 'Contact ajouté');
         
+    }
+
+    /**
+     * Archiver un user
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function archiver($user_id)
+    {
+        $user = User::where('id', Crypt::decrypt($user_id))->first();
+        
+        $user->archive = true;
+        $user->update();
+        
+        return "200";
+    }
+
+     /**
+     * Restaurer un user
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function unarchive($user_id)
+    {
+        $user = User::where('id', Crypt::decrypt($user_id))->first();
+        
+        
+        $user->archive = false;
+        $user->update();
+        
+        return "200";
     }
 }

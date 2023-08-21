@@ -74,7 +74,7 @@
                             </div>
                             <div class="d-flex justify-content-end">
                                 <a href="{{ route('contact.index') }}" class="btn btn-success mb-2">
-                                    <i class="mdi mdi-account-group me-2"></i> Contact actifs
+                                    <i class="mdi mdi-account-group me-2"></i> Contacts actifs
                                 </a>
                             </div>
                         </div>
