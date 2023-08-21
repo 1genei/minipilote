@@ -144,7 +144,7 @@
 @endsection
 
 @section('script')
-<script>
+    <script>
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -163,7 +163,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Restaurer',
+                    title: 'Restaurer le client',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,

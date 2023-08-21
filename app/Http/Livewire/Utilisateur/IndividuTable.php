@@ -99,7 +99,7 @@ final class IndividuTable extends PowerGridComponent
         return PowerGrid::columns()
             ->addColumn('name')
             ->addColumn('email')
-            ->addColumn('contact_id', function (User $user) {return $user->contact_id === null ? 'Non' : 'Oui';})
+            ->addColumn('contact_id', function (User $user) {return $user->contact_id === null ? '<div class="badge bg-danger ">Non</div>' : '<div class="badge bg-success ">Oui</div>';})
             ->addColumn('created_at_formatted', fn (User $user) => Carbon::parse($user->created_at)->format('d/m/Y'));
     }
 

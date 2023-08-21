@@ -169,17 +169,9 @@
         </li>
 
         <li class="side-nav-item">
-            <a href="{{ route('parametre.index') }}" aria-expanded="false" aria-controls="sidebarCrm"
-                class="side-nav-link">
-                <i class="uil uil-bright"></i>
-                <span> Paramètres </span>
-            </a>
-        </li>
-
-        <li class="side-nav-item">
             <a data-bs-toggle="collapse" href="#affaires" aria-expanded="" aria-controls="affaires"
                 class="side-nav-link">
-                <i class="mdi mdi-book-edit-outline"></i>
+                <i class="uil uil-bright"></i>
                 <span>Paramètres</span>
                 <span class="menu-arrow"></span>
             </a>
