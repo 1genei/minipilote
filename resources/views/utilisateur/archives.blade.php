@@ -15,7 +15,7 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{route('utilisateur.index')}}">Utilisateurs</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('utilisateur.index')}}">Utilisateurs</a></li><li class="breadcrumb-item"><a href="{{route('utilisateur.archives')}}">Archives</a></li>
                         </ol>
                     </div>
                     <h4 class="page-title">Utilisateurs</h4>
@@ -74,8 +74,8 @@
                                 </a>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('utilisateur.archives') }}" class="btn btn-warning mb-2">
-                                    <i class="mdi mdi-archive me-2"></i> Utilisateurs archivés
+                                <a href="{{ route('utilisateur.index') }}" class="btn btn-success mb-2">
+                                    <i class="mdi mdi-account-group me-2"></i> Utilisateurs actifs
                                 </a>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
 
                             </div>
                         </div>
-                        <livewire:utilisateur.individu-table />
+                        <livewire:utilisateur.individu-archive-table />
 
 
                     </div> <!-- end card-body-->
@@ -124,7 +124,7 @@
 
 
     <script>
-        // Archiver
+        // Desarchiver
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -132,7 +132,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive_user', function(event) {
+            $('body').on('click', 'a.unarchive_user', function(event) {
                 let that = $(this)
                 event.preventDefault();
 
@@ -143,7 +143,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver l\'utilisateur',
+                    title: 'Restaurer l\'utilisateur',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
@@ -156,7 +156,7 @@
                         $('[data-toggle="tooltip"]').tooltip('hide')
                         $.ajax({
                                 url: that.attr('data-href'),
-                                type: 'PUT',
+                                type: 'POST',
                                 success: function(data) {
                                     // document.location.reload();
                                 },
@@ -168,7 +168,7 @@
 
                                 swalWithBootstrapButtons.fire(
                                     'Confirmation',
-                                    'Utilisateur archivé avec succès',
+                                    'Utilisateur restauré avec succès',
                                     'success'
                                 )
                                 // document.location.reload();
@@ -183,7 +183,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Utilisateur non archivé',
+                            'Utilisateur non restauré',
                             'error'
                         )
                     }

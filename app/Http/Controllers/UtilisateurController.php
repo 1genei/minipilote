@@ -9,6 +9,9 @@ use App\Models\User;
 use App\Models\Individu;
 use Auth;
 use Hash;
+use Illuminate\Support\Facades\Crypt;
+
+
 class UtilisateurController extends Controller
 {
     /**
@@ -127,7 +130,6 @@ class UtilisateurController extends Controller
     public function archiver($user_id)
     {
         $user = User::where('id', Crypt::decrypt($user_id))->first();
-        
         
         $user->archive = true;
         $user->update();
