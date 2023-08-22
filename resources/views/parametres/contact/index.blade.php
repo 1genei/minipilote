@@ -41,10 +41,10 @@
                                     </div>
                                 </div>
                             @endif
-                        </div> 
+                        </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
 
         <div class="row">
@@ -60,8 +60,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#postes" data-bs-toggle="tab" aria-expanded="true"
-                                    class="nav-link rounded-0">
+                                <a href="#postes" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
                                     <i class="mdi mdi-badge-account font-18"></i>
                                     <span class="d-none d-lg-block">Postes</span>
                                 </a>
@@ -70,15 +69,15 @@
 
                         <div class="tab-content">
 
-                        {{-- Onglet types de contact --}}
-                        @include('parametres.contact.types')
-                                
-                        {{-- Onglet postes --}}
-                        @include('parametres.contact.postes')
-                        </div> 
+                            {{-- Onglet types de contact --}}
+                            @include('parametres.contact.types')
+
+                            {{-- Onglet postes --}}
+                            @include('parametres.contact.postes')
+                        </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
 @endsection
@@ -135,11 +134,18 @@
                             .done(function() {
 
                                 swalWithBootstrapButtons.fire(
-                                    'Confirmation',
-                                    'Type de contact archivé avec succès',
-                                    'success'
-                                )
-                                document.location.reload();
+                                        'Confirmation',
+                                        'Type de contact archivé avec succès',
+                                        'success'
+                                    )
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
+
+
+                                // document.location.reload();
                             })
                     } else if (
                         /* Read more about handling dismissals below */
@@ -196,11 +202,15 @@
                             })
                             .done(function() {
                                 swalWithBootstrapButtons.fire(
-                                    'Confirmation',
-                                    'Type de contact restauré avec succès',
-                                    'success'
-                                )
-                                document.location.reload();
+                                        'Confirmation',
+                                        'Type de contact restauré avec succès',
+                                        'success'
+                                    )
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
                             })
                     } else if (
                         /* Read more about handling dismissals below */
@@ -267,11 +277,15 @@
                             })
                             .done(function() {
                                 swalWithBootstrapButtons.fire(
-                                    'Confirmation',
-                                    'Poste archivé avec succès',
-                                    'success'
-                                )
-                                document.location.reload();
+                                        'Confirmation',
+                                        'Poste archivé avec succès',
+                                        'success'
+                                    )
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
                             })
                     } else if (
                         /* Read more about handling dismissals below */
@@ -330,11 +344,15 @@
                             .done(function() {
 
                                 swalWithBootstrapButtons.fire(
-                                    'Confirmation',
-                                    ' Poste restauré avec succès',
-                                    'success'
-                                )
-                                document.location.reload();
+                                        'Confirmation',
+                                        ' Poste restauré avec succès',
+                                        'success'
+                                    )
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
                             })
                     } else if (
                         /* Read more about handling dismissals below */

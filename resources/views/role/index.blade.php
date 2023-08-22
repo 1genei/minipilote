@@ -321,11 +321,17 @@
                             .done(function() {
 
                                 swalWithBootstrapButtons.fire(
-                                    'Archivé',
-                                    '',
-                                    'success'
-                                )
-                                document.location.reload();
+                                        'Archivé',
+                                        '',
+                                        'success'
+                                    )
+
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
+
 
                                 // that.parents('tr').remove();
                             })
@@ -395,11 +401,15 @@
                             .done(function() {
 
                                 swalWithBootstrapButtons.fire(
-                                    'Désarchivé',
-                                    '',
-                                    'success'
-                                )
-                                document.location.reload();
+                                        'Désarchivé',
+                                        '',
+                                        'success'
+                                    )
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
                             })
 
 
