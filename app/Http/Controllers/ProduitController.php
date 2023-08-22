@@ -12,7 +12,10 @@ class ProduitController extends Controller
      */
     public function index()
     {
-        //
+        // $produits = Produit::where('archive', false)->get();
+
+        return view('produit.index');
+        // return view('produit.index', compact('produits'));
     }
 
     /**
