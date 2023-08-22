@@ -31,8 +31,8 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap"
-                            id="tab2">
+                        <table class="table table-centered table-hover w-100 dt-responsive nowrap"
+                            id="tab1">
                             <thead class="table-light">
                                 <tr>
                                     <th>Nom</th>
@@ -46,9 +46,9 @@
                                         <td><a href="#" class="text-body fw-bold">{{ $poste->nom }}</a> </td>
                                         <td>
                                             @if ($poste->archive == false)
-                                                <span class="badge bg-success">Actif</span>
+                                                <button type="button" class="btn-success btn-sm rounded-pill">Actif</button>
                                             @else
-                                                <span class="badge bg-danger">Archivé</span>
+                                                <button type="button" class="btn-danger btn-sm rounded-pill">Archivé</button>
                                             @endif
                                         </td>
                                         <td>
@@ -130,7 +130,7 @@
                     <h4 class="modal-title" id="standard-modalLabel">Modifier le poste</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="post" id="form-edit">
+                <form action="" method="post" id="form-edit-poste">
                     <div class="modal-body">
                         @csrf
                         <div class="col-lg-12">
@@ -159,215 +159,3 @@
             </div>
         </div>
     </div>
-
-@section('script')
-    <script>
-        $('.edit_poste').click(function(e) {
-
-            let that = $(this);
-            let currentPoste = that.data('value');
-            let currentFormAction = that.data('href');
-            $('#edit_poste').val(currentPoste);
-            $('#form-edit').attr('action', currentFormAction);
-
-        })
-    </script>
-
-    <script>
-        // Archiver
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            })
-            $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive_poste', function(event) {
-                let that = $(this)
-                event.preventDefault();
-
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
-
-                swalWithBootstrapButtons.fire({
-                    title: 'Archiver le poste',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non',
-                    reverseButtons: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        $('[data-toggle="tooltip"]').tooltip('hide')
-                        $.ajax({
-                                url: that.attr('data-href'),
-                                type: 'PUT',
-                                success: function(data) {
-                                    // document.location.reload();
-                                },
-                                error: function(data) {
-                                    console.log(data);
-                                }
-                            })
-                            .done(function() {
-
-                                swalWithBootstrapButtons.fire(
-                                    'Confirmation',
-                                    'Poste archivé avec succès',
-                                    'success'
-                                )
-                                document.location.reload();
-                            })
-
-
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulation',
-                            'Poste non archivé',
-                            'error'
-                        )
-                    }
-                });
-            })
-
-        });
-    </script>
-
-    <script>
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            })
-            $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.unarchive_poste', function(event) {
-                let that = $(this)
-                event.preventDefault();
-
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
-
-                swalWithBootstrapButtons.fire({
-                    title: 'Restaurer le poste',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non',
-                    reverseButtons: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        $('[data-toggle="tooltip"]').tooltip('hide')
-                        $.ajax({
-                                url: that.attr('data-href'),
-                                type: 'POST',
-                                success: function(data) {
-                                    // document.location.reload();
-                                },
-                                error: function(data) {
-                                    console.log(data);
-                                }
-                            })
-                            .done(function() {
-
-                                swalWithBootstrapButtons.fire(
-                                    'Confirmation',
-                                    ' Poste restauré avec succès',
-                                    'success'
-                                )
-                                document.location.reload();
-                            })
-
-
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulation',
-                            'Poste non restauré',
-                            'error'
-                        )
-                    }
-                });
-            })
-
-        });
-    </script>
-
-    <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/responsive.bootstrap5.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            "use strict";
-            $("#tab1").
-            DataTable({
-                language: {
-                    paginate: {
-                        previous: "<i class='mdi mdi-chevron-left'>",
-                        next: "<i class='mdi mdi-chevron-right'>"
-                    },
-                    info: "Affichage de  _START_ à _END_ sur _TOTAL_",
-                    lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">Tous</option></select> '
-                },
-                pageLength: 100,
-
-                select: {
-                    style: "multi"
-                },
-                drawCallback: function() {
-                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                        document.querySelector(".dataTables_wrapper .row").querySelectorAll(".col-md-6")
-                        .forEach(function(e) {
-                            e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
-                                .classList.remove("col-md-6")
-                        })
-                }
-            })
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            "use strict";
-            $("#tab2").
-            DataTable({
-                language: {
-                    paginate: {
-                        previous: "<i class='mdi mdi-chevron-left'>",
-                        next: "<i class='mdi mdi-chevron-right'>"
-                    },
-                    info: "Affichage de  _START_ à _END_ sur _TOTAL_",
-                    lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">Tous</option></select> '
-                },
-                pageLength: 100,
-
-                select: {
-                    style: "multi"
-                },
-                drawCallback: function() {
-                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                        document.querySelector(".dataTables_wrapper .row").querySelectorAll(".col-md-6")
-                        .forEach(function(e) {
-                            e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
-                                .classList.remove("col-md-6")
-                        })
-                }
-            })
-        });
-    </script>
-@endsection
