@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer("parent_id")->nullable();
             $table->string("description")->nullable();
             $table->integer("niveau")->nullable();
+            $table->boolean("archive")->default(false);
             
             $table->timestamps();
         });

@@ -16,6 +16,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\TypecontactController;
 use App\Http\Controllers\PosteController;
+use App\Http\Controllers\CategorieproduitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,7 +65,14 @@ Route::controller(ParametreController::class)->group(function () {
     Route::get('/parametres/contact', 'contact')->name('parametre.contact')->middleware(['auth']);
     Route::get('/parametres/produit', 'produit')->name('parametre.produit')->middleware(['auth']);
     Route::post('/parametres', 'update')->name('parametre.update')->middleware(['auth']);
+});
 
+// Categorieproduit
+Route::controller(CategorieproduitController::class)->group(function () {
+    Route::post('/categorieproduit/ajouter', 'store')->name('categorieproduit.store')->middleware(['auth']);
+    Route::post('/categorieproduit/modifier/{categorieId}', 'update')->name('categorieproduit.update')->middleware(['auth']);
+    Route::put('/categorieproduit/archiver/{categorieId}', 'archive')->name('categorieproduit.archive')->middleware(['auth']);
+    Route::post('/categorieproduit/desarchiver/{categorieId}', 'unarchive')->name('categorieproduit.unarchive')->middleware(['auth']);
 });
 
 // Typecontacts
