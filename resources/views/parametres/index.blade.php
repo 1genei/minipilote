@@ -2,6 +2,8 @@
 @section('css')
 @endsection
 
+@section('title', 'Paramètres')
+
 @section('content')
     <div class="content">
 

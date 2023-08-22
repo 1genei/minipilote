@@ -163,7 +163,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Restaurer',
+                    title: 'Restaurer le prospect',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,

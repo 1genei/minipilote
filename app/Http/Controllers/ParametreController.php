@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Parametre;
+use App\Models\Typecontact;
+use App\Models\Poste;
 
 
 class ParametreController extends Controller
@@ -25,9 +27,11 @@ class ParametreController extends Controller
     *   affichage de la page des paramètres des contacts
     */
     public function contact(){
-        
+
+        $types = Typecontact::all();
+        $postes = Poste::all();
        
-        return view('parametres.contact');
+        return view('parametres.contact.index', compact('types', 'postes'));
     
     }
     
@@ -36,7 +40,7 @@ class ParametreController extends Controller
     */
     public function produit(){
         
-      
+      // catégorie, type, famille
         
         return view('parametres.produit');
     

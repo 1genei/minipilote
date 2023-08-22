@@ -163,7 +163,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Restaurer',
+                    title: 'Restaurer le fournisseur',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,

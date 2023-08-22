@@ -14,6 +14,8 @@ use App\Http\Controllers\ProspectController;
 use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\TypecontactController;
+use App\Http\Controllers\PosteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,6 +65,22 @@ Route::controller(ParametreController::class)->group(function () {
     Route::get('/parametres/produit', 'produit')->name('parametre.produit')->middleware(['auth']);
     Route::post('/parametres', 'update')->name('parametre.update')->middleware(['auth']);
 
+});
+
+// Typecontacts
+Route::controller(TypecontactController::class)->group(function () {
+    Route::post('/typecontact/ajouter', 'store')->name('typecontact.store')->middleware(['auth']);
+    Route::post('/typecontact/modifier/{typeId}', 'update')->name('typecontact.update')->middleware(['auth']);
+    Route::put('/typecontact/archiver/{typeId}', 'archive')->name('typecontact.archive')->middleware(['auth']);
+    Route::post('/typecontact/desarchiver/{typeId}', 'unarchive')->name('typecontact.unarchive')->middleware(['auth']);
+});
+
+// Postes
+Route::controller(PosteController::class)->group(function () {
+    Route::post('/poste/ajouter', 'store')->name('poste.store')->middleware(['auth']);
+    Route::post('/poste/modifier/{posteId}', 'update')->name('poste.update')->middleware(['auth']);
+    Route::put('/poste/archiver/{posteId}', 'archive')->name('poste.archive')->middleware(['auth']);
+    Route::post('/poste/desarchiver/{posteId}', 'unarchive')->name('poste.unarchive')->middleware(['auth']);
 });
 
 // Rôles

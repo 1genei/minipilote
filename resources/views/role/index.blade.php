@@ -434,7 +434,7 @@
                         previous: "<i class='mdi mdi-chevron-left'>",
                         next: "<i class='mdi mdi-chevron-right'>"
                     },
-                    info: "Showing actions _START_ to _END_ of _TOTAL_",
+                    info: "Affichage de  _START_ à _END_ sur _TOTAL_",
                     lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
                 },
                 pageLength: 100,
