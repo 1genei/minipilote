@@ -26,10 +26,12 @@ return new class extends Migration
             $table->double("largeur")->nullable();
             $table->double("hauteur")->nullable();
             $table->string("fiche_technique")->nullable();
-            $table->double("prix_achat")->nullable();
+            $table->double("prix_achat_ht")->nullable();
+            $table->double("prix_achat_ttc")->nullable();
             $table->double("commission_base")->nullable();
             // ( prix_achat + comm_base) markeup ou marge
-            $table->double("prix_achat_commerciaux")->nullable();
+            $table->double("prix_achat_commerciaux_ht")->nullable();
+            $table->double("prix_achat_commerciaux_ttc")->nullable();
             $table->double("prix_vente")->nullable();
             $table->double("prix_vente_max")->nullable();
             $table->timestamps();

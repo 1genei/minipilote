@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
 @endsection
 
-@section('title', 'Ajout client')
+@section('title', 'Ajout produit')
 
 @section('content')
     <div class="content">
@@ -16,10 +16,10 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="">Clients</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('produit.index') }}">Produits</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Clients</h4>
+                    <h4 class="page-title">Produits</h4>
                 </div>
             </div>
 
@@ -32,9 +32,9 @@
                                 {{-- <a href="{{ URL::previous() }}" type="button" class="btn btn-outline-primary"><i
                                         class="uil-arrow-left"></i>
                                     Retour</a> --}}
-                                <a href="{{ route('client.index') }}" type="button" class="btn btn-outline-primary"><i
+                                <a href="{{ route('produit.index') }}" type="button" class="btn btn-outline-primary"><i
                                         class="uil-arrow-left"></i>
-                                    Clients</a>
+                                    Produits</a>
 
                             </div>
                             @if (session('ok'))
@@ -80,118 +80,21 @@
                             </div>
                         </div>
 
+                        <livewire:produit.add-form>
 
-                        <div class="row">
+                            <style>
+                                .select2-container .select2-selection--single {
+                                    height: calc(1.69em + 0.9rem + 2px);
+                                }
 
-                            <div class="row justify-content-between">
-                                <div class="col-4">
+                                .card-body {
+                                    padding: 0.0rem 1.5rem !important;
+                                }
 
-                                </div>
-                                <div class="col-4">
-
-                                    <a href="" type="button" class="btn btn-secondary"><i class="uil-plus"></i>
-                                        Publié</a>
-
-                                </div>
-                            </div>
-
-
-
-
-                        </div>
-
-                        <form action="{{ route('produit.store') }}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    {{-- <h4 class="modal-title" id="">Modifier l'article</h4> --}}
-                                    <br>
-
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <br>
-
-
-                                    @csrf
-
-                                    <div class="row">
-                                        <div class="col-8">
-                                            <div class="col-12">
-                                                <div class="mb-3">
-                                                    <label for="titre" class="form-label">Titre *</label>
-                                                    <input type="text" class="form-control" name="titre"
-                                                        value="{{ old('titre') }}" id="titre" required>
-                                                    @if ($errors->has('titre'))
-                                                        <br>
-                                                        <div class="alert alert-danger" role="alert">
-                                                            <i class="dripicons-wrong me-2"></i>
-                                                            <strong>{{ $errors->first('titre') }}</strong>
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <label for="contenu" class="form-label">Contenu *</label>
-
-                                                <textarea rows="50" id="contenu" name="contenu" required> </textarea>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-4">
-                                            <div class="col-12">
-                                                <div class="mb-3">
-                                                    <label for="categorie_id" class="form-label">Catégorie *</label>
-                                                    <select name="categorie_id" id="categorie_id" class="form-select"
-                                                        required>
-                                                        <option value=""></option>
-                                                        {{-- @foreach ($categories as $categorie)
-                                                            <option value="{{ $categorie->id }}">{{ $categorie->nom }}
-                                                            </option>
-                                                        @endforeach --}}
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="col-12">
-                                                <label for="images" class="form-label">Image(s)</label>
-
-                                                <div class="fallback">
-                                                    <input name="images[]" class=" btn btn-danger image-multiple"
-                                                        accept="image/*" type="file" multiple />
-                                                </div>
-
-                                            </div>
-
-
-
-                                        </div>
-                                    </div>
-
-
-
-                                </div>
-                                <div class="modal-footer"
-                                    style="position: fixed;bottom: 10px; margin: 0;  left: 50%; z-index:1 ;">
-                                    <a class="btn btn-light btn-lg " href="{{ route('produit.index') }}">Annuler</a>
-                                    <button type="submit"
-                                        class="btn btn-dark btn-flat btn-addon btn-lg ">Enregistrer</button>
-                                </div>
-
-
-                            </div>
-                        </form>
-
-
-
-                        <style>
-                            .select2-container .select2-selection--single {
-                                height: calc(1.69em + 0.9rem + 2px);
-                            }
-                        </style>
+                                .modal-footer {
+                                    border-top: 0px solid #ffffff;
+                                }
+                            </style>
 
 
 
@@ -202,12 +105,19 @@
         <!-- end row -->
 
 
-
-
-
     </div> <!-- End Content -->
 @endsection
 
 @section('script')
 
+    <script src="https://cdn.tiny.cloud/1/raz3clgrdrwxg1nj7ky75jzhjuv9y1gb8qu8xsjph3ov99k0/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
+
+    <script>
+        tinymce.init({
+            selector: '#description',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
 @endsection
