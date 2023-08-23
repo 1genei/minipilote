@@ -1,100 +1,150 @@
-@extends('layouts.app')
-@section('css')
-@endsection
-
-@section('title', 'Paramètres')
-
-@section('content')
-    <!-- Mise en page table, confirmation sweetalert -->
-    <div class="content">
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box">
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{ route('parametre.index') }}">Paramètres</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('parametre.contact') }}">Contacts</a></li>
-                        </ol>
+<div class="tab-pane show active" id="categories">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-5">
+                            <a href="" class="btn btn-primary mb-2" data-bs-toggle="modal"
+                                data-bs-target="#standard-modal-poste"><i class="mdi mdi-plus-circle me-2"></i>Nouvelle catégorie</a>
+                        </div>
                     </div>
-                    <h4 class="page-title">Paramètres</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card widget-inline">
-                    <div class="card-body p-0">
-                        <div class="row g-0">
-                            <div class="col-sm-4  mr-14 ">
-                                {{-- <a href="{{route('action.index')}}" type="button" class="btn btn-outline-primary"><i class="uil-arrow-left"></i> Retour</a> --}}
-                                <h4 class="modal-title" id="addActionModalLabel"> Modification de vos paramètres </h4>
-
-                            </div>
-                            @if (session('ok'))
-                                <div class="col-6">
-                                    <div class="alert alert-success alert-dismissible bg-success text-white text-center border-0 fade show"
-                                        role="alert">
+                    <div class="row">
+                        <div class="col-6">
+                            @if (session('message'))
+                                <div class="alert alert-success text-secondary alert-dismissible ">
+                                    <i class="dripicons-checkmark me-2"></i>
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <a href="#" class="alert-link"><strong> {{ session('message') }}</strong></a>
+                                </div>
+                            @endif
+                            @if ($errors->has('categorie'))
+                                <br>
+                                    <div class="alert alert-warning text-secondary " role="alert">
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
                                             aria-label="Close"></button>
-                                        <strong> {{ session('ok') }}</strong>
+                                        <strong>{{ $errors->first('categorie') }}</strong>
                                     </div>
-                                </div>
+                                </br>
                             @endif
                         </div>
                     </div>
+                    <div class="row">
+                        <table class="table table-centered table-hover w-100 dt-responsive nowrap">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Description</th>
+                                    <th>Statut</th>
+                                    <th style="width: 125px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($categories as $categorie)
+                                    @if($categorie->niveau == 1)
+                                        @include('parametres.produit.categorie', ['categorie' => $categorie])
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div> 
+            </div> 
+        </div> 
+    </div>
+</div>
+
+{{-- Ajout d'une categorie --}}
+    <div id="standard-modal-categorie" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="standard-modalLabel">Ajouter un poste</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12 ">
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                            <li class="nav-item">
-                                <a href="#types" data-bs-toggle="tab" aria-expanded="false"
-                                    class="nav-link rounded-0 active">
-                                    <i class="mdi mdi-account-details font-18"></i>
-                                    <span class="d-none d-lg-block">Types des contacts</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#postes" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
-                                    <i class="mdi mdi-badge-account font-18"></i>
-                                    <span class="d-none d-lg-block">Postes</span>
-                                </a>
-                            </li>
-                        </ul>
-
-                        <div class="tab-content">
-
-                            {{-- Onglet types de contact --}}
-                            @include('parametres.contact.types')
-
-                            {{-- Onglet postes --}}
-                            @include('parametres.contact.postes')
+                <form action="{{ route('categorieproduit.store') }}" method="post">
+                    <div class="modal-body">
+                        @csrf
+                        <div class="col-lg-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" name="categorie" value="{{ old('categorie') ? old('categorie') : '' }}"
+                                    class="form-control" id="floatingInput">
+                                <label for="floatingInput">Catégorie</label>
+                                @if ($errors->has('categorie'))
+                                    <br>
+                                    <div class="alert alert-warning text-secondary " role="alert">
+                                        <button type="button" class="btn-close btn-close-white"
+                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{{ $errors->first('categorie') }}</strong>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
-@endsection
+
+{{-- Modification d'une categorie --}}
+    <div id="edit-modal-categorie" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="standard-modalLabel">Modifier la catégorie</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="" method="post" id="form-edit-categorie">
+                    <div class="modal-body">
+                        @csrf
+                        <div class="col-lg-12">
+
+                            <div class="form-floating mb-3">
+                                <input type="text" name="categorie" value="{{ old('categorie') ? old('categorie') : '' }}"
+                                    class="form-control" id="edit_categorie">
+                                <label for="edit_categorie">categorie</label>
+                                @if ($errors->has('categorie'))
+                                    <br>
+                                    <div class="alert alert-warning text-secondary " role="alert">
+                                        <button type="button" class="btn-close btn-close-white"
+                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{{ $errors->first('categorie') }}</strong>
+                                    </div>
+                                @endif
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Modifier</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 @section('script')
     <script>
-        $('.edit_type').click(function(e) {
+        $('.edit_categorie').click(function(e) {
             let that = $(this);
             let currentType = that.data('value');
             let currentFormAction = that.data('href');
-            $('#edit_type').val(currentType);
-            $('#form-edit-type').attr('action', currentFormAction);
+            $('#edit_categorie').val(currentType);
+            $('#form-edit-categorie').attr('action', currentFormAction);
         })
     </script>
 
     <script>
-        // Archiver type
+        // Archiver categorie
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -102,7 +152,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive_type', function(event) {
+            $('body').on('click', 'a.archive_categorie', function(event) {
                 let that = $(this)
                 event.preventDefault();
                 const swalWithBootstrapButtons = swal.mixin({
@@ -111,8 +161,8 @@
                     buttonsStyling: false,
                 });
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver le type de contact',
-                    text: "Confirmer ?",
+                    title: 'Archiver la catégorie ?',
+                    text: "Toutes les sous-catégories seront archivées",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Oui',
@@ -135,7 +185,7 @@
 
                                 swalWithBootstrapButtons.fire(
                                         'Confirmation',
-                                        'Type de contact archivé avec succès',
+                                        'Catégorie archivée avec succès',
                                         'success'
                                     )
                                     .then((result) => {
@@ -143,9 +193,6 @@
                                             document.location.reload();
                                         }
                                     })
-
-
-                                // document.location.reload();
                             })
                     } else if (
                         /* Read more about handling dismissals below */
@@ -153,7 +200,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Type de contact non archivé',
+                            'Catégorie non archivée',
                             'error'
                         )
                     }
@@ -163,7 +210,7 @@
     </script>
 
     <script>
-        // Restaurer type
+        // Restaurer categorie
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -171,7 +218,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.unarchive_type', function(event) {
+            $('body').on('click', 'a.unarchive_categorie', function(event) {
                 let that = $(this)
                 event.preventDefault();
                 const swalWithBootstrapButtons = swal.mixin({
@@ -180,8 +227,8 @@
                     buttonsStyling: false,
                 });
                 swalWithBootstrapButtons.fire({
-                    title: 'Restaurer le type de contact',
-                    text: "Confirmer ?",
+                    title: 'Restaurer la catégorie ?',
+                    text: "Toutes les sous catégories seront restaurées",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Oui',
@@ -203,7 +250,7 @@
                             .done(function() {
                                 swalWithBootstrapButtons.fire(
                                         'Confirmation',
-                                        'Type de contact restauré avec succès',
+                                        'Catégorie restaurée avec succès',
                                         'success'
                                     )
                                     .then((result) => {
@@ -218,7 +265,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Type de contact non restauré',
+                            'Catégorie non restaurée',
                             'error'
                         )
                     }

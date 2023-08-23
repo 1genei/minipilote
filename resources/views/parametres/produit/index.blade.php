@@ -13,7 +13,7 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{ route('parametre.index') }}">Paramètres</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('parametre.contact') }}">Contacts</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('parametre.produit') }}">Produits</a></li>
                         </ol>
                     </div>
                     <h4 class="page-title">Paramètres</h4>
@@ -53,27 +53,18 @@
                     <div class="card-body">
                         <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                             <li class="nav-item">
-                                <a href="#types" data-bs-toggle="tab" aria-expanded="false"
+                                <a href="#categories" data-bs-toggle="tab" aria-expanded="false"
                                     class="nav-link rounded-0 active">
-                                    <i class="mdi mdi-account-details font-18"></i>
-                                    <span class="d-none d-lg-block">Types des contacts</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#postes" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
-                                    <i class="mdi mdi-badge-account font-18"></i>
-                                    <span class="d-none d-lg-block">Postes</span>
+                                    <i class="mdi mdi-folder font-18"></i>
+                                    <span class="d-none d-lg-block">Catégories</span>
                                 </a>
                             </li>
                         </ul>
 
                         <div class="tab-content">
 
-                            {{-- Onglet types de contact --}}
-                            @include('parametres.contact.types')
-
-                            {{-- Onglet postes --}}
-                            @include('parametres.contact.postes')
+                            {{-- Onglet catégories --}}
+                            @include('parametres.produit.categories')
                         </div>
                     </div>
                 </div>

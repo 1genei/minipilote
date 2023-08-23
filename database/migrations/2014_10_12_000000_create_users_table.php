@@ -19,7 +19,6 @@ return new class extends Migration
             $table->boolean('archive')->default(false);        
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->boolean("archive")->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

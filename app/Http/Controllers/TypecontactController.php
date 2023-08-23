@@ -14,7 +14,6 @@ class TypecontactController extends Controller
             'type' => 'string|required|unique:typecontacts,type',
         ]);
 
-        $types = Typecontact::all();
         Typecontact::create([
             "type" => $request->type
         ]);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Parametre;
 use App\Models\Typecontact;
+use App\Models\Categorieproduit;
 use App\Models\Poste;
 
 
@@ -40,9 +41,10 @@ class ParametreController extends Controller
     */
     public function produit(){
         
-      // catégorie, type, famille
+        // catégorie, type, famille
+        $categories = Categorieproduit::all();
         
-        return view('parametres.produit');
+        return view('parametres.produit.index', compact('categories'));
     
     }
     
