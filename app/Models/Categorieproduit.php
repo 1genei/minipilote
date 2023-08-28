@@ -19,4 +19,18 @@ class Categorieproduit extends Model
     {
         return $this->belongsTo(Categorieproduit::class, 'parent_id');
     }
+
+    public function estFils($parentCategory)
+    {
+        $parent = $this->parent;
+
+        while ($parent) {
+            if ($parent->id == $parentCategory->id) {
+                return true;
+            }
+            $parent = $parent->parent;
+        }
+
+        return false;
+    }
 }
