@@ -12,29 +12,59 @@ class CategorieproduitController extends Controller
 
         $request->validate([
             'nom' => 'string|required',
+            'parent_id' => 'string|nullable',
+            'description' => 'string|nullable'
         ]);
+
+        $niveau = 1;
+        $archive = false;
+
+        if ($request->parent_id != null) {
+            $request->parent_id = (int) $request->parent_id;
+            $parent = Categorieproduit::where('id', $request->parent_id)->first();
+            $niveau += $parent->niveau;
+            $archive = $parent->archive;
+        }
 
         Categorieproduit::create([
-            "type" => $request->type
+            "nom" => $request->nom,
+            "parent_id" => $request->parent_id,
+            "description" => $request->description,
+            "niveau" => $niveau,
+            "archive" => $archive,
         ]);
 
-        return redirect()->route('parametre.contact')->with('message', 'Nouveau type de contact ajouté');
+        return redirect()->route('parametre.produit')->with('message', 'Nouvelle catégorie ajoutée');
     }
 
     public function update(Request $request, $categorieId){
 
-        $type = Categorieproduit::where('id', Crypt::decrypt($categorieId))->first();
-        if($type->type != $request->type){
-            $request->validate([
-                'type' => 'string|required',
-            ]);
+        $categorie = Categorieproduit::where('id', Crypt::decrypt($categorieId))->first();
+        $request->validate([
+            'nom' => 'string|required',
+            'parent_id' => 'different:'.$categorie->id.'|nullable',
+            'description' => 'string|nullable'
+        ]);
+    
+        $niveau = 1;
+        $archive = $categorie->archive;
+    
+        if ($request->parent_id != null) {
+            $request->parent_id = (int) $request->parent_id;
+            $parent = Categorieproduit::where('id', $request->parent_id)->first();
+            $niveau += $parent->niveau;
+            $archive = $parent->archive || $archive;
         }
         
-        $type->type = $request->type;
-        $type->update();
+        $categorie->nom = $request->nom;
+        $categorie->parent_id = $request->parent_id;
+        $categorie->description = $request->description;
+        $categorie->niveau = $niveau;
+        $categorie->archive = $archive;
+        $categorie->update();
       
-        return redirect()->route('parametre.contact')->with('message', 'Type de contact modifié');
-    }
+        return redirect()->route('parametre.produit')->with('message', 'Catégorie modifiée');
+    }    
 
     public function archive($categorie_id) {
         $categorie = Categorieproduit::find(Crypt::decrypt($categorie_id));

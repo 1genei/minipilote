@@ -27,7 +27,10 @@
     </td>
     <td>
         <a data-href="{{ route('categorieproduit.update', Crypt::encrypt($categorie->id)) }}" style="cursor: pointer;" title="Modifier"
-                data-value="{{ $categorie->nom }}" data-bs-toggle="modal"
+            data-nom="{{ $categorie->nom }}" 
+            data-parent_id="{{ $categorie->parent_id }}" 
+            data-description="{{ $categorie->description }}" 
+            data-bs-toggle="modal"
                 data-bs-target="#edit-modal-categorie" class="action-icon edit_categorie text-primary">
             <i class="mdi mdi-square-edit-outline"></i>
         </a>
