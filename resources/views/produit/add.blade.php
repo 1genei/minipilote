@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <livewire:produit.add-form>
+                        <livewire:produit.add-form :categories="$categories">
 
                             <style>
                                 .select2-container .select2-selection--single {

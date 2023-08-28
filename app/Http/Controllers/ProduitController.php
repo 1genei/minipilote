@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produit;
+use App\Models\Stock;
+use App\Models\Categorieproduit;
+
 use Illuminate\Http\Request;
 
 class ProduitController extends Controller
@@ -14,6 +17,7 @@ class ProduitController extends Controller
     {
         // $produits = Produit::where('archive', false)->get();
 
+
         return view('produit.index');
         // return view('produit.index', compact('produits'));
     }
@@ -23,7 +27,11 @@ class ProduitController extends Controller
      */
     public function create()
     {
-        return view('produit.add');
+    
+        $categories = Categorieproduit::whereNull('parent_id')->get();
+    
+ 
+        return view('produit.add', compact('categories'));
         
     }
 
@@ -32,7 +40,44 @@ class ProduitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        dd($request->all());
+        $produit = Produit::create([
+        "nom" => $request->nom,
+          "description" => $request->description,
+          "type" => $request->type,
+          "marque_id" => $request->marque,
+          "prix_vente_ht" => $request->prix_vente_ht,
+          "prix_vente_ttc" => $request->prix_vente_ttc,
+          "prix_vente_max_ht" => $request->prix_vente_max_ht,
+          "prix_vente_max_ttc" => $request->prix_vente_max_ttc,
+          "prix_achat_ht" => $request->prix_achat_ht,
+          "prix_achat_ttc" => $request->prix_achat_ttc,
+          "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht,
+          "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc,
+         
+        ]);
+        
+        // if($request->)
+        
+        
+        if($request->type != "simple"){
+        
+            // variations
+        }
+        
+        // fiche technique categorie stock
+        
+        $stock = Stock::create([
+            "produit_id" => $produit->id,
+            "quantite" => $request->quantite,
+            "quantite_min" => $request->quantite_min_vente,
+            "seuil_alerte" => $request->seuil_alerte_stock,
+        ]);
+        
+        
+        
+        return redirect()->back()->with('ok', 'Nouveau produit ajouté');
     }
 
     /**

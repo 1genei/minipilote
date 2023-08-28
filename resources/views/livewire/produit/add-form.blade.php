@@ -55,7 +55,8 @@
         </div>
         <div class="modal-footer" style="position: fixed;bottom: 10px; margin: 0;  left: 50%; z-index:1 ;">
             <a class="btn btn-light btn-lg " href="{{ route('produit.index') }}">Annuler</a>
-            <button type="submit" class="btn btn-dark btn-flat btn-addon btn-lg ">Enregistrer</button>
+            <button type="submit" class="btn btn-dark btn-flat btn-addon btn-lg "
+                wire:click="submit">Enregistrer</button>
         </div>
 
 

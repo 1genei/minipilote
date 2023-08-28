@@ -300,4 +300,12 @@
     .dropdown-menu {
         font-size: 12px;
     }
+
+
+    /* SWEETALERT */
+
+    /* Mettre espace entre les deux btn OUI et NON */
+    .swal2-cancel {
+        margin-left: 5px;
+    }
 </style>

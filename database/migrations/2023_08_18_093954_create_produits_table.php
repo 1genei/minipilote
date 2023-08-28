@@ -17,6 +17,8 @@ return new class extends Migration
             // Simple, déclinaison
             $table->integer("fournisseur_id")->nullable();
             $table->integer("categorie_id")->nullable();
+            $table->boolean("est_declinaison")->default(false);
+            $table->integer("produit_id")->nullable();
             $table->integer("marque_id")->nullable();
             $table->string("type")->nullable();
             $table->string("nom")->nullable();
@@ -32,8 +34,11 @@ return new class extends Migration
             // ( prix_achat + comm_base) markeup ou marge
             $table->double("prix_achat_commerciaux_ht")->nullable();
             $table->double("prix_achat_commerciaux_ttc")->nullable();
-            $table->double("prix_vente")->nullable();
-            $table->double("prix_vente_max")->nullable();
+            $table->double("prix_vente_ht")->nullable();
+            $table->double("prix_vente_ttc")->nullable();
+            $table->double("prix_vente_max_ht")->nullable();
+            $table->double("prix_vente_max_ttc")->nullable();
+            $table->boolean("gerer_stock")->default(false);
             $table->timestamps();
         });
     }

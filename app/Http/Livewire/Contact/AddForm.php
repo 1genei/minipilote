@@ -48,6 +48,8 @@ class AddForm extends Component
     public $typecontact;
     public $typecontacts;
     public $displaytypecontact;
+    
+    
     public function rules()
     {
     
