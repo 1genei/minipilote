@@ -91,7 +91,7 @@
                     <h4 class="modal-title" id="standard-modalLabel">Ajouter un poste</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('poste.store') }}" method="post">
+                <form id="form-add-poste" action="{{ route('poste.store') }}" method="post">
                     <div class="modal-body">
                         @csrf
                         <div class="col-lg-12">

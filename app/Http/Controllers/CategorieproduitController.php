@@ -5,16 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Categorieproduit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Validation\ValidationException;
 
 class CategorieproduitController extends Controller
 {
     public function store(Request $request){
 
-        $request->validate([
-            'nom' => 'string|required',
-            'parent_id' => 'string|nullable',
-            'description' => 'string|nullable'
-        ]);
+        try {
+            $this->validate($request, [
+                'nom' => 'string|required',
+                'parent_id' => 'string|nullable',
+                'description' => 'string|nullable'
+            ]);
+        } catch (ValidationException $e) {
+            return redirect()->route('parametre.produit')->withErrors(['categorie' => $e->validator->errors()]);
+        }
 
         $niveau = 1;
         $archive = false;

@@ -158,14 +158,6 @@
                                 <label for="inputDescriptionEdit">Description</label>
                                 <textarea name="description" class="form-control" id="inputDescriptionEdit" rows="4" value=""></textarea>
                             </div>
-                            @if ($errors->has('categorie'))
-                                <br>
-                                <div class="alert alert-warning text-secondary " role="alert">
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                    <strong>{{ $errors->first('categorie') }}</strong>
-                                </div>
-                            @endif
                         </div>
                     </div>
                 </div>

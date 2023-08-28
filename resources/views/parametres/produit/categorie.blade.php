@@ -15,7 +15,7 @@
         @endif
         <b>{{ $categorie->nom }}</b>
     </td>
-    <td>
+    <td class="text-wrap w-50">
         {{ $categorie->description }}
     </td>
     <td>
