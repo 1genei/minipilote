@@ -58,7 +58,14 @@ class ProduitController extends Controller
          
         ]);
         
-        // if($request->)
+        if($request->categories_id){
+            
+            foreach ($$request->categories_id as $categories_id) {
+                Categorieproduit::create([
+                    
+                ]);
+            }
+        }
         
         
         if($request->type != "simple"){
