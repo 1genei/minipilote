@@ -42,7 +42,7 @@ class CategorieproduitController extends Controller
         $categorie = Categorieproduit::where('id', Crypt::decrypt($categorieId))->first();
         $request->validate([
             'nom' => 'string|required',
-            'parent_id' => 'different:'.$categorie->id.'|nullable',
+            'parent_id' => 'string|nullable',
             'description' => 'string|nullable'
         ]);
     
@@ -52,6 +52,9 @@ class CategorieproduitController extends Controller
         if ($request->parent_id != null) {
             $request->parent_id = (int) $request->parent_id;
             $parent = Categorieproduit::where('id', $request->parent_id)->first();
+            if ($parent->estFils($categorie) || $parent->id == $categorie->id) {
+                return redirect()->route('parametre.produit')->withErrors(['categorie' => 'Catégorie parent invalide']);
+            }
             $niveau += $parent->niveau;
             $archive = $parent->archive || $archive;
         }
@@ -62,9 +65,19 @@ class CategorieproduitController extends Controller
         $categorie->niveau = $niveau;
         $categorie->archive = $archive;
         $categorie->update();
+
+        $this->updateSsCategorie($categorie);
       
         return redirect()->route('parametre.produit')->with('message', 'Catégorie modifiée');
     }    
+
+    protected function updateSsCategorie($categorie) {
+        foreach ($categorie->sscategories as $sscategorie) {
+            $sscategorie->niveau = $categorie->niveau + 1;
+            $sscategorie->save();
+            $this->archiveSscategorie($sscategorie);
+        }
+    }
 
     public function archive($categorie_id) {
         $categorie = Categorieproduit::find(Crypt::decrypt($categorie_id));

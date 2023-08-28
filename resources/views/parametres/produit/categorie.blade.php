@@ -13,7 +13,7 @@
                 <span class="mdi mdi-file mr-2"></span>
             @endif
         @endif
-        {{ $categorie->nom }}
+        <b>{{ $categorie->nom }}</b>
     </td>
     <td>
         {{ $categorie->description }}
