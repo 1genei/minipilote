@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Parametre;
+use App\Models\Societe;
 use App\Models\Typecontact;
 use App\Models\Categorieproduit;
 use App\Models\Poste;
@@ -19,8 +20,9 @@ class ParametreController extends Controller
         
         $parametre = Parametre::first();
         // dd($parametre);
+        $societes = Societe::all();
   
-        return view('parametres.index', compact('parametre'));
+        return view('parametres.index', compact('parametre', 'societes'));
     
     }
     

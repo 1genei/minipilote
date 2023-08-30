@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("raison_sociale")->nullable();
             $table->string("numero_siret")->nullable();
             $table->string("logo")->nullable();
-            $table->string("capital")->nullable();
+            $table->integer("capital")->nullable();
             $table->string("gerant")->nullable();
             $table->string("numero_tva")->nullable();
             $table->string("email")->nullable();
@@ -26,7 +26,8 @@ return new class extends Migration
             $table->string("ville")->nullable();
             $table->string("code_postal")->nullable();
             $table->string("pays")->nullable();
-            $table->string("est_societe_principale")->nullable();
+            $table->boolean("est_societe_principale")->nullable()->default(false);
+            $table->boolean("archive")->nullable()->default(false);
             $table->timestamps();
         });
     }
