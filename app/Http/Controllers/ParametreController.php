@@ -8,6 +8,7 @@ use App\Models\Societe;
 use App\Models\Typecontact;
 use App\Models\Categorieproduit;
 use App\Models\Poste;
+use App\Models\Marque;
 
 
 class ParametreController extends Controller
@@ -45,8 +46,9 @@ class ParametreController extends Controller
         
         // catégorie, type, famille
         $categories = Categorieproduit::all();
+        $marques = Marque::all();
         
-        return view('parametres.produit.index', compact('categories'));
+        return view('parametres.produit.index', compact('categories', 'marques'));
     
     }
     

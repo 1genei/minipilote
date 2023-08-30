@@ -72,7 +72,21 @@
                         </ul>
 
                         <div class="tab-content">
+                            @php
+                                $principalSociete = null;
+                                $activeSocietes = [];
+                                $archivedSocietes = [];
 
+                                foreach ($societes as $societe) {
+                                    if ($societe->est_societe_principale) {
+                                        $principalSociete = $societe;
+                                    } elseif (!$societe->archive) {
+                                        $activeSocietes[] = $societe;
+                                    } else {
+                                        $archivedSocietes[] = $societe;
+                                    }
+                                }
+                            @endphp
                             <div class="tab-pane show active" id="societes">
 
                                 <div class="row mt-1 mb-2">
@@ -105,32 +119,26 @@
                                     <div class="col-12 my-2">
                                         <label for="principale-id">Société principale :</label>
                                         <select class="form-select w-50" id="principale-id">
-                                            @foreach ($societes as $societe)
-                                                <option value="{{ $societe->id }}" {{ $societe->est_societe_principale ? 'selected' : '' }}>
-                                                    {{ $societe->raison_sociale }}
-                                                </option>
+                                            @if ($principalSociete)
+                                            <option value="{{ $principalSociete->id }}" {{ $societe->est_societe_principale ? 'selected' : '' }}>
+                                                {{ $principalSociete->raison_sociale.' (principale)' }}
+                                            </option>
+                                            @endif
+                                            @foreach ($activeSocietes as $societe)
+                                            <option value="{{ $societe->id }}">
+                                                {{ $societe->raison_sociale }}
+                                            </option>
+                                            @endforeach
+                                            @foreach ($archivedSocietes as $societe)
+                                            <option value="{{ $societe->id }}">
+                                                {{ $societe->raison_sociale.' (archivée)' }}
+                                            </option>
                                             @endforeach
                                         </select>
                                         <button id="modif-principale" class="btn btn-primary mt-2" disabled>Modifier</button>
                                     </div>
                                 </div>
                                 <div class="row">
-                                @php
-                                    $principalSociete = null;
-                                    $activeSocietes = [];
-                                    $archivedSocietes = [];
-
-                                    foreach ($societes as $societe) {
-                                        if ($societe->est_societe_principale) {
-                                            $principalSociete = $societe;
-                                        } elseif (!$societe->archive) {
-                                            $activeSocietes[] = $societe;
-                                        } else {
-                                            $archivedSocietes[] = $societe;
-                                        }
-                                    }
-                                @endphp
-
                                 @if ($principalSociete)
                                     @include('parametres.societes', ['societe' => $principalSociete])
                                 @endif
@@ -181,5 +189,40 @@
                 button.setAttribute('disabled', true);
             }
         });
+    </script>
+    <script>
+        document.getElementById("add_browse_button").addEventListener("click", function () {
+            document.getElementById("add_logo_file").click();
+        });
+    </script>
+    <script>
+        document.getElementById("edit_browse_button").addEventListener("click", function () {
+            document.getElementById("edit_logo_file").click();
+        });
+
+        const myForm = document.getElementById('edit-form');
+        const saveButton = document.getElementById('save-button');
+        const cancelButton = document.getElementById('cancel-button');
+        const originalData = {!! json_encode($societe) !!};
+
+        for (const field in originalData) {
+            if (myForm[field]) {
+                myForm[field].value = originalData[field];
+            }
+        }
+
+        myForm.addEventListener('input', function () {
+            saveButton.removeAttribute('disabled');
+            cancelButton.removeAttribute('disabled');
+        });
+
+        cancelButton.addEventListener('click', function () {
+            for (const field in originalData) {
+                if (myForm[field]) {
+                    myForm[field].value = originalData[field];
+                }
+            }
+            saveButton.setAttribute('disabled', true);
+    });
     </script>
 @endsection

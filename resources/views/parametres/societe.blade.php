@@ -82,9 +82,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.getElementById("add_browse_button").addEventListener("click", function () {
-        document.getElementById("add_logo_file").click();
-    });
-</script>

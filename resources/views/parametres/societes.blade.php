@@ -95,34 +95,3 @@
         <button type="button" class="btn btn-light" id="cancel-button">Annuler</button>
     </div>
 </form>
-
-<script>
-    document.getElementById("edit_browse_button").addEventListener("click", function () {
-        document.getElementById("edit_logo_file").click();
-    });
-
-    const myForm = document.getElementById('edit-form');
-    const saveButton = document.getElementById('save-button');
-    const cancelButton = document.getElementById('cancel-button');
-    const originalData = {!! json_encode($societe) !!};
-
-    for (const field in originalData) {
-        if (myForm[field]) {
-            myForm[field].value = originalData[field];
-        }
-    }
-
-    myForm.addEventListener('input', function () {
-        saveButton.removeAttribute('disabled');
-        cancelButton.removeAttribute('disabled');
-    });
-
-    cancelButton.addEventListener('click', function () {
-        for (const field in originalData) {
-            if (myForm[field]) {
-                myForm[field].value = originalData[field];
-            }
-        }
-        saveButton.setAttribute('disabled', true);
-    });
-</script>

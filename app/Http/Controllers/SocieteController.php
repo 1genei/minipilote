@@ -83,10 +83,13 @@ class SocieteController extends Controller
 
     public function setPrincipale(Request $request, $societeId) {
         $principale = Societe::where('est_societe_principale', true)->first();
+        $societe = Societe::where('id', $societeId)->first();
+        if ($societe->archive) {
+            return redirect()->route('parametre.index')->withErrors(['societe' => 'La catégorie sélectionnée est archivée']);
+        }
         $principale->est_societe_principale = false;
         $principale->update();
 
-        $societe = Societe::where('id', $societeId)->first();
         $societe->est_societe_principale = true;
         $societe->update();
 

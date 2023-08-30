@@ -59,12 +59,21 @@
                                     <span class="d-none d-lg-block">Catégories</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="#marques" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+                                    <i class="mdi mdi-palette-swatch font-18"></i>
+                                    <span class="d-none d-lg-block">Marques</span>
+                                </a>
+                            </li>
                         </ul>
 
                         <div class="tab-content">
 
                             {{-- Onglet catégories --}}
                             @include('parametres.produit.categories')
+
+                            {{-- Onglet marques --}}
+                            @include('parametres.produit.marques')
                         </div>
                     </div>
                 </div>
@@ -74,18 +83,27 @@
 @endsection
 
 @section('script')
-    <script>
-        $('.edit_type').click(function(e) {
-            let that = $(this);
-            let currentType = that.data('value');
+<script>
+        $('.edit_categorie').click(function(e) {
+            let that = $(this)
+            let currentNom = that.data('nom');
+            let currentParentId = that.data('parent_id');
+            let currentDescription = that.data('description');
             let currentFormAction = that.data('href');
-            $('#edit_type').val(currentType);
-            $('#form-edit-type').attr('action', currentFormAction);
-        })
+
+            if (currentParentId)
+                $('#parent_id option[value=' + currentParentId + ']').attr("selected", true);
+
+            $('#inputNomEditCategorie').val(currentNom);
+            $('#inputParentEdit').val(currentParentId);
+            $('#inputDescriptionEdit').val(currentDescription);
+
+            $('#form-edit-categorie').attr('action', currentFormAction);
+        });
     </script>
 
     <script>
-        // Archiver type
+        // Archiver categorie
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -93,7 +111,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive_type', function(event) {
+            $('body').on('click', 'a.archive_categorie', function(event) {
                 let that = $(this)
                 event.preventDefault();
                 const swalWithBootstrapButtons = swal.mixin({
@@ -102,8 +120,8 @@
                     buttonsStyling: false,
                 });
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver le type de contact',
-                    text: "Confirmer ?",
+                    title: 'Archiver la catégorie ?',
+                    text: "Toutes les sous-catégories seront archivées",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Oui',
@@ -126,7 +144,7 @@
 
                                 swalWithBootstrapButtons.fire(
                                         'Confirmation',
-                                        'Type de contact archivé avec succès',
+                                        'Catégorie archivée avec succès',
                                         'success'
                                     )
                                     .then((result) => {
@@ -134,9 +152,6 @@
                                             document.location.reload();
                                         }
                                     })
-
-
-                                // document.location.reload();
                             })
                     } else if (
                         /* Read more about handling dismissals below */
@@ -144,7 +159,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Type de contact non archivé',
+                            'Catégorie non archivée',
                             'error'
                         )
                     }
@@ -154,7 +169,7 @@
     </script>
 
     <script>
-        // Restaurer type
+        // Restaurer categorie
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -162,7 +177,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.unarchive_type', function(event) {
+            $('body').on('click', 'a.unarchive_categorie', function(event) {
                 let that = $(this)
                 event.preventDefault();
                 const swalWithBootstrapButtons = swal.mixin({
@@ -171,8 +186,8 @@
                     buttonsStyling: false,
                 });
                 swalWithBootstrapButtons.fire({
-                    title: 'Restaurer le type de contact',
-                    text: "Confirmer ?",
+                    title: 'Restaurer la catégorie ?',
+                    text: "Toutes les sous catégories seront restaurées",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Oui',
@@ -194,7 +209,7 @@
                             .done(function() {
                                 swalWithBootstrapButtons.fire(
                                         'Confirmation',
-                                        'Type de contact restauré avec succès',
+                                        'Catégorie restaurée avec succès',
                                         'success'
                                     )
                                     .then((result) => {
@@ -209,7 +224,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Type de contact non restauré',
+                            'Catégorie non restaurée',
                             'error'
                         )
                     }
@@ -352,6 +367,147 @@
                         swalWithBootstrapButtons.fire(
                             'Annulation',
                             'Poste non restauré',
+                            'error'
+                        )
+                    }
+                });
+            })
+        });
+    </script>
+    <script>
+        $('.edit_marque').click(function(e) {
+            let that = $(this)
+            let currentNom = that.data('nom');
+            let currentFormAction = that.data('href');
+
+            $('#inputNomEditMarque').val(currentNom);
+            $('#form-edit-marque').attr('action', currentFormAction);
+        });
+    </script>
+
+    <script>
+        // Archiver marque
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+            $('[data-toggle="tooltip"]').tooltip()
+            $('body').on('click', 'a.archive_marque', function(event) {
+                let that = $(this)
+                event.preventDefault();
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
+                swalWithBootstrapButtons.fire({
+                    title: 'Archiver la marque',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                    reverseButtons: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('[data-toggle="tooltip"]').tooltip('hide')
+                        $.ajax({
+                                url: that.attr('data-href'),
+                                type: 'POST',
+                                success: function(data) {
+                                    // document.location.reload();
+                                },
+                                error: function(data) {
+                                    console.log(data);
+                                }
+                            })
+                            .done(function() {
+
+                                swalWithBootstrapButtons.fire(
+                                        'Confirmation',
+                                        'Marque archivée avec succès',
+                                        'success'
+                                    )
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
+                            })
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Annulation',
+                            'Marque non archivée',
+                            'error'
+                        )
+                    }
+                });
+            })
+        });
+    </script>
+
+    <script>
+        // Restaurer marque
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+            $('[data-toggle="tooltip"]').tooltip()
+            $('body').on('click', 'a.unarchive_marque', function(event) {
+                let that = $(this)
+                event.preventDefault();
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
+                swalWithBootstrapButtons.fire({
+                    title: 'Restaurer la marque',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                    reverseButtons: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('[data-toggle="tooltip"]').tooltip('hide')
+                        $.ajax({
+                                url: that.attr('data-href'),
+                                type: 'POST',
+                                success: function(data) {
+                                    // document.location.reload();
+                                },
+                                error: function(data) {
+                                    console.log(data);
+                                }
+                            })
+                            .done(function() {
+                                swalWithBootstrapButtons.fire(
+                                        'Confirmation',
+                                        'Marque restaurée avec succès',
+                                        'success'
+                                    )
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
+                            })
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Annulation',
+                            'Marque non restaurée',
                             'error'
                         )
                     }
