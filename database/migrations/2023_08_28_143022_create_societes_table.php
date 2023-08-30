@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("raison_sociale")->nullable();
             $table->string("numero_siret")->nullable();
             $table->string("logo")->nullable();
-            $table->integer("capital")->nullable();
+            $table->string("capital")->nullable();
             $table->string("gerant")->nullable();
             $table->string("numero_tva")->nullable();
             $table->string("email")->nullable();

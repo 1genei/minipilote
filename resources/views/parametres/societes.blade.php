@@ -1,4 +1,4 @@
-<form action="{{ route('societe.update', Crypt::encrypt($societe->id)) }}" method="POST" id="edit-form">
+<form action="{{ route('societe.update', Crypt::encrypt($societe->id)) }}" method="POST" id="edit-form-{{ $index }}" class="edit-societe">
     <div class="modal-header d-flex justify-content-between">    
         <h3>{{ $societe->est_societe_principale ? $societe->raison_sociale.' (principale)' : ($societe->archive ? $societe->raison_sociale.' (archivée)' : $societe->raison_sociale) }}</h3>
         <div class="d-flex align-items-center">
@@ -19,7 +19,7 @@
                 </span>
             @endif
         @endif
-    </div>
+        </div>
     </div>
     <div class="modal-body">
         @csrf
@@ -43,13 +43,13 @@
                         @endif
                     </div>
                     <div>
-                        <input type="file" name="edit_logo_file" id="edit_logo_file" accept="image/*" style="display: none;" />
-                        <button type="button" id="edit_browse_button" class="btn btn-success">Parcourir</button>
+                        <input type="file" name="edit_logo_file" id="edit-logo-file-{{ $index }}" accept="image/*" style="display: none;" />
+                        <button type="button" id="edit-browse-button-{{ $index }}" class="btn btn-success mt-1">Parcourir</button>
                     </div>
                 </div>
                 <div class="m-2">
                     <label for="capital">Capital</label>
-                    <input type="number" name="capital" class="form-control w-75" value="{{ $societe->capital }}" />
+                    <input type="text" name="capital" class="form-control w-75" value="{{ $societe->capital }}" />
                 </div>
                 <div class="m-2">
                     <label for="gerant">Gérant</label>
@@ -91,7 +91,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" id="save-button" disabled>Sauvegarder</button>
-        <button type="button" class="btn btn-light" id="cancel-button">Annuler</button>
+        <button type="submit" class="btn btn-primary" id="save-button-{{ $index }}" disabled>Sauvegarder</button>
+        <button type="button" class="btn btn-light" id="cancel-button-{{ $index }}">Annuler</button>
     </div>
 </form>

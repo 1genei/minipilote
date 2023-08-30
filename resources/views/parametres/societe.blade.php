@@ -7,7 +7,7 @@
                 <h4 class="modal-title" id="standard-modalLabel">Ajouter une société</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('societe.store') }}" method="post">
+            <form action="{{ route('societe.store') }}" method="post" id="form-add-societe">
                 <div class="modal-body">
                     @csrf
                     <div class="col-lg-12">
@@ -27,12 +27,12 @@
                                 </div>
                                 <div>
                                     <input type="file" name="add_logo_file" id="add_logo_file" accept="image/*" style="display: none;" />
-                                    <button type="button" id="add_browse_button" class="btn btn-success">Parcourir</button>
+                                    <button type="button" id="add_browse_button" class="btn btn-success mt-1">Parcourir</button>
                                 </div>
                             </div>
                             <div class="m-2">
                                 <label for="capital">Capital</label>
-                                <input type="number" name="capital" class="form-control" value="" />
+                                <input type="text" name="capital" class="form-control" value="" />
                             </div>
                             <div class="m-2">
                                 <label for="gerant">Gérant</label>

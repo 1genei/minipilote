@@ -86,6 +86,11 @@
                                         $archivedSocietes[] = $societe;
                                     }
                                 }
+                                $societes = [];
+                                if ($principalSociete) {
+                                    $societes[] = $principalSociete;
+                                }
+                                $societes = array_merge($societes, $activeSocietes, $archivedSocietes);
                             @endphp
                             <div class="tab-pane show active" id="societes">
 
@@ -119,19 +124,9 @@
                                     <div class="col-12 my-2">
                                         <label for="principale-id">Société principale :</label>
                                         <select class="form-select w-50" id="principale-id">
-                                            @if ($principalSociete)
-                                            <option value="{{ $principalSociete->id }}" {{ $societe->est_societe_principale ? 'selected' : '' }}>
-                                                {{ $principalSociete->raison_sociale.' (principale)' }}
-                                            </option>
-                                            @endif
-                                            @foreach ($activeSocietes as $societe)
-                                            <option value="{{ $societe->id }}">
-                                                {{ $societe->raison_sociale }}
-                                            </option>
-                                            @endforeach
-                                            @foreach ($archivedSocietes as $societe)
-                                            <option value="{{ $societe->id }}">
-                                                {{ $societe->raison_sociale.' (archivée)' }}
+                                            @foreach ($societes as $societe)
+                                            <option value="{{ route('societe.principale', Crypt::encrypt($societe->id)) }}" {{ $societe->est_societe_principale ? 'selected' : '' }}>
+                                                {{ $societe->est_societe_principale ? $societe->raison_sociale.' (principale)' : ($societe->archive ? $societe->raison_sociale.' (archivée)' : $societe->raison_sociale) }}
                                             </option>
                                             @endforeach
                                         </select>
@@ -139,22 +134,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                @if ($principalSociete)
-                                    @include('parametres.societes', ['societe' => $principalSociete])
-                                @endif
-
-                                @foreach ($activeSocietes as $societe)
-                                    <div class="col-12 my-3">
-                                        <div style="border-top: 3px solid black; margin-top: 1rem;"></div>
-                                    </div>
-                                    @include('parametres.societes')
-                                @endforeach
-
-                                @foreach ($archivedSocietes as $societe)
-                                    <div class="col-12 my-3">
-                                        <div style="border-top: 3px solid black; margin-top: 1rem;"></div>
-                                    </div>
-                                @include('parametres.societes')
+                                @foreach ($societes as $index => $societe)
+                                    @if (!$societe->est_societe_principale)
+                                        <div class="col-12 my-3">
+                                            <div style="border-top: 3px solid black; margin-top: 1rem;"></div>
+                                        </div>
+                                    @endif
+                                    @include('parametres.societes', ['index' => $index])
                                 @endforeach
                                 </div>
                             </div>
@@ -196,33 +182,223 @@
         });
     </script>
     <script>
-        document.getElementById("edit_browse_button").addEventListener("click", function () {
-            document.getElementById("edit_logo_file").click();
-        });
+        const societes = @json($societes);
+        const myForms = [];
+        const saveButtons = [];
+        const cancelButtons = [];
+        const originalDatas = [];
+        for (let i = 0; i < societes.length; i++) {
+            document.getElementById(`edit-browse-button-${i}`).addEventListener("click", function () {
+                document.getElementById(`edit-logo-file-${i}`).click();
+            });
 
-        const myForm = document.getElementById('edit-form');
-        const saveButton = document.getElementById('save-button');
-        const cancelButton = document.getElementById('cancel-button');
-        const originalData = {!! json_encode($societe) !!};
+            myForms.push(document.getElementById(`edit-form-${i}`));
+            saveButtons.push(document.getElementById(`save-button-${i}`));
+            cancelButtons.push(document.getElementById(`cancel-button-${i}`));
+            originalDatas.push(societes[i]);
 
-        for (const field in originalData) {
-            if (myForm[field]) {
-                myForm[field].value = originalData[field];
-            }
-        }
-
-        myForm.addEventListener('input', function () {
-            saveButton.removeAttribute('disabled');
-            cancelButton.removeAttribute('disabled');
-        });
-
-        cancelButton.addEventListener('click', function () {
-            for (const field in originalData) {
-                if (myForm[field]) {
-                    myForm[field].value = originalData[field];
+            for (const field in originalDatas[i]) {
+                if (myForms[i][field]) {
+                    myForms[i][field].value = originalDatas[i][field];
                 }
             }
-            saveButton.setAttribute('disabled', true);
-    });
+
+            myForms[i].addEventListener('input', function () {
+                saveButtons[i].removeAttribute('disabled');
+                cancelButtons[i].removeAttribute('disabled');
+            });
+
+            cancelButtons[i].addEventListener('click', function () {
+                for (const field in originalDatas[i]) {
+                    if (myForms[i][field]) {
+                        myForms[i][field].value = originalDatas[i][field];
+                    }
+                }
+                saveButtons[i].setAttribute('disabled', true);
+            });
+        }
+    </script>
+    <script>
+        // Ajout société
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('#form-add-societe').submit(function(event) {
+                event.preventDefault(); // Prevent form submission
+                let that = $(this);
+
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Ajouter la société',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                    reverseButtons: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('[data-toggle="tooltip"]').tooltip('hide');
+                        $.ajax({
+                            url: that.attr('action'),
+                            type: 'POST',
+                            data: that.serialize(),
+                            success: function(data) {
+                            },
+                            error: function(data) {
+                            }
+                        }).done(function() {
+                            swalWithBootstrapButtons.fire(
+                                'Confirmation',
+                                'Société ajoutée avec succès',
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.location.reload();
+                                }
+                            });
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Annulation',
+                            'Ajout annulé',
+                            'error'
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        // Société principale
+        $(function() {
+            const select = document.getElementById('principale-id');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('#modif-principale').click(function () {
+
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Changer la société principale',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                    reverseButtons: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: select.value,
+                            type: 'POST',
+                            success: function(data) {
+                            },
+                            error: function(data) {
+                            }
+                        }).done(function() {
+                            swalWithBootstrapButtons.fire(
+                                'Confirmation',
+                                'Société principale changée avec succès',
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.location.reload();
+                                }
+                            });
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Annulation',
+                            'Modification annulée',
+                            'error'
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+            $('[data-toggle="tooltip"]').tooltip()
+            $('body').on('submit', 'form.edit-societe', function(event) {
+                let that = $(this)
+                event.preventDefault();
+
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Modifier la société',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                    reverseButtons: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $('[data-toggle="tooltip"]').tooltip('hide')
+                        $.ajax({
+                                url: that.attr('action'),
+                                type: 'POST',
+                                data: that.serialize(),
+                                success: function(data) {
+                                },
+                                error: function(data) {
+                                    console.log(data);
+                                }
+                            }).done(function() {
+                            swalWithBootstrapButtons.fire(
+                                'Confirmation',
+                                'Société modifiée avec succès',
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.location.reload();
+                                }
+                            });
+                        });
+                    } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Annulation',
+                            'Modification annulée',
+                            'error'
+                        )
+                    }
+                });
+            })
+
+        });
     </script>
 @endsection
