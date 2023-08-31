@@ -94,69 +94,6 @@
     </script>
 
     <script>
-        // Ajout type
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $('#form-add-type').submit(function(event) {
-                event.preventDefault(); // Prevent form submission
-                let that = $(this);
-
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
-
-                swalWithBootstrapButtons.fire({
-                    title: 'Ajouter le type de contact',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non',
-                    reverseButtons: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('[data-toggle="tooltip"]').tooltip('hide');
-                        $.ajax({
-                            url: that.attr('action'),
-                            type: 'POST',
-                            data: that.serialize(),
-                            success: function(data) {
-                            },
-                            error: function(data) {
-                            }
-                        }).done(function() {
-                            swalWithBootstrapButtons.fire(
-                                'Confirmation',
-                                'Type de contact ajouté avec succès',
-                                'success'
-                            ).then((result) => {
-                                if (result.isConfirmed) {
-                                    document.location.reload();
-                                }
-                            });
-                        });
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulation',
-                            'Ajout annulé',
-                            'error'
-                        );
-                    }
-                });
-            });
-        });
-    </script>
-
-    <script>
         // Modification type
         $(function() {
             $.ajaxSetup({
@@ -361,69 +298,6 @@
             $('#edit_poste').val(currentPoste);
             $('#form-edit-poste').attr('action', currentFormAction);
         })
-    </script>
-
-    <script>
-        // Ajout poste
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $('#form-add-poste').submit(function(event) {
-                event.preventDefault(); // Prevent form submission
-                let that = $(this);
-
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
-
-                swalWithBootstrapButtons.fire({
-                    title: 'Ajouter le poste',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non',
-                    reverseButtons: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('[data-toggle="tooltip"]').tooltip('hide');
-                        $.ajax({
-                            url: that.attr('action'),
-                            type: 'POST',
-                            data: that.serialize(),
-                            success: function(data) {
-                            },
-                            error: function(data) {
-                            }
-                        }).done(function() {
-                            swalWithBootstrapButtons.fire(
-                                'Confirmation',
-                                'Poste ajouté avec succès',
-                                'success'
-                            ).then((result) => {
-                                if (result.isConfirmed) {
-                                    document.location.reload();
-                                }
-                            });
-                        });
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulation',
-                            'Ajout annulé',
-                            'error'
-                        );
-                    }
-                });
-            });
-        });
     </script>
 
     <script>
