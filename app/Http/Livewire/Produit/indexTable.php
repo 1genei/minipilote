@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Produit;
 
 
 use App\Models\Contact;
-use App\Models\Individu;
+use App\Models\Produit;
 use Crypt;
 use Auth;
 
@@ -19,7 +19,7 @@ final class indexTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
-    public $contactindividus;
+    public $produits;
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
@@ -64,31 +64,35 @@ final class indexTable extends PowerGridComponent
 
         if ($user->is_admin) {
 
+
+            $produits = Produit::where('archive', false)->get();
             // On réccupère tous les contacts de type individu
                 
-            $contactindividus = Individu::select('individus.*','contacts.*','typecontacts.type')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
-                // ->where('typecontacts.type', 'Fournisseur')
-                ->get();
+            // $contactindividus = Individu::select('individus.*','contacts.*','typecontacts.type')
+            //     ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+            //     ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+            //     ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+            //     ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+            //     ->get();
 
         } else {
+        
+            $produits = Produit::where([['archive', false], ['user_id',$user->id]])->get();
+            
             //   On réccupère uniquement les contacts de l'utilisateur connecté
                 
-            $contactindividus = Individu::select('individus.*','contacts.*','typecontacts.type')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false], ["contacts.user_id", $user->id]])
-                // ->where('typecontacts.type', 'Fournisseur')
-                ->get();
+            // $contactindividus = Individu::select('individus.*','contacts.*','typecontacts.type')
+            //     ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+            //     ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+            //     ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+            //     ->where([['contacts.type', 'individu'],['contacts.archive', false], ["contacts.user_id", $user->id]])
+            //     // ->where('typecontacts.type', 'Fournisseur')
+            //     ->get();
         }
     // dd($contactindividus);
        
         
-        return $contactindividus;
+        return $produits;
 
     }
 
@@ -127,31 +131,53 @@ final class indexTable extends PowerGridComponent
     
         return PowerGrid::columns()
             // ->addColumn('id')
-            ->addColumn('type', function (Individu $model) {
-                if($model->type == "Prospect"){
+            ->addColumn('type', function (Produit $model) {
+                if($model->type == "simple"){
                     $color = "btn-secondary ";
-                }elseif($model->type == "Client"){
-                    $color = "btn-info";                
-                }elseif($model->type == "Fournisseur"){
-                    $color = "btn-warning";                
-                }
-                elseif($model->type == "Collaborateur"){
-                    $color = "btn-danger";                
                 }
                 else{
                     $color = "btn-light ";                
                 }
                 return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
             } )
+            
+            ->addColumn('image', function (Produit $model) {
+                if($model->imageproduit){
+                    return  '<span  class="btn btn-sm rounded-pill"> image</span>';
+                
+                }else{
+                    return  '<span class="btn btn-sm rounded-pill"> sans image</span>';
+                    
+                }
+            } )
+            ->addColumn('reference')
             ->addColumn('nom')
-            ->addColumn('prenom')
-            ->addColumn('email',fn (Individu $model) => decode_string($model->email))
-            ->addColumn('telephone_fixe')
-            ->addColumn('telephone_mobile')
-            ->addColumn('adresse')
-            ->addColumn('code_postal')
-            ->addColumn('ville')
-            ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
+            ->addColumn('categorie',function (Produit $model){
+                
+               
+                $cats = "";
+                foreach ($model->categorieproduits as $cat) {
+                
+               
+                    $cats .= $cat->nom .", " ;
+    
+                }
+                
+                return $cats;
+            } )
+            ->addColumn('prix_vente_ht',function (Produit $model){
+                
+              
+                return $model->prix_vente_ht;
+            })
+            ->addColumn('stock',function (Produit $model){
+                
+                if($model->stock){
+                    return $model->stock->quantite;
+                }
+                return "non géré";
+            });
+         
     }
 
     /*
@@ -173,16 +199,13 @@ final class indexTable extends PowerGridComponent
         return [
             // Column::make('Id', 'id'),
             Column::make('Type', 'type')->sortable()->searchable(),            
+            Column::make('Image', 'image')->sortable()->searchable(),
+            Column::make('Référence', 'reference')->sortable()->searchable(),
             Column::make('Nom', 'nom')->sortable()->searchable(),
-            Column::make('Prénom', 'prenom')->sortable()->searchable(),
-            Column::make('Email', 'email')->sortable()->searchable(),
-            Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
-            Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
-            Column::make('Adresse', 'adresse')->sortable()->searchable(),
-            Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
-            Column::make('Ville', 'ville')->sortable()->searchable(),
-            Column::make('Date de création', 'created_at_formatted', 'created_at')
-                ->sortable(),
+            Column::make('Catégories', 'categorie')->sortable()->searchable(),
+            Column::make('Prix de vente HT', 'prix_vente_ht')->sortable()->searchable(),
+            Column::make('Stock', 'stock')->sortable()->searchable(),
+
 
         ];
     }
@@ -236,20 +259,20 @@ final class indexTable extends PowerGridComponent
                
                
             Button::add('Afficher')
-                ->bladeComponent('button-show', function(Individu $individu) {
-                    return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),
+                ->bladeComponent('button-show', function(Produit $produit) {
+                    return ['route' => route('produit.show', Crypt::encrypt($produit->id)),
                     'tooltip' => "Afficher"];
                 }),
                 
             Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Individu $individu) {
-                return ['route' => route('contact.edit', Crypt::encrypt($individu->contact_id)),
+            ->bladeComponent('button-edit', function(Produit $produit) {
+                return ['route' => route('produit.edit', Crypt::encrypt($produit->id)),
                 'tooltip' => "Modifier"];
             }),
             
             Button::add('Archiver')
-            ->bladeComponent('button-archive', function(Individu $individu) {
-                return ['route' => route('contact.archive', Crypt::encrypt($individu->contact_id)),
+            ->bladeComponent('button-archive', function(Produit $produit) {
+                return ['route' => route('produit.archive', Crypt::encrypt($produit->id)),
                 'tooltip' => "Archiver",
                 'classarchive' => "archive_contact",
                 ];

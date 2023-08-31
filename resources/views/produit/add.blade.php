@@ -110,6 +110,21 @@
 
 @section('script')
 
+    {{-- Gestion de stock --}}
+    <script>
+        $(".div_stock").hide();
+
+        $('#gerer_stock').change(function() {
+            if ($("#gerer_stock").is(":checked")) {
+                $(".div_stock").slideDown();
+            } else {
+                $(".div_stock").slideUp();
+
+            }
+
+        });
+    </script>
+
     <script src="https://cdn.tiny.cloud/1/raz3clgrdrwxg1nj7ky75jzhjuv9y1gb8qu8xsjph3ov99k0/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
 

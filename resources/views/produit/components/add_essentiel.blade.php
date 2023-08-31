@@ -57,7 +57,7 @@
             <div class="mb-3">
                 <label for="categorie_id" class="form-label fw-bold fs-5 mb-2">Catégories </label>
 
-                @include('components.input-checkbox-categorie', ['categories' => $categories])
+                @include('produit.components.input-checkbox', ['categories' => $categories])
 
                 <hr>
             </div>

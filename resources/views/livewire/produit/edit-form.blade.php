@@ -1,4 +1,4 @@
-<form action="{{ route('produit.store') }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('produit.update', Crypt::encrypt($produit->id)) }}" method="post" enctype="multipart/form-data">
     @csrf
     <div class="modal-content">
         <div class="modal-body">
@@ -36,18 +36,18 @@
 
             <div class="tab-content">
                 <div class="tab-pane show active" id="essentiel-tab">
-                    @include('produit.components.add_essentiel')
+                    @include('produit.components.edit_essentiel')
                 </div>
-                <div class="tab-pane " id="prix-tab" wire:ignore>
-                    @include('produit.components.add_prix')
+                <div class="tab-pane " id="prix-tab">
+                    @include('produit.components.edit_prix')
 
                 </div>
                 <div class="tab-pane" id="declinaison-tab">
-                    @include('produit.components.add_declinaison')
+                    @include('produit.components.edit_declinaison')
                 </div>
 
-                <div class="tab-pane" id="stock-tab" wire:ignore>
-                    @include('produit.components.add_stock')
+                <div class="tab-pane" id="stock-tab">
+                    @include('produit.components.edit_stock')
                 </div>
             </div>
 

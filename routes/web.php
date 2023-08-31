@@ -212,12 +212,27 @@ Route::controller(ProduitController::class)->group(function () {
     Route::get('/produits/archives', 'archives')->name('produit.archives')->middleware(['auth']);
     Route::post('/produit/ajouter', 'store')->name('produit.store')->middleware(['auth']);
     Route::get('/produit/ajouter', 'create')->name('produit.create')->middleware(['auth']);
+    Route::get('/produit/show/{produitId}', 'show')->name('produit.show')->middleware(['auth']);
     Route::get('/produit/modifier/{produitId}', 'edit')->name('produit.edit')->middleware(['auth']);
     Route::post('/produit/modifier/{produitId}', 'update')->name('produit.update')->middleware(['auth']);
     Route::put('/produit/archiver/{produitId}', 'archive')->name('produit.archive')->middleware(['auth']);
     Route::post('/produit/desarchiver/{produitId}', 'unarchive')->name('produit.unarchive')->middleware(['auth']);
-});
+    
+    Route::post('/produit/images-create/{produitId}', 'uploadPhoto')->name('produit.uptof')->middleware(['auth']);
+    Route::post('/produit/images-save/{produitId}', 'savePhoto')->name('produit.savetof')->middleware(['auth']);
+    Route::get('/produit/images-delete/{produitId}', 'destroyPhoto')->name('produit.destroytof')->middleware(['auth']);
+    Route::post('/produit/images-show/{produitId}', 'indexPhoto')->name('produit.indextof')->middleware(['auth']);
+    Route::post('/produit/images-delete/{imageId}', 'deletePhoto')->name('produit.photoDelete')->middleware(['auth']);
+    
+    //Modifer les positions des photos du produit
+    Route::post('/produit/images-update/{imageId}', 'updatePhoto')->name('produit.photoUpdate')->middleware(['auth']);
+    // Télechargement d'une photo du produit
+    Route::get('/produit/images-get/{imageId}', 'getPhoto')->name('produit.getPhoto')->middleware(['auth']);
+    Route::get('/produit/fiche-technique-get/{nom_fichier}', 'getFicheTechnique')->name('produit.getFicheTechnique')->middleware(['auth']);
+    
 
+    
+});
 
 
 require __DIR__ . '/auth.php';

@@ -1,5 +1,6 @@
 <div class="row">
-    <div class="col-lg-6">
+
+    <div class="col-lg-6 div_stock">
         <div class="col-12">
             <label for="nom" id="tooltip-prix" class="form-label fs-5 mb-2 text-bold">Quantités
                 <i class=" mdi mdi-information text-primary " data-bs-container="#tooltip-prix" data-bs-toggle="tooltip"
@@ -53,16 +54,18 @@
             <div class="mb-3">
                 <label for="categorie_id" class="form-label">Activer la gestion de stock </label> <br>
 
-                <input type="checkbox" id="gerer_stock" wire:model="gerer_stock" data-switch="info" />
-                <label for="gerer_stock" name="gerer_stock" data-on-label="Oui" data-off-label="Non"></label>
+                <input type="checkbox" id="gerer_stock" name="gerer_stock" wire:model.defer="gerer_stock"
+                    data-switch="info" />
+                <label for="gerer_stock" data-on-label="Oui" data-off-label="Non"></label>
             </div>
+
         </div>
 
     </div>
 </div>
 
 
-<div class="row mt-3">
+<div class="row mt-3 div_stock">
     <div class="col-lg-6">
         <div class="col-12">
             <label for="nom" id="tooltip-stock" class="form-label fs-5 mb-2 text-bold">Alertes
@@ -74,7 +77,8 @@
         <div class="row">
 
             <div class="col-md-6 col-xxl-4">
-                <label for="seuil_alerte_stock" class="form-label">Niveau de stock au quel vous souhaitez être alerté
+                <label for="seuil_alerte_stock" class="form-label">Niveau de stock au quel vous souhaitez être
+                    alerté
                 </label>
                 <input type="number" min="0" class="form-control" placeholder="Laisser vide pour désactiver"
                     wire:model.defer="seuil_alerte_stock" name="seuil_alerte_stock"
@@ -97,5 +101,3 @@
 
     </div>
 </div>
-
-<hr>

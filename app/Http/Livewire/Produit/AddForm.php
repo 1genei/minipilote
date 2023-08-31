@@ -7,6 +7,7 @@ use Livewire\Component;
 
 class AddForm extends Component
 {
+    use WithFileUploads;
 
 public $type;
 public $nom;
