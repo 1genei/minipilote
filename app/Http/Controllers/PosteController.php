@@ -24,7 +24,7 @@ class PosteController extends Controller
 
     public function update(Request $request, $posteId){
 
-        $poste = Typecontact::where('id', Crypt::decrypt($posteId))->first();
+        $poste = Poste::where('id', Crypt::decrypt($posteId))->first();
         if($poste->nom != $request->poste){
             $request->validate([
                 'poste' => 'string|required|unique:typecontacts,type',

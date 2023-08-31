@@ -17,6 +17,8 @@ use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\TypecontactController;
 use App\Http\Controllers\PosteController;
 use App\Http\Controllers\CategorieproduitController;
+use App\Http\Controllers\SocieteController;
+use App\Http\Controllers\MarqueController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,6 +67,23 @@ Route::controller(ParametreController::class)->group(function () {
     Route::get('/parametres/contact', 'contact')->name('parametre.contact')->middleware(['auth']);
     Route::get('/parametres/produit', 'produit')->name('parametre.produit')->middleware(['auth']);
     Route::post('/parametres', 'update')->name('parametre.update')->middleware(['auth']);
+});
+
+// Societe
+Route::controller(SocieteController::class)->group(function () {
+    Route::post('/societe/ajouter', 'store')->name('societe.store')->middleware(['auth']);
+    Route::post('/societe/modifier/{societeId}', 'update')->name('societe.update')->middleware(['auth']);
+    Route::post('/societe/archiver/{societeId}', 'archive')->name('societe.archive')->middleware(['auth']);
+    Route::post('/societe/desarchiver/{societeId}', 'unarchive')->name('societe.unarchive')->middleware(['auth']);
+    Route::post('/societe/principale/{societeId}', 'setPrincipale')->name('societe.principale')->middleware(['auth']);
+});
+
+// Marque
+Route::controller(MarqueController::class)->group(function () {
+    Route::post('/marque/ajouter', 'store')->name('marque.store')->middleware(['auth']);
+    Route::post('/marque/modifier/{marqueId}', 'update')->name('marque.update')->middleware(['auth']);
+    Route::post('/marque/archiver/{marqueId}', 'archive')->name('marque.archive')->middleware(['auth']);
+    Route::post('/marque/desarchiver/{marqueId}', 'unarchive')->name('marque.unarchive')->middleware(['auth']);
 });
 
 // Categorieproduit

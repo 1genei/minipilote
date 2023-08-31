@@ -91,7 +91,7 @@
                     <h4 class="modal-title" id="standard-modalLabel">Ajouter un type de contact</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('typecontact.store') }}" method="post">
+                <form id="form-add-type" action="{{ route('typecontact.store') }}" method="post">
                     <div class="modal-body">
                         @csrf
                         <div class="col-lg-12">
