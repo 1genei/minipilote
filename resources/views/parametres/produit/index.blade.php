@@ -234,34 +234,28 @@
     </script>
 
     <script>
-        $('.edit_poste').click(function(e) {
-            let that = $(this);
-            let currentPoste = that.data('value');
-            let currentFormAction = that.data('href');
-            $('#edit_poste').val(currentPoste);
-            $('#form-edit-poste').attr('action', currentFormAction);
-        })
-    </script>
-
-    <script>
-        // Archiver poste
+        // Ajout categorie
         $(function() {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-            })
-            $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive_poste', function(event) {
-                let that = $(this)
-                event.preventDefault();
+            });
+            
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('#form-add-categorie').submit(function(event) {
+                event.preventDefault(); // Prevent form submission
+                let that = $(this);
+
                 const swalWithBootstrapButtons = swal.mixin({
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger',
                     buttonsStyling: false,
                 });
+
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver le poste',
+                    title: 'Ajouter la catgéorie',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
@@ -270,63 +264,61 @@
                     reverseButtons: false
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $('[data-toggle="tooltip"]').tooltip('hide')
+                        $('[data-toggle="tooltip"]').tooltip('hide');
                         $.ajax({
-                                url: that.attr('data-href'),
-                                type: 'PUT',
-                                success: function(data) {
-                                    // document.location.reload();
-                                },
-                                error: function(data) {
-                                    console.log(data);
+                            url: that.attr('action'),
+                            type: 'POST',
+                            data: that.serialize(),
+                            success: function(data) {
+                            },
+                            error: function(data) {
+                            }
+                        }).done(function() {
+                            swalWithBootstrapButtons.fire(
+                                'Confirmation',
+                                'Catégorie ajoutée avec succès',
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.location.reload();
                                 }
-                            })
-                            .done(function() {
-                                swalWithBootstrapButtons.fire(
-                                        'Confirmation',
-                                        'Poste archivé avec succès',
-                                        'success'
-                                    )
-                                    .then((result) => {
-                                        if (result.isConfirmed) {
-                                            document.location.reload();
-                                        }
-                                    })
-                            })
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
+                            });
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Poste non archivé',
+                            'Ajout annulé',
                             'error'
-                        )
+                        );
                     }
                 });
-            })
+            });
         });
     </script>
 
     <script>
-        // Restaurer poste
+        // Modification categorie
         $(function() {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-            })
-            $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.unarchive_poste', function(event) {
-                let that = $(this)
-                event.preventDefault();
+            });
+            
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('#form-edit-categorie').submit(function(event) {
+                event.preventDefault(); // Prevent form submission
+                let that = $(this);
+
                 const swalWithBootstrapButtons = swal.mixin({
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger',
                     buttonsStyling: false,
                 });
+
                 swalWithBootstrapButtons.fire({
-                    title: 'Restaurer le poste',
+                    title: 'Modifier la catégorie',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
@@ -335,45 +327,38 @@
                     reverseButtons: false
                 }).then((result) => {
                     if (result.isConfirmed) {
-
-                        $('[data-toggle="tooltip"]').tooltip('hide')
+                        $('[data-toggle="tooltip"]').tooltip('hide');
                         $.ajax({
-                                url: that.attr('data-href'),
-                                type: 'POST',
-                                success: function(data) {
-                                    // document.location.reload();
-                                },
-                                error: function(data) {
-                                    console.log(data);
+                            url: that.attr('action'),
+                            type: 'POST',
+                            data: that.serialize(),
+                            success: function(data) {
+                            },
+                            error: function(data) {
+                            }
+                        }).done(function() {
+                            swalWithBootstrapButtons.fire(
+                                'Confirmation',
+                                'Catégorie modifiée avec succès',
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.location.reload();
                                 }
-                            })
-                            .done(function() {
-
-                                swalWithBootstrapButtons.fire(
-                                        'Confirmation',
-                                        ' Poste restauré avec succès',
-                                        'success'
-                                    )
-                                    .then((result) => {
-                                        if (result.isConfirmed) {
-                                            document.location.reload();
-                                        }
-                                    })
-                            })
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
+                            });
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Poste non restauré',
+                            'Modification annulée',
                             'error'
-                        )
+                        );
                     }
                 });
-            })
+            });
         });
     </script>
+
     <script>
         $('.edit_marque').click(function(e) {
             let that = $(this)
@@ -513,6 +498,132 @@
                     }
                 });
             })
+        });
+    </script>
+
+    <script>
+        // Ajout marque
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('#form-add-marque').submit(function(event) {
+                event.preventDefault(); // Prevent form submission
+                let that = $(this);
+
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Ajouter la marque',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                    reverseButtons: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('[data-toggle="tooltip"]').tooltip('hide');
+                        $.ajax({
+                            url: that.attr('action'),
+                            type: 'POST',
+                            data: that.serialize(),
+                            success: function(data) {
+                            },
+                            error: function(data) {
+                            }
+                        }).done(function() {
+                            swalWithBootstrapButtons.fire(
+                                'Confirmation',
+                                'Marque ajoutée avec succès',
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.location.reload();
+                                }
+                            });
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Annulation',
+                            'Ajout annulé',
+                            'error'
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        // Modification poste
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('#form-edit-marque').submit(function(event) {
+                event.preventDefault(); // Prevent form submission
+                let that = $(this);
+
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Modifier la marque',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                    reverseButtons: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('[data-toggle="tooltip"]').tooltip('hide');
+                        $.ajax({
+                            url: that.attr('action'),
+                            type: 'POST',
+                            data: that.serialize(),
+                            success: function(data) {
+                            },
+                            error: function(data) {
+                            }
+                        }).done(function() {
+                            swalWithBootstrapButtons.fire(
+                                'Confirmation',
+                                'Marque modifiée avec succès',
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.location.reload();
+                                }
+                            });
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Annulation',
+                            'Modification annulée',
+                            'error'
+                        );
+                    }
+                });
+            });
         });
     </script>
 @endsection

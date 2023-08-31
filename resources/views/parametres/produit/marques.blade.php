@@ -91,7 +91,7 @@
                 <h4 class="modal-title" id="standard-modalLabel">Ajouter une marque</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('marque.store') }}" method="post">
+            <form action="{{ route('marque.store') }}" method="post" id="form-add-marque">
                 <div class="modal-body">
                     @csrf
                     <div class="col-lg-12">

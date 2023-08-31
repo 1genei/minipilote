@@ -66,7 +66,7 @@
                 <h4 class="modal-title" id="standard-modalLabel">Ajouter une catégorie</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('categorieproduit.store') }}" method="post">
+            <form action="{{ route('categorieproduit.store') }}" method="post" id="form-add-categorie">
                 <div class="modal-body">
                     @csrf
                     <div class="col-lg-12">
