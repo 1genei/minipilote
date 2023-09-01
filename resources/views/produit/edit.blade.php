@@ -112,6 +112,27 @@
 
 @section('script')
 
+
+    {{-- Gestion de stock --}}
+    <script>
+        var gerer_stock = @json($produit->gerer_stock);
+        console.log(gerer_stock);
+        if (gerer_stock == false) {
+            $(".div_stock").hide();
+
+        }
+        $('#gerer_stock').change(function() {
+            if ($("#gerer_stock").is(":checked")) {
+                $(".div_stock").slideDown();
+            } else {
+                $(".div_stock").slideUp();
+
+            }
+
+        });
+    </script>
+
+
     <script src="https://cdn.tiny.cloud/1/raz3clgrdrwxg1nj7ky75jzhjuv9y1gb8qu8xsjph3ov99k0/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
 
@@ -127,176 +148,6 @@
 
 
     <script>
-        // cette fonction permet de réccupérer les images du bloc id et de recalculer leurs positions afin de l'afficher 
-        // dans le span (children[0])   
-        function display_position(id) {
-            // élement du dom sur lequel on clic
-            var index = $('ul' + id + ' li').index(this);
-            var list = $('ul' + id + ' li');
-
-            //on reparcour les images pour leur attribuer une position
-            for (var i = 0; i < list.length; i++) {
-                list[i].children[0].innerHTML = i + 1;
-            }
-        }
-
-        display_position("#sortable_visible");
-        display_position("#sortable_invisible");
-
-
-        // @@@@@@@@ Liste des images visibles
-
-        $('#btn_save_visible').hide();
-
-        $(function() {
-            $("#sortable_visible").sortable({
-                grid: [20, 10],
-            });
-        });
-
-        $('#sortable_visible').mousemove(function() {
-            display_position("#sortable_visible");
-
-        });
-
-
-        $('#sortable_visible').mouseup(function() {
-            $('#btn_save_visible').show();
-
-        });
-
-        // Ajouter une image visible 
-        $('#div_add_image_visible').hide();
-
-        $('#clic_add_image_visible').click(function() {
-            $('#div_add_image_visible').fadeIn();
-        });
-
-        $('#refresh_div_visible').click(function() {
-            $('#div_add_image_visible').fadeOut();
-            $("#sortable_visible").load(" #sortable_visible");
-        });
-
-
-        $('#btn_save_visible').click(function() {
-
-            // élement du dom sur lequel on clic
-            var list_id = $('ul#sortable_visible div');
-            var list_id_tab = Array();
-            // var list_position = $('ul#sortable_visible li');
-
-            //on reparcour les images pour leur attribuer une position
-            for (var i = 0; i < list_id.length; i++) {
-                // console.log(list_id[i].getAttribute("id"));
-                list_id_tab.push(list_id[i].getAttribute("id"));
-                i++;
-
-            }
-
-            //On envoie les nouvelles positions pour les sauvegarder
-            $.ajax({
-                type: "POST",
-                url: '/images-update',
-                datatype: 'json',
-                data: {
-                    "list": JSON.stringify(list_id_tab)
-                },
-
-                success: function(data) {
-                    console.log(data);
-                    swal("Super!", "Nouvelles positions enregistrées!", "success");
-                },
-                error: function(data) {
-                    console.log(data);
-                },
-
-
-            });
-
-            $('#btn_save_visible').hide();
-        });
-
-
-
-        // @@@@@@@@@ fin
-
-
-
-        // @@@@@@@@ Liste des images invisibles
-        $('#btn_save_invisible').hide();
-        $(function() {
-            $("#sortable_invisible").sortable({
-                grid: [20, 10]
-            });
-        });
-
-        $("ul#sortable_invisible li").mousemove(function() {
-            display_position("#sortable_invisible");
-
-        });
-
-        $('#sortable_invisible').mouseup(function() {
-            $('#btn_save_invisible').show();
-
-        });
-
-        // Ajouter une image invisible 
-        $('#div_add_image_invisible').hide();
-
-        $('#clic_add_image_invisible').click(function() {
-            $('#div_add_image_invisible').fadeIn();
-        });
-
-        $('#refresh_div_invisible').click(function() {
-            $('#div_add_image_invisible').fadeOut();
-            $("#sortable_invisible").load(" #sortable_invisible");
-        });
-
-
-        $('#btn_save_invisible').click(function() {
-
-            // élement du dom sur lequel on clic
-            var list_id = $('ul#sortable_invisible div');
-            var list_id_tab = Array();
-            // var list_position = $('ul#sortable_invisible li');
-
-            //on reparcour les images pour leur attribuer une position
-            for (var i = 0; i < list_id.length; i++) {
-                // console.log(list_id[i].getAttribute("id"));
-                list_id_tab.push(list_id[i].getAttribute("id"));
-                i++;
-
-            }
-
-            //On envoie les nouvelles positions pour les sauvegarder
-            $.ajax({
-                type: "POST",
-                url: '/images-update',
-                datatype: 'json',
-                data: {
-                    "list": JSON.stringify(list_id_tab)
-                },
-
-                success: function(data) {
-                    console.log((data));
-                    swal("Super!", "Nouvelles positions enregistrées!", "success");
-                },
-                error: function(data) {
-                    console.log(data);
-                },
-
-
-            });
-
-            $('#btn_save_invisible').hide();
-        });
-
-
-        // @@@@@@@@@ fin
-
-
-
-
         //@@@@@@@@@@@@@@@@@@@@@ SUPPRESSION DES ImageS DU BIEN @@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -369,81 +220,5 @@
             })
 
         });
-
-
-
-
-        // $(document).ready(function() {
-
-        //     $(function() {
-        //         $.ajaxSetup({
-        //             headers: {
-        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //             }
-        //         })
-        //         $('[data-toggle="tooltip"]').tooltip()
-        //         $('#sortable_visible').on('click', '.delete_image', function(e) {
-        //             let that = $(this)
-        //             e.preventDefault()
-        //             const swalWithBootstrapButtons = swal.mixin({
-        //                 confirmButtonClass: 'btn btn-success',
-        //                 cancelButtonClass: 'btn btn-danger',
-        //                 buttonsStyling: false,
-        //             })
-
-        //             swalWithBootstrapButtons({
-        //                 title: '@lang('Vraiment supprimer cette image  ?')',
-        //                 type: 'warning',
-        //                 showCancelButton: true,
-        //                 confirmButtonColor: '#DD6B55',
-        //                 confirmButtonText: '@lang('Oui')',
-        //                 cancelButtonText: '@lang('Non')',
-
-        //             }).then((result) => {
-        //                 if (result.value) {
-        //                     // $('[data-toggle="tooltip"]').tooltip('hide')
-        //                     $.ajax({
-        //                             url: that.attr('data-href'),
-        //                             type: 'GET'
-        //                         })
-        //                         .done(function() {
-
-        //                             that.parent().parent().parent().remove();
-
-
-
-        //                             // var index = $('ul#sortable_visible li').index(this);
-        //                             // var list = $('ul#sortable_visible li');
-        //                             // for (var i = 0; i < list.length; i++) {
-        //                             //     list[i].children[0].innerHTML = i + 1;
-        //                             //     // console.log(list[i].children[0].innerHTML);
-        //                             // }
-
-
-
-        //                         })
-
-        //                     swalWithBootstrapButtons(
-        //                         'Supprimé!',
-        //                         'Image supprimée.',
-        //                         'success'
-        //                     )
-
-
-        //                 } else if (
-        //                     result.dismiss === swal.DismissReason.cancel
-        //                 ) {
-        //                     swalWithBootstrapButtons(
-        //                         'Annulé',
-        //                         'Cette image n\'a pas été supprimée :)',
-        //                         'error'
-        //                     )
-        //                 }
-        //             })
-        //         })
-        //     })
-
-        // });
-        //@@@@@@@@@@@@@@@@@@@@@ FIN @@@@@@@@@@@@@@@@@@@@@@@@@@
     </script>
 @endsection

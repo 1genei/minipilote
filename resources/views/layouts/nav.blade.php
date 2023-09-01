@@ -133,9 +133,9 @@
             <div class="collapse @if ($li_simulations) show @endif" id="catalogue">
                 <ul class="side-nav-second-level">
                     <li class=""><a href="{{ route('produit.index') }}"> Produits </a></li>
+                    <li class=""><a href="#"> Stock </a></li>
                     <li class=""><a href="#"> Catégories </a></li>
                     <li class=""><a href="#"> Caractéristiques </a></li>
-                    <li class=""><a href="#"> Stock </a></li>
                 </ul>
             </div>
         </li>

@@ -135,7 +135,6 @@ class ProduitController extends Controller
     {   
         $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
         $categories = Categorieproduit::whereNull('parent_id')->get();
-        
         return view('produit.edit', compact('categories', 'produit'));
     }
 
@@ -165,7 +164,7 @@ class ProduitController extends Controller
         
         $produit->update();
         
-        
+
         // stock
         if( $request->gerer_stock){        
         
@@ -174,7 +173,7 @@ class ProduitController extends Controller
             $stock->quantite = $request->quantite;
             $stock->quantite_min = $request->quantite_min_vente;
             $stock->seuil_alerte = $request->seuil_alerte_stock;
-            $stock->update();
+            $stock->update();             
              
         }
         
@@ -213,7 +212,6 @@ class ProduitController extends Controller
         
             $this->savePhoto( $request, $produit->id);
         }
-        
         
         
         return redirect()->back()->with('ok', 'Produit modifié');

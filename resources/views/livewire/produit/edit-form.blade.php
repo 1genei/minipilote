@@ -38,7 +38,7 @@
                 <div class="tab-pane show active" id="essentiel-tab">
                     @include('produit.components.edit_essentiel')
                 </div>
-                <div class="tab-pane " id="prix-tab">
+                <div class="tab-pane " id="prix-tab" wire:ignore>
                     @include('produit.components.edit_prix')
 
                 </div>
@@ -46,7 +46,7 @@
                     @include('produit.components.edit_declinaison')
                 </div>
 
-                <div class="tab-pane" id="stock-tab">
+                <div class="tab-pane" id="stock-tab" wire:ignore>
                     @include('produit.components.edit_stock')
                 </div>
             </div>

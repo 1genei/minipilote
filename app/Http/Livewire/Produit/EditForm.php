@@ -53,10 +53,10 @@ class EditForm extends Component
         $this->prix_achat_commerciaux_ht = $this->produit->prix_achat_commerciaux_ht;
         $this->prix_achat_commerciaux_ttc = $this->produit->prix_achat_commerciaux_ttc;
         
-        $this->quantite = $this->produit->quantite;
-        $this->quantite_min_vente = $this->produit->quantite_min_vente;
+        $this->quantite =  $this->produit->gerer_stock == true ? $this->produit->stock->quantite : null;
+        $this->quantite_min_vente =  $this->produit->gerer_stock == true ? $this->produit->stock->quantite_min : null;
         $this->gerer_stock = $this->produit->gerer_stock;
-        $this->seuil_alerte_stock = $this->produit->seuil_alerte_stock;
+        $this->seuil_alerte_stock =  $this->produit->gerer_stock == true ? $this->produit->stock->seuil_alerte : null;
     
     }
     

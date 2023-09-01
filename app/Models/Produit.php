@@ -47,4 +47,14 @@ class Produit extends Model
         return $this->hasMany(Imageproduit::class,);
     }
     
+    
+    /**
+     * Get the stock associated with the Produit
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function stock()
+    {
+        return $this->hasOne(Stock::class);
+    }
 }
