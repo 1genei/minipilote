@@ -4,20 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Valeurcaracteristique;
 
-class Caracteristque extends Model
+class Caracteristique extends Model
 {
     use HasFactory;
     protected $guarded =[];
     
     
     /**
-     * Get all of the valeurcaracteristiques for the Caracteristque
+     * Get all of the valeurcaracteristiques for the Caracteristique
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function valeurcaracteristiques()
+    public function valeurs()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Valeurcaracteristique::class, 'caracteristique_id');
     }
+
 }
