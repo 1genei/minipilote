@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Caracteristque;
+use App\Models\Caracteristique;
 use Illuminate\Http\Request;
 
-class CaracteristqueController extends Controller
+class CaracteristiqueController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
+    {
+        return view('caracteristiques.index');
+    }
+
+    public function archives()
     {
         //
     }
@@ -34,7 +39,7 @@ class CaracteristqueController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Caracteristque $caracteristque)
+    public function show(Caracteristique $caracteristique)
     {
         //
     }
@@ -42,7 +47,7 @@ class CaracteristqueController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Caracteristque $caracteristque)
+    public function edit(Caracteristique $caracteristique)
     {
         //
     }
@@ -50,7 +55,7 @@ class CaracteristqueController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Caracteristque $caracteristque)
+    public function update(Request $request, Caracteristique $caracteristique)
     {
         //
     }
@@ -58,7 +63,7 @@ class CaracteristqueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Caracteristque $caracteristque)
+    public function destroy(Caracteristique $caracteristique)
     {
         //
     }

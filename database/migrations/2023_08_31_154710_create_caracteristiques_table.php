@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caracteristques', function (Blueprint $table) {
+        Schema::create('caracteristiques', function (Blueprint $table) {
             $table->id();
             $table->string("nom")->nullable();
             $table->boolean("archive")->nullable()->default(false);
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caracteristques');
+        Schema::dropIfExists('caracteristiques');
     }
 };
