@@ -11,6 +11,7 @@ class EditForm extends Component
 
     public $type;
     public $nom;
+    public $reference;
     public $description;
     public $images;
     public $categories;
@@ -18,6 +19,7 @@ class EditForm extends Component
     
     public $fiche_technique;
     public $marque;
+    public $marques;
     public $prix_vente_ht;
     public $prix_vente_ttc;
     public $prix_vente_max_ht;
@@ -37,6 +39,7 @@ class EditForm extends Component
     public function mount(){
     
         $this->type = $this->produit->type;
+        $this->reference = $this->produit->reference;
         $this->nom = $this->produit->nom;
         $this->description = $this->produit->description;
         $this->images = $this->produit->images;

@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <livewire:produit.add-form :categories="$categories">
+                        <livewire:produit.add-form :categories="$categories" :marques="$marques">
 
                             <style>
                                 .select2-container .select2-selection--single {
@@ -88,7 +88,7 @@
                                 }
 
                                 .card-body {
-                                    padding: 0.0rem 1.5rem !important;
+                                    padding: 0.0rem 0.0rem !important;
                                 }
 
                                 .modal-footer {

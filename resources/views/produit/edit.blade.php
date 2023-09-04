@@ -10,6 +10,17 @@
 @section('title', 'Modifier produit')
 
 @section('content')
+
+
+    <style>
+        .container-gauche {
+
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+
+        }
+    </style>
     <div class="content">
 
         <!-- start page title -->
@@ -30,25 +41,38 @@
                     <div class="card-body p-0">
                         <div class="row g-0">
 
-                            <div class="col-sm-2 ">
-                                {{-- <a href="{{ URL::previous() }}" type="button" class="btn btn-outline-primary"><i
-                                        class="uil-arrow-left"></i>
-                                    Retour</a> --}}
-                                <a href="{{ route('produit.index') }}" type="button" class="btn btn-outline-primary"><i
-                                        class="uil-arrow-left"></i>
-                                    Produits</a>
+                            <div class="col-sm-6">
 
-                            </div>
-                            @if (session('ok'))
-                                <div class="col-6">
-                                    <div class="alert alert-success alert-dismissible bg-success text-white text-center border-0 fade show"
-                                        role="alert">
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
-                                            aria-label="Close"></button>
-                                        <strong> {{ session('ok') }}</strong>
-                                    </div>
+                                <div class="col-sm-4 ">
+                                    <a href="{{ route('produit.index') }}" type="button" class="btn btn-outline-primary"><i
+                                            class="uil-arrow-left"></i>
+                                        Produits</a>
+
                                 </div>
-                            @endif
+                                @if (session('ok'))
+                                    <div class="col-6">
+                                        <div class="alert alert-success alert-dismissible text-center border-0 fade show"
+                                            role="alert">
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                            <strong> {{ session('ok') }}</strong>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+
+
+                            <div class="col-sm-6 container-gauche">
+
+                                <div class="item">
+                                    <a href="{{ route('produit.index') }}" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#dark-header-modal" class="btn btn-dark"><i
+                                            class="mdi mdi-plus-circle "></i>
+                                        Ajouter une déclinaison
+                                    </a>
+                                </div>
+                            </div>
+
 
                         </div> <!-- end row -->
                     </div>
@@ -77,12 +101,10 @@
                                         <a href="#" class="alert-link"><strong> {{ session('message') }}</strong></a>
                                     </div>
                                 @endif
-
-
                             </div>
                         </div>
 
-                        <livewire:produit.edit-form :produit="$produit" :categories="$categories">
+                        <livewire:produit.edit-form :produit="$produit" :categories="$categories" :marques="$marques">
 
                             <style>
                                 .select2-container .select2-selection--single {
@@ -90,7 +112,7 @@
                                 }
 
                                 .card-body {
-                                    padding: 0.0rem 1.5rem !important;
+                                    padding: 0.0rem 0.0rem !important;
                                 }
 
                                 .modal-footer {
@@ -107,6 +129,15 @@
         <!-- end row -->
 
 
+
+        {{-- MODAL AJOUT DECLINAISON --}}
+
+
+        @include('produit.components.add_declinaison')
+
+        {{-- FIN MODAL --}}
+
+
     </div> <!-- End Content -->
 @endsection
 
@@ -116,10 +147,10 @@
     {{-- Gestion de stock --}}
     <script>
         var gerer_stock = @json($produit->gerer_stock);
-        console.log(gerer_stock);
+
         if (gerer_stock == false) {
             $(".div_stock").hide();
-
+            $(".div_stock_decli").hide();
         }
         $('#gerer_stock').change(function() {
             if ($("#gerer_stock").is(":checked")) {
@@ -129,6 +160,14 @@
 
             }
 
+        });
+
+        $('#gerer_stock_decli').change(function() {
+            if ($("#gerer_stock_decli").is(":checked")) {
+                $(".div_stock_decli").slideDown();
+            } else {
+                $(".div_stock_decli").slideUp();
+            }
         });
     </script>
 

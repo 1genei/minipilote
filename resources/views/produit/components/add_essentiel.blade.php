@@ -27,22 +27,44 @@
     <div class="col-lg-4 ">
 
         <div class="col-12  mb-3">
-            <div class="mt-3">
-                <div class="form-check">
-                    <input type="radio" id="simple" name="type" value="simple" wire:model="type"
-                        class="form-check-input">
-                    <label class="form-check-label fw-bold " for="simple">Produit simple</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" id="declinaison" name="type" value="declinaison" wire:model="type"
-                        class="form-check-input">
-                    <label class="form-check-label fw-bold " for="declinaison">Produit avec
-                        déclinaison</label>
-                </div>
+            <div class="mb-3">
+                <label for="reference" class="form-label">Référence produit</label>
+                <input type="text" class="form-control" name="reference" wire:model.defer="reference"
+                    value="{{ old('reference') }}" id="reference" required>
+                @if ($errors->has('reference'))
+                    <br>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="dripicons-wrong me-2"></i>
+                        <strong>{{ $errors->first('reference') }}</strong>
+                    </div>
+                @endif
             </div>
         </div>
 
-        {{ $type }} <br>
+
+
+        <div class="col-12 mb-3">
+            <label for="images" class="form-label">Fiche technique</label>
+
+            <div class="fallback">
+                <input name="fiche_technique" wire:model.defer="fiche_technique"
+                    class=" btn btn-secondary image-multiple" accept=".pdf" type="file" />
+            </div>
+        </div>
+
+        <div class="col-12 mb-3" wire:ignore>
+            <label for="marque" class="form-label">Marque</label>
+
+            <select class="form-control select2" id="marque" name="marque" wire:model.defer="marque"
+                data-toggle="select2">
+                <option></option>
+                @foreach ($marques as $marque)
+                    <option value="{{ $marque->id }}">{{ $marque->nom }}</option>
+                @endforeach
+
+            </select>
+        </div>
+
 
         <div class="col-12 mb-3">
             <label for="images" class="form-label fw-bold fs-5 mb-2">Photo(s) du produit </label>
@@ -52,6 +74,7 @@
             </div>
 
         </div>
+
 
         <div class="col-12" wire:ignore>
             <div class="mb-3">
@@ -64,48 +87,4 @@
         </div>
 
     </div>
-</div>
-
-
-<div class="row mt-5">
-
-    <div class="col-lg-4 ">
-        <hr>
-
-        <div class="col-12 mb-3">
-            <label for="images" class="form-label">Fiche technique</label>
-
-            <div class="fallback">
-                <input name="fiche_technique" wire:model.defer="fiche_technique"
-                    class=" btn btn-secondary image-multiple" accept=".pdf" type="file" />
-            </div>
-
-        </div>
-
-
-
-    </div>
-
-    <div class="col-lg-4 " wire:ignore>
-        <hr>
-
-        <div class="col-12 mb-3">
-            <label for="marque" class="form-label">Marque</label>
-
-            <select class="form-control select2" id="marque" name="marque" wire:model.defer="marque"
-                data-toggle="select2">
-                <option></option>
-                {{-- @foreach ($marques as $marque)
-                    <option value="{{ $marque->id }}">{{ $marque->nom }}</option>
-                @endforeach --}}
-                <option value="1">STL</option>
-
-
-            </select>
-
-        </div>
-
-    </div>
-
-
 </div>

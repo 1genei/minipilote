@@ -9,7 +9,7 @@ class AddForm extends Component
 {
     use WithFileUploads;
 
-public $type;
+
 public $nom;
 public $description;
 public $images;
@@ -17,7 +17,9 @@ public $categories;
 public $categories_id = [];
 
 public $fiche_technique;
+public $reference;
 public $marque;
+public $marques;
 public $prix_vente_ht;
 public $prix_vente_ttc;
 public $prix_vente_max_ht;
@@ -45,32 +47,16 @@ public $seuil_alerte_stock;
     */
     public function rules()
     {
+
+        return [
+            'nom' => 'required|string|unique:produits',
+            'prix_vente_ht' => 'required',
+            'prix_vente_ttc' => 'required',                
+            'categories_id' => 'required',
+          
+        ];
+
     
-// dd($this->categories_id);
-
-        if ($this->type == "simple") {
-
-            return [
-                'type' => 'required',
-                'nom' => 'required|string|unique:produits',
-                'prix_vente_ht' => 'required',
-                'prix_vente_ttc' => 'required',                
-                'categories_id' => 'required',
-              
-            ];
-
-        } else {
-
-            return [
-                'type' => 'required',
-                'nom' => 'required|string|unique:produits',
-                'prix_vente_ht' => 'required',
-                'prix_vente_ttc' => 'required',                
-                'categories_id' => 'required',
-                
-            ];
-
-        }
 
     }
 

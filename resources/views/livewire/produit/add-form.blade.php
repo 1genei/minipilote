@@ -18,12 +18,6 @@
                         <span class="d-none d-md-block">Prix</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#declinaison-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                        <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                        <span class="d-none d-md-block">Déclinaisons</span>
-                    </a>
-                </li>
 
                 <li class="nav-item">
                     <a href="#stock-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
@@ -41,9 +35,6 @@
                 <div class="tab-pane " id="prix-tab" wire:ignore>
                     @include('produit.components.add_prix')
 
-                </div>
-                <div class="tab-pane" id="declinaison-tab">
-                    @include('produit.components.add_declinaison')
                 </div>
 
                 <div class="tab-pane" id="stock-tab" wire:ignore>

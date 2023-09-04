@@ -18,12 +18,14 @@
                         <span class="d-none d-md-block">Prix</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#declinaison-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                        <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                        <span class="d-none d-md-block">Déclinaisons</span>
-                    </a>
-                </li>
+                @if ($type == 'declinaison')
+                    <li class="nav-item">
+                        <a href="#declinaison-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                            <span class="d-none d-md-block">Déclinaisons</span>
+                        </a>
+                    </li>
+                @endif
 
                 <li class="nav-item">
                     <a href="#stock-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
@@ -42,10 +44,11 @@
                     @include('produit.components.edit_prix')
 
                 </div>
-                <div class="tab-pane" id="declinaison-tab">
-                    @include('produit.components.edit_declinaison')
-                </div>
-
+                @if ($type == 'declinaison')
+                    <div class="tab-pane" id="declinaison-tab">
+                        @include('produit.components.edit_declinaison')
+                    </div>
+                @endif
                 <div class="tab-pane" id="stock-tab" wire:ignore>
                     @include('produit.components.edit_stock')
                 </div>

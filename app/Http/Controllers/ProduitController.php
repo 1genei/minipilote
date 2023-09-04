@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Produit;
 use App\Models\Imageproduit;
 use App\Models\Stock;
+use App\Models\Marque;
 use App\Models\Categorieproduit;
 use Crypt;
 use Illuminate\Http\Request;
@@ -44,10 +45,11 @@ class ProduitController extends Controller
     public function create()
     {
     
-        $categories = Categorieproduit::whereNull('parent_id')->get();
+        $categories = Categorieproduit::where([['parent_id', null], ['archive',false]])->get();
+        $marques = Marque::where('archive', false)->get();
     
  
-        return view('produit.add', compact('categories'));
+        return view('produit.add', compact('categories','marques'));
         
     }
 
@@ -62,7 +64,6 @@ class ProduitController extends Controller
             "nom" => $request->nom,
             "description" => $request->description,
             "reference" => $request->reference,
-            "type" => $request->type,
             "user_id" => Auth::user()->id,
             "marque_id" => $request->marque,
             "prix_vente_ht" => $request->prix_vente_ht,
@@ -82,11 +83,7 @@ class ProduitController extends Controller
         }
         
         
-        if($request->type != "simple"){
-        
-            // variations
-        }
-        
+      
         // stock
         if( $request->gerer_stock){
         
@@ -135,7 +132,12 @@ class ProduitController extends Controller
     {   
         $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
         $categories = Categorieproduit::whereNull('parent_id')->get();
-        return view('produit.edit', compact('categories', 'produit'));
+        
+        $categories = Categorieproduit::where([['parent_id', null], ['archive',false]])->get();
+        $marques = Marque::where('archive', false)->get();
+        
+        return view('produit.edit', compact('categories', 'produit','marques'));
+ 
     }
 
     /**
@@ -149,7 +151,7 @@ class ProduitController extends Controller
         
         $produit->nom = $request->nom;
         $produit->description = $request->description;
-        $produit->type = $request->type;
+        $produit->reference = $request->reference;
         $produit->marque_id = $request->marque;
         $produit->prix_vente_ht = $request->prix_vente_ht;
         $produit->prix_vente_ttc = $request->prix_vente_ttc;
@@ -165,15 +167,30 @@ class ProduitController extends Controller
         $produit->update();
         
 
+
         // stock
         if( $request->gerer_stock){        
         
             $stock = Stock::where('produit_id', $produit->id)->first();
+            
+            if($stock == null){
+            
+                $stock = Stock::create([
+                    "produit_id" => $produit->id,
+                    "quantite" => $request->quantite,
+                    "quantite_min" => $request->quantite_min_vente,
+                    "seuil_alerte" => $request->seuil_alerte_stock,
+                   
+                ]);
+            
+            }else{
+                $stock->quantite = $request->quantite;
+                $stock->quantite_min = $request->quantite_min_vente;
+                $stock->seuil_alerte = $request->seuil_alerte_stock;
+                $stock->update(); 
+            }
                 
-            $stock->quantite = $request->quantite;
-            $stock->quantite_min = $request->quantite_min_vente;
-            $stock->seuil_alerte = $request->seuil_alerte_stock;
-            $stock->update();             
+                       
              
         }
         
@@ -186,7 +203,7 @@ class ProduitController extends Controller
         
         
         
-        if($request->hasFile('fiche_technique')){
+        if($request->hasFile('fiche_technique') ){
          
         //  Supprimer l'ancienne fiche technique
             // return response()->download(storage_path('app/pdf_compromis/pdf_compro.pdf'));
@@ -194,8 +211,9 @@ class ProduitController extends Controller
             
             $file_path .= $produit->fiche_technique;
 
+
      
-            if (file_exists($file_path)) {
+            if (file_exists($file_path) && $produit->fiche_technique != null) {
                 unlink($file_path);
             }
         
