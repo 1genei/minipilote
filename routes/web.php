@@ -97,6 +97,11 @@ Route::controller(CaracteristiqueController::class)->group(function () {
     Route::post('/caracteristique/modifier/{caracteristiqueId}', 'update')->name('caracteristique.update')->middleware(['auth']);
     Route::post('/caracteristique/archiver/{caracteristiqueId}', 'archive')->name('caracteristique.archive')->middleware(['auth']);
     Route::post('/caracteristique/desarchiver/{caracteristiqueId}', 'unarchive')->name('caracteristique.unarchive')->middleware(['auth']);
+    
+    Route::post('/caracteristique-valeur/ajouter', 'store_valeur')->name('caracteristique_valeur.store')->middleware(['auth']);
+    Route::post('/caracteristique-valeur/modifier/{valeur_caracteristiqueId}', 'update_valeur')->name('caracteristique_valeur.update')->middleware(['auth']);
+    Route::post('/caracteristique-valeur/archiver/{valeur_caracteristiqueId}', 'archive_valeur')->name('caracteristique_valeur.archive')->middleware(['auth']);
+    Route::post('/caracteristique-valeur/desarchiver/{valeur_caracteristiqueId}', 'unarchive_valeur')->name('caracteristique_valeur.unarchive')->middleware(['auth']);
 });
 
 // Categorieproduit

@@ -135,7 +135,7 @@
                     <li class=""><a href="{{ route('produit.index') }}"> Produits </a></li>
                     <li class=""><a href="#"> Stock </a></li>
                     <li class=""><a href="#"> Catégories </a></li>
-                    <li class=""><a href="#"> Caractéristiques </a></li>
+                    <li class=""><a href="{{ route('caracteristique.index') }}"> Caractéristiques </a></li>
                 </ul>
             </div>
         </li>

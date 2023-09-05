@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('valeurcaracteristiques', function (Blueprint $table) {
             $table->id();
             $table->integer("caracteristique_id")->nullable();
-            $table->string("valeur")->nullable();
+            $table->string("nom")->nullable();
             $table->boolean("archive")->nullable();
             $table->timestamps();
         });
