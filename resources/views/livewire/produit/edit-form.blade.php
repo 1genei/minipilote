@@ -18,7 +18,7 @@
                         <span class="d-none d-md-block">Prix</span>
                     </a>
                 </li>
-                @if ($type == 'declinaison')
+                @if ($a_declinaison == true)
                     <li class="nav-item">
                         <a href="#declinaison-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                             <i class="mdi mdi-settings-outline d-md-none d-block"></i>
@@ -44,7 +44,7 @@
                     @include('produit.components.edit_prix')
 
                 </div>
-                @if ($type == 'declinaison')
+                @if ($a_declinaison == true)
                     <div class="tab-pane" id="declinaison-tab">
                         @include('produit.components.edit_declinaison')
                     </div>

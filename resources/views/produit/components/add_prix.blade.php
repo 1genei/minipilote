@@ -135,10 +135,10 @@
         <div class="row">
 
             <div class="col-sm-6 col-lg-6 col-xxl-4 mb-3">
-                <label for="prix_achat_ht" class="form-label">Montant HT *</label>
+                <label for="prix_achat_ht" class="form-label">Montant HT </label>
                 <input type="number" step="0.001" min="0" class="form-control"
                     wire:model.defer="prix_achat_ht" name="prix_achat_ht" value="{{ old('prix_achat_ht') }}"
-                    id="prix_achat_ht" required>
+                    id="prix_achat_ht">
                 @if ($errors->has('prix_achat_ht'))
                     <br>
                     <div class="alert alert-danger" role="alert">

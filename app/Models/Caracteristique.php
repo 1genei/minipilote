@@ -17,9 +17,9 @@ class Caracteristique extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function valeurs()
+    public function valeurcaracteristiques()
     {
-        return $this->hasMany(Valeurcaracteristique::class, 'caracteristique_id');
+        return $this->hasMany(Valeurcaracteristique::class);
     }
 
 }

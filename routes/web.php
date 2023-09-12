@@ -267,7 +267,12 @@ Route::controller(ProduitController::class)->group(function () {
     Route::get('/produit/images-get/{imageId}', 'getPhoto')->name('produit.getPhoto')->middleware(['auth']);
     Route::get('/produit/fiche-technique-get/{nom_fichier}', 'getFicheTechnique')->name('produit.getFicheTechnique')->middleware(['auth']);
     
+// Déclinaisons du produit
 
+Route::post('/produit-declinaison/ajouter', 'store_declinaison')->name('produit_declinaison.store')->middleware(['auth']);
+Route::post('/produit-declinaison/modifier/{produitId}', 'update_declinaison')->name('produit_declinaison.update')->middleware(['auth']);
+Route::post('/produit-declinaison/archiver/{produitId}', 'archive_declinaison')->name('produit_declinaison.archive')->middleware(['auth']);
+Route::post('/produit-declinaison/desarchiver/{produitId}', 'unarchive_declinaison')->name('produit_declinaison.unarchive')->middleware(['auth']);
     
 });
 

@@ -103,7 +103,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($caracteristique->valeurs as $valeur)
+                                    @foreach ($caracteristique->valeurcaracteristiques as $valeur)
                                         <tr>
 
                                             <td>

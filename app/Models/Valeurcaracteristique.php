@@ -10,4 +10,13 @@ class Valeurcaracteristique extends Model
     use HasFactory;
     protected $guarded =[];
     
+    /**
+     * Get the caracteristique that owns the Valeurcaracteristique
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function caracteristique()
+    {
+        return $this->belongsTo(Caracteristique::class);
+    }
 }

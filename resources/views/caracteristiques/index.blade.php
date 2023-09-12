@@ -115,9 +115,9 @@
                                                 <a href="#" class="text-body fw-bold">{{ $caracteristique->nom }}</a>
                                             </td>
                                             <td>
-                                                @foreach ($caracteristique->valeurs as $key => $val)
+                                                @foreach ($caracteristique->valeurcaracteristiques as $key => $val)
                                                     {{ $val->nom }}
-                                                    @if ($key < count($caracteristique->valeurs) - 1)
+                                                    @if ($key < count($caracteristique->valeurcaracteristiques) - 1)
                                                         ,
                                                     @endif
                                                 @endforeach

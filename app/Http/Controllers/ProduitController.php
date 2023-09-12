@@ -7,7 +7,9 @@ use App\Models\Imageproduit;
 use App\Models\Stock;
 use App\Models\Marque;
 use App\Models\Categorieproduit;
+use App\Models\Caracteristique;
 use Crypt;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
@@ -33,9 +35,9 @@ class ProduitController extends Controller
     public function index()
     {
         // $produits = Produit::where('archive', false)->get();
-
-
-        return view('produit.index');
+        
+        $categories = Categorieproduit::where([['parent_id', null], ['archive',false]])->get();
+        return view('produit.index',compact('categories'));
         // return view('produit.index', compact('produits'));
     }
 
@@ -54,7 +56,7 @@ class ProduitController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Création d'un produit
      */
     public function store(Request $request)
     {
@@ -118,11 +120,11 @@ class ProduitController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Produit $produit)
+    public function show($produit_id)
     {
-        $categories = Categorieproduit::whereNull('parent_id')->get();
+        $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
     
-        return view('produit.show', compact('categories'));
+        return view('produit.show', compact('produit'));
     }
 
     /**
@@ -133,10 +135,12 @@ class ProduitController extends Controller
         $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
         $categories = Categorieproduit::whereNull('parent_id')->get();
         
+        $caracteristiques = Caracteristique::where('archive',false)->get();
+        
         $categories = Categorieproduit::where([['parent_id', null], ['archive',false]])->get();
         $marques = Marque::where('archive', false)->get();
         
-        return view('produit.edit', compact('categories', 'produit','marques'));
+        return view('produit.edit', compact('categories', 'produit','marques','caracteristiques'));
  
     }
 
@@ -146,9 +150,7 @@ class ProduitController extends Controller
     public function update(Request $request, string $produit_id)
     {
         $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
-        
-    //   dd($request->all());
-        
+           
         $produit->nom = $request->nom;
         $produit->description = $request->description;
         $produit->reference = $request->reference;
@@ -399,4 +401,137 @@ class ProduitController extends Controller
         ], 200);
     }
     
+    
+    
+    
+    
+    // #### DECLINAISON DE PRODUIT
+    
+     /**
+     * Création d'une déclinaison de  produit
+     */
+    public function store_declinaison(Request $request)
+    {
+    
+        $produit = Produit::where('id', $request->produit_id)->first();
+        
+        
+        $produitdecli = Produit::create([
+            "nom" => $produit->nom,
+            "produit_id" => $produit->id,
+            "fournisseur_id" => $produit->fournisseur_id,
+            "description" => $produit->description,
+            "reference" => $produit->reference,
+            "fiche_technique" => $produit->fiche_technique,
+            "user_id" => Auth::user()->id,
+            "marque_id" => $produit->marque,
+            "prix_vente_ht" => $request->prix_vente_ht_decli,
+            "type" => "declinaison",
+            "prix_vente_ttc" => $request->prix_vente_ttc_decli,
+            "prix_vente_max_ht" => $request->prix_vente_max_ht_decli,
+            "prix_vente_max_ttc" => $request->prix_vente_max_ttc_decli,
+            "prix_achat_ht" => $request->prix_achat_ht_decli,
+            "prix_achat_ttc" => $request->prix_achat_ttc_decli,
+            "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht_decli,
+            "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc_decli,
+            "gerer_stock" => $request->gerer_stock_decli ? true : false,     
+        ]);
+        
+       
+       // On réccupère les ids des valeurs des caractéristiques
+        $valeurids = [];
+        foreach ($request->all() as $key => $value) {
+            if(str_contains($key, "valeurNom" ) ){
+               $valeurids [] = $value;            
+            }         
+        }
+        
+        
+        if(sizeof($valeurids) > 0 ){
+            $produitdecli->valeurcaracteristiques()->attach($valeurids);
+        }
+        
+        $produit->a_declinaison = true;
+        $produit->update();
+      
+        // stock
+        if( $request->gerer_stock_decli){
+        
+            $stock = Stock::create([
+                "produit_id" => $produitdecli->id,
+                "quantite" => $request->quantite_decli,
+                "quantite_min" => $request->quantite_min_vente_decli,
+                "seuil_alerte" => $request->seuil_alerte_stock_decli,
+               
+            ]);
+            
+        }
+        
+        return redirect()->back()->with('ok', 'Nouvelle déclinaison ajoutée');
+    }
+    
+    
+     /**
+     * Modification d'une déclinaison de  produit
+     */
+    public function update_declinaison(Request $request, $produitdeli_id)
+    {
+    
+        $produitdecli = Produit::where('id', Crypt::decrypt($produitdeli_id))->first();
+        // dd($request->all());
+        $produitdecli->prix_vente_ht = $request->prix_vente_ht_decli;
+        $produitdecli->prix_vente_ttc = $request->prix_vente_ttc_decli;
+        $produitdecli->prix_vente_max_ht = $request->prix_vente_max_ht_decli;
+        $produitdecli->prix_vente_max_ttc = $request->prix_vente_max_ttc_decli;
+        $produitdecli->prix_achat_ht = $request->prix_achat_ht_decli;
+        $produitdecli->prix_achat_ttc = $request->prix_achat_ttc_decli;
+        $produitdecli->prix_achat_commerciaux_ht = $request->prix_achat_commerciaux_ht_decli;
+        $produitdecli->prix_achat_commerciaux_ttc = $request->prix_achat_commerciaux_ttc_decli;
+        $produitdecli->gerer_stock = $request->gerer_stock_decli ? true : false;
+
+       $produitdecli->update(); 
+       
+       // On réccupère les ids des valeurs des caractéristiques
+        $valeurids = [];
+        foreach ($request->all() as $key => $value) {
+            if(str_contains($key, "valeurNom" ) ){
+               $valeurids [] = $value;            
+            }         
+        }
+        
+        
+        if(sizeof($valeurids) > 0 ){
+            $produitdecli->valeurcaracteristiques()->detach();
+            $produitdecli->valeurcaracteristiques()->attach($valeurids);
+        }
+        
+      
+        // stock
+        if(isset($request->gerer_stock_decli)){        
+      
+            $stock = Stock::where('produit_id', $produitdecli->id)->first();
+            
+            if($stock == null){
+            
+                $stock = Stock::create([
+                    "produit_id" => $produitdecli->id,
+                    "quantite" => $request->quantite_decli,
+                    "quantite_min" => $request->quantite_min_vente_decli,
+                    "seuil_alerte" => $request->seuil_alerte_stock_decli,
+                   
+                ]);
+            
+            }else{
+                $stock->quantite = $request->quantite_decli;
+                $stock->quantite_min = $request->quantite_min_vente_decli;
+                $stock->seuil_alerte = $request->seuil_alerte_stock_decli;
+                $stock->update(); 
+            }
+                
+                       
+             
+        }
+   
+        return redirect()->back()->with('ok', 'Déclinaison modifiée');
+    }
 }

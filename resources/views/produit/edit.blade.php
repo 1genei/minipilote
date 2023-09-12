@@ -104,7 +104,8 @@
                             </div>
                         </div>
 
-                        <livewire:produit.edit-form :produit="$produit" :categories="$categories" :marques="$marques">
+
+                        <livewire:produit.edit-form :produit="$produit" :categories="$categories" :caracteristiques="$caracteristiques" :marques="$marques">
 
                             <style>
                                 .select2-container .select2-selection--single {
@@ -131,9 +132,13 @@
 
 
         {{-- MODAL AJOUT DECLINAISON --}}
+        @include('produit.components.add_declinaison_modal')
+
+        {{-- MODAL MODIFICATION DECLINAISON --}}
+        @include('produit.components.edit_declinaison_modal')
 
 
-        @include('produit.components.add_declinaison')
+
 
         {{-- FIN MODAL --}}
 
@@ -144,7 +149,7 @@
 @section('script')
 
 
-    {{-- Gestion de stock --}}
+    {{-- Gestion de stock Ajout déclinaison --}}
     <script>
         var gerer_stock = @json($produit->gerer_stock);
 
@@ -258,6 +263,264 @@
                 });
             })
 
+        });
+    </script>
+
+
+
+
+
+    <script>
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+            $('[data-toggle="tooltip"]').tooltip()
+            $('body').on('click', 'a.archive-produit-decli', function(event) {
+                let that = $(this)
+                event.preventDefault();
+
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Archiver',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $('[data-toggle="tooltip"]').tooltip('hide')
+                        $.ajax({
+                                url: that.attr('data-href'),
+                                type: 'POST',
+                                success: function(data) {
+                                    // document.location.reload();
+                                },
+                                error: function(data) {
+                                    console.log(data);
+                                }
+                            })
+                            .done(function() {
+
+                                swalWithBootstrapButtons.fire(
+                                        'Archivée',
+                                        '',
+                                        'success'
+                                    )
+
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
+
+
+                                // that.parents('tr').remove();
+                            })
+
+
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Annulé',
+                            'Caracteristique non archivée :)',
+                            'error'
+                        )
+                    }
+                });
+            })
+
+        });
+    </script>
+
+    <script>
+        // Désarchiver
+
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+            $('[data-toggle="tooltip"]').tooltip()
+            $('body').on('click', 'a.unarchive-produit-decli', function(event) {
+                let that = $(this)
+                event.preventDefault();
+
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Désarchiver',
+                    text: "Confirmer ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $('[data-toggle="tooltip"]').tooltip('hide')
+                        $.ajax({
+                                url: that.attr('data-href'),
+                                type: 'POST',
+                                success: function(data) {
+
+                                    // document.location.reload();
+                                },
+                                error: function(data) {
+                                    console.log(data);
+                                }
+                            })
+                            .done(function() {
+
+                                swalWithBootstrapButtons.fire(
+                                        'Désarchivée',
+                                        '',
+                                        'success'
+                                    )
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.location.reload();
+                                        }
+                                    })
+                            })
+
+
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Annulé',
+                            'Caracteristique non désarchivée :)',
+                            'error'
+                        )
+                    }
+                });
+            })
+
+        });
+    </script>
+
+
+    <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/responsive.bootstrap5.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            "use strict";
+            $("#tab1").
+            DataTable({
+                language: {
+                    paginate: {
+                        previous: "<i class='mdi mdi-chevron-left'>",
+                        next: "<i class='mdi mdi-chevron-right'>"
+                    },
+                    info: "Affichage de  _START_ à _END_ sur _TOTAL_",
+                    lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
+                },
+                pageLength: 100,
+
+                select: {
+                    style: "multi"
+                },
+                drawCallback: function() {
+                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
+                        document.querySelector(".dataTables_wrapper .row").querySelectorAll(".col-md-6")
+                        .forEach(function(e) {
+                            e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
+                                .classList.remove("col-md-6")
+                        })
+                }
+            })
+        });
+    </script>
+
+
+    {{-- Modification d'une déclinaison --}}
+    <script>
+        $('.edit-declinaison').click(function(e) {
+
+            let that = $(this);
+            let currentCaracteristique = that.data('nom');
+
+            let currentFormAction = that.data('href');
+
+
+            $('#edit_form_decli').attr('action', currentFormAction);
+
+
+            $('#edit_prix_vente_ht_decli').val(that.data('prix_vente_ht'));
+            $('#edit_prix_vente_ttc_decli').val(that.data('prix_vente_ttc'));
+            $('#edit_prix_vente_max_ht_decli').val(that.data('prix_vente_max_ht'));
+            $('#edit_prix_vente_max_ttc_decli').val(that.data('prix_vente_max_ttc'));
+            $('#edit_prix_achat_ht_decli').val(that.data('prix_achat_ht'));
+            $('#edit_prix_achat_ttc_decli').val(that.data('prix_achat_ttc'));
+            $('#edit_prix_achat_commerciaux_ht_decli').val(that.data('prix_achat_commerciaux_ht'));
+            $('#edit_prix_achat_commerciaux_ttc_decli').val(that.data('prix_achat_commerciaux_ttc'));
+            $('#edit_gerer_stock_decli').val(that.data('gerer_stock'));
+            $('#edit_valeurcaracteristique_decli').val(that.data('valeurcaracteristique'));
+            $('#edit_produitdecli_id_decli').val(that.data('produitdecli_id'));
+            $('#edit_quantite_decli').val(that.data('quantite'));
+            $('#edit_quantite_min_vente_decli').val(that.data('quantite_min'));
+            $('#edit_seuil_alerte_stock_decli').val(that.data('seuil_alerte'));
+
+
+            var check_declis = $('.check-decli');
+
+
+
+            valeursExistantes = that.data('valeurcaracteristique');
+            // Parcourez les valeurs existantes et cochez les boutons radio correspondants
+            valeursExistantes.forEach(function(valeurId) {
+                $('input[value="' + valeurId + '"]').prop('checked', true);
+            });
+
+
+            // {{-- Gestion de stock modification déclinaison --}}
+
+            var gerer_stock = that.data('gerer_stock');
+
+            if (gerer_stock == false) {
+                $(".div_edit_stock_decli").hide();
+                $(".div_edit_stock_decli").hide();
+                $("#edit_gerer_stock_decli").prop("checked", false);
+
+            } else {
+                $(".div_edit_stock_decli").show();
+                $(".div_edit_stock_decli").show();
+                $("#edit_gerer_stock_decli").prop("checked", true);
+
+            }
+
+
+
+        });
+
+        $('#edit_gerer_stock_decli').change(function() {
+            if ($("#edit_gerer_stock_decli").is(":checked")) {
+                $(".div_edit_stock_decli").slideDown();
+            } else {
+                $(".div_edit_stock_decli").slideUp();
+            }
         });
     </script>
 @endsection

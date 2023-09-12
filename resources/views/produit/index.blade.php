@@ -101,7 +101,7 @@
 
 
                         <div class="row">
-                            <div class="col-xxl-2 col-lg-2">
+                            {{-- <div class="col-xxl-2 col-lg-2">
                                 <div class="pe-xl-3">
                                     <h5 class="mt-0 mb-3">Trier par:</h5>
 
@@ -117,7 +117,7 @@
                                                 <h5 class="m-0 pb-2">
                                                     <a class="text-dark" data-bs-toggle="collapse" href="#todayTasks"
                                                         role="button" aria-expanded="false" aria-controls="todayTasks">
-                                                        <i class='uil uil-angle-down font-18'></i>Catégorie
+                                                        <i class='uil uil-angle-down font-18'></i>Catégories
                                                         <span class="text-muted">(5)</span>
                                                     </a>
                                                 </h5>
@@ -128,30 +128,57 @@
                                                             <!-- task -->
                                                             <div class="row justify-content-sm-between mt-2">
                                                                 <div class=" mb-2 mb-sm-0">
-                                                                    <div class="form-check">
-                                                                        <input type="checkbox" class="form-check-input"
-                                                                            name="typecontact" id="task2">
-                                                                        <label class="form-check-label" for="task2">
-                                                                            Abonnements
-                                                                        </label>
+                                                                    <form action="" method="post">
 
-                                                                        <div class="form-check">
-                                                                            <input type="checkbox" class="form-check-input"
-                                                                                name="typecontact" id="task2">
-                                                                            <label class="form-check-label" for="task2">
-                                                                                Abonnements
-                                                                            </label>
-                                                                            <div class="form-check">
-                                                                                <input type="checkbox"
-                                                                                    class="form-check-input"
-                                                                                    name="typecontact" id="task2">
-                                                                                <label class="form-check-label"
-                                                                                    for="task2">
-                                                                                    Abonnements
-                                                                                </label>
-                                                                            </div> <!-- end checkbox -->
-                                                                        </div> <!-- end checkbox -->
-                                                                    </div> <!-- end checkbox -->
+
+                                                                        <ul>
+                                                                            @if (isset($produit))
+                                                                                @foreach ($categories as $categorie)
+                                                                                    <li>
+                                                                                        <label>
+                                                                                            <input type="checkbox"
+                                                                                                @if (in_array($categorie->id, $produit->categorieproduitsId())) checked @endif
+                                                                                                name="categories_id[]"
+                                                                                                wire:model="categories_id"
+                                                                                                value="{{ $categorie->id }}">
+                                                                                            {{ $categorie->nom }}
+                                                                                        </label>
+                                                                                        @if ($categorie->sscategories->count() > 0)
+                                                                                            @include(
+                                                                                                'produit.components.input-checkbox',
+                                                                                                [
+                                                                                                    'categories' =>
+                                                                                                        $categorie->sscategories,
+                                                                                                ]
+                                                                                            )
+                                                                                        @endif
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            @else
+                                                                                @foreach ($categories as $categorie)
+                                                                                    <li>
+                                                                                        <label>
+                                                                                            <input type="checkbox"
+                                                                                                name="categories_id[]"
+                                                                                                wire:model="categories_id"
+                                                                                                value="{{ $categorie->id }}">
+                                                                                            {{ $categorie->nom }}
+                                                                                        </label>
+                                                                                        @if ($categorie->sscategories->count() > 0)
+                                                                                            @include(
+                                                                                                'produit.components.input-checkbox',
+                                                                                                [
+                                                                                                    'categories' =>
+                                                                                                        $categorie->sscategories,
+                                                                                                ]
+                                                                                            )
+                                                                                        @endif
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </ul>
+
+                                                                    </form>
 
 
                                                                 </div> <!-- end col -->
@@ -164,19 +191,13 @@
                                                     </div> <!-- end card -->
                                                 </div> <!-- end .collapse-->
                                             </div> <!-- end .mt-2-->
-
-
-
-
-
-
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
 
-                            <div class="col-10">
+                            <div class="col-12">
                                 <div class="table-responsive">
                                     <livewire:produit.index-table />
                                 </div>

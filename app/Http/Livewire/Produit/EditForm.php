@@ -20,6 +20,7 @@ class EditForm extends Component
     public $fiche_technique;
     public $marque;
     public $marques;
+    public $a_declinaison;
     public $prix_vente_ht;
     public $prix_vente_ttc;
     public $prix_vente_max_ht;
@@ -34,6 +35,7 @@ class EditForm extends Component
     public $gerer_stock;
     public $seuil_alerte_stock;
     public $produit;
+    public $caracteristiques;
         
         
     public function mount(){
@@ -46,6 +48,7 @@ class EditForm extends Component
         $this->categories_id = $this->produit->categorieproduitsId();
         
         $this->fiche_technique = $this->produit->fiche_technique;
+        $this->a_declinaison = $this->produit->a_declinaison;
         $this->marque = $this->produit->marque_id;
         $this->prix_vente_ht = $this->produit->prix_vente_ht;
         $this->prix_vente_ttc = $this->produit->prix_vente_ttc;

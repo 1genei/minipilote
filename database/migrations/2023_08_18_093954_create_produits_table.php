@@ -16,10 +16,12 @@ return new class extends Migration
             $table->string("reference")->nullable();
             // Simple, déclinaison
             $table->integer("fournisseur_id")->nullable();
+            $table->integer("produit_id")->nullable();
             $table->integer("marque_id")->nullable();
             $table->integer("user_id")->nullable();
             $table->string("type")->nullable();
             $table->string("nom")->nullable();
+            $table->boolean("a_declinaison")->default(false);
             $table->text("description")->nullable();
             $table->double("poids")->nullable();
             $table->double("longueur")->nullable();

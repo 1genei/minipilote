@@ -47,6 +47,15 @@ class Produit extends Model
         return $this->hasMany(Imageproduit::class,);
     }
     
+    /**
+     * Get the marque associated with the Produit
+     *
+     */
+    public function marque()
+    {
+        return $this->belongsTo(Marque::class);
+    }
+    
     
     /**
      * Get the stock associated with the Produit
@@ -57,4 +66,44 @@ class Produit extends Model
     {
         return $this->hasOne(Stock::class);
     }
+    
+    /**
+     * The Valeurcaracteristiques that belong to the Produit
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function valeurcaracteristiques()
+    {
+        return $this->belongsToMany(Valeurcaracteristique::class);
+    }
+    
+    /**
+     * Get all of the declinaisons for the Produit
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function declinaisons()
+    {
+        if($this->a_declinaison){
+        
+            $declinaisons = Produit::where('produit_id', $this->id)->get();
+            return $declinaisons;
+        }else{
+        
+            return [];
+        }
+    }
+    
+   public function valeurcaracteristique_id(){
+    
+        $valeurcaracteristiques = ProduitValeurcaracteristique::where('produit_id', $this->id)->get();
+        
+        $valids = [];
+        
+        foreach ($valeurcaracteristiques as $valeurcaracteristique) {
+            $valids[] = $valeurcaracteristique->valeurcaracteristique_id;
+        }
+        
+        return json_encode($valids);    
+   }
 }
