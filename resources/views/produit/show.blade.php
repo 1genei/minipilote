@@ -106,7 +106,8 @@
                                                 <!-- Product image -->
                                                 <a href="javascript: void(0);" class="text-center d-block mb-4">
                                                     <img src="{{ asset('/images/images_produits/' . $produit->imageproduits[0]?->nom_fichier) }} "
-                                                        class="img-fluid" style="max-width: 280px;" alt="Product-img" />
+                                                        class="img-fluid" style="max-width: 280px;"
+                                                        alt="Photo du produit" />
                                                 </a>
 
                                                 <div class="d-lg-flex d-none justify-content-center">
@@ -116,7 +117,7 @@
                                                             <img src="{{ asset('/images/images_produits/' . $photosproduit->nom_fichier) }}"
                                                                 class="img-fluid img-thumbnail p-2"
                                                                 style="max-width: 100px; max-height:100px;"
-                                                                alt="Product-img" />
+                                                                alt="Photo du produit" />
                                                         </a>
                                                     @endforeach
 

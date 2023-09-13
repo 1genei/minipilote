@@ -79,52 +79,46 @@ class EditForm extends Component
     public function rules()
     {
     
+        return [
+            'nom' => 'required|string|unique:produits',
+            'reference' => 'required|string|unique:produits',
+            'prix_vente_ht' => 'required',
+            'prix_vente_ttc' => 'required',                
+            'categories_id' => 'required',
+          
+        ];
 
-
+        $require = [
+            'type' => 'required',
+            'prix_vente_ht' => 'required',
+            'prix_vente_ttc' => 'required',                
+            'fiche_technique' => 'file:pdf'
+        ];
+        
+       
         if($this->nom == $this->produit->nom){
-            return [
-                'nom' => 'required|string',
-            ];
+            $require = array_merge($require,['nom' => 'required|string']);
         }
         else{
-            return [
-                'nom' => 'required|string|unique:produits',
-            ];
+            $require = array_merge($require,['nom' => 'required|string|unique:produits']);
         }
+        
         
         if($this->reference == $this->produit->reference){
-            return [
-                'reference' => 'required|string',
-            ];
+            
+            $require = array_merge($require,['reference' => 'required|string']);           
+           
         }
         else{
-            return [
-                'reference' => 'required|string|unique:produits',
-            ];
+
+            $require = array_merge($require,['reference' => 'required|string|unique:produits']);
+        
         }
         
         
-        if ($this->type == "simple") {
-            
-            return [
-                'type' => 'required',
-                'prix_vente_ht' => 'required',
-                'prix_vente_ttc' => 'required',                
-                'pdf_compromis' => 'file:pdf'
-            ];
+// dd($require);
 
-        } else {
-
-            return [
-                'type' => 'required',
-                'prix_vente_ht' => 'required',
-                'prix_vente_ttc' => 'required',                
-                'pdf_compromis' => 'file:pdf'
-                
-            ];
-
-        }
-
+        return $require;
     }
 
     public function submit()

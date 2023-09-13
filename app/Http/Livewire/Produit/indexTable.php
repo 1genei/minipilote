@@ -145,8 +145,10 @@ final class indexTable extends PowerGridComponent
             } )
             
             ->addColumn('image', function (Produit $model) {
-                if($model->imageproduit){
-                    return  '<span  class="btn btn-sm rounded-pill"> image</span>';
+                if($model->imageproduits != null && sizeof($model->imageproduits)>0 ){
+                    $src = asset('/images/images_produits/' . $model->imageproduits[0]?->nom_fichier) ;
+                    
+                    return  ' <img src="'.$src.'" class="img-fluid" style="max-width: 80px; min-width: 80px;" alt="Photo du produit" />';
                 
                 }else{
                     return  '<span class="btn btn-sm rounded-pill"> sans image</span>';
