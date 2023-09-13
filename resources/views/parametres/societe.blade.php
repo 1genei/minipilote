@@ -1,13 +1,13 @@
 {{-- Ajout d'une société --}}
-<div id="standard-modal-societe" class="modal fade" tabindex="-1" role="dialog"
-    aria-labelledby="standard-modalLabel" aria-hidden="true">
+<div id="standard-modal-societe" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="standard-modalLabel">Ajouter une société</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('societe.store') }}" method="post" id="form-add-societe">
+            <form action="{{ route('societe.store') }}" method="post" id="form-add-societexx">
                 <div class="modal-body">
                     @csrf
                     <div class="col-lg-12">
@@ -26,8 +26,10 @@
                                     <p>Pas de logo chargé</p>
                                 </div>
                                 <div>
-                                    <input type="file" name="add_logo_file" id="add_logo_file" accept="image/*" style="display: none;" />
-                                    <button type="button" id="add_browse_button" class="btn btn-success mt-1">Parcourir</button>
+                                    <input type="file" name="add_logo_file" id="add_logo_file" accept="image/*"
+                                        style="display: none;" />
+                                    <button type="button" id="add_browse_button"
+                                        class="btn btn-success mt-1">Parcourir</button>
                                 </div>
                             </div>
                             <div class="m-2">
@@ -72,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                </div>  
+                </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Enregistrer</button>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>

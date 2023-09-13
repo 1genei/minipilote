@@ -91,6 +91,19 @@ class EditForm extends Component
                 'nom' => 'required|string|unique:produits',
             ];
         }
+        
+        if($this->reference == $this->produit->reference){
+            return [
+                'reference' => 'required|string',
+            ];
+        }
+        else{
+            return [
+                'reference' => 'required|string|unique:produits',
+            ];
+        }
+        
+        
         if ($this->type == "simple") {
             
             return [

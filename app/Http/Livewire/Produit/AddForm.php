@@ -50,6 +50,7 @@ public $seuil_alerte_stock;
 
         return [
             'nom' => 'required|string|unique:produits',
+            'reference' => 'required|string|unique:produits',
             'prix_vente_ht' => 'required',
             'prix_vente_ttc' => 'required',                
             'categories_id' => 'required',

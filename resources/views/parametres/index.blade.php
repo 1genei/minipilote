@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
 
         <div class="row">
@@ -63,8 +63,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#application" data-bs-toggle="tab" aria-expanded="true"
-                                    class="nav-link rounded-0">
+                                <a href="#application" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
                                     <i class="mdi mdi-application-cog font-18"></i>
                                     <span class="d-none d-lg-block">Application</span>
                                 </a>
@@ -76,7 +75,7 @@
                                 $principalSociete = null;
                                 $activeSocietes = [];
                                 $archivedSocietes = [];
-
+                                
                                 foreach ($societes as $societe) {
                                     if ($societe->est_societe_principale) {
                                         $principalSociete = $societe;
@@ -97,7 +96,8 @@
                                 <div class="row mt-1 mb-2">
                                     <div class="col-sm-5">
                                         <a href="#add-societe" class="btn btn-primary mb-2" data-bs-toggle="modal"
-                                            data-bs-target="#standard-modal-societe"><i class="mdi mdi-plus-circle me-2"></i> Nouvelle société</a>
+                                            data-bs-target="#standard-modal-societe"><i
+                                                class="mdi mdi-plus-circle me-2"></i> Nouvelle société</a>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -105,17 +105,19 @@
                                         @if (session('message'))
                                             <div class="alert alert-success text-secondary alert-dismissible ">
                                                 <i class="dripicons-checkmark me-2"></i>
-                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                                <a href="#" class="alert-link"><strong> {{ session('message') }}</strong></a>
+                                                <a href="#" class="close" data-dismiss="alert"
+                                                    aria-label="close">&times;</a>
+                                                <a href="#" class="alert-link"><strong>
+                                                        {{ session('message') }}</strong></a>
                                             </div>
                                         @endif
                                         @if ($errors->has('societe'))
                                             <br>
-                                                <div class="alert alert-warning text-secondary " role="alert">
-                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
-                                                        aria-label="Close"></button>
-                                                    <strong>{{ $errors->first('societe') }}</strong>
-                                                </div>
+                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('societe') }}</strong>
+                                            </div>
                                             </br>
                                         @endif
                                     </div>
@@ -125,23 +127,26 @@
                                         <label for="principale-id">Société principale :</label>
                                         <select class="form-select w-50" id="principale-id">
                                             @foreach ($societes as $societe)
-                                            <option value="{{ route('societe.principale', Crypt::encrypt($societe->id)) }}" {{ $societe->est_societe_principale ? 'selected' : '' }}>
-                                                {{ $societe->est_societe_principale ? $societe->raison_sociale.' (principale)' : ($societe->archive ? $societe->raison_sociale.' (archivée)' : $societe->raison_sociale) }}
-                                            </option>
+                                                <option
+                                                    value="{{ route('societe.principale', Crypt::encrypt($societe->id)) }}"
+                                                    {{ $societe->est_societe_principale ? 'selected' : '' }}>
+                                                    {{ $societe->est_societe_principale ? $societe->raison_sociale . ' (principale)' : ($societe->archive ? $societe->raison_sociale . ' (archivée)' : $societe->raison_sociale) }}
+                                                </option>
                                             @endforeach
                                         </select>
-                                        <button id="modif-principale" class="btn btn-primary mt-2" disabled>Modifier</button>
+                                        <button id="modif-principale" class="btn btn-primary mt-2"
+                                            disabled>Modifier</button>
                                     </div>
                                 </div>
                                 <div class="row">
-                                @foreach ($societes as $index => $societe)
-                                    @if (!$societe->est_societe_principale)
-                                        <div class="col-12 my-3">
-                                            <div style="border-top: 3px solid black; margin-top: 1rem;"></div>
-                                        </div>
-                                    @endif
-                                    @include('parametres.societes', ['index' => $index])
-                                @endforeach
+                                    @foreach ($societes as $index => $societe)
+                                        @if (!$societe->est_societe_principale)
+                                            <div class="col-12 my-3">
+                                                <div style="border-top: 3px solid black; margin-top: 1rem;"></div>
+                                            </div>
+                                        @endif
+                                        @include('parametres.societes', ['index' => $index])
+                                    @endforeach
                                 </div>
                             </div>
 
@@ -154,7 +159,7 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 
     @include('parametres.societe')
@@ -168,7 +173,7 @@
 
         let initialSelectedValue = select.value;
 
-        select.addEventListener('change', function () {
+        select.addEventListener('change', function() {
             if (select.value !== initialSelectedValue) {
                 button.removeAttribute('disabled');
             } else {
@@ -177,7 +182,7 @@
         });
     </script>
     <script>
-        document.getElementById("add_browse_button").addEventListener("click", function () {
+        document.getElementById("add_browse_button").addEventListener("click", function() {
             document.getElementById("add_logo_file").click();
         });
     </script>
@@ -188,7 +193,7 @@
         const cancelButtons = [];
         const originalDatas = [];
         for (let i = 0; i < societes.length; i++) {
-            document.getElementById(`edit-browse-button-${i}`).addEventListener("click", function () {
+            document.getElementById(`edit-browse-button-${i}`).addEventListener("click", function() {
                 document.getElementById(`edit-logo-file-${i}`).click();
             });
 
@@ -203,12 +208,12 @@
                 }
             }
 
-            myForms[i].addEventListener('input', function () {
+            myForms[i].addEventListener('input', function() {
                 saveButtons[i].removeAttribute('disabled');
                 cancelButtons[i].removeAttribute('disabled');
             });
 
-            cancelButtons[i].addEventListener('click', function () {
+            cancelButtons[i].addEventListener('click', function() {
                 for (const field in originalDatas[i]) {
                     if (myForms[i][field]) {
                         myForms[i][field].value = originalDatas[i][field];
@@ -226,58 +231,58 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            
+
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('#form-add-societe').submit(function(event) {
-                event.preventDefault(); // Prevent form submission
-                let that = $(this);
+            // $('#form-add-societe').submit(function(event) {
+            //     event.preventDefault(); // Prevent form submission
+            //     let that = $(this);
 
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
+            //     const swalWithBootstrapButtons = swal.mixin({
+            //         confirmButtonClass: 'btn btn-success',
+            //         cancelButtonClass: 'btn btn-danger',
+            //         buttonsStyling: false,
+            //     });
 
-                swalWithBootstrapButtons.fire({
-                    title: 'Ajouter la société',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non',
-                    reverseButtons: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('[data-toggle="tooltip"]').tooltip('hide');
-                        $.ajax({
-                            url: that.attr('action'),
-                            type: 'POST',
-                            data: that.serialize(),
-                            success: function(data) {
-                            },
-                            error: function(data) {
-                            }
-                        }).done(function() {
-                            swalWithBootstrapButtons.fire(
-                                'Confirmation',
-                                'Société ajoutée avec succès',
-                                'success'
-                            ).then((result) => {
-                                if (result.isConfirmed) {
-                                    document.location.reload();
-                                }
-                            });
-                        });
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulation',
-                            'Ajout annulé',
-                            'error'
-                        );
-                    }
-                });
-            });
+            //     swalWithBootstrapButtons.fire({
+            //         title: 'Ajouter la société',
+            //         text: "Confirmer ?",
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonText: 'Oui',
+            //         cancelButtonText: 'Non',
+            //         reverseButtons: false
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             $('[data-toggle="tooltip"]').tooltip('hide');
+            //             $.ajax({
+            //                 url: that.attr('action'),
+            //                 type: 'POST',
+            //                 data: that.serialize(),
+            //                 success: function(data) {
+            //                 },
+            //                 error: function(data) {
+            //                 }
+            //             }).done(function() {
+            //                 swalWithBootstrapButtons.fire(
+            //                     'Confirmation',
+            //                     'Société ajoutée avec succès',
+            //                     'success'
+            //                 ).then((result) => {
+            //                     if (result.isConfirmed) {
+            //                         document.location.reload();
+            //                     }
+            //                 });
+            //             });
+            //         } else if (result.dismiss === Swal.DismissReason.cancel) {
+            //             swalWithBootstrapButtons.fire(
+            //                 'Annulation',
+            //                 'Ajout annulé',
+            //                 'error'
+            //             );
+            //         }
+            //     });
+            // });
         });
     </script>
     <script>
@@ -290,7 +295,7 @@
                 }
             });
 
-            $('#modif-principale').click(function () {
+            $('#modif-principale').click(function() {
 
                 const swalWithBootstrapButtons = swal.mixin({
                     confirmButtonClass: 'btn btn-success',
@@ -311,10 +316,8 @@
                         $.ajax({
                             url: select.value,
                             type: 'POST',
-                            success: function(data) {
-                            },
-                            error: function(data) {
-                            }
+                            success: function(data) {},
+                            error: function(data) {}
                         }).done(function() {
                             swalWithBootstrapButtons.fire(
                                 'Confirmation',
@@ -368,15 +371,14 @@
 
                         $('[data-toggle="tooltip"]').tooltip('hide')
                         $.ajax({
-                                url: that.attr('action'),
-                                type: 'POST',
-                                data: that.serialize(),
-                                success: function(data) {
-                                },
-                                error: function(data) {
-                                    console.log(data);
-                                }
-                            }).done(function() {
+                            url: that.attr('action'),
+                            type: 'POST',
+                            data: that.serialize(),
+                            success: function(data) {},
+                            error: function(data) {
+                                console.log(data);
+                            }
+                        }).done(function() {
                             swalWithBootstrapButtons.fire(
                                 'Confirmation',
                                 'Société modifiée avec succès',

@@ -33,7 +33,6 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-
 Route::view('/powergrid', 'powergrid-demo');
 
 

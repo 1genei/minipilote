@@ -64,6 +64,7 @@ class ProduitController extends Controller
    
         $produit = Produit::create([
             "nom" => $request->nom,
+            "type" => "simple",
             "description" => $request->description,
             "reference" => $request->reference,
             "user_id" => Auth::user()->id,
