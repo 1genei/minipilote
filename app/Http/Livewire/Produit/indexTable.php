@@ -70,25 +70,25 @@ final class indexTable extends PowerGridComponent
             $produits = Produit::where([['archive', false],['type','simple']])->get();
             // On réccupère tous les contacts de type individu
                 
-            $produits = Produit::select('produits.*','categorieproduits.nom')
-                ->join('categorieproduit_produit', 'categorieproduit_produit.produit_id', '=', 'produits.id')
-                ->join('categorieproduits', 'categorieproduit_produit.categorieproduit_id', '=', 'categorieproduits.id')
-                ->where([['produits.archive', false],['produits.type','simple']])
-                ->get();
+            // $produits = Produit::select('produits.*','categorieproduits.nom')
+            //     ->join('categorieproduit_produit', 'categorieproduit_produit.produit_id', '=', 'produits.id')
+            //     ->join('categorieproduits', 'categorieproduit_produit.categorieproduit_id', '=', 'categorieproduits.id')
+            //     ->where([['produits.archive', false],['produits.type','simple']])
+            //     ->get();
        
 
         } else {
         
-            // $produits = Produit::where([['archive', false],['type','simple'], ['user_id',$user->id]])->get();
+            $produits = Produit::where([['archive', false],['type','simple'], ['user_id',$user->id]])->get();
             
             //   On réccupère uniquement les contacts de l'utilisateur connecté
             
-            $produits = Produit::select('produits.*','categorieproduits.nom')
-                ->join('categorieproduit_produit', 'categorieproduit_produit.produit_id', '=', 'produits.id')
-                ->join('categorieproduits', 'categorieproduit_produit.categorieproduit_id', '=', 'categorieproduits.id')
-                ->where([['produits.archive', false],['produits.type','simple'],['produits.user_id',$user->id]])
-                // ->whereIn('categorieproduit_produit.categorie_id', $this->categories_id )
-                ->get();
+            // $produits = Produit::select('produits.*','categorieproduits.nom')
+            //     ->join('categorieproduit_produit', 'categorieproduit_produit.produit_id', '=', 'produits.id')
+            //     ->join('categorieproduits', 'categorieproduit_produit.categorieproduit_id', '=', 'categorieproduits.id')
+            //     ->where([['produits.archive', false],['produits.type','simple'],['produits.user_id',$user->id]])
+            //     // ->whereIn('categorieproduit_produit.categorie_id', $this->categories_id )
+            //     ->get();
          
                 
         }
