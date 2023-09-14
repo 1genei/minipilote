@@ -32,12 +32,12 @@
                 <div class="tab-pane show active" id="essentiel-tab">
                     @include('produit.components.add_essentiel')
                 </div>
-                <div class="tab-pane " id="prix-tab" wire:ignore>
+                <div class="tab-pane " id="prix-tab">
                     @include('produit.components.add_prix')
 
                 </div>
 
-                <div class="tab-pane" id="stock-tab" wire:ignore>
+                <div class="tab-pane" id="stock-tab">
                     @include('produit.components.add_stock')
                 </div>
             </div>

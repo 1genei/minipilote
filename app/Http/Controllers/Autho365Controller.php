@@ -57,6 +57,7 @@ class Autho365Controller extends Controller
             $graphApiUrl = 'https://graph.microsoft.com/v1.0/me';
             $response = \Http::withToken($accessToken)->get($graphApiUrl);
             $userData = $response->json();
+ 
 
             // Récupération des informations spécifiques de l'utilisateur
             // $displayName = $userData['displayName'];
@@ -68,11 +69,11 @@ class Autho365Controller extends Controller
             if (Auth::loginUsingId($user->id)) {
                 return redirect('/dashboard');
             }
-            return redirect('login')->with('error', 'Vous n\'êtes pas autorisé à vous connecter. Veuillez contacter l\'administrateur !');
+            return redirect('login')->with('error', 'Vous n\'êtes pas autorisé à vous connecter. Veuillez contacter l\'administrateur ! #err001');
 
         } catch (\Throwable $th) {
 
-            return redirect('login')->with('error', 'Vous n\'êtes pas autorisé à vous connecter. Veuillez contacter l\'administrateur !');
+            return redirect('login')->with('error', 'Vous n\'êtes pas autorisé à vous connecter. Veuillez contacter l\'administrateur ! #err002');
         }
 
     }

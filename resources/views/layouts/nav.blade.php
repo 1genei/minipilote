@@ -1,10 +1,98 @@
 @php
     $curent_url = $_SERVER['REQUEST_URI'];
     $curent_url = explode('/', $curent_url);
-    $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = '';
-    $li_simulations = 'false';
+    
+    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_contrat_parrainage = $li_contrat = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = '';
+    $li_simulations = $li_utilisateur_show = $li_contact_show = $li_contrat_show = $li_catalogue_show = $li_parametre_show = false;
     
     switch ($curent_url[1]) {
+        case '/':
+            $li_dashboard = 'menuitem-active';
+            break;
+    
+        // Utilisateurs
+        case 'utilisateurs':
+            $li_utilisateur = 'menuitem-active';
+            $li_utilisateur_show = true;
+            break;
+        case 'roles':
+            $li_utilisateur_droit = 'menuitem-active';
+            $li_utilisateur_show = true;
+            break;
+        case 'permissions':
+            $li_utilisateur_droit = 'menuitem-active';
+            $li_utilisateur_show = true;
+            break;
+    
+        // Contacts
+        case 'collaborateurs':
+            $li_contact_collaborateur = 'menuitem-active';
+            $li_contact_show = true;
+            break;
+        case 'clients':
+            $li_contact_client = 'menuitem-active';
+            $li_contact_show = true;
+            break;
+        case 'prospects':
+            $li_contact_prospect = 'menuitem-active';
+            $li_contact_show = true;
+            break;
+        case 'fournisseurs':
+            $li_contact_fournisseur = 'menuitem-active';
+            $li_contact_show = true;
+            break;
+        case 'contacts':
+            $li_contact = 'menuitem-active';
+            $li_contact_show = true;
+            break;
+    
+        // Contrats
+        case 'contrats':
+            $li_contrat = 'menuitem-active';
+            $li_contrat_show = true;
+            break;
+        case 'parrainages':
+            $li_contrat_parrainage = 'menuitem-active';
+            $li_contrat_show = true;
+            break;
+    
+        // Catalogue
+        case 'produits':
+            $li_catalogue_produit = 'menuitem-active';
+            $li_catalogue_show = true;
+            break;
+        case 'stocks':
+            $li_catalogue_stock = 'menuitem-active';
+            $li_catalogue_show = true;
+            break;
+        case 'categories':
+            $li_catalogue_categorie = 'menuitem-active';
+            $li_catalogue_show = true;
+            break;
+        case 'fournisseurs':
+            $li_catalogue_fournisseur = 'menuitem-active';
+            $li_catalogue_show = true;
+            break;
+        case 'caracteristiques':
+            $li_catalogue_caracteristique = 'menuitem-active';
+            $li_catalogue_show = true;
+            break;
+    
+        // Paramètres
+        case 'parametres':
+            if (sizeof($curent_url) > 2) {
+                if ($curent_url[2] == 'contact') {
+                    $li_parametre_contact = 'menuitem-active';
+                } elseif ($curent_url[2] == 'produit') {
+                    $li_parametre_produit = 'menuitem-active';
+                }
+            } else {
+                $li_parametre_generaux = 'menuitem-active';
+            }
+    
+            $li_parametre_show = true;
+            break;
+    
         case 'ordres-simule':
             if (sizeof($curent_url) > 3) {
                 switch (substr($curent_url[3], 0, 1)) {
@@ -54,7 +142,7 @@
     <!--- Sidemenu -->
     <ul class="side-nav">
 
-        <li class="side-nav-item">
+        <li class="side-nav-item {{ $li_dashboard }}">
             <a href="{{ route('welcome') }}" aria-expanded="false" aria-controls="sidebarDashboards"
                 class="side-nav-link">
                 <i class="mdi mdi-view-dashboard"></i>
@@ -64,56 +152,71 @@
 
 
 
-        <li class="side-nav-item">
+        <li class="side-nav-item {{ $li_utilisateur }} {{ $li_utilisateur_droit }} ">
             <a data-bs-toggle="collapse" href="#utilisateurs" aria-expanded="false" aria-controls="utilisateurs"
                 class="side-nav-link">
                 <i class="mdi mdi-account-lock-open-outline"></i>
                 <span> Utilisateurs </span>
                 <span class="menu-arrow"></span>
             </a>
-            <div class="collapse" id="utilisateurs">
+            <div class="collapse @if ($li_utilisateur_show) show @endif " id="utilisateurs">
                 <ul class="side-nav-second-level">
-                    <li>
+                    <li class="{{ $li_utilisateur }}">
                         <a href="{{ route('utilisateur.index') }}">Gestion</a>
                     </li>
-                    <li>
+                    <li class="{{ $li_utilisateur_droit }}">
                         <a href="{{ route('permission.index') }}">Droits</a>
                     </li>
                 </ul>
             </div>
         </li>
-        <li class="side-nav-item">
-            <a data-bs-toggle="collapse" href="#contacts" aria-expanded="{{ $li_simulations }}" aria-controls="contacts"
+
+        <li
+            class="side-nav-item {{ $li_contact_collaborateur }} {{ $li_contact_prospect }} {{ $li_contact_client }} {{ $li_contact_fournisseur }} {{ $li_contact }}">
+            <a data-bs-toggle="collapse" href="#contacts" aria-expanded="false" aria-controls="contacts"
                 class="side-nav-link">
                 <i class="mdi mdi-contacts-outline"></i>
                 <span> Contacts</span>
                 <span class="menu-arrow"></span>
             </a>
-            <div class="collapse @if ($li_simulations) show @endif" id="contacts">
+            <div class="collapse @if ($li_contact_show) show @endif" id="contacts">
                 <ul class="side-nav-second-level">
-
-                    <li class="{{ $li_ordre_simule_algo1 }}">
+                    <li class="{{ $li_contact_collaborateur }}">
                         <a href="{{ route('collaborateur.index') }}">Collaborateurs</a>
+                    </li>
+                    <li class="{{ $li_contact_prospect }}">
                         <a href="{{ route('prospect.index') }}">Prospects</a>
+                    </li>
+                    <li class="{{ $li_contact_client }}">
                         <a href="{{ route('client.index') }}">Clients</a>
+                    </li>
+                    <li class="{{ $li_contact_fournisseur }}">
                         <a href="{{ route('fournisseur.index') }}">Fournisseurs</a>
+                    </li>
+                    <li class="{{ $li_contact }}">
                         <a href="{{ route('contact.index') }}">Tous les contacts</a>
                     </li>
+
                 </ul>
             </div>
         </li>
-        <li class="side-nav-item">
-            <a data-bs-toggle="collapse" href="#contrats" aria-expanded="{{ $li_simulations }}"
-                aria-controls="contrats" class="side-nav-link">
+
+
+
+        <li class="side-nav-item {{ $li_contrat_parrainage }} {{ $li_contrat }} ">
+            <a data-bs-toggle="collapse" href="#contrats" aria-expanded="" aria-controls="contrats"
+                class="side-nav-link">
                 <i class="mdi mdi-book-edit-outline"></i>
                 <span> Contrats</span>
                 <span class="menu-arrow"></span>
             </a>
-            <div class="collapse @if ($li_simulations) show @endif" id="contrats">
+            <div class="collapse @if ($li_contrat_show) show @endif" id="contrats">
                 <ul class="side-nav-second-level">
 
-                    <li class="{{ $li_ordre_simule_algo1 }}">
+                    <li class="{{ $li_contrat }}">
                         <a href="#">Gestion</a>
+                    </li>
+                    <li class="{{ $li_contrat_parrainage }}">
                         <a href="#">Parrainages</a>
 
                     </li>
@@ -123,19 +226,22 @@
 
 
 
-        <li class="side-nav-item">
-            <a data-bs-toggle="collapse" href="#catalogue" aria-expanded="" aria-controls="catalogue"
+        <li
+            class="side-nav-item {{ $li_catalogue_produit }} {{ $li_catalogue_stock }} {{ $li_catalogue_categorie }} {{ $li_catalogue_caracteristique }}">
+            <a data-bs-toggle="collapse " href="#catalogue" aria-expanded="" aria-controls="catalogue"
                 class="side-nav-link">
                 <i class="mdi  mdi-beaker-outline"></i>
                 <span>Catalogue</span>
                 <span class="menu-arrow"></span>
             </a>
-            <div class="collapse @if ($li_simulations) show @endif" id="catalogue">
+            <div class="collapse @if ($li_catalogue_show) show @endif" id="catalogue">
                 <ul class="side-nav-second-level">
-                    <li class=""><a href="{{ route('produit.index') }}"> Produits </a></li>
-                    <li class=""><a href="#"> Stock </a></li>
-                    <li class=""><a href="#"> Catégories </a></li>
-                    <li class=""><a href="{{ route('caracteristique.index') }}"> Caractéristiques </a></li>
+                    <li class="{{ $li_catalogue_produit }}"><a href="{{ route('produit.index') }}"> Produits </a></li>
+                    <li class="{{ $li_catalogue_stock }}"><a href="#"> Stock </a></li>
+                    <li class="{{ $li_catalogue_categorie }}"><a href="#"> Catégories </a></li>
+                    <li class="{{ $li_catalogue_caracteristique }}">
+                        <a href="{{ route('caracteristique.index') }}">Caractéristiques </a>
+                    </li>
                 </ul>
             </div>
         </li>
@@ -147,14 +253,11 @@
                 <span>Affaires</span>
                 <span class="menu-arrow"></span>
             </a>
-            <div class="collapse @if ($li_simulations) show @endif" id="affaires">
+            <div class="collapse " id="affaires">
                 <ul class="side-nav-second-level">
-
-                    <li class="">
-                        <a href="#">Gestion</a>
-                        <a href="#"> Propositions commerciales </a>
-                        <a href="#"> Devis </a>
-                    </li>
+                    <li class=""><a href="#">Gestion</a> </li>
+                    <li> <a href="#"> Propositions commerciales </a></li>
+                    <li> <a href="#"> Devis </a></li>
                 </ul>
             </div>
         </li>
@@ -168,20 +271,22 @@
             </a>
         </li>
 
-        <li class="side-nav-item">
-            <a data-bs-toggle="collapse" href="#affaires" aria-expanded="" aria-controls="affaires"
+        <li
+            class="side-nav-item {{ $li_parametre_contact }} {{ $li_parametre_generaux }} {{ $li_parametre_produit }} ">
+            <a data-bs-toggle="collapse" href="#parametres" aria-expanded="" aria-controls="parametres"
                 class="side-nav-link">
                 <i class="uil uil-bright"></i>
                 <span>Paramètres</span>
                 <span class="menu-arrow"></span>
             </a>
-            <div class="collapse @if ($li_simulations) show @endif" id="affaires">
+            <div class="collapse @if ($li_parametre_show) show @endif" id="parametres">
                 <ul class="side-nav-second-level">
-                    <li class="">
-                        <a href="{{ route('parametre.index') }}">Généraux</a>
-                        <a href="{{ route('parametre.contact') }}"> Contacts </a>
-                        <a href="{{ route('parametre.produit') }}"> Produits </a>
+                    <li class="{{ $li_parametre_generaux }}"><a href="{{ route('parametre.index') }}">Généraux</a>
                     </li>
+                    <li class="{{ $li_parametre_contact }}"> <a href="{{ route('parametre.contact') }}"> Contacts
+                        </a></li>
+                    <li class="{{ $li_parametre_produit }}"> <a href="{{ route('parametre.produit') }}"> Produits
+                        </a></li>
                 </ul>
             </div>
         </li>
@@ -211,7 +316,7 @@
     }
 
     body[data-layout=detached] .leftside-menu .side-nav .menuitem-active>a {
-        color: #fff !important;
+        color: #f9c851 !important;
     }
 
     body[data-layout=detached] .leftside-menu .side-nav .side-nav-forth-level li a,

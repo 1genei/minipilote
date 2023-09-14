@@ -104,24 +104,26 @@
                                         <div class="row">
                                             <div class="col-lg-5">
                                                 <!-- Product image -->
-                                                <a href="javascript: void(0);" class="text-center d-block mb-4">
-                                                    <img src="{{ asset('/images/images_produits/' . $produit->imageproduits[0]?->nom_fichier) }} "
-                                                        class="img-fluid" style="max-width: 280px;"
-                                                        alt="Photo du produit" />
-                                                </a>
+                                                @if (sizeof($produit->imageproduits))
+                                                    <a href="javascript: void(0);" class="text-center d-block mb-4">
+                                                        <img src="{{ asset('/images/images_produits/' . $produit->imageproduits[0]?->nom_fichier) }} "
+                                                            class="img-fluid" style="max-width: 280px;"
+                                                            alt="Photo du produit" />
+                                                    </a>
 
-                                                <div class="d-lg-flex d-none justify-content-center">
+                                                    <div class="d-lg-flex d-none justify-content-center">
 
-                                                    @foreach ($produit->imageproduits as $photosproduit)
-                                                        <a href="javascript: void(0);" class="ms-2">
-                                                            <img src="{{ asset('/images/images_produits/' . $photosproduit->nom_fichier) }}"
-                                                                class="img-fluid img-thumbnail p-2"
-                                                                style="max-width: 100px; max-height:100px;"
-                                                                alt="Photo du produit" />
-                                                        </a>
-                                                    @endforeach
+                                                        @foreach ($produit->imageproduits as $photosproduit)
+                                                            <a href="javascript: void(0);" class="ms-2">
+                                                                <img src="{{ asset('/images/images_produits/' . $photosproduit->nom_fichier) }}"
+                                                                    class="img-fluid img-thumbnail p-2"
+                                                                    style="max-width: 100px; max-height:100px;"
+                                                                    alt="Photo du produit" />
+                                                            </a>
+                                                        @endforeach
 
-                                                </div>
+                                                    </div>
+                                                @endif
                                             </div> <!-- end col -->
                                             <div class="col-lg-7">
                                                 <form class="ps-lg-4">
