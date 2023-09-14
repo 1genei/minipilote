@@ -116,31 +116,39 @@
                                         <div style="display:flex; flex-direction: row; justify-content:space-around; ">
 
                                             <div class="media-left media-middle">
-                                                <i class="ti-list f-s-48 color-primary m-r-1"></i> <label for=""><a
-                                                        style="font-weight: bold; color:#2483ac; font-size:18px "
+                                                <i class="ti-list f-s-48 color-primary m-r-1"></i>
+                                                <label for="">
+                                                    <a style="font-weight: bold; color:#2483ac; font-size:18px "
                                                         href="{{ route('agenda.listing') }}">Toutes les tâches
                                                         <span
-                                                            class="badge badge-danger">{{ \App\Models\Agenda::nb_taches('toutes') }}</span>
-                                                    </a></label>
+                                                            class="badge bg-danger rounded-pill ">{{ \App\Models\Agenda::nb_taches('toutes') }}
+                                                        </span>
+
+                                                    </a>
+                                                </label>
                                                 <hr style="border-top: 5px solid #240c9a; margin-top: 10px">
                                             </div>
 
                                             <div class="media-left media-middle">
-                                                <i class="ti-list f-s-48 color-success m-r-1"></i> <label for=""><a
-                                                        style="font-weight: bold; color:#14893f;"
+                                                <i class="ti-list f-s-48 color-success m-r-1"></i>
+                                                <label for="">
+                                                    <a style="font-weight: bold; color:#14893f;"
                                                         href="{{ route('agenda.listing_a_faire') }}">Tâches à faire
                                                         <span
-                                                            class="badge badge-danger">{{ \App\Models\Agenda::nb_taches('a_faire') }}</span>
-                                                    </a></label>
+                                                            class="badge bg-danger rounded-pill">{{ \App\Models\Agenda::nb_taches('a_faire') }}</span>
+                                                    </a>
+                                                </label>
                                             </div>
 
                                             <div class="media-left media-middle">
-                                                <i class="ti-list f-s-48 color-danger m-r-1"></i> <label for=""><a
-                                                        style="font-weight: bold; color:#8b0f06;"
+                                                <i class="ti-list f-s-48 color-danger m-r-1"></i>
+                                                <label for="">
+                                                    <a style="font-weight: bold; color:#8b0f06;"
                                                         href="{{ route('agenda.listing_en_retard') }}">Tâches en retard
                                                         <span
-                                                            class="badge badge-danger">{{ \App\Models\Agenda::nb_taches('en_retard') }}</span>
-                                                    </a></label>
+                                                            class="badge bg-danger rounded-pill">{{ \App\Models\Agenda::nb_taches('en_retard') }}</span>
+                                                    </a>
+                                                </label>
                                             </div>
 
 
@@ -188,11 +196,11 @@
                                                                         <td style="color: #450854; ">
                                                                             <span>
                                                                                 @if ($agenda->est_lie == true && $agenda->contact)
-                                                                                    @if ($agenda->contact->type == 'individu')
-                                                                                        {{ $agenda->contact->individu->nom }}
-                                                                                        {{ $agenda->contact->individu->prenom }}
+                                                                                    @if ($agenda->contact?->type == 'individu')
+                                                                                        {{ $agenda->contact?->individu?->nom }}
+                                                                                        {{ $agenda->contact?->individu?->prenom }}
                                                                                     @else
-                                                                                        {{ $agenda->contact->entite->nom }}
+                                                                                        {{ $agenda->contact?->entite?->raison_sociale }}
                                                                                     @endif
                                                                                 @endif
 
@@ -210,11 +218,9 @@
                                                                         </td>
 
                                                                         <td style="color: #32ade1;">
-                                                                            @php
-                                                                                $date_deb = new DateTime($agenda->date_deb);
-                                                                            @endphp
+
                                                                             <p class="" style="font-weight: bold;">
-                                                                                {{ $date_deb->format('d/m/Y') }} à
+                                                                                {{ string_to_date($agenda->date_deb) }} à
                                                                                 {{ $agenda->heure_deb }}</p>
                                                                         </td>
 
@@ -236,8 +242,8 @@
                                                                                 href="javascript:void(0);"
                                                                                 data-titre="{{ $agenda->titre }}"
                                                                                 data-description="{{ $agenda->description }}"
-                                                                                data-date_deb="{{ $agenda->date_deb->format('Y-m-d') }}"
-                                                                                data-date_fin="{{ $agenda->date_fin->format('Y-m-d') }}"
+                                                                                data-date_deb="{{ $agenda->date_deb }}"
+                                                                                data-date_fin="{{ $agenda->date_fin }}"
                                                                                 data-heure_deb="{{ $agenda->heure_deb }}"
                                                                                 data-type="{{ $agenda->type_rappel }}"
                                                                                 data-est_lie="{{ $agenda->est_lie }} "
@@ -422,7 +428,15 @@
                                             data-live-search="true">
                                             <option value="">Choisir le contact</option>
                                             @foreach ($contacts as $contact)
-                                                {{-- <option  data-tokens="@if ($contact->type == 'individu'){{$contact->individu->nom}} {{$contact->individu->prenom}}  @else  {{$contact->entite->nom}} @endif" value="{{$contact->id}}">  @if ($contact->type == 'individu'){{$contact->individu->nom}} {{$contact->individu->prenom}}  @else  {{$contact->entite->nom}} @endif</option>                                     --}}
+                                                <option
+                                                    data-tokens="@if ($contact->type == 'individu') {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}  @else  {{ $contact->entite?->nom }} @endif"
+                                                    value="{{ $contact->id }}">
+                                                    @if ($contact->type == 'individu')
+                                                        {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}
+                                                    @else
+                                                        {{ $contact->entite?->raison_sociale }}
+                                                    @endif
+                                                </option>
                                             @endforeach
 
 
@@ -638,9 +652,9 @@
                                             @foreach ($contacts as $contact)
                                                 <option value="{{ $contact->id }}">
                                                     @if ($contact->type == 'individu')
-                                                        {{ $contact->individu->nom }} {{ $contact->individu->prenom }}
+                                                        {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}
                                                     @else
-                                                        {{ $contact->entite->nom }}
+                                                        {{ $contact->entite?->raison_sociale }}
                                                     @endif
                                                 </option>
                                             @endforeach

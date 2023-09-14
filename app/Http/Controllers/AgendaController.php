@@ -22,7 +22,6 @@ class AgendaController extends Controller
         $contacts = Contact::where([['archive',false]])->get();
         
         
-       // dd($mandataires);
        $liste_contacts = contact::all();
        
        
@@ -31,8 +30,8 @@ class AgendaController extends Controller
        
        foreach ($liste_contacts as $value) {
        
-           $tab_contacts [$value->id]["nom"] = $value->type == "individu" ? $value->infos()->nom." ".$value->infos()->prenom :  $value->infos()->nom; 
-           $tab_contacts [$value->id]["contact"] = $value->infos()->contact1 . "/".$value->infos()->contact2; 
+           $tab_contacts [$value->id]["nom"] = $value->type == "individu" ? $value->infos()?->nom." ".$value->infos()?->prenom :  $value->infos()?->raison_sociale; 
+           $tab_contacts [$value->id]["contact"] = $value->infos()?->telephone_fixe . "/".$value->infos()?->telephone_mobile; 
        }
        
        
@@ -58,7 +57,6 @@ class AgendaController extends Controller
         
         $contacts = Contact::where([['archive',false]])->get();
         
-    
         return view('agenda.listing',compact('agendas', 'contacts'));
     }
     
