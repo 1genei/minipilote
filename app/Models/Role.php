@@ -29,6 +29,22 @@ class Role extends Model
         
     }
     
+    /**
+    * Vérifie si le rôle a la permission passée en paramètre
+    */
+    public function havePermissionByName($permission_name) {
+        
+        $permission = Permission::where('nom', $permission_name)->first();
+        
+
+        if($permission != null ){
+            return $this->havePermission($permission->id);
+        }else{
+            return false;
+        }
+        
+    }
+
     
     /**
      * Retourne la liste des utilisateurs associé à un rôles

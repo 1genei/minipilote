@@ -16,6 +16,7 @@ return new class extends Migration
             // $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->integer("contact_id")->unsigned()->nullable();    
+            $table->integer("role_id")->unsigned()->nullable();    
             $table->boolean('archive')->default(false);        
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -142,6 +142,7 @@
     <!--- Sidemenu -->
     <ul class="side-nav">
 
+        {{-- @can('permission', 'afficher-dashboard') --}}
         <li class="side-nav-item {{ $li_dashboard }}">
             <a href="{{ route('welcome') }}" aria-expanded="false" aria-controls="sidebarDashboards"
                 class="side-nav-link">
@@ -149,59 +150,62 @@
                 <span> Tableau de bord </span>
             </a>
         </li>
+        {{-- @endcan --}}
 
+        @can('permission', 'afficher-utilisateur')
+            <li class="side-nav-item {{ $li_utilisateur }} {{ $li_utilisateur_droit }} ">
+                <a data-bs-toggle="collapse" href="#utilisateurs" aria-expanded="false" aria-controls="utilisateurs"
+                    class="side-nav-link">
+                    <i class="mdi mdi-account-lock-open-outline"></i>
+                    <span> Utilisateurs </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse @if ($li_utilisateur_show) show @endif " id="utilisateurs">
+                    <ul class="side-nav-second-level">
+                        <li class="{{ $li_utilisateur }}">
+                            <a href="{{ route('utilisateur.index') }}">Gestion</a>
+                        </li>
+                        @can('permission', 'afficher-droit')
+                            <li class="{{ $li_utilisateur_droit }}">
+                                <a href="{{ route('permission.index') }}">Droits</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </div>
+            </li>
+        @endcan
 
+        @can('permission', 'afficher-contact')
+            <li
+                class="side-nav-item {{ $li_contact_collaborateur }} {{ $li_contact_prospect }} {{ $li_contact_client }} {{ $li_contact_fournisseur }} {{ $li_contact }}">
+                <a data-bs-toggle="collapse" href="#contacts" aria-expanded="false" aria-controls="contacts"
+                    class="side-nav-link">
+                    <i class="mdi mdi-contacts-outline"></i>
+                    <span> Contacts</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse @if ($li_contact_show) show @endif" id="contacts">
+                    <ul class="side-nav-second-level">
+                        <li class="{{ $li_contact_collaborateur }}">
+                            <a href="{{ route('collaborateur.index') }}">Collaborateurs</a>
+                        </li>
+                        <li class="{{ $li_contact_prospect }}">
+                            <a href="{{ route('prospect.index') }}">Prospects</a>
+                        </li>
+                        <li class="{{ $li_contact_client }}">
+                            <a href="{{ route('client.index') }}">Clients</a>
+                        </li>
+                        <li class="{{ $li_contact_fournisseur }}">
+                            <a href="{{ route('fournisseur.index') }}">Fournisseurs</a>
+                        </li>
+                        <li class="{{ $li_contact }}">
+                            <a href="{{ route('contact.index') }}">Tous les contacts</a>
+                        </li>
 
-        <li class="side-nav-item {{ $li_utilisateur }} {{ $li_utilisateur_droit }} ">
-            <a data-bs-toggle="collapse" href="#utilisateurs" aria-expanded="false" aria-controls="utilisateurs"
-                class="side-nav-link">
-                <i class="mdi mdi-account-lock-open-outline"></i>
-                <span> Utilisateurs </span>
-                <span class="menu-arrow"></span>
-            </a>
-            <div class="collapse @if ($li_utilisateur_show) show @endif " id="utilisateurs">
-                <ul class="side-nav-second-level">
-                    <li class="{{ $li_utilisateur }}">
-                        <a href="{{ route('utilisateur.index') }}">Gestion</a>
-                    </li>
-                    <li class="{{ $li_utilisateur_droit }}">
-                        <a href="{{ route('permission.index') }}">Droits</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-
-        <li
-            class="side-nav-item {{ $li_contact_collaborateur }} {{ $li_contact_prospect }} {{ $li_contact_client }} {{ $li_contact_fournisseur }} {{ $li_contact }}">
-            <a data-bs-toggle="collapse" href="#contacts" aria-expanded="false" aria-controls="contacts"
-                class="side-nav-link">
-                <i class="mdi mdi-contacts-outline"></i>
-                <span> Contacts</span>
-                <span class="menu-arrow"></span>
-            </a>
-            <div class="collapse @if ($li_contact_show) show @endif" id="contacts">
-                <ul class="side-nav-second-level">
-                    <li class="{{ $li_contact_collaborateur }}">
-                        <a href="{{ route('collaborateur.index') }}">Collaborateurs</a>
-                    </li>
-                    <li class="{{ $li_contact_prospect }}">
-                        <a href="{{ route('prospect.index') }}">Prospects</a>
-                    </li>
-                    <li class="{{ $li_contact_client }}">
-                        <a href="{{ route('client.index') }}">Clients</a>
-                    </li>
-                    <li class="{{ $li_contact_fournisseur }}">
-                        <a href="{{ route('fournisseur.index') }}">Fournisseurs</a>
-                    </li>
-                    <li class="{{ $li_contact }}">
-                        <a href="{{ route('contact.index') }}">Tous les contacts</a>
-                    </li>
-
-                </ul>
-            </div>
-        </li>
-
-
+                    </ul>
+                </div>
+            </li>
+        @endcan
 
         <li class="side-nav-item {{ $li_contrat_parrainage }} {{ $li_contrat }} ">
             <a data-bs-toggle="collapse" href="#contrats" aria-expanded="" aria-controls="contrats"
@@ -226,9 +230,11 @@
 
 
 
+
+
         <li
-            class="side-nav-item {{ $li_catalogue_produit }} {{ $li_catalogue_stock }} {{ $li_catalogue_categorie }} {{ $li_catalogue_caracteristique }}">
-            <a data-bs-toggle="collapse " href="#catalogue" aria-expanded="" aria-controls="catalogue"
+            class="side-nav-item{{ $li_catalogue_produit }} {{ $li_catalogue_stock }} {{ $li_catalogue_categorie }} {{ $li_catalogue_caracteristique }}">
+            <a data-bs-toggle="collapse" href="#catalogue" aria-expanded="" aria-controls="catalogue"
                 class="side-nav-link">
                 <i class="mdi  mdi-beaker-outline"></i>
                 <span>Catalogue</span>
@@ -284,9 +290,11 @@
                     <li class="{{ $li_parametre_generaux }}"><a href="{{ route('parametre.index') }}">Généraux</a>
                     </li>
                     <li class="{{ $li_parametre_contact }}"> <a href="{{ route('parametre.contact') }}"> Contacts
-                        </a></li>
-                    <li class="{{ $li_parametre_produit }}"> <a href="{{ route('parametre.produit') }}"> Produits
-                        </a></li>
+                        </a>
+                    </li>
+                    <li class="{{ $li_parametre_produit }}"> <a href="{{ route('parametre.produit') }}"> Catalogue
+                        </a>
+                    </li>
                 </ul>
             </div>
         </li>
