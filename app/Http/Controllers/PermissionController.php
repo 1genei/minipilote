@@ -18,7 +18,7 @@ class PermissionController extends Controller
      public function index(){
         
         $roles = Role::all();
-        $permissionsGroups = Permissiongroup::all();
+        $permissionsGroups = Permissiongroup::orderBy('rang')->get();
         $permissionRoles = PermissionRole::all();
         
         foreach ($permissionsGroups as $group) {
