@@ -61,6 +61,49 @@ class PermissionController extends Controller
         return redirect()->back()->with('ok','Permissions modifiées');
     }
     
+    
+    /**
+     * Générer de nouvelles permissions
+    */
+
+    public function storeAuto($groupId, $nomGroup, ){
+        
+
+
+        Permission::insert([
+            [
+                "nom"=>"ajouter-$nomGroup",
+                "description"=>"Ajouter",
+                "permissiongroup_id"=> $groupId,
+            ],
+            [
+                "nom"=>"modifier-$nomGroup",
+                "description"=>"Modifier",
+                "permissiongroup_id"=> $groupId,
+            ],
+            [
+                "nom"=>"afficher-$nomGroup",
+                "description"=>"Afficher",
+                "permissiongroup_id"=> $groupId,
+            ],
+            [
+                "nom"=>"supprimer-$nomGroup",
+                "description"=>"Supprimer",
+                "permissiongroup_id"=> $groupId,
+            ],
+            [
+                "nom"=>"archiver-$nomGroup",
+                "description"=>"Archiver",
+                "permissiongroup_id"=> $groupId,
+            ],
+    
+        ]);
+        
+  
+        // return redirect()->back()->with('ok','Permissions modifiées');
+    }
+    
+    
      /**
      * Modifier une  permission
     */
