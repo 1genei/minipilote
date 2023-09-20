@@ -142,15 +142,15 @@
     <!--- Sidemenu -->
     <ul class="side-nav">
 
-        {{-- @can('permission', 'afficher-dashboard') --}}
-        <li class="side-nav-item {{ $li_dashboard }}">
-            <a href="{{ route('welcome') }}" aria-expanded="false" aria-controls="sidebarDashboards"
-                class="side-nav-link">
-                <i class="mdi mdi-view-dashboard"></i>
-                <span> Tableau de bord </span>
-            </a>
-        </li>
-        {{-- @endcan --}}
+        @can('permission', 'afficher-dashboard')
+            <li class="side-nav-item {{ $li_dashboard }}">
+                <a href="{{ route('welcome') }}" aria-expanded="false" aria-controls="sidebarDashboards"
+                    class="side-nav-link">
+                    <i class="mdi mdi-view-dashboard"></i>
+                    <span> Tableau de bord </span>
+                </a>
+            </li>
+        @endcan
 
         @can('permission', 'afficher-utilisateur')
             <li class="side-nav-item {{ $li_utilisateur }} {{ $li_utilisateur_droit }} ">
@@ -186,71 +186,92 @@
                 </a>
                 <div class="collapse @if ($li_contact_show) show @endif" id="contacts">
                     <ul class="side-nav-second-level">
-                        <li class="{{ $li_contact_collaborateur }}">
-                            <a href="{{ route('collaborateur.index') }}">Collaborateurs</a>
-                        </li>
-                        <li class="{{ $li_contact_prospect }}">
-                            <a href="{{ route('prospect.index') }}">Prospects</a>
-                        </li>
-                        <li class="{{ $li_contact_client }}">
-                            <a href="{{ route('client.index') }}">Clients</a>
-                        </li>
-                        <li class="{{ $li_contact_fournisseur }}">
-                            <a href="{{ route('fournisseur.index') }}">Fournisseurs</a>
-                        </li>
-                        <li class="{{ $li_contact }}">
-                            <a href="{{ route('contact.index') }}">Tous les contacts</a>
-                        </li>
+                        @can('permission', 'afficher-collaborateur')
+                            <li class="{{ $li_contact_collaborateur }}">
+                                <a href="{{ route('collaborateur.index') }}">Collaborateurs</a>
+                            </li>
+                        @endcan
+                        @can('permission', 'afficher-prospect')
+                            <li class="{{ $li_contact_prospect }}">
+                                <a href="{{ route('prospect.index') }}">Prospects</a>
+                            </li>
+                        @endcan
+                        @can('permission', 'afficher-client')
+                            <li class="{{ $li_contact_client }}">
+                                <a href="{{ route('client.index') }}">Clients</a>
+                            </li>
+                        @endcan
+                        @can('permission', 'afficher-fournisseur')
+                            <li class="{{ $li_contact_fournisseur }}">
+                                <a href="{{ route('fournisseur.index') }}">Fournisseurs</a>
+                            </li>
+                        @endcan
+                        @can('permission', 'afficher-tous-les-contacts')
+                            <li class="{{ $li_contact }}">
+                                <a href="{{ route('contact.index') }}">Tous les contacts</a>
+                            </li>
+                        @endcan
 
                     </ul>
                 </div>
             </li>
         @endcan
 
-        <li class="side-nav-item {{ $li_contrat_parrainage }} {{ $li_contrat }} ">
-            <a data-bs-toggle="collapse" href="#contrats" aria-expanded="" aria-controls="contrats"
-                class="side-nav-link">
-                <i class="mdi mdi-book-edit-outline"></i>
-                <span> Contrats</span>
-                <span class="menu-arrow"></span>
-            </a>
-            <div class="collapse @if ($li_contrat_show) show @endif" id="contrats">
-                <ul class="side-nav-second-level">
+        @can('permission', 'afficher-contrat')
+            <li class="side-nav-item {{ $li_contrat_parrainage }} {{ $li_contrat }} ">
+                <a data-bs-toggle="collapse" href="#contrats" aria-expanded="" aria-controls="contrats"
+                    class="side-nav-link">
+                    <i class="mdi mdi-book-edit-outline"></i>
+                    <span> Contrats</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse @if ($li_contrat_show) show @endif" id="contrats">
+                    <ul class="side-nav-second-level">
 
-                    <li class="{{ $li_contrat }}">
-                        <a href="#">Gestion</a>
-                    </li>
-                    <li class="{{ $li_contrat_parrainage }}">
-                        <a href="#">Parrainages</a>
+                        <li class="{{ $li_contrat }}">
+                            <a href="#">Gestion</a>
+                        </li>
+                        <li class="{{ $li_contrat_parrainage }}">
+                            <a href="#">Parrainages</a>
 
-                    </li>
-                </ul>
-            </div>
-        </li>
-
-
-
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        @endcan
 
 
-        <li
-            class="side-nav-item{{ $li_catalogue_produit }} {{ $li_catalogue_stock }} {{ $li_catalogue_categorie }} {{ $li_catalogue_caracteristique }}">
-            <a data-bs-toggle="collapse" href="#catalogue" aria-expanded="" aria-controls="catalogue"
-                class="side-nav-link">
-                <i class="mdi  mdi-beaker-outline"></i>
-                <span>Catalogue</span>
-                <span class="menu-arrow"></span>
-            </a>
-            <div class="collapse @if ($li_catalogue_show) show @endif" id="catalogue">
-                <ul class="side-nav-second-level">
-                    <li class="{{ $li_catalogue_produit }}"><a href="{{ route('produit.index') }}"> Produits </a></li>
-                    <li class="{{ $li_catalogue_stock }}"><a href="#"> Stock </a></li>
-                    <li class="{{ $li_catalogue_categorie }}"><a href="#"> Catégories </a></li>
-                    <li class="{{ $li_catalogue_caracteristique }}">
-                        <a href="{{ route('caracteristique.index') }}">Caractéristiques </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
+
+
+        @can('permission', 'afficher-catalogue')
+            <li
+                class="side-nav-item{{ $li_catalogue_produit }} {{ $li_catalogue_stock }} {{ $li_catalogue_categorie }} {{ $li_catalogue_caracteristique }}">
+                <a data-bs-toggle="collapse" href="#catalogue" aria-expanded="" aria-controls="catalogue"
+                    class="side-nav-link">
+                    <i class="mdi  mdi-beaker-outline"></i>
+                    <span>Catalogue</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse @if ($li_catalogue_show) show @endif" id="catalogue">
+                    <ul class="side-nav-second-level">
+                        <li class="{{ $li_catalogue_produit }}"><a href="{{ route('produit.index') }}"> Produits </a></li>
+
+                        @can('permission', 'afficher-stock')
+                            <li class="{{ $li_catalogue_stock }}"><a href="#"> Stock </a></li>
+                        @endcan
+                        @can('permission', 'afficher-categorie-produit')
+                            <li class="{{ $li_catalogue_categorie }}"><a href="#"> Catégories </a></li>
+                        @endcan
+                        @can('permission', 'afficher-caracteristique-produit')
+                            <li class="{{ $li_catalogue_caracteristique }}">
+                                <a href="{{ route('caracteristique.index') }}">Caractéristiques </a>
+                            </li>
+                        @endcan
+
+                    </ul>
+                </div>
+            </li>
+        @endcan
 
         <li class="side-nav-item">
             <a data-bs-toggle="collapse" href="#affaires" aria-expanded="" aria-controls="affaires"

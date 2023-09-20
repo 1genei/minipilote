@@ -136,7 +136,7 @@ Route::controller(RoleController::class)->group(function () {
 // Permissions
 Route::controller(PermissionController::class)->group(function () {
     Route::get('/permissions', 'index')->name('permission.index')->middleware(['auth']);
-    Route::get('/permissions/ajouter/', 'store')->name('permission.store')->middleware(['auth']);
+    Route::post('/permissions/ajouter/', 'store')->name('permission.store')->middleware(['auth']);
     Route::get('/permissions/ajouter-auto/{groupeid}/{groupName}', 'storeAuto')->name('permission.store_auto')->middleware(['auth']);
     Route::post('/permissions/desarchiver/{roleId}', 'unarchive')->name('permission.unarchive')->middleware(['auth']);
     Route::post('/permissions/modifier/{permission_id}', 'update')->name('permission.update')->middleware(['auth']);
