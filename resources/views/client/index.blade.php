@@ -15,7 +15,7 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{route('client.index')}}">Clients</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('client.index') }}">Clients</a></li>
                         </ol>
                     </div>
                     <h4 class="page-title">Clients</h4>
@@ -65,16 +65,20 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                    <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between">
                             <div class="d-flex justify-content-start">
-                                <a href="{{ route('client.create') }}" class="btn btn-primary mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Nouveau client
-                                </a>
+                                @can('permission', 'ajouter-client')
+                                    <a href="{{ route('client.create') }}" class="btn btn-primary mb-2">
+                                        <i class="mdi mdi-plus-circle me-2"></i> Ajouter client
+                                    </a>
+                                @endcan
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('client.archives') }}" class="btn btn-warning mb-2">
-                                    <i class="mdi mdi-archive me-2"></i> Clients archivés
-                                </a>
+                                @can('permission', 'archiver-client')
+                                    <a href="{{ route('client.archives') }}" class="btn btn-warning mb-2">
+                                        <i class="mdi mdi-archive me-2"></i> Clients archivés
+                                    </a>
+                                @endcan
                             </div>
                         </div>
                         <div class="row">

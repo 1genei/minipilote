@@ -12,6 +12,7 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
+use Illuminate\Support\Facades\Gate;
 
 final class IndividuTable extends PowerGridComponent
 {
@@ -219,13 +220,19 @@ final class IndividuTable extends PowerGridComponent
             Button::add('Afficher')
                 ->bladeComponent('button-show', function(Individu $individu) {
                     return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),
-                    'tooltip' => "Afficher"];
+                    'tooltip' => "Afficher",
+                    'permission' => Gate::allows('permission', 'afficher-prospect'),
+                    
+                    ];
                 }),
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(Individu $individu) {
                 return ['route' => route('prospect.edit', Crypt::encrypt($individu->contact_id)),
-                'tooltip' => "Modifier"];
+                'tooltip' => "Modifier",
+                'permission' => Gate::allows('permission', 'modifier-prospect'),
+                
+                ];
             }),
             
             Button::add('Archiver')
@@ -233,6 +240,8 @@ final class IndividuTable extends PowerGridComponent
                 return ['route' => route('contact.archive', Crypt::encrypt($individu->contact_id)),
                 'tooltip' => "Archiver",
                 'classarchive' => "archive_contact",
+                'permission' => Gate::allows('permission', 'archiver-prospect'),
+                
                 ];
             }),
         ];

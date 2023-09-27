@@ -63,16 +63,20 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div class="d-flex justify-content-start">
-                                <a href="#" class="btn btn-primary mb-2" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#standard-modal">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Ajouter une caractéristique
-                                </a>
+                                @can('permission', 'ajouter-caracteristique-produit')
+                                    <a href="#" class="btn btn-primary mb-2" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#standard-modal">
+                                        <i class="mdi mdi-plus-circle me-2"></i> Ajouter caractéristique
+                                    </a>
+                                @endcan
 
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('caracteristique.archives') }}" class="btn btn-warning mb-2">
-                                    <i class="mdi mdi-archive me-2"></i> Caractéristiques archivées
-                                </a>
+                                @can('permission', 'archiver-caracteristique-produit')
+                                    <a href="{{ route('caracteristique.archives') }}" class="btn btn-warning mb-2">
+                                        <i class="mdi mdi-archive me-2"></i> Caractéristiques archivées
+                                    </a>
+                                @endcan
                             </div>
                         </div>
                         <div class="row">
@@ -131,25 +135,31 @@
                                             </td>
 
                                             <td>
-                                                <a href="{{ route('caracteristique.show', Crypt::encrypt($caracteristique->id)) }}"
-                                                    class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                                <a data-href="{{ route('caracteristique.update', Crypt::encrypt($caracteristique->id)) }}"
-                                                    data-nom="{{ $caracteristique->nom }}" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-caracteristique"
-                                                    class="action-icon edit-caracteristique text-success">
-                                                    <i class="mdi mdi-square-edit-outline"></i>
-                                                </a>
-                                                @if ($caracteristique->archive == false)
-                                                    <a data-href="{{ route('caracteristique.archive', Crypt::encrypt($caracteristique->id)) }}"
-                                                        style="cursor: pointer;"
-                                                        class="action-icon archive-caracteristique text-warning"> <i
-                                                            class="mdi mdi-archive-arrow-down"></i></a>
-                                                @else
-                                                    <a data-href="{{ route('caracteristique.unarchive', Crypt::encrypt($caracteristique->id)) }}"
-                                                        style="cursor: pointer;"
-                                                        class="action-icon unarchive-caracteristique text-success"> <i
-                                                            class="mdi mdi-archive-arrow-up"></i></a>
-                                                @endif
+                                                @can('permission', 'afficher-caracteristique-produit')
+                                                    <a href="{{ route('caracteristique.show', Crypt::encrypt($caracteristique->id)) }}"
+                                                        class="action-icon"> <i class="mdi mdi-eye"></i></a>
+                                                @endcan
+                                                @can('permission', 'modifier-caracteristique-produit')
+                                                    <a data-href="{{ route('caracteristique.update', Crypt::encrypt($caracteristique->id)) }}"
+                                                        data-nom="{{ $caracteristique->nom }}" data-bs-toggle="modal"
+                                                        data-bs-target="#edit-caracteristique"
+                                                        class="action-icon edit-caracteristique text-success">
+                                                        <i class="mdi mdi-square-edit-outline"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('permission', 'archiver-caracteristique-produit')
+                                                    @if ($caracteristique->archive == false)
+                                                        <a data-href="{{ route('caracteristique.archive', Crypt::encrypt($caracteristique->id)) }}"
+                                                            style="cursor: pointer;"
+                                                            class="action-icon archive-caracteristique text-warning"> <i
+                                                                class="mdi mdi-archive-arrow-down"></i></a>
+                                                    @else
+                                                        <a data-href="{{ route('caracteristique.unarchive', Crypt::encrypt($caracteristique->id)) }}"
+                                                            style="cursor: pointer;"
+                                                            class="action-icon unarchive-caracteristique text-success"> <i
+                                                                class="mdi mdi-archive-arrow-up"></i></a>
+                                                    @endif
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach

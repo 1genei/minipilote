@@ -14,6 +14,7 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
+use Illuminate\Support\Facades\Gate;
 
 final class indexTable extends PowerGridComponent
 {
@@ -266,20 +267,26 @@ final class indexTable extends PowerGridComponent
             Button::add('Afficher')
                 ->bladeComponent('button-show', function(Produit $produit) {
                     return ['route' => route('produit.show', Crypt::encrypt($produit->id)),
-                    'tooltip' => "Afficher"];
+                    'tooltip' => "Afficher",
+                    'permission' => Gate::allows('permission', 'afficher-produit'),                    
+                    ];
                 }),
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(Produit $produit) {
                 return ['route' => route('produit.edit', Crypt::encrypt($produit->id)),
-                'tooltip' => "Modifier"];
+                'tooltip' => "Modifier",
+                'permission' => Gate::allows('permission', 'modifier-produit'),                
+                ];
             }),
             
             Button::add('Archiver')
             ->bladeComponent('button-archive', function(Produit $produit) {
                 return ['route' => route('produit.archive', Crypt::encrypt($produit->id)),
                 'tooltip' => "Archiver",
-                'classarchive' => "archive_contact",
+                'classarchive' => "archive_produit",
+                'permission' => Gate::allows('permission', 'archiver-produit'),
+                
                 ];
             }),
         ];

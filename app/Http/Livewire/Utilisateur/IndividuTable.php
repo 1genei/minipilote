@@ -14,6 +14,7 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
+use Illuminate\Support\Facades\Gate;
 
 final class IndividuTable extends PowerGridComponent
 {
@@ -173,29 +174,37 @@ final class IndividuTable extends PowerGridComponent
         //             return $model->id;
         //        }),
 
-            /*
+       
                
             Button::add('Afficher')
                 ->bladeComponent('button-show', function(User $user) {
                     return ['route' => route('contact.show', Crypt::encrypt($user->contact_id)),
-                    'tooltip' => "Afficher"];
+                    'tooltip' => "Afficher",
+                    'permission' => Gate::allows('permission', 'afficher-utilisateur'),                    
+                    ];
                 }),
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(User $user) {
                 return ['route' => route('contact.edit', Crypt::encrypt($user->contact_id)),
-                'tooltip' => "Modifier"];
+                'tooltip' => "Modifier",
+                'permission' => Gate::allows('permission', 'modifier-utilisateur'),
+                
+                ];
             }),
 
-            */
+       
             
             Button::add('Archiver')
             ->bladeComponent('button-archive', function(User $user) {
-                //dd($individu);
+               
                 return ['route' => route('utilisateur.archive', Crypt::encrypt($user->id)),
-                'tooltip' => "Archiver",
-                'classarchive' => "archive_user",
-                ];
+                    'tooltip' => "Archiver",
+                    'classarchive' => "archive_user",
+                    'permission' => Gate::allows('permission', 'archiver-utilisateur'),
+                    ];
+                
+              
             }),
         ];
     }

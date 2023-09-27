@@ -20,6 +20,7 @@ use App\Http\Controllers\CategorieproduitController;
 use App\Http\Controllers\SocieteController;
 use App\Http\Controllers\MarqueController;
 use App\Http\Controllers\CaracteristiqueController;
+use App\Http\Controllers\ContratController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -262,13 +263,25 @@ Route::controller(ProduitController::class)->group(function () {
     Route::get('/produits/images-get/{imageId}', 'getPhoto')->name('produit.getPhoto')->middleware(['auth']);
     Route::get('/produits/fiche-technique-get/{nom_fichier}', 'getFicheTechnique')->name('produit.getFicheTechnique')->middleware(['auth']);
     
-// Déclinaisons du produit
-
-Route::post('/produit-declinaison/ajouter', 'store_declinaison')->name('produit_declinaison.store')->middleware(['auth']);
-Route::post('/produit-declinaison/modifier/{produitId}', 'update_declinaison')->name('produit_declinaison.update')->middleware(['auth']);
-Route::post('/produit-declinaison/archiver/{produitId}', 'archive_declinaison')->name('produit_declinaison.archive')->middleware(['auth']);
-Route::post('/produit-declinaison/desarchiver/{produitId}', 'unarchive_declinaison')->name('produit_declinaison.unarchive')->middleware(['auth']);
+    // Déclinaisons du produit
+    Route::post('/produit-declinaison/ajouter', 'store_declinaison')->name('produit_declinaison.store')->middleware(['auth']);
+    Route::post('/produit-declinaison/modifier/{produitId}', 'update_declinaison')->name('produit_declinaison.update')->middleware(['auth']);
+    Route::post('/produit-declinaison/archiver/{produitId}', 'archive_declinaison')->name('produit_declinaison.archive')->middleware(['auth']);
+    Route::post('/produit-declinaison/desarchiver/{produitId}', 'unarchive_declinaison')->name('produit_declinaison.unarchive')->middleware(['auth']);
     
+});
+
+
+// Contrats
+Route::controller(ContratController::class)->group(function () {
+    Route::get('/contrats', 'index')->name('contrat.index')->middleware(['auth']);
+    Route::get('/contrats/archives', 'archives')->name('contrat.archives')->middleware(['auth']);
+    Route::post('/contrats/ajouter', 'store')->name('contrat.store')->middleware(['auth']);
+    Route::get('/contrats/ajouter', 'create')->name('contrat.create')->middleware(['auth']);
+    Route::get('/contrats/modifier/{contratId}', 'edit')->name('contrat.edit')->middleware(['auth']);
+    Route::post('/contrats/modifier/{contratId}', 'update')->name('contrat.update')->middleware(['auth']);
+    Route::put('/contrats/archiver/{contratId}', 'archive')->name('contrat.archive')->middleware(['auth']);
+    Route::post('/contrats/desarchiver/{contratId}', 'unarchive')->name('contrat.unarchive')->middleware(['auth']);
 });
 
 

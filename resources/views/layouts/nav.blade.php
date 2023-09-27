@@ -229,7 +229,7 @@
                     <ul class="side-nav-second-level">
 
                         <li class="{{ $li_contrat }}">
-                            <a href="#">Gestion</a>
+                            <a href="{{ route('contrat.index') }}">Gestion</a>
                         </li>
                         <li class="{{ $li_contrat_parrainage }}">
                             <a href="#">Parrainages</a>
@@ -243,7 +243,7 @@
 
 
 
-        @can('permission', 'afficher-catalogue')
+        @can('permission', 'afficher-produit')
             <li
                 class="side-nav-item{{ $li_catalogue_produit }} {{ $li_catalogue_stock }} {{ $li_catalogue_categorie }} {{ $li_catalogue_caracteristique }}">
                 <a data-bs-toggle="collapse" href="#catalogue" aria-expanded="" aria-controls="catalogue"
@@ -273,53 +273,61 @@
             </li>
         @endcan
 
-        <li class="side-nav-item">
-            <a data-bs-toggle="collapse" href="#affaires" aria-expanded="" aria-controls="affaires"
-                class="side-nav-link">
-                <i class="mdi mdi-book-edit-outline"></i>
-                <span>Affaires</span>
-                <span class="menu-arrow"></span>
-            </a>
-            <div class="collapse " id="affaires">
-                <ul class="side-nav-second-level">
-                    <li class=""><a href="#">Gestion</a> </li>
-                    <li> <a href="#"> Propositions commerciales </a></li>
-                    <li> <a href="#"> Devis </a></li>
-                </ul>
-            </div>
-        </li>
+        @can('permission', 'afficher-affaire')
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#affaires" aria-expanded="" aria-controls="affaires"
+                    class="side-nav-link">
+                    <i class="mdi mdi-book-edit-outline"></i>
+                    <span>Affaires</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse " id="affaires">
+                    <ul class="side-nav-second-level">
+                        <li class=""><a href="#">Gestion</a> </li>
+                        @can('permission', 'afficher-proposition-commerciale')
+                            <li> <a href="#"> Propositions commerciales </a></li>
+                        @endcan
+                        @can('permission', 'afficher-devis')
+                            <li> <a href="#"> Devis </a></li>
+                        @endcan
+                    </ul>
+                </div>
+            </li>
+        @endcan
 
+        @can('permission', 'afficher-agenda')
+            <li class="side-nav-item">
+                <a href="{{ route('agenda.listing') }}" aria-expanded="false" aria-controls="sidebarDashboards"
+                    class="side-nav-link">
+                    <i class="uil-calendar-alt"></i>
+                    <span> Agenda </span>
+                </a>
+            </li>
+        @endcan
 
-        <li class="side-nav-item">
-            <a href="{{ route('agenda.listing') }}" aria-expanded="false" aria-controls="sidebarDashboards"
-                class="side-nav-link">
-                <i class="uil-calendar-alt"></i>
-                <span> Agenda </span>
-            </a>
-        </li>
-
-        <li
-            class="side-nav-item {{ $li_parametre_contact }} {{ $li_parametre_generaux }} {{ $li_parametre_produit }} ">
-            <a data-bs-toggle="collapse" href="#parametres" aria-expanded="" aria-controls="parametres"
-                class="side-nav-link">
-                <i class="uil uil-bright"></i>
-                <span>Paramètres</span>
-                <span class="menu-arrow"></span>
-            </a>
-            <div class="collapse @if ($li_parametre_show) show @endif" id="parametres">
-                <ul class="side-nav-second-level">
-                    <li class="{{ $li_parametre_generaux }}"><a href="{{ route('parametre.index') }}">Généraux</a>
-                    </li>
-                    <li class="{{ $li_parametre_contact }}"> <a href="{{ route('parametre.contact') }}"> Contacts
-                        </a>
-                    </li>
-                    <li class="{{ $li_parametre_produit }}"> <a href="{{ route('parametre.produit') }}"> Catalogue
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-
+        @can('permission', 'afficher-parametre')
+            <li
+                class="side-nav-item {{ $li_parametre_contact }} {{ $li_parametre_generaux }} {{ $li_parametre_produit }} ">
+                <a data-bs-toggle="collapse" href="#parametres" aria-expanded="" aria-controls="parametres"
+                    class="side-nav-link">
+                    <i class="uil uil-bright"></i>
+                    <span>Paramètres</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse @if ($li_parametre_show) show @endif" id="parametres">
+                    <ul class="side-nav-second-level">
+                        <li class="{{ $li_parametre_generaux }}"><a href="{{ route('parametre.index') }}">Généraux</a>
+                        </li>
+                        <li class="{{ $li_parametre_contact }}"> <a href="{{ route('parametre.contact') }}"> Contacts
+                            </a>
+                        </li>
+                        <li class="{{ $li_parametre_produit }}"> <a href="{{ route('parametre.produit') }}"> Catalogue
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        @endcan
 
     </ul>
 

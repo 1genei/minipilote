@@ -535,4 +535,50 @@ class ProduitController extends Controller
    
         return redirect()->back()->with('ok', 'Déclinaison modifiée');
     }
+    
+    
+    /**
+     * Listes des produits archivés
+    */
+    public function archives()
+    {
+       
+        $categories = Categorieproduit::where([['parent_id', null], ['archive',false]])->get();
+        return view('produit.archive',compact('categories'));
+      
+    }
+    
+    /**
+     * Archiver un produit
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function archive($produit_id)
+    {
+        $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
+        
+        
+        $produit->archive = true;
+        $produit->update();
+        
+        return "200";
+    }
+    
+    /**
+     * Désarchiver un produit
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function unarchive($produit_id)
+    {
+        $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
+        
+        
+        $produit->archive = false;
+        $produit->update();
+        
+        return "200";
+    }
 }

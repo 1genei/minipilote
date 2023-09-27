@@ -66,9 +66,12 @@
                     <div class="card-body">
                         <div class="row mb-2">
                             <div class="col-sm-5">
-                                <a href="javascript:void(0);" class="btn btn-primary mb-2" data-bs-toggle="modal"
-                                    data-bs-target="#standard-modal"><i class="mdi mdi-plus-circle me-2"></i> Ajouter
-                                    permission</a>
+                                @can('permission', 'ajouter-permission')
+                                    <a href="javascript:void(0);" class="btn btn-primary mb-2" data-bs-toggle="modal"
+                                        data-bs-target="#standard-modal"><i class="mdi mdi-plus-circle me-2"></i>
+                                        Ajouter permission
+                                    </a>
+                                @endcan
                             </div>
 
                         </div>
@@ -123,7 +126,8 @@
                                             <tr>
 
                                                 <td><span class="fw-bold" style="font-size: 20px">{{ $group->nom }}
-                                                    </span></td>
+                                                    </span>
+                                                </td>
                                             </tr>
                                             @foreach ($group->permissions as $permission)
                                                 <tr>
@@ -142,15 +146,17 @@
                                                     @endforeach
 
                                                     <td>
-                                                        <a data-href="{{ route('permission.update', $permission->id) }}"
-                                                            data-nom="{{ $permission->nom }}"
-                                                            data-description="{{ $permission->description }}"
-                                                            data-permissiongroup="{{ $permission->permissiongroup->nom }}"
-                                                            data-permissiongroup_id="{{ $permission->permissiongroup_id }}"
-                                                            data-bs-toggle="modal" data-bs-target="#edit-modal"
-                                                            class="action-icon edit-role text-success"> <i
-                                                                class="mdi mdi-square-edit-outline"></i></a>
 
+                                                        @can('permission', 'modifier-permission')
+                                                            <a data-href="{{ route('permission.update', $permission->id) }}"
+                                                                data-nom="{{ $permission->nom }}"
+                                                                data-description="{{ $permission->description }}"
+                                                                data-permissiongroup="{{ $permission->permissiongroup->nom }}"
+                                                                data-permissiongroup_id="{{ $permission->permissiongroup_id }}"
+                                                                data-bs-toggle="modal" data-bs-target="#edit-modal"
+                                                                class="action-icon edit-role text-success"> <i
+                                                                    class="mdi mdi-square-edit-outline"></i></a>
+                                                        @endcan
                                                     </td>
 
                                                 </tr>
@@ -159,9 +165,12 @@
 
                                     </tbody>
                                 </table>
-                                <button type="submit"
-                                    style="position: fixed;bottom: 10px; margin: 0;  left: 50%; z-index:1 ; width:200px; height:50px;"
-                                    class="btn btn-dark btn-flat btn-addon btn-lg">Enregistrer</button>
+                                @can('permission', 'modifier-droit')
+                                    <button type="submit"
+                                        style="position: fixed;bottom: 10px; margin: 0;  left: 50%; z-index:1 ; width:200px; height:50px;"
+                                        class="btn btn-dark btn-flat btn-addon btn-lg">Enregistrer
+                                    </button>
+                                @endcan
 
                             </form>
                         </div>
@@ -351,9 +360,6 @@
         })
     </script>
 
-
-
-
     <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/dataTables.responsive.min.js') }}"></script>
@@ -368,7 +374,7 @@
                         previous: "<i class='mdi mdi-chevron-left'>",
                         next: "<i class='mdi mdi-chevron-right'>"
                     },
-                    info: "Showing actions _START_ to _END_ of _TOTAL_",
+                    info: "Affichage de  _START_ à _END_ sur _TOTAL_",
                     lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
                 },
                 pageLength: 100,

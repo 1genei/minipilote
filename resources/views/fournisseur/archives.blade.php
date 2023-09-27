@@ -15,8 +15,8 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{route('fournisseur.index')}}">Fournisseurs</a></li>
-                            <li class="breadcrumb-item"><a href="{{route('fournisseur.archives')}}">Archives</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('fournisseur.index') }}">Fournisseurs</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('fournisseur.archives') }}">Archives</a></li>
                         </ol>
                     </div>
                     <h4 class="page-title">Fournisseurs</h4>
@@ -68,9 +68,9 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div class="d-flex justify-content-start">
-                                <a href="{{ route('fournisseur.create') }}" class="btn btn-primary mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Nouveau fournisseur
-                                </a>
+                                {{-- <a href="{{ route('fournisseur.create') }}" class="btn btn-primary mb-2">
+                                    <i class="mdi mdi-plus-circle me-2"></i> Ajouter fournisseur
+                                </a> --}}
                             </div>
                             <div class="d-flex justify-content-end">
                                 <a href="{{ route('fournisseur.index') }}" class="btn btn-success mb-2">
@@ -144,7 +144,7 @@
 @endsection
 
 @section('script')
-<script>
+    <script>
         $(function() {
             $.ajaxSetup({
                 headers: {

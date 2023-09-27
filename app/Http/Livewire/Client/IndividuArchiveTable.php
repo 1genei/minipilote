@@ -13,6 +13,7 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
+use Illuminate\Support\Facades\Gate;
 
 final class IndividuArchiveTable extends PowerGridComponent
 {
@@ -220,7 +221,9 @@ final class IndividuArchiveTable extends PowerGridComponent
              Button::add('Afficher')
                  ->bladeComponent('button-show', function(Individu $individu) {
                      return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),
-                     'tooltip' => "Afficher"];
+                     'tooltip' => "Afficher",
+                    'permission' => Gate::allows('permission', 'afficher-client'),
+                ];
                  }),
              
              Button::add('Restaurer')
@@ -228,6 +231,8 @@ final class IndividuArchiveTable extends PowerGridComponent
                  return ['route' => route('contact.unarchive', Crypt::encrypt($individu->contact_id)),
                  'tooltip' => "Restaurer",
                  'classunarchive' => "unarchive_contact",
+                 'permission' => Gate::allows('permission', 'archiver-client'),
+                 
                  ];
              }),
          ];

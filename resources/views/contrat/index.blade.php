@@ -4,7 +4,7 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
-@section('title', 'Fournisseurs')
+@section('title', 'contrats')
 
 @section('content')
     <div class="content">
@@ -15,10 +15,10 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{ route('fournisseur.index') }}">Fournisseurs</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('contrat.index') }}">contrats</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Fournisseurs</h4>
+                    <h4 class="page-title">contrats</h4>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
         <style>
             body {
 
-                font-size: 14px;
+                font-size: 13px;
             }
         </style>
 
@@ -66,17 +66,17 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <div class="d-flex justify-content-start">
-                                @can('permission', 'ajouter-fournisseur')
-                                    <a href="{{ route('fournisseur.create') }}" class="btn btn-primary mb-2">
-                                        <i class="mdi mdi-plus-circle me-2"></i> Ajouter fournisseur
+                            @can('permission', 'ajouter-contrat')
+                                <div class="d-flex justify-content-start">
+                                    <a href="{{ route('contrat.create') }}" class="btn btn-primary mb-2">
+                                        <i class="mdi mdi-plus-circle me-2"></i> Ajouter contrat
                                     </a>
                                 @endcan
                             </div>
                             <div class="d-flex justify-content-end">
-                                @can('permission', 'ajouter-fournisseur')
-                                    <a href="{{ route('fournisseur.archives') }}" class="btn btn-warning mb-2">
-                                        <i class="mdi mdi-archive me-2"></i> Fournisseurs archivés
+                                @can('permission', 'archiver-contrat')
+                                    <a href="{{ route('contrat.archives') }}" class="btn btn-warning mb-2">
+                                        <i class="mdi mdi-archive me-2"></i> contrats archivés
                                     </a>
                                 @endcan
                             </div>
@@ -103,40 +103,114 @@
                             </div>
                         </div>
 
-                        <ul class="nav nav-tabs nav-bordered mb-3">
 
-                            <li class="nav-item">
-                                <a href="#entite" data-bs-toggle="tab" aria-expanded="true" class="nav-link active ">
-                                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Personnes morales</span>
-                                </a>
-                            </li>
+                        <div class="row">
+                            {{-- <div class="col-xxl-2 col-lg-2">
+                                <div class="pe-xl-3">
+                                    <h5 class="mt-0 mb-3">Trier par:</h5>
 
-                            <li class="nav-item">
-                                <a href="#individu" data-bs-toggle="tab" aria-expanded="false" class="nav-link ">
-                                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Individus</span>
-                                </a>
-                            </li>
-
-                        </ul>
-
-                        <div class="tab-content">
-                            <div class="tab-pane show active" id="entite">
-                                <div class="table-responsive">
-                                    <livewire:fournisseur.entite-table />
                                 </div>
 
-                            </div>
-                            <div class="tab-pane " id="individu">
-                                <div class="table-responsive">
-                                    <livewire:fournisseur.individu-table />
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="pe-xl-3" data-simplebar style="max-height: 635px;">
+
+
+
+                                            <div class="mt-2">
+                                                <h5 class="m-0 pb-2">
+                                                    <a class="text-dark" data-bs-toggle="collapse" href="#todayTasks"
+                                                        role="button" aria-expanded="false" aria-controls="todayTasks">
+                                                        <i class='uil uil-angle-down font-18'></i>Catégories
+                                                        <span class="text-muted">(5)</span>
+                                                    </a>
+                                                </h5>
+
+                                                <div class="collapse show" id="todayTasks">
+                                                    <div class="card mb-0">
+                                                        <div class="card-body">
+                                                            <!-- task -->
+                                                            <div class="row justify-content-sm-between mt-2">
+                                                                <div class=" mb-2 mb-sm-0">
+                                                                    <form action="" method="post">
+
+
+                                                                        <ul>
+                                                                            @if (isset($contrat))
+                                                                                @foreach ($categories as $categorie)
+                                                                                    <li>
+                                                                                        <label>
+                                                                                            <input type="checkbox"
+                                                                                                @if (in_array($categorie->id, $contrat->categoriecontratsId())) checked @endif
+                                                                                                name="categories_id[]"
+                                                                                                wire:model="categories_id"
+                                                                                                value="{{ $categorie->id }}">
+                                                                                            {{ $categorie->nom }}
+                                                                                        </label>
+                                                                                        @if ($categorie->sscategories->count() > 0)
+                                                                                            @include(
+                                                                                                'contrat.components.input-checkbox',
+                                                                                                [
+                                                                                                    'categories' =>
+                                                                                                        $categorie->sscategories,
+                                                                                                ]
+                                                                                            )
+                                                                                        @endif
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            @else
+                                                                                @foreach ($categories as $categorie)
+                                                                                    <li>
+                                                                                        <label>
+                                                                                            <input type="checkbox"
+                                                                                                name="categories_id[]"
+                                                                                                wire:model="categories_id"
+                                                                                                value="{{ $categorie->id }}">
+                                                                                            {{ $categorie->nom }}
+                                                                                        </label>
+                                                                                        @if ($categorie->sscategories->count() > 0)
+                                                                                            @include(
+                                                                                                'contrat.components.input-checkbox',
+                                                                                                [
+                                                                                                    'categories' =>
+                                                                                                        $categorie->sscategories,
+                                                                                                ]
+                                                                                            )
+                                                                                        @endif
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </ul>
+
+                                                                    </form>
+
+
+                                                                </div> <!-- end col -->
+
+                                                            </div>
+                                                            <!-- end task -->
+
+
+                                                        </div> <!-- end card-body-->
+                                                    </div> <!-- end card -->
+                                                </div> <!-- end .collapse-->
+                                            </div> <!-- end .mt-2-->
+                                        </div>
+                                    </div>
                                 </div>
+                            </div> --}}
 
 
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <livewire:contrat.contrat-table />
+                                </div>
                             </div>
-
                         </div>
+
+
+
+
 
 
                     </div> <!-- end card-body-->
@@ -147,21 +221,24 @@
 
 
 
+
     </div> <!-- End Content -->
 @endsection
 
 @section('script')
-    {{-- selection des statuts du fournisseur --}}
+    <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
+
+    {{-- selection des statuts du contrat --}}
 
     <script>
         $('#client').click(function(e) {
             if (e.currentTarget.checked == true) {
-                $('#fournisseur').prop('checked', false);
+                $('#prospect').prop('checked', false);
             }
 
         });
 
-        $('#fournisseur').click(function(e) {
+        $('#prospect').click(function(e) {
             if (e.currentTarget.checked == true) {
                 $('#client').prop('checked', false);
             }
@@ -169,7 +246,7 @@
         });
     </script>
 
-    {{-- selection du type de fournisseur --}}
+    {{-- selection du type de contrat --}}
 
     <script>
         $('.div-entite').hide();
@@ -189,19 +266,22 @@
     </script>
 
 
-    {{-- Modification d'un fournisseur --}}
+    {{-- Modification d'un contrat --}}
     <script>
-        $('.edit-contact').click(function(e) {
+        $('.edit-contrat').click(function(e) {
 
             let that = $(this);
 
             $('#edit-nom').val(that.data('nom'));
             $('#edit-prenom').val(that.data('prenom'));
 
+            $('#edit-prospect').prop('checked', that.data('est-prospect'));
+            $('#edit-client').prop('checked', that.data('est-client'));
+            $('#edit-fournisseur').prop('checked', that.data('est-fournisseur'));
 
             $('#edit-email').val(that.data('email'));
-            $('#edit-contact1').val(that.data('contact1'));
-            $('#edit-contact2').val(that.data('contact2'));
+            $('#edit-contrat1').val(that.data('contrat1'));
+            $('#edit-contrat2').val(that.data('contrat2'));
             $('#edit-adresse').val(that.data('adresse'));
             $('#edit-code_postal').val(that.data('code-postal'));
             $('#edit-ville').val(that.data('ville'));
@@ -213,22 +293,20 @@
 
 
 
-            //    selection du type de fournisseur
+            //    selection du type de contrat
 
 
-            let currentType = that.data('type-contact');
+            let currentType = that.data('type-contrat');
             let currentTypeentite = that.data('typeentite');
-
             $('#edit-type option[value=' + currentType + ']').attr('selected', 'selected');
 
 
             if (currentType == "entité") {
-                $('.div-edit-entite').show();
                 $('.div-edit-individu').hide();
 
             } else {
                 $('.div-edit-entite').hide();
-                $('.div-edit-individu').show();
+
             }
 
             $('#edit-type').change(function(e) {
@@ -244,8 +322,8 @@
 
             });
 
-
             $('#edit-type_entite option[value=' + currentTypeentite + ']').attr('selected', 'selected');
+
 
 
 
@@ -253,22 +331,21 @@
 
 
 
-        // selection des statuts du fournisseur  Modal modifier
+        // selection des statuts du contrat  Modal modifier
         $('#edit-client').click(function(e) {
             if (e.currentTarget.checked == true) {
-                $('#edit-fournisseur').prop('checked', false);
+                $('#edit-prospect').prop('checked', false);
             }
 
         });
 
-        $('#edit-fournisseur').click(function(e) {
+        $('#edit-prospect').click(function(e) {
             if (e.currentTarget.checked == true) {
                 $('#edit-client').prop('checked', false);
             }
 
         });
     </script>
-
 
     <script>
         // Archiver
@@ -279,7 +356,7 @@
                 }
             })
             $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.archive_contact', function(event) {
+            $('body').on('click', 'a.archive_contrat', function(event) {
                 let that = $(this)
                 event.preventDefault();
 
@@ -290,7 +367,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver le fournisseur',
+                    title: 'Archiver le contrat',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
@@ -315,7 +392,7 @@
 
                                 swalWithBootstrapButtons.fire(
                                     'Confirmation',
-                                    'Fournisseur archivé avec succès',
+                                    'contrat archivé avec succès',
                                     'success'
                                 )
                                 // document.location.reload();
@@ -330,7 +407,7 @@
                     ) {
                         swalWithBootstrapButtons.fire(
                             'Annulation',
-                            'Fournisseur non archivé',
+                            'contrat non archivé',
                             'error'
                         )
                     }

@@ -66,15 +66,19 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <div class="d-flex justify-content-start">
-                                <a href="{{ route('produit.create') }}" class="btn btn-primary mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Nouveau produit
-                                </a>
+                            @can('permission', 'ajouter-produit')
+                                <div class="d-flex justify-content-start">
+                                    <a href="{{ route('produit.create') }}" class="btn btn-primary mb-2">
+                                        <i class="mdi mdi-plus-circle me-2"></i> Ajouter produit
+                                    </a>
+                                @endcan
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('produit.archives') }}" class="btn btn-warning mb-2">
-                                    <i class="mdi mdi-archive me-2"></i> Produit archivés
-                                </a>
+                                @can('permission', 'archiver-produit')
+                                    <a href="{{ route('produit.archives') }}" class="btn btn-warning mb-2">
+                                        <i class="mdi mdi-archive me-2"></i> Produits archivés
+                                    </a>
+                                @endcan
                             </div>
                         </div>
                         <div class="row">
@@ -101,102 +105,6 @@
 
 
                         <div class="row">
-                            {{-- <div class="col-xxl-2 col-lg-2">
-                                <div class="pe-xl-3">
-                                    <h5 class="mt-0 mb-3">Trier par:</h5>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="pe-xl-3" data-simplebar style="max-height: 635px;">
-
-
-
-                                            <div class="mt-2">
-                                                <h5 class="m-0 pb-2">
-                                                    <a class="text-dark" data-bs-toggle="collapse" href="#todayTasks"
-                                                        role="button" aria-expanded="false" aria-controls="todayTasks">
-                                                        <i class='uil uil-angle-down font-18'></i>Catégories
-                                                        <span class="text-muted">(5)</span>
-                                                    </a>
-                                                </h5>
-
-                                                <div class="collapse show" id="todayTasks">
-                                                    <div class="card mb-0">
-                                                        <div class="card-body">
-                                                            <!-- task -->
-                                                            <div class="row justify-content-sm-between mt-2">
-                                                                <div class=" mb-2 mb-sm-0">
-                                                                    <form action="" method="post">
-
-
-                                                                        <ul>
-                                                                            @if (isset($produit))
-                                                                                @foreach ($categories as $categorie)
-                                                                                    <li>
-                                                                                        <label>
-                                                                                            <input type="checkbox"
-                                                                                                @if (in_array($categorie->id, $produit->categorieproduitsId())) checked @endif
-                                                                                                name="categories_id[]"
-                                                                                                wire:model="categories_id"
-                                                                                                value="{{ $categorie->id }}">
-                                                                                            {{ $categorie->nom }}
-                                                                                        </label>
-                                                                                        @if ($categorie->sscategories->count() > 0)
-                                                                                            @include(
-                                                                                                'produit.components.input-checkbox',
-                                                                                                [
-                                                                                                    'categories' =>
-                                                                                                        $categorie->sscategories,
-                                                                                                ]
-                                                                                            )
-                                                                                        @endif
-                                                                                    </li>
-                                                                                @endforeach
-                                                                            @else
-                                                                                @foreach ($categories as $categorie)
-                                                                                    <li>
-                                                                                        <label>
-                                                                                            <input type="checkbox"
-                                                                                                name="categories_id[]"
-                                                                                                wire:model="categories_id"
-                                                                                                value="{{ $categorie->id }}">
-                                                                                            {{ $categorie->nom }}
-                                                                                        </label>
-                                                                                        @if ($categorie->sscategories->count() > 0)
-                                                                                            @include(
-                                                                                                'produit.components.input-checkbox',
-                                                                                                [
-                                                                                                    'categories' =>
-                                                                                                        $categorie->sscategories,
-                                                                                                ]
-                                                                                            )
-                                                                                        @endif
-                                                                                    </li>
-                                                                                @endforeach
-                                                                            @endif
-                                                                        </ul>
-
-                                                                    </form>
-
-
-                                                                </div> <!-- end col -->
-
-                                                            </div>
-                                                            <!-- end task -->
-
-
-                                                        </div> <!-- end card-body-->
-                                                    </div> <!-- end card -->
-                                                </div> <!-- end .collapse-->
-                                            </div> <!-- end .mt-2-->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
-
-
                             <div class="col-12">
                                 <div class="table-responsive">
                                     <livewire:produit.index-table />

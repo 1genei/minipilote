@@ -68,9 +68,12 @@
                     <div class="card-body">
                         <div class="row mb-2">
                             <div class="col-sm-5">
-                                <a href="javascript:void(0);" class="btn btn-primary mb-2" data-bs-toggle="modal"
-                                    data-bs-target="#standard-modal"><i class="mdi mdi-plus-circle me-2"></i> Nouvelle
-                                    tâche</a>
+                                @can('permission', 'ajouter-agenda')
+                                    <a href="javascript:void(0);" class="btn btn-primary mb-2" data-bs-toggle="modal"
+                                        data-bs-target="#standard-modal"><i class="mdi mdi-plus-circle me-2"></i> Ajouter
+                                        tâche
+                                    </a>
+                                @endcan
                             </div>
                             <div class="col-sm-7">
 
@@ -233,30 +236,34 @@
                                                                         </td>
 
                                                                         <td>
-                                                                            <a data-href="{{ route('agenda.update', $agenda->id) }}"
-                                                                                href="javascript:void(0);"
-                                                                                data-titre="{{ $agenda->titre }}"
-                                                                                data-description="{{ $agenda->description }}"
-                                                                                data-date_deb="{{ $agenda->date_deb }}"
-                                                                                data-date_fin="{{ $agenda->date_fin }}"
-                                                                                data-heure_deb="{{ $agenda->heure_deb }}"
-                                                                                data-type="{{ $agenda->type_rappel }}"
-                                                                                data-est_lie="{{ $agenda->est_lie }} "
-                                                                                data-contact_id="{{ $agenda->contact_id }}"
-                                                                                title="@lang('Modifier ')"
-                                                                                title="@lang('modifier la tâche ') "
-                                                                                class="modifier text-success"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#modifier-modal"><i
-                                                                                    class="mdi mdi-circle-edit-outline"></i>
-                                                                            </a>
-                                                                            <span><a href="javascript:void(0);"
+                                                                            @can('permission', 'modifier-agenda')
+                                                                                <a data-href="{{ route('agenda.update', $agenda->id) }}"
+                                                                                    href="javascript:void(0);"
+                                                                                    data-titre="{{ $agenda->titre }}"
+                                                                                    data-description="{{ $agenda->description }}"
+                                                                                    data-date_deb="{{ $agenda->date_deb }}"
+                                                                                    data-date_fin="{{ $agenda->date_fin }}"
+                                                                                    data-heure_deb="{{ $agenda->heure_deb }}"
+                                                                                    data-type="{{ $agenda->type_rappel }}"
+                                                                                    data-est_lie="{{ $agenda->est_lie }} "
+                                                                                    data-contact_id="{{ $agenda->contact_id }}"
+                                                                                    title="@lang('Modifier ')"
+                                                                                    title="@lang('modifier la tâche ') "
+                                                                                    class="modifier text-success"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#modifier-modal"><i
+                                                                                        class="mdi mdi-circle-edit-outline"></i>
+                                                                                </a>
+                                                                            @endcan
+                                                                            @can('permission', 'supprimer-agenda')
+                                                                                <a href="javascript:void(0);"
                                                                                     data-href="{{ route('agenda.destroy', $agenda->id) }}"
                                                                                     class="delete text-danger"
                                                                                     data-toggle="tooltip"
                                                                                     title="@lang('Supprimer la tâche') "><i
                                                                                         class="mdi mdi-delete-circle-outline"></i>
-                                                                                </a></span>
+                                                                                </a>
+                                                                            @endcan
                                                                         </td>
 
                                                                     </tr>

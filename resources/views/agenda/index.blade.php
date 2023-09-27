@@ -60,9 +60,12 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="d-grid">
-                                    <button class="btn btn-lg font-16 btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#new-event"><i class="mdi mdi-plus-circle-outline"></i> Créer
-                                        nouvelle tâche</button>
+                                    @can('permission', 'ajouter-agenda')
+                                        <button class="btn btn-lg font-16 btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#new-event"><i class="mdi mdi-plus-circle-outline"></i>
+                                            Ajouter tâche
+                                        </button>
+                                    @endcan
                                 </div>
                                 <div id="external-events" class="m-t-20">
                                     <br>
