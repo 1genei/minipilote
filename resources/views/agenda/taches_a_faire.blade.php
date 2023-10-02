@@ -41,8 +41,8 @@
                         <div class="row g-0">
 
                             <div class="col-sm-2 mr-14 ">
-                                <a href="{{ route('permission.index') }}" type="button" class="btn btn-outline-primary"><i
-                                        class="uil-arrow-left"></i> Affichage sur l'agenda</a>
+                                <a href="{{ route('agenda.index') }}" type="button" class="btn btn-danger"><i
+                                        class="uil-calendar-alt"></i> Affichage sur le calendrier</a>
                             </div>
                             @if (session('ok'))
                                 <div class="col-6">
@@ -60,7 +60,6 @@
                 </div> <!-- end card-box-->
             </div> <!-- end col-->
         </div>
-        <!-- end row-->
 
         <div class="row">
             <div class="col-12">
