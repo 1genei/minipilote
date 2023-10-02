@@ -20,9 +20,9 @@
     </td>
     <td>
         @if ($categorie->archive)
-            <button type="button" class="btn-danger btn-sm rounded-pill">Archivée</button>
+            <span class="badge bg-warning">Archivé</span>
         @else
-            <button type="button" class="btn-success btn-sm rounded-pill">Active</button>
+            <span class="badge bg-success">Actif</span>
         @endif
     </td>
     <td>

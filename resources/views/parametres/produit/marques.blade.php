@@ -6,8 +6,8 @@
                     <div class="row mb-2">
                         <div class="col-sm-5">
                             <a href="" class="btn btn-primary mb-2" data-bs-toggle="modal"
-                                data-bs-target="#standard-modal-marque"><i
-                                    class="mdi mdi-plus-circle me-2"></i>Nouvelle marque</a>
+                                data-bs-target="#standard-modal-marque"><i class="mdi mdi-plus-circle me-2"></i>Nouvelle
+                                marque</a>
                         </div>
                     </div>
                     <div class="row">
@@ -41,37 +41,41 @@
                             </thead>
                             <tbody>
                                 @foreach ($marques as $marque)
-                                <tr>
-                                    <td>
-                                        <b>{{ $marque->nom }}</b>
-                                    </td>
-                                    <td>
-                                        @if ($marque->archive)
-                                            <button type="button" class="btn-danger btn-sm rounded-pill">Archivée</button>
-                                        @else
-                                            <button type="button" class="btn-success btn-sm rounded-pill">Active</button>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a data-href="{{ route('marque.update', Crypt::encrypt($marque->id)) }}" style="cursor: pointer;"
-                                            title="Modifier" data-nom="{{ $marque->nom }}" data-parent_id="{{ $marque->parent_id }}"
-                                            data-description="{{ $marque->description }}" data-bs-toggle="modal"
-                                            data-bs-target="#edit-modal-marque" class="action-icon edit_marque text-primary">
-                                            <i class="mdi mdi-square-edit-outline"></i>
-                                        </a>
-                                        @if (!$marque->archive)
-                                            <a data-href="{{ route('marque.archive', Crypt::encrypt($marque->id)) }}"
-                                                style="cursor: pointer;" title="Archiver" class="action-icon archive_marque text-warning">
-                                                <i class="mdi mdi-archive-arrow-down"></i>
+                                    <tr>
+                                        <td>
+                                            <b>{{ $marque->nom }}</b>
+                                        </td>
+                                        <td>
+                                            @if ($marque->archive)
+                                                <span class="badge bg-warning">Archivé</span>
+                                            @else
+                                                <span class="badge bg-success">Actif</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a data-href="{{ route('marque.update', Crypt::encrypt($marque->id)) }}"
+                                                style="cursor: pointer;" title="Modifier" data-nom="{{ $marque->nom }}"
+                                                data-parent_id="{{ $marque->parent_id }}"
+                                                data-description="{{ $marque->description }}" data-bs-toggle="modal"
+                                                data-bs-target="#edit-modal-marque"
+                                                class="action-icon edit_marque text-primary">
+                                                <i class="mdi mdi-square-edit-outline"></i>
                                             </a>
-                                        @else
-                                            <a data-href="{{ route('marque.unarchive', Crypt::encrypt($marque->id)) }}"
-                                                style="cursor: pointer;" title="Restaurer" class="action-icon unarchive_marque text-info">
-                                                <i class="mdi mdi-archive-arrow-up"></i>
-                                            </a>
-                                        @endif
-                                    </td>
-                                </tr>
+                                            @if (!$marque->archive)
+                                                <a data-href="{{ route('marque.archive', Crypt::encrypt($marque->id)) }}"
+                                                    style="cursor: pointer;" title="Archiver"
+                                                    class="action-icon archive_marque text-warning">
+                                                    <i class="mdi mdi-archive-arrow-down"></i>
+                                                </a>
+                                            @else
+                                                <a data-href="{{ route('marque.unarchive', Crypt::encrypt($marque->id)) }}"
+                                                    style="cursor: pointer;" title="Restaurer"
+                                                    class="action-icon unarchive_marque text-info">
+                                                    <i class="mdi mdi-archive-arrow-up"></i>
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -83,8 +87,8 @@
 </div>
 
 {{-- Ajout d'une marque --}}
-<div id="standard-modal-marque" class="modal fade" tabindex="-1" role="dialog"
-    aria-labelledby="standard-modalLabel" aria-hidden="true">
+<div id="standard-modal-marque" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -144,4 +148,3 @@
         </div>
     </div>
 </div>
-

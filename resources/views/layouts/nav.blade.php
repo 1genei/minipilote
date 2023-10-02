@@ -2,7 +2,7 @@
     $curent_url = $_SERVER['REQUEST_URI'];
     $curent_url = explode('/', $curent_url);
     
-    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_contrat_parrainage = $li_contrat = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = '';
+    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_contrat_parrainage = $li_contrat = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = '';
     $li_simulations = $li_utilisateur_show = $li_contact_show = $li_contrat_show = $li_catalogue_show = $li_parametre_show = false;
     
     switch ($curent_url[1]) {
@@ -51,6 +51,11 @@
             $li_contrat = 'menuitem-active';
             $li_contrat_show = true;
             break;
+        // Agenda
+        case 'agendas':
+            $li_agenda = 'menuitem-active';
+            break;
+    
         case 'parrainages':
             $li_contrat_parrainage = 'menuitem-active';
             $li_contrat_show = true;
@@ -133,9 +138,9 @@
 
     <div class="leftbar-user">
         <a href="javascript: void(0);">
-            <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="user-image" height="42"
-                class="rounded-circle shadow-sm">
-            <span class="leftbar-user-name">Admin</span>
+            {{-- <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="user-image" height="42"
+                class="rounded-circle shadow-sm"> --}}
+            {{-- <span class="leftbar-user-name">{{ Auth::user()->individu }}</span> --}}
         </a>
     </div>
 
@@ -144,8 +149,7 @@
 
         @can('permission', 'afficher-dashboard')
             <li class="side-nav-item {{ $li_dashboard }}">
-                <a href="{{ route('welcome') }}" aria-expanded="false" aria-controls="sidebarDashboards"
-                    class="side-nav-link">
+                <a href="{{ route('welcome') }}" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
                     <i class="mdi mdi-view-dashboard"></i>
                     <span> Tableau de bord </span>
                 </a>
@@ -256,12 +260,12 @@
                     <ul class="side-nav-second-level">
                         <li class="{{ $li_catalogue_produit }}"><a href="{{ route('produit.index') }}"> Produits </a></li>
 
-                        @can('permission', 'afficher-stock')
+                        {{-- @can('permission', 'afficher-stock')
                             <li class="{{ $li_catalogue_stock }}"><a href="#"> Stock </a></li>
                         @endcan
                         @can('permission', 'afficher-categorie-produit')
                             <li class="{{ $li_catalogue_categorie }}"><a href="#"> Catégories </a></li>
-                        @endcan
+                        @endcan --}}
                         @can('permission', 'afficher-caracteristique-produit')
                             <li class="{{ $li_catalogue_caracteristique }}">
                                 <a href="{{ route('caracteristique.index') }}">Caractéristiques </a>
@@ -296,7 +300,7 @@
         @endcan
 
         @can('permission', 'afficher-agenda')
-            <li class="side-nav-item">
+            <li class="side-nav-item {{ $li_agenda }}">
                 <a href="{{ route('agenda.listing') }}" aria-expanded="false" aria-controls="sidebarDashboards"
                     class="side-nav-link">
                     <i class="uil-calendar-alt"></i>

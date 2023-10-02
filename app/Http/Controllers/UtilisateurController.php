@@ -51,6 +51,20 @@ class UtilisateurController extends Controller
     }
     
     /**
+     *Page de modification d'un utilisateur
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($user_id)
+    {
+        
+        $user = User::where('contact_id', Crypt::decrypt($user_id))->first();
+
+        return view('utilisateur.edit', compact('user'));
+    }
+    
+    
+    /**
     *  
     */
     public function store(Request $request){

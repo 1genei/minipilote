@@ -12,12 +12,12 @@
         <!-- LOGO -->
         <a href="#" class="topnav-logo">
             <span class="topnav-logo-lg">
-                <img src="{{ asset('assets/images/logo_sm.png') }}" alt="" height="16">
-                <span style="color: #fff; font-size:20px; font-weight: bold;">{{ env('APP_NAME') }}</span>
+                <img src="{{ asset('images/logo.png') }}" alt="" height="50">
+                {{-- <span style="color: #fff; font-size:20px; font-weight: bold;">{{ env('APP_NAME') }}</span> --}}
             </span>
             <span class="topnav-logo-sm">
-                <img src="{{ asset('assets/images/logo_sm.png') }}" alt="" height="16">
-                <span style="color: #fff; font-size:20px; font-weight: bold;">{{ env('APP_NAME') }}</span>
+                <img src="{{ asset('images/logo.png') }}" alt="" height="30">
+                {{-- <span style="color: #fff; font-size:20px; font-weight: bold;">{{ env('APP_NAME') }}</span> --}}
 
             </span>
         </a>
@@ -53,7 +53,7 @@
                         <h5 class="m-0">
                             <span class="float-end">
                                 <a href="javascript: void(0);" class="text-dark">
-                                    <small>Clear All</small>
+                                    {{-- <small>Clear All</small> --}}
                                 </a>
                             </span>Notification
                         </h5>
@@ -61,27 +61,9 @@
 
                     <div class="px-3" style="max-height: 300px;" data-simplebar>
 
-                        <h5 class="text-muted font-13 fw-normal mt-0">Today</h5>
+                        <h5 class="text-muted font-13 fw-normal mt-0">Aujourd'hui</h5>
                         <!-- item-->
-                        <a href="javascript:void(0);"
-                            class="dropdown-item p-0 notify-item card unread-noti shadow-none mb-2">
-                            <div class="card-body">
-                                <span class="float-end noti-close-btn text-muted"><i class="mdi mdi-close"></i></span>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="notify-icon bg-primary">
-                                            <i class="mdi mdi-comment-account-outline"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 text-truncate ms-2">
-                                        <h5 class="noti-item-title fw-semibold font-14">Datacorp <small
-                                                class="fw-normal text-muted ms-1">1 min ago</small></h5>
-                                        <small class="noti-item-subtitle text-muted">Caleb Flakelar commented on
-                                            Admin</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+
 
                         <!-- item-->
                         <a href="javascript:void(0);"
@@ -96,79 +78,15 @@
                                     </div>
                                     <div class="flex-grow-1 text-truncate ms-2">
                                         <h5 class="noti-item-title fw-semibold font-14">Admin <small
-                                                class="fw-normal text-muted ms-1">1 hours ago</small></h5>
-                                        <small class="noti-item-subtitle text-muted">New user registered</small>
+                                                class="fw-normal text-muted ms-1">Il y'a 1 heure</small></h5>
+                                        <small class="noti-item-subtitle text-muted">Nouvelle utilisateur créé</small>
                                     </div>
                                 </div>
                             </div>
                         </a>
 
-                        <h5 class="text-muted font-13 fw-normal mt-0">Yesterday</h5>
 
-                        <!-- item-->
-                        <a href="javascript:void(0);"
-                            class="dropdown-item p-0 notify-item card read-noti shadow-none mb-2">
-                            <div class="card-body">
-                                <span class="float-end noti-close-btn text-muted"><i class="mdi mdi-close"></i></span>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="notify-icon">
-                                            <img src="{{ 'assets/images/users/avatar-2.jpg' }}"
-                                                class="img-fluid rounded-circle" alt="" />
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 text-truncate ms-2">
-                                        <h5 class="noti-item-title fw-semibold font-14">Cristina Pride <small
-                                                class="fw-normal text-muted ms-1">1 day ago</small></h5>
-                                        <small class="noti-item-subtitle text-muted">Hi, How are you? What about our
-                                            next meeting</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
 
-                        <h5 class="text-muted font-13 fw-normal mt-0">30 Dec 2021</h5>
-
-                        <!-- item-->
-                        <a href="javascript:void(0);"
-                            class="dropdown-item p-0 notify-item card read-noti shadow-none mb-2">
-                            <div class="card-body">
-                                <span class="float-end noti-close-btn text-muted"><i class="mdi mdi-close"></i></span>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="notify-icon bg-primary">
-                                            <i class="mdi mdi-comment-account-outline"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 text-truncate ms-2">
-                                        <h5 class="noti-item-title fw-semibold font-14">Datacorp</h5>
-                                        <small class="noti-item-subtitle text-muted">Caleb Flakelar commented on
-                                            Admin</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <!-- item-->
-                        <a href="javascript:void(0);"
-                            class="dropdown-item p-0 notify-item card read-noti shadow-none mb-2">
-                            <div class="card-body">
-                                <span class="float-end noti-close-btn text-muted"><i class="mdi mdi-close"></i></span>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="notify-icon">
-                                            <img src="{{ asset('assets/images/users/avatar-4.jpg') }}"
-                                                class="img-fluid rounded-circle" alt="" />
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 text-truncate ms-2">
-                                        <h5 class="noti-item-title fw-semibold font-14">Karen Robinson</h5>
-                                        <small class="noti-item-subtitle text-muted">Wow ! this admin looks good and
-                                            awesome design</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
 
                         <div class="text-center">
                             <i class="mdi mdi-dots-circle mdi-spin text-muted h3 mt-0"></i>

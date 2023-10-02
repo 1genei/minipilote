@@ -26,12 +26,9 @@ final class ContratTable extends PowerGridComponent
     */
     public function datasource(): ?Collection
     {
+ 
         return collect([
-            ['id' => 1, 'name' => 'Name 1', 'price' => 1.58, 'created_at' => now(),],
-            ['id' => 2, 'name' => 'Name 2', 'price' => 1.68, 'created_at' => now(),],
-            ['id' => 3, 'name' => 'Name 3', 'price' => 1.78, 'created_at' => now(),],
-            ['id' => 4, 'name' => 'Name 4', 'price' => 1.88, 'created_at' => now(),],
-            ['id' => 5, 'name' => 'Name 5', 'price' => 1.98, 'created_at' => now(),],
+            
         ]);
     }
 
@@ -68,12 +65,16 @@ final class ContratTable extends PowerGridComponent
     public function addColumns(): PowerGridColumns
     {
         return PowerGrid::columns()
-            ->addColumn('id')
-            ->addColumn('name')
-            ->addColumn('price')
-            ->addColumn('created_at_formatted', function ($entry) {
-                return Carbon::parse($entry->created_at)->format('d/m/Y');
-            });
+            ->addColumn('Collaborateur')
+            ->addColumn('Statut')
+            ->addColumn('Période')
+            ->addColumn('Société')
+            ->addColumn('parrain')
+            ->addColumn('action')
+            // ->addColumn('created_at_formatted', function ($entry) {
+            //     return Carbon::parse($entry->created_at)->format('d/m/Y');
+            // })
+            ;
     }
 
     /*
@@ -93,18 +94,24 @@ final class ContratTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id')
+            Column::make('Collaborateur', 'Collaborateur')
                 ->searchable()
                 ->sortable(),
 
-            Column::make('Name', 'name')
+            Column::make('Statut', 'Statut')
                 ->searchable()
                 ->sortable(),
 
-            Column::make('Price', 'price')
+            Column::make('Période', 'Période')
                 ->sortable(),
+            Column::make('Société', 'Société')
+            ->sortable(),
+            Column::make('parrain', 'parrain')
+            ->sortable(),
+            Column::make('Action', 'Action')
+            ->sortable(),
 
-            Column::make('Created', 'created_at_formatted'),
+            // Column::make('Created', 'created_at_formatted'),
         ];
     }
 }

@@ -169,6 +169,7 @@ Route::controller(UtilisateurController::class)->group(function () {
     Route::get('/utilisateurs/ajouter', 'create')->name('utilisateur.create')->middleware(['auth']);
     Route::post('/utilisateurs/ajouter', 'store')->name('utilisateur.store')->middleware(['auth']);
     Route::get('/utilisateurs/detail/{utilisateurId}', 'show')->name('utilisateur.show')->middleware(['auth']);
+    Route::get('/utilisateurs/modifier/{utilisateurId}', 'edit')->name('utilisateur.edit')->middleware(['auth']);
     Route::post('/utilisateurs/modifier/{utilisateurId}', 'update')->name('utilisateur.update')->middleware(['auth']);
     Route::put('/utilisateurs/archiver/{utilisateurId}', 'archiver')->name('utilisateur.archive')->middleware(['auth']);
     Route::post('/utilisateurs/desarchiver/{utilisateurId}', 'unarchive')->name('utilisateur.unarchive')->middleware(['auth']);
