@@ -27,7 +27,8 @@ class UtilisateurController extends Controller
         return view('utilisateur.index', compact('contactindividus'));
     }
 
-        /**
+
+    /**
      * Affiche la liste des utilisateurs archivés
      *
      * @return \Illuminate\Http\Response
@@ -98,11 +99,22 @@ class UtilisateurController extends Controller
             "contact_id" => $contact->id,
             "nom" => $request->nom,
             "prenom" => $request->prenom,
-            "adresse" => $request->adresse,
-            "complement_adresse" => $request->complement_adresse,
+            
+            "numero_voie" => $request->numero_voie,
+            "nom_voie" => $request->nom_voie,
+            "complement_voie" => $request->complement_voie,
             "code_postal" => $request->code_postal,
             "ville" => $request->ville,
             "pays" => $request->pays,
+            "code_insee" => $request->code_insee,
+            "code_cedex" => $request->code_cedex,
+            "numero_cedex" => $request->numero_cedex,
+            "boite_postale" => $request->boite_postale,
+            "residence" => $request->residence,
+            "batiment" => $request->batiment,
+            "escalier" => $request->escalier,
+            "etage" => $request->etage,
+            "porte" => $request->porte, 
 
             "civilite" => $request->civilite,
             "date_naissance" => $request->date_naissance,

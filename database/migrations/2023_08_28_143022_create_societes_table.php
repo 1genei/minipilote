@@ -21,11 +21,24 @@ return new class extends Migration
             $table->string("numero_tva")->nullable();
             $table->string("email")->nullable();
             $table->string("telephone")->nullable();
-            $table->string("adresse")->nullable();
-            $table->string("complement_adresse")->nullable();
-            $table->string("ville")->nullable();
+            
+            $table->string("numero_voie")->nullable();
+            $table->string("nom_voie")->nullable();
+            $table->string("complement_voie")->nullable();
             $table->string("code_postal")->nullable();
+            $table->string("ville")->nullable();
             $table->string("pays")->nullable();
+            $table->string("code_insee")->nullable();
+            $table->string("code_cedex")->nullable();
+            $table->string("numero_cedex")->nullable();
+            $table->string("boite_postale")->nullable();
+            $table->string("residence")->nullable();
+            $table->string("batiment")->nullable();
+            $table->string("escalier")->nullable();
+            $table->string("etage")->nullable();
+            $table->string("porte")->nullable();
+            
+            
             $table->boolean("est_societe_principale")->nullable()->default(false);
             $table->boolean("archive")->nullable()->default(false);
             $table->timestamps();

@@ -53,12 +53,16 @@
                                 <input type="text" name="telephone" class="form-control" value="" />
                             </div>
                             <div class="m-2">
-                                <label for="adresse">Adresse postale</label>
-                                <input type="text" name="adresse" class="form-control" value="" />
+                                <label for="numero_voie">numéro de la vie</label>
+                                <input type="text" name="numero_voie" class="form-control" value="" />
                             </div>
                             <div class="m-2">
-                                <label for="complement_adresse">Complément d'adresse</label>
-                                <input type="text" name="complement_adresse" class="form-control" value="" />
+                                <label for="nom_voie">nom de la vie</label>
+                                <input type="text" name="nom_voie" class="form-control" value="" />
+                            </div>
+                            <div class="m-2">
+                                <label for="complement_voie">Complément de voie</label>
+                                <input type="text" name="complement_voie" class="form-control" value="" />
                             </div>
                             <div class="m-2">
                                 <label for="ville">Ville</label>

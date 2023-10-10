@@ -52,4 +52,22 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
 
     }
+    
+    /**
+     * Retourne les informations de contact de l'utilisateur
+     */
+    function contact(){
+
+        return $this->belongsTo(Contact::class);
+
+    }
+    
+    /**
+     * Retourne les informations de l'utilisateur
+     */
+    function infos(){
+
+        return $this->contact?->infos();
+
+    }
 }

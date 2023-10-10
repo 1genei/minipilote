@@ -861,23 +861,54 @@
                         <div class="col-6">
 
 
+                            <div class="row">
 
-                            <div class="mb-3">
-                                <label for="adresse" class="form-label">
-                                    Adresse
-                                </label>
-                                <input type="text" id="adresse" name="adresse" wire:model.defer="adresse"
-                                    value="{{ old('adresse') ? old('adresse') : '' }}" class="form-control">
+                                <div class="col-lg-4">
 
-                                @if ($errors->has('adresse'))
-                                    <br>
-                                    <div class="alert alert-warning text-secondary " role="alert">
-                                        <button type="button" class="btn-close btn-close-white"
-                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <strong>{{ $errors->first('adresse') }}</strong>
+                                    <div class="row mb-3">
+                                        <div class="col-12">
+                                            <label for="telephone_fixe" class="form-label item_input">
+                                                Numéro de voie
+                                            </label>
+                                        </div>
+                                        <div class="col-12">
+                                            <input type="number" id="numero_voie" name="numero_voie"
+                                                wire:model.defer="numero_voie"
+                                                value="{{ old('numero_voie') ? old('numero_voie') : '' }}"
+                                                class="form-control">
+                                        </div>
                                     </div>
-                                @endif
+
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="row mb-3">
+                                        <div class="col-12">
+                                            <label for="telephone_fixe" class="form-label item_input">
+                                                Nom de la voie
+                                            </label>
+                                        </div>
+                                        <div class="col-12">
+                                            <input type="text" id="nom_voie" name="nom_voie"
+                                                wire:model.defer="nom_voie"
+                                                value="{{ old('nom_voie') ? old('nom_voie') : '' }}"
+                                                class="form-control">
+                                        </div>
+
+                                        @if ($errors->has('nom_voie'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('nom_voie') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
                             </div>
+
+
+
                             <div class="mb-3">
                                 <label for="code_postal" class="form-label">
                                     Code Postal
@@ -919,20 +950,20 @@
                         <div class="col-6">
 
                             <div class="mb-3">
-                                <label for="complement_adresse" class="form-label">
-                                    Complément d'adresse
+                                <label for="complement_voie" class="form-label">
+                                    Complément de voie
                                 </label>
-                                <input type="text" id="complement_adresse" name="complement_adresse"
-                                    wire:model.defer="complement_adresse"
-                                    value="{{ old('complement_adresse') ? old('complement_adresse') : '' }}"
+                                <input type="text" id="complement_voie" name="complement_voie"
+                                    wire:model.defer="complement_voie"
+                                    value="{{ old('complement_voie') ? old('complement_voie') : '' }}"
                                     class="form-control">
 
-                                @if ($errors->has('complement_adresse'))
+                                @if ($errors->has('complement_voie'))
                                     <br>
                                     <div class="alert alert-warning text-secondary " role="alert">
                                         <button type="button" class="btn-close btn-close-white"
                                             data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <strong>{{ $errors->first('complement_adresse') }}</strong>
+                                        <strong>{{ $errors->first('complement_voie') }}</strong>
                                     </div>
                                 @endif
                             </div>

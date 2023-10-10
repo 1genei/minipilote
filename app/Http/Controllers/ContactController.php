@@ -94,11 +94,21 @@ class ContactController extends Controller
                 "contact_id" => $contact->id,
                 "nom" => $request->nom,
                 "prenom" => $request->prenom,
-                "adresse" => $request->adresse,
-                "complement_adresse" => $request->complement_adresse,
+                "numero_voie" => $request->numero_voie,
+                "nom_voie" => $request->nom_voie,
+                "complement_voie" => $request->complement_voie,
                 "code_postal" => $request->code_postal,
                 "ville" => $request->ville,
                 "pays" => $request->pays,
+                "code_insee" => $request->code_insee,
+                "code_cedex" => $request->code_cedex,
+                "numero_cedex" => $request->numero_cedex,
+                "boite_postale" => $request->boite_postale,
+                "residence" => $request->residence,
+                "batiment" => $request->batiment,
+                "escalier" => $request->escalier,
+                "etage" => $request->etage,
+                "porte" => $request->porte, 
 
                 "civilite" => $request->civilite,
                 "date_naissance" => $request->date_naissance,
@@ -135,8 +145,22 @@ class ContactController extends Controller
                 "nom" => $request->nom,
                 "telephone_fixe" => $request->telephone_fixe,
                 "telephone_mobile" => $request->telephone_mobile,
-                "adresse" => $request->adresse,
-                "complement_adresse" => $request->complement_adresse,
+                "numero_voie" => $request->numero_voie,
+                "nom_voie" => $request->nom_voie,
+                "complement_voie" => $request->complement_voie,
+                "code_postal" => $request->code_postal,
+                "ville" => $request->ville,
+                "pays" => $request->pays,
+                "code_insee" => $request->code_insee,
+                "code_cedex" => $request->code_cedex,
+                "numero_cedex" => $request->numero_cedex,
+                "boite_postale" => $request->boite_postale,
+                "residence" => $request->residence,
+                "batiment" => $request->batiment,
+                "escalier" => $request->escalier,
+                "etage" => $request->etage,
+                "porte" => $request->porte, 
+                
                 "forme_juridique" => $request->forme_juridique,
                 "raison_sociale" => $request->raison_sociale,
                 "numero_siret" => $request->numero_siret,
@@ -150,9 +174,6 @@ class ContactController extends Controller
                 "iban" => $request->iban,
                 "bic" => $request->bic,
                 "site_web" => $request->site_web,
-                "pays" => $request->pays,
-                "code_postal" => $request->code_postal,
-                "ville" => $request->ville,
                 "contact_id" => $contact->id,
 
             ]);
@@ -259,11 +280,21 @@ class ContactController extends Controller
             $individu->contact_id = $contact->id;
             $individu->nom = $request->nom;
             $individu->prenom = $request->prenom;
-            $individu->adresse = $request->adresse;
-            $individu->complement_adresse = $request->complement_adresse;
+            $individu->numero_voie = $request->numero_voie;
+            $individu->nom_voie = $request->nom_voie;
+            $individu->complement_voie = $request->complement_voie;
             $individu->code_postal = $request->code_postal;
             $individu->ville = $request->ville;
             $individu->pays = $request->pays;
+            $individu->code_insee = $request->code_insee;
+            $individu->code_cedex = $request->code_cedex;
+            $individu->numero_cedex = $request->numero_cedex;
+            $individu->boite_postale = $request->boite_postale;
+            $individu->residence = $request->residence;
+            $individu->batiment = $request->batiment;
+            $individu->escalier = $request->escalier;
+            $individu->etage = $request->etage;
+            $individu->porte = $request->porte;
 
             $individu->civilite = $request->civilite;
             $individu->date_naissance = $request->date_naissance;
@@ -299,8 +330,23 @@ class ContactController extends Controller
             $entite->nom = $request->nom;
             $entite->telephone_fixe = $request->telephone_fixe;
             $entite->telephone_mobile = $request->telephone_mobile;
-            $entite->adresse = $request->adresse;
-            $entite->complement_adresse = $request->complement_adresse;
+            
+            $entite->numero_voie = $request->numero_voie;
+            $entite->nom_voie = $request->nom_voie;
+            $entite->complement_voie = $request->complement_voie;
+            $entite->code_postal = $request->code_postal;
+            $entite->ville = $request->ville;
+            $entite->pays = $request->pays;
+            $entite->code_insee = $request->code_insee;
+            $entite->code_cedex = $request->code_cedex;
+            $entite->numero_cedex = $request->numero_cedex;
+            $entite->boite_postale = $request->boite_postale;
+            $entite->residence = $request->residence;
+            $entite->batiment = $request->batiment;
+            $entite->escalier = $request->escalier;
+            $entite->etage = $request->etage;
+            $entite->porte = $request->porte;
+            
             $entite->forme_juridique = $request->forme_juridique;
             $entite->raison_sociale = $request->raison_sociale;
             $entite->numero_siret = $request->numero_siret;
@@ -314,9 +360,6 @@ class ContactController extends Controller
             $entite->iban = $request->iban;
             $entite->bic = $request->bic;
             $entite->site_web = $request->site_web;
-            $entite->pays = $request->pays;
-            $entite->code_postal = $request->code_postal;
-            $entite->ville = $request->ville;
             $entite->contact_id = $contact->id;
 
             $entite->update();

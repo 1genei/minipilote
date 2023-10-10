@@ -18,11 +18,22 @@ class SocieteController extends Controller
             'numero_tva' => 'required|string',
             'email' => 'required|string',
             'telephone' => 'required|string',
-            'adresse' => 'required|string',
-            'complement_adresse' => 'string|nullable',
-            'ville' => 'required|string',
-            'code_postal' => 'required|string',
-            'pays' => 'required|string',
+            
+            'numero_voie' => 'string',
+            'nom_voie' => 'string',
+            'complement_voie' => 'string',
+            'code_postal' => 'string',
+            'ville' => 'string',
+            'pays' => 'string',
+            'code_insee' => 'string',
+            'code_cedex' => 'string',
+            'numero_cedex' => 'string',
+            'boite_postale' => 'string',
+            'residence' => 'string',
+            'batiment' => 'string',
+            'escalier' => 'string',
+            'etage' => 'string',
+            'porte' => 'string',
         ]);
         Societe::create([
             'raison_sociale' => $request->raison_sociale,
@@ -33,11 +44,21 @@ class SocieteController extends Controller
             'numero_tva' => $request->numero_tva,
             'email' => $request->email,
             'telephone' => $request->telephone,
-            'adresse' => $request->adresse,
-            'complement_adresse' => $request->complement_adresse,
-            'ville' => $request->ville,
-            'code_postal' => $request->code_postal,
-            'pays' => $request->pays,
+            "numero_voie" => $request->numero_voie,
+            "nom_voie" => $request->nom_voie,
+            "complement_voie" => $request->complement_voie,
+            "code_postal" => $request->code_postal,
+            "ville" => $request->ville,
+            "pays" => $request->pays,
+            "code_insee" => $request->code_insee,
+            "code_cedex" => $request->code_cedex,
+            "numero_cedex" => $request->numero_cedex,
+            "boite_postale" => $request->boite_postale,
+            "residence" => $request->residence,
+            "batiment" => $request->batiment,
+            "escalier" => $request->escalier,
+            "etage" => $request->etage,
+            "porte" => $request->porte, 
             'est_societe_principale' => false,
             'archive' => false
         ]);
@@ -55,11 +76,21 @@ class SocieteController extends Controller
             'numero_tva' => 'required|string',
             'email' => 'required|string',
             'telephone' => 'required|string',
-            'adresse' => 'required|string',
-            'complement_adresse' => 'string|nullable',
-            'ville' => 'required|string',
-            'code_postal' => 'required|string',
-            'pays' => 'required|string',
+            'numero_voie' => 'string',
+            'nom_voie' => 'string',
+            'complement_voie' => 'string',
+            'code_postal' => 'string',
+            'ville' => 'string',
+            'pays' => 'string',
+            'code_insee' => 'string',
+            'code_cedex' => 'string',
+            'numero_cedex' => 'string',
+            'boite_postale' => 'string',
+            'residence' => 'string',
+            'batiment' => 'string',
+            'escalier' => 'string',
+            'etage' => 'string',
+            'porte' => 'string',
         ]);
         $societe = Societe::where('id', Crypt::decrypt($societeId))->first();
         
@@ -71,11 +102,21 @@ class SocieteController extends Controller
         $societe->numero_tva = $request->numero_tva;
         $societe->email = $request->email;
         $societe->telephone = $request->telephone;
-        $societe->adresse = $request->adresse;
-        $societe->complement_adresse = $request->complement_adresse;
-        $societe->ville = $request->ville;
+        $societe->numero_voie = $request->numero_voie;
+        $societe->nom_voie = $request->nom_voie;
+        $societe->complement_voie = $request->complement_voie;
         $societe->code_postal = $request->code_postal;
+        $societe->ville = $request->ville;
         $societe->pays = $request->pays;
+        $societe->code_insee = $request->code_insee;
+        $societe->code_cedex = $request->code_cedex;
+        $societe->numero_cedex = $request->numero_cedex;
+        $societe->boite_postale = $request->boite_postale;
+        $societe->residence = $request->residence;
+        $societe->batiment = $request->batiment;
+        $societe->escalier = $request->escalier;
+        $societe->etage = $request->etage;
+        $societe->porte = $request->porte;
         $societe->update();
         
         return redirect()->route('parametre.index')->with('message', 'Société modifiée');

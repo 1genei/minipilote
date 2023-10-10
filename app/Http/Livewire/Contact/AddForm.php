@@ -19,11 +19,23 @@ class AddForm extends Component
     public $email;
     public $email1;
     public $email2;
-    public $ville;
+    
+    public $numero_voie;
+    public $nom_voie;
+    public $complement_voie;
     public $code_postal;
-    public $adresse;
-    public $complement_adresse;
+    public $ville;
     public $pays;
+    public $code_insee;
+    public $code_cedex;
+    public $numero_cedex;
+    public $boite_postale;
+    public $residence;
+    public $batiment;
+    public $escalier;
+    public $etage;
+    public $porte;
+            
     public $numero_siret;
     public $numero_tva;
     public $telephone_fixe;

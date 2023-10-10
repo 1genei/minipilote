@@ -26,11 +26,23 @@ class CreateIndividusTable extends Migration
             $table->string('indicatif_mobile')->nullable();
             $table->string('telephone_fixe')->nullable();
             $table->string('telephone_mobile')->nullable();
-            $table->string("adresse")->nullable();
-            $table->string("complement_adresse")->nullable();
+            
+            $table->string("numero_voie")->nullable();
+            $table->string("nom_voie")->nullable();
+            $table->string("complement_voie")->nullable();
             $table->string("code_postal")->nullable();
             $table->string("ville")->nullable();
             $table->string("pays")->nullable();
+            $table->string("code_insee")->nullable();
+            $table->string("code_cedex")->nullable();
+            $table->string("numero_cedex")->nullable();
+            $table->string("boite_postale")->nullable();
+            $table->string("residence")->nullable();
+            $table->string("batiment")->nullable();
+            $table->string("escalier")->nullable();
+            $table->string("etage")->nullable();
+            $table->string("porte")->nullable();
+            
             $table->string("profession")->nullable();
             $table->date("date_naissance")->nullable();
             $table->string('lieu_naissance')->nullable();

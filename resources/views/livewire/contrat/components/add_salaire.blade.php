@@ -55,54 +55,54 @@
 
     <div class="col-6">
         <div class="mb-3">
-            <label for="complement_adresse" class="form-label">
+            <label for="complement_voie" class="form-label">
                 Horaire net
             </label>
-            <input type="number" min="0" step="0.01" id="complement_adresse" name="complement_adresse"
-                wire:model.defer="complement_adresse"
-                value="{{ old('complement_adresse') ? old('complement_adresse') : '' }}" class="form-control">
+            <input type="number" min="0" step="0.01" id="complement_voie" name="complement_voie"
+                wire:model.defer="complement_voie" value="{{ old('complement_voie') ? old('complement_voie') : '' }}"
+                class="form-control">
 
-            @if ($errors->has('complement_adresse'))
+            @if ($errors->has('complement_voie'))
                 <br>
                 <div class="alert alert-warning text-secondary " role="alert">
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
                         aria-label="Close"></button>
-                    <strong>{{ $errors->first('complement_adresse') }}</strong>
+                    <strong>{{ $errors->first('complement_voie') }}</strong>
                 </div>
             @endif
         </div>
 
         <div class="mb-3">
-            <label for="complement_adresse" class="form-label">
+            <label for="complement_voie" class="form-label">
                 Mensuel net
             </label>
-            <input type="number" min="0" step="0.01" id="complement_adresse" name="complement_adresse"
-                wire:model.defer="complement_adresse"
-                value="{{ old('complement_adresse') ? old('complement_adresse') : '' }}" class="form-control">
+            <input type="number" min="0" step="0.01" id="complement_voie" name="complement_voie"
+                wire:model.defer="complement_voie" value="{{ old('complement_voie') ? old('complement_voie') : '' }}"
+                class="form-control">
 
-            @if ($errors->has('complement_adresse'))
+            @if ($errors->has('complement_voie'))
                 <br>
                 <div class="alert alert-warning text-secondary " role="alert">
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
                         aria-label="Close"></button>
-                    <strong>{{ $errors->first('complement_adresse') }}</strong>
+                    <strong>{{ $errors->first('complement_voie') }}</strong>
                 </div>
             @endif
         </div>
         <div class="mb-3">
-            <label for="complement_adresse" class="form-label">
+            <label for="complement_voie" class="form-label">
                 Annuel net
             </label>
-            <input type="number" min="0" step="0.01" id="complement_adresse" name="complement_adresse"
-                wire:model.defer="complement_adresse"
-                value="{{ old('complement_adresse') ? old('complement_adresse') : '' }}" class="form-control">
+            <input type="number" min="0" step="0.01" id="complement_voie" name="complement_voie"
+                wire:model.defer="complement_voie" value="{{ old('complement_voie') ? old('complement_voie') : '' }}"
+                class="form-control">
 
-            @if ($errors->has('complement_adresse'))
+            @if ($errors->has('complement_voie'))
                 <br>
                 <div class="alert alert-warning text-secondary " role="alert">
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
                         aria-label="Close"></button>
-                    <strong>{{ $errors->first('complement_adresse') }}</strong>
+                    <strong>{{ $errors->first('complement_voie') }}</strong>
                 </div>
             @endif
         </div>
