@@ -242,5 +242,84 @@
         });
     </script>
 
-    {{-- selection du type de client --}}
+
+    <script>
+        let autocomplete_adresse;
+        let autocomplete_code_postal;
+        let autocomplete_ville;
+
+
+        function initAutocomplete() {
+            autocomplete_adresse = new google.maps.places.Autocomplete(
+                document.getElementById('nom_voie'), {
+                    types: ['address'],
+                    componentRestrictions: {
+                        'country': ['FR']
+                    },
+                    fields: ['address_components', 'address_components', 'adr_address', 'formatted_address', 'name',
+                        'vicinity'
+                    ]
+                }
+            );
+
+            autocomplete_code_postal = new google.maps.places.Autocomplete(
+                document.getElementById('code_postal'), {
+                    types: ['postal_code'],
+                    componentRestrictions: {
+                        'country': ['FR']
+                    },
+                    fields: ['name', 'vicinity']
+                }
+            );
+
+            autocomplete_ville = new google.maps.places.Autocomplete(
+                document.getElementById('ville'), {
+                    types: ['geocode'],
+                    componentRestrictions: {
+                        'country': ['FR']
+                    },
+                    fields: ['address_components', 'address_components', 'adr_address', 'formatted_address', 'name',
+                        'vicinity'
+                    ]
+                }
+            );
+
+            autocomplete_adresse.addListener('place_changed', onPlaceChanged);
+            autocomplete_code_postal.addListener('place_changed', onPlaceChanged);
+            autocomplete_ville.addListener('place_changed', onPlaceChanged);
+
+
+
+        }
+
+
+        function onPlaceChanged() {
+
+            var place_voie = autocomplete_adresse.getPlace();
+            var place_ville = autocomplete_ville.getPlace();
+            var place_code_postal = autocomplete_code_postal.getPlace();
+
+
+            if (place_voie) {
+                document.getElementById('nom_voie').value = place_voie.name;
+                document.getElementById('ville').value = place_voie.vicinity;
+                document.getElementById('code_postal').value = place_voie.address_components[5].long_name;
+
+            }
+
+            if (place_code_postal) {
+                document.getElementById('ville').value = place_code_postal.vicinity;
+                document.getElementById('code_postal').value = place_code_postal.name;
+            }
+
+            if (place_ville) {
+                document.getElementById('ville').value = place_ville.vicinity;
+            }
+
+
+        }
+    </script>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD0y8QWgApdFG33-i8dVHWia-fIXcOMyc&libraries=places&callback=initAutocomplete"
+        async defer></script>
 @endsection

@@ -66,7 +66,7 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $returnContact = false)
     {
     
 
@@ -76,7 +76,7 @@ class ContactController extends Controller
         } else {
             $type_contact = "individu";
         }
- 
+
         $contact = Contact::create([
             "user_id" => Auth::user()->id,
             "type" => $type_contact,
@@ -179,7 +179,8 @@ class ContactController extends Controller
             ]);
 
         }
-
+        
+        if($returnContact == true) return $contact;
         return redirect()->back()->with('ok', 'Contact ajouté');
         
     }
@@ -194,13 +195,13 @@ class ContactController extends Controller
     {
         $contact = Contact::where('id', Crypt::decrypt($contact_id))->first();
         
+
     
         if($contact->type == "individu"){
             return view('contact.show_individu', compact('contact'));
             
         }else{
         
-    //   dd($contact);
         
             $individus_existants = EntiteIndividu::where([['entite_id', $contact->entite->id]])->get();
             $ids_existant = array();
@@ -239,8 +240,15 @@ class ContactController extends Controller
         }
         $typecontact = $contact->typecontacts[0]->type;
         
-        $emails = $cont->email != null ? json_decode($cont->email) : [];
+        if($cont->email != null){
+            $emails = json_decode($cont->email) != null ? json_decode($cont->email)  : array($cont->email);
+        
+        }else{
+            $emails =  [];
+        
+        }
         $typecontacts = Typecontact::where('archive', false)->get();
+        
         
         return view('contact.edit', compact('contact','cont','emails','typecontacts','typecontact'));
     }
@@ -383,16 +391,19 @@ class ContactController extends Controller
         $entite = Entite::where('id',$entite_id)->first();
         
       
+    //   dd($request->all());
         
         if($request->contact_existant){
 
-            $entite->individus()->syncWithoutDetaching($request->newcontacts);
+            // $entite->individus()->syncWithoutDetaching($request->newcontacts);
+            $entite->individus()->attach($request->newcontact, ['poste' => $request->poste] );
             
         }else{
             
-            $contact = $this->store($request);
+            $contact = $this->store($request, true);
+            $entite->individus()->attach($contact->individu->id, ['poste' => $request->poste] );
         
-            $entite->individus()->syncWithoutDetaching($contact->individu->id);
+            // $entite->individus()->syncWithoutDetaching($contact->individu->id);
         }
         
         
@@ -408,7 +419,7 @@ class ContactController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deassocier_individu($entite_id, $individu_id)
+    public function dissocier_individu($entite_id, $individu_id)
     {
         $entite = Entite::where('id', $entite_id)->first();
         

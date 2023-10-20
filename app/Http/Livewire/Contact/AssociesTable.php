@@ -14,6 +14,8 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
 use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
+use Illuminate\Support\Facades\Gate;
+
 
 final class AssociesTable extends PowerGridComponent
 {
@@ -225,20 +227,29 @@ final class AssociesTable extends PowerGridComponent
             Button::add('Afficher')
                 ->bladeComponent('button-show', function(Individu $individu) {
                     return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),
-                    'tooltip' => "Afficher"];
+                    'tooltip' => "Afficher",
+                    'permission' => Gate::allows('permission', 'afficher-contact'),
+                    
+                    ];
                 }),
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(Individu $individu) {
                 return ['route' => route('contact.edit', Crypt::encrypt($individu->contact_id)),
-                'tooltip' => "Modifier"];
+                'tooltip' => "Modifier",
+                'permission' => Gate::allows('permission', 'modifier-contact'),
+                
+                ];
             }),
             
             Button::add('Retirer')
             ->bladeComponent('button-delete', function(Individu $individu) {
                 return ['route' => route('contact.deassociate', [intval($this->entite_id), $individu->contact_id] ),
                 'tooltip' => "Retirer",
-                'class' => "deassocier_individu",
+                'class' => "dissocier_individu",
+                'permission' => Gate::allows('permission', 'modifier-contact'),
+                
+                
                 ];
             }),
         ];

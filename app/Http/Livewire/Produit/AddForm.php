@@ -19,6 +19,7 @@ public $categories_id = [];
 public $fiche_technique;
 public $reference;
 public $marque;
+public $type;
 public $marques;
 public $prix_vente_ht;
 public $prix_vente_ttc;
@@ -37,7 +38,7 @@ public $seuil_alerte_stock;
     
     public function render()
     {
-   
+        $this->type = "simple";
         return view('livewire.produit.add-form');
     }
     

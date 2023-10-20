@@ -1,15 +1,15 @@
 @php
     $curent_url = $_SERVER['REQUEST_URI'];
     $curent_url = explode('/', $curent_url);
-    
+
     $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_contrat_parrainage = $li_contrat = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = '';
     $li_simulations = $li_utilisateur_show = $li_contact_show = $li_contrat_show = $li_catalogue_show = $li_parametre_show = false;
-    
+
     switch ($curent_url[1]) {
         case '/':
             $li_dashboard = 'menuitem-active';
             break;
-    
+
         // Utilisateurs
         case 'utilisateurs':
             $li_utilisateur = 'menuitem-active';
@@ -23,7 +23,7 @@
             $li_utilisateur_droit = 'menuitem-active';
             $li_utilisateur_show = true;
             break;
-    
+
         // Contacts
         case 'collaborateurs':
             $li_contact_collaborateur = 'menuitem-active';
@@ -45,7 +45,7 @@
             $li_contact = 'menuitem-active';
             $li_contact_show = true;
             break;
-    
+
         // Contrats
         case 'contrats':
             $li_contrat = 'menuitem-active';
@@ -55,12 +55,12 @@
         case 'agendas':
             $li_agenda = 'menuitem-active';
             break;
-    
+
         case 'parrainages':
             $li_contrat_parrainage = 'menuitem-active';
             $li_contrat_show = true;
             break;
-    
+
         // Catalogue
         case 'produits':
             $li_catalogue_produit = 'menuitem-active';
@@ -82,7 +82,7 @@
             $li_catalogue_caracteristique = 'menuitem-active';
             $li_catalogue_show = true;
             break;
-    
+
         // Paramètres
         case 'parametres':
             if (sizeof($curent_url) > 2) {
@@ -94,10 +94,10 @@
             } else {
                 $li_parametre_generaux = 'menuitem-active';
             }
-    
+
             $li_parametre_show = true;
             break;
-    
+
         case 'ordres-simule':
             if (sizeof($curent_url) > 3) {
                 switch (substr($curent_url[3], 0, 1)) {
@@ -108,14 +108,14 @@
                     case '3':
                         $li_ordre_simule_algo3 = 'menuitem-active';
                         $li_simulations = 'true';
-    
+
                         break;
                     case '4':
                         $li_ordre_simule_algo4 = 'menuitem-active';
                         $li_simulations = 'true';
-    
+
                         break;
-    
+
                     default:
                         $li_ordre_simule_algo1 = 'menuitem-active';
                         $li_simulations = 'true';
@@ -123,12 +123,12 @@
                 }
             }
             break;
-    
+
         default:
             // dd("default");
             break;
     }
-    
+
 @endphp
 
 
@@ -453,5 +453,13 @@
     /* Mettre espace entre les deux btn OUI et NON */
     .swal2-cancel {
         margin-left: 5px;
+    }
+
+
+    /* NAV BAR */
+
+    .nav-pills .nav-link.active,
+    .nav-pills .show>.nav-link {
+        background-color: #6c757d !important;
     }
 </style>

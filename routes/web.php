@@ -21,6 +21,7 @@ use App\Http\Controllers\SocieteController;
 use App\Http\Controllers\MarqueController;
 use App\Http\Controllers\CaracteristiqueController;
 use App\Http\Controllers\ContratController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/powergrid', 'powergrid-demo');
 
+Route::get('/tests', [TestController::class, 'index'])->name('tests');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -158,7 +160,7 @@ Route::controller(ContactController::class)->group(function () {
     Route::put('/contacts/archiver/{contactId}', 'archiver')->name('contact.archive')->middleware(['auth']);
     Route::post('/contacts/desarchiver/{contactId}', 'unarchive')->name('contact.unarchive')->middleware(['auth']);
     Route::post('/contacts/associer/{entiteId}', 'associer_individu')->name('contact.associate')->middleware(['auth']);
-    Route::post('/contacts/desassocier/{entiteId}/{individuId}', 'deassocier_individu')->name('contact.deassociate')->middleware(['auth']);
+    Route::post('/contacts/desassocier/{entiteId}/{individuId}', 'dissocier_individu')->name('contact.deassociate')->middleware(['auth']);
 });
 
 
@@ -174,7 +176,7 @@ Route::controller(UtilisateurController::class)->group(function () {
     Route::put('/utilisateurs/archiver/{utilisateurId}', 'archiver')->name('utilisateur.archive')->middleware(['auth']);
     Route::post('/utilisateurs/desarchiver/{utilisateurId}', 'unarchive')->name('utilisateur.unarchive')->middleware(['auth']);
     Route::post('/utilisateurs/associer/{entiteId}', 'associer_individu')->name('utilisateur.associate')->middleware(['auth']);
-    Route::post('/utilisateurs/desassocier/{entiteId}/{individuId}', 'deassocier_individu')->name('utilisateur.deassociate')->middleware(['auth']);
+    Route::post('/utilisateurs/desassocier/{entiteId}/{individuId}', 'dissocier_individu')->name('utilisateur.deassociate')->middleware(['auth']);
 });
 
 // Supprimer les routes d'archivage qui ne sont pas contacts

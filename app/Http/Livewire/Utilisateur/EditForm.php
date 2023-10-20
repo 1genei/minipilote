@@ -46,32 +46,33 @@ public $roles;
     public function render()
     {
     
-        $emails = $cont->email != null ? json_decode($cont->email) : [];
-    // dd()
     
         $this->roles = Role::where('archive', false)->get();
         $this->individus = Individu::where('archive', false)->get();
         $this->infosUser = $this->utilisateur?->infos();
 
+        $emails = $this->infosUser?->email != null ? json_decode($this->infosUser?->email) : [];
+  
 
         $this->nom = $this->infosUser?->nom;   
         $this->prenom = $this->infosUser?->prenom;    
-        $this->email = $this->infosUser?->email;
-        $this->numero_voie = $this->infoUser?->numero_voie;
-        $this->nom_voie = $this->infoUser?->nom_voie;
-        $this->complement_voie = $this->infoUser?->complement_voie;
-        $this->code_postal = $this->infoUser?->code_postal;
-        $this->ville = $this->infoUser?->ville;
-        $this->pays = $this->infoUser?->pays;
-        $this->code_insee = $this->infoUser?->code_insee;
-        $this->code_cedex = $this->infoUser?->code_cedex;
-        $this->numero_cedex = $this->infoUser?->numero_cedex;
-        $this->boite_postale = $this->infoUser?->boite_postale;
-        $this->residence = $this->infoUser?->residence;
-        $this->batiment = $this->infoUser?->batiment;
-        $this->escalier = $this->infoUser?->escalier;
-        $this->etage = $this->infoUser?->etage;
-        $this->porte = $this->infoUser?->porte;
+        $this->email = $this->utilisateur?->email;
+        $this->emailx = $emails;
+        $this->numero_voie = $this->infosUser?->numero_voie;
+        $this->nom_voie = $this->infosUser?->nom_voie;
+        $this->complement_voie = $this->infosUser?->complement_voie;
+        $this->code_postal = $this->infosUser?->code_postal;
+        $this->ville = $this->infosUser?->ville;
+        $this->pays = $this->infosUser?->pays;
+        $this->code_insee = $this->infosUser?->code_insee;
+        $this->code_cedex = $this->infosUser?->code_cedex;
+        $this->numero_cedex = $this->infosUser?->numero_cedex;
+        $this->boite_postale = $this->infosUser?->boite_postale;
+        $this->residence = $this->infosUser?->residence;
+        $this->batiment = $this->infosUser?->batiment;
+        $this->escalier = $this->infosUser?->escalier;
+        $this->etage = $this->infosUser?->etage;
+        $this->porte = $this->infosUser?->porte;
         $this->telephone_fixe = $this->infosUser?->telephone_fixe;
         $this->indicatif_fixe = $this->infosUser?->indicatif_fixe;
         $this->telephone_mobile = $this->infosUser?->telephone_mobile;

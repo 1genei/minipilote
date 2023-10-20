@@ -208,101 +208,10 @@
     <script>
         $(document).ready(function() {
 
-            // $(".div_personne_morale").show();
-            // $(".div_personne_physique").hide();
-            // $(".div_couple").hide();
-            // $(".div_groupe").hide();
-
-
             $(".div_associer_contact").show();
-
-
-
-            // $("input[type='radio']").click(function(e) {
-
-            //     let nature = e.currentTarget.value;
-
-            //     if (nature == "Personne morale") {
-
-            //         $("input[type='text']").removeAttr("required");
-            //         $("select").removeAttr("required");
-            //         $("#type").val("entité");
-
-            //         $(".div_personne_physique").hide();
-            //         $(".div_personne_morale").show();
-            //         $(".div_couple").hide();
-            //         $(".div_groupe").hide();
-            //         $(".div_personne_tout").show();
-            //         $(".div_associer_contact").show();
-
-            //         $("#forme_juridique").attr("required", "required");
-            //         $("#raison_sociale").attr("required", "required");
-            //         $("#email").attr("required", "required");
-
-            //     } else if (nature == "Personne physique") {
-            //         $("input[type='text']").removeAttr("required");
-            //         $("select").removeAttr("required");
-
-            //         $(".div_personne_physique").show();
-            //         $(".div_personne_morale").hide();
-            //         $(".div_couple").hide();
-            //         $(".div_groupe").hide();
-            //         $(".div_personne_tout").show();
-
-            //         $("#civilite").attr("required", "required");
-            //         $("#nom").attr("required", "required");
-            //         $("#prenom").attr("required", "required");
-            //         $("#email").attr("required", "required");
-
-            //         $("#type").val("individu");
-            //         $(".div_associer_contact").hide();
-
-
-
-            //     } else if (nature == "Couple") {
-            //         $("input[type='text']").removeAttr("required");
-            //         $("select").removeAttr("required");
-
-            //         $(".div_personne_physique").hide();
-            //         $(".div_personne_morale").hide();
-            //         $(".div_couple").show();
-            //         $(".div_groupe").hide();
-            //         $(".div_personne_tout").hide();
-
-            //         $("#civilite1").attr("required", "required");
-            //         $("#nom1").attr("required", "required");
-            //         $("#prenom1").attr("required", "required");
-            //         $("#email1").attr("required", "required");
-
-            //         $("#civilite2").attr("required", "required");
-            //         $("#nom2").attr("required", "required");
-            //         $("#prenom2").attr("required", "required");
-            //         $("#email2").attr("required", "required");
-
-            //         $("#type").val("individu");
-            //         $(".div_associer_contact").hide();
-
-            //     } else if (nature == "Groupe") {
-            //         $("input[type='text']").removeAttr("required");
-            //         $("select").removeAttr("required");
-
-            //         $(".div_personne_physique").hide();
-            //         $(".div_personne_morale").hide();
-            //         $(".div_couple").hide();
-            //         $(".div_personne_tout").show();
-            //         $(".div_groupe").show();
-
-            //         $(".div_associer_contact").show();
-
-            //         $("#nom_groupe").attr("required", "required");
-            //         $("#email").attr("required", "required");
-            //         $("#type").val("entité");
-
-            //     }
-
-            // });
-
 
         });
     </script>
+
+
 @endsection

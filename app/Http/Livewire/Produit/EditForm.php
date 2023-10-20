@@ -68,7 +68,6 @@ class EditForm extends Component
     
     public function render()
     {
-   
         return view('livewire.produit.edit-form');
     }
     

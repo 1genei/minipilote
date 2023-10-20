@@ -253,10 +253,3 @@
 
 
 </form>
-
-<style>
-    .nav-pills .nav-link.active,
-    .nav-pills .show>.nav-link {
-        background-color: #7e7b7b !important;
-    }
-</style>
