@@ -15,7 +15,7 @@ public $roles;
     public $nom;   
     public $prenom;    
     public $email;
-    public $emailx;
+    // public $emailx;
     public $numero_voie;
     public $nom_voie;
     public $complement_voie;
@@ -51,13 +51,13 @@ public $roles;
         $this->individus = Individu::where('archive', false)->get();
         $this->infosUser = $this->utilisateur?->infos();
 
-        $emails = $this->infosUser?->email != null ? json_decode($this->infosUser?->email) : [];
+        // $emails = $this->infosUser?->email != null ? json_decode($this->infosUser?->email) : [];
   
 
         $this->nom = $this->infosUser?->nom;   
         $this->prenom = $this->infosUser?->prenom;    
         $this->email = $this->utilisateur?->email;
-        $this->emailx = $emails;
+        // $this->emailx = $emails;
         $this->numero_voie = $this->infosUser?->numero_voie;
         $this->nom_voie = $this->infosUser?->nom_voie;
         $this->complement_voie = $this->infosUser?->complement_voie;

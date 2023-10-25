@@ -15,7 +15,7 @@ class AddForm extends Component
     public $prenom2;
     public $forme_juridique;
     public $nature;
-    public $emailx;
+    // public $emailx;
     public $email;
     public $email1;
     public $email2;
@@ -73,7 +73,7 @@ class AddForm extends Component
                 'nature' => 'required',
                 'raison_sociale' => 'required|string',
                 'forme_juridique' => 'required|string',
-                'emailx' => 'required|string',
+                // 'emailx' => 'required|string',
                 'email' => 'required|email|unique:entites',
             ];
 
@@ -84,7 +84,7 @@ class AddForm extends Component
                 // 'civilite' => 'required|string',
                 'nom' => 'required|string',
                 'prenom' => 'required|string',
-                'emailx' => 'required|string',
+                // 'emailx' => 'required|string',
                 'email' => 'required|email|unique:individus',
             ];
 
@@ -110,7 +110,7 @@ class AddForm extends Component
                 'nature' => 'required',
                 'nom' => 'required|string',
                 'type' => 'required|string',
-                'emailx' => 'required|string',
+                // 'emailx' => 'required|string',
                 'email' => 'required|email|unique:entites',
 
             ];

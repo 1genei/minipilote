@@ -95,7 +95,7 @@ class UtilisateurController extends Controller
         
         
         Individu::create([
-            "email" => $request->emailx,
+            "email" => $request->email,
             "contact_id" => $contact->id,
             "nom" => $request->nom,
             "prenom" => $request->prenom,

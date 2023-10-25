@@ -382,4 +382,10 @@
             })
         });
     </script>
+
+    <script src="/js/mesfonctions.js"></script>
+    <script>
+        formater_tel("#telephone_fixe", "#indicatif_fixe");
+        formater_tel("#telephone_mobile", "#indicatif_mobile");
+    </script>
 @endsection

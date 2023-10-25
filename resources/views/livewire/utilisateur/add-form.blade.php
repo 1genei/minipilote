@@ -146,9 +146,9 @@
                                         </div>
 
                                         <div class="item_input">
-                                            <input type="text" id="nom" name="nom"
-                                                wire:model.defer="nom" required
-                                                value="{{ old('nom') ? old('nom') : '' }}" class="form-control">
+                                            <input type="text" id="nom" name="nom" wire:model.defer="nom"
+                                                required value="{{ old('nom') ? old('nom') : '' }}"
+                                                class="form-control">
                                             @if ($errors->has('nom'))
                                                 <br>
                                                 <div class="alert alert-warning text-secondary " role="alert">
@@ -202,8 +202,8 @@
                                     }
                                 </style>
 
-                                <input type="text" name="emailx" wire:model.defer="emailx" id="emailx"
-                                    value="" hidden>
+                                {{-- <input type="text" name="emailx" wire:model.defer="emailx" id="emailx"
+                                    value="" hidden> --}}
                                 <div class="mb-3">
                                     <div class=" container_email_label">
                                         <div class="">
@@ -211,11 +211,11 @@
                                                 Email <span class="text-danger">*</span>
                                             </label>
                                         </div>
-                                        <div class="">
+                                        {{-- <div class="">
                                             <a class="btn btn-warning add_field_button"
                                                 style=" margin-top:-10px; padding: 0.2rem 0.4rem;"><i
                                                     class="mdi mdi-plus-thick "></i> </a>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="input_fields_wrap">
                                         <div class="container_email_input">

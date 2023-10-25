@@ -12,11 +12,11 @@
         <!-- LOGO -->
         <a href="#" class="topnav-logo">
             <span class="topnav-logo-lg">
-                <img src="{{ asset('images/logo.png') }}" alt="" height="50">
+                {{-- <img src="{{ asset('images/logo.png') }}" alt="" height="50"> --}}
                 {{-- <span style="color: #fff; font-size:20px; font-weight: bold;">{{ env('APP_NAME') }}</span> --}}
             </span>
             <span class="topnav-logo-sm">
-                <img src="{{ asset('images/logo.png') }}" alt="" height="30">
+                {{-- <img src="{{ asset('images/logo.png') }}" alt="" height="30"> --}}
                 {{-- <span style="color: #fff; font-size:20px; font-weight: bold;">{{ env('APP_NAME') }}</span> --}}
 
             </span>

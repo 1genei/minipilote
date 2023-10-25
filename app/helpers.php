@@ -1,5 +1,8 @@
 <?php
 
+/**
+* Converti une chaine en format json en chaine de carcatère
+*/
 if (!function_exists('decode_string')) {
 
     function decode_string($encode_string)
@@ -25,6 +28,10 @@ if (!function_exists('decode_string')) {
 
 }
 
+
+/**
+* Convertir une chaine  de caractère en date 
+*/ 
 if(!function_exists('string_to_date')){
 
     function string_to_date($string_date, $lang="fr"){

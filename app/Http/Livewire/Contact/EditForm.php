@@ -16,7 +16,7 @@ class EditForm extends Component
     public $prenom2;
     public $forme_juridique;
     public $nature;
-    public $emailx;
+    // public $emailx;
     public $email;
     public $email1;
     public $email2;
@@ -76,8 +76,8 @@ class EditForm extends Component
         $this->prenom =  $this->cont->prenom;
         $this->prenom1 =  $this->cont->prenom1;
         $this->prenom2 =  $this->cont->prenom2;
-        $this->emailx =  $this->cont->emailx;
-        $this->email =  sizeof($this->emails) > 0 ? $this->emails[0] : "" ;
+        $this->email =  $this->cont->email;
+        // $this->email =  sizeof($this->emails) > 0 ? $this->emails[0] : "" ;
         $this->email1 =  $this->cont->email1;
         $this->email2 =  $this->cont->email2;
         
@@ -167,7 +167,7 @@ class EditForm extends Component
                 'nature' => 'required',
                 'nom' => 'required|string',
                 'type' => 'required|string',
-                'emailx' => 'required|string',
+                // 'emailx' => 'required|string',
                 'email' => 'required|email|unique:entites',
 
             ];

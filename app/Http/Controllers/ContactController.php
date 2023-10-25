@@ -90,7 +90,7 @@ class ContactController extends Controller
         if ($type_contact == "individu") {
 
             Individu::create([
-                "email" => $request->emailx,
+                "email" => $request->email,
                 "contact_id" => $contact->id,
                 "nom" => $request->nom,
                 "prenom" => $request->prenom,
@@ -141,7 +141,7 @@ class ContactController extends Controller
 
             Entite::create([
                 "type" => $request->type,
-                "email" => $request->emailx,
+                "email" => $request->email,
                 "nom" => $request->nom,
                 "telephone_fixe" => $request->telephone_fixe,
                 "telephone_mobile" => $request->telephone_mobile,
@@ -240,17 +240,17 @@ class ContactController extends Controller
         }
         $typecontact = $contact->typecontacts[0]->type;
         
-        if($cont->email != null){
-            $emails = json_decode($cont->email) != null ? json_decode($cont->email)  : array($cont->email);
+        // if($cont->email != null){
+        //     $emails = json_decode($cont->email) != null ? json_decode($cont->email)  : array($cont->email);
         
-        }else{
-            $emails =  [];
+        // }else{
+        //     $emails =  [];
         
-        }
+        // }
         $typecontacts = Typecontact::where('archive', false)->get();
         
         
-        return view('contact.edit', compact('contact','cont','emails','typecontacts','typecontact'));
+        return view('contact.edit', compact('contact','cont','typecontacts','typecontact'));
     }
 
     /**
@@ -284,7 +284,7 @@ class ContactController extends Controller
         $contact->update();
 
         if ($type_contact == "individu") {
-            $individu->email = $request->emailx;
+            $individu->email = $request->email;
             $individu->contact_id = $contact->id;
             $individu->nom = $request->nom;
             $individu->prenom = $request->prenom;
@@ -334,7 +334,7 @@ class ContactController extends Controller
         } else {
 
             $entite->type = $request->type;
-            $entite->email = $request->emailx;
+            $entite->email = $request->email;
             $entite->nom = $request->nom;
             $entite->telephone_fixe = $request->telephone_fixe;
             $entite->telephone_mobile = $request->telephone_mobile;

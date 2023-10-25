@@ -193,10 +193,6 @@
 
                                     </div>
 
-
-
-
-
                                 </div>
 
                             @endif
@@ -204,45 +200,50 @@
                             @if ($nature == 'Couple')
 
 
-                                <div class="mb-3 ">
-                                    <label for="civilite1" class="form-label">
-                                        Civilité <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select select2" id="civilite1" name="civilite1"
-                                        wire:model.defer="civilite1">
-                                        <option value="{{ old('civilite1') }}">
-                                            {{ old('civilite1') }}</option>
-                                        <option value="M.">M.</option>
-                                        <option value="Mme">Mme</option>
-                                    </select>
-
-                                    @if ($errors->has('civilite1'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('civilite1') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
-
-
-                                <div class="mb-3 ">
+                                <div class="mb-3 div_couple">
                                     <label for="nom1" class="form-label">
                                         Nom <span class="text-danger">*</span>
                                     </label>
-                                    <input type="text" id="nom1" name="nom1" wire:model.defer="nom1"
-                                        required value="{{ old('nom1') ? old('nom1') : '' }}" class="form-control">
 
-                                    @if ($errors->has('nom1'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('nom1') }}</strong>
+                                    <div class="container_indicatif">
+                                        <div class="item_indicatif">
+                                            <select class="form-select select2" id="civilite1" name="civilite1"
+                                                wire:model.defer="civilite1">
+
+                                                <option value="M.">M.</option>
+                                                <option value="Mme">Mme</option>
+                                            </select>
+
+                                            @if ($errors->has('civilite1'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('civilite1') }}</strong>
+                                                </div>
+                                            @endif
+
+
                                         </div>
-                                    @endif
+
+                                        <div class="item_input">
+                                            <input type="text" id="nom1" name="nom1"
+                                                wire:model.defer="nom1" required
+                                                value="{{ old('nom1') ? old('nom1') : '' }}" class="form-control">
+                                            @if ($errors->has('nom1'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('nom1') }}</strong>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                    </div>
+
                                 </div>
+
                                 <div class="mb-3 ">
                                     <label for="prenom1" class="form-label">
                                         Prénom(s) <span class="text-danger">*</span>
@@ -317,8 +318,8 @@
                                 }
                             </style>
 
-                            <input type="text" name="emailx" wire:model.defer="emailx" id="emailx"
-                                value="" hidden>
+                            {{-- <input type="text" name="emailx" wire:model.defer="emailx" id="emailx"
+                                value="" hidden> --}}
                             @if ($nature != 'Couple')
                                 <div class="mb-3">
                                     <div class=" container_email_label">
@@ -327,11 +328,11 @@
                                                 Email <span class="text-danger">*</span>
                                             </label>
                                         </div>
-                                        <div class="">
+                                        {{-- <div class="">
                                             <a class="btn btn-warning add_field_button"
                                                 style=" margin-top:-10px; padding: 0.2rem 0.4rem;"><i
                                                     class="mdi mdi-plus-thick "></i> </a>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="input_fields_wrap">
                                         <div class="container_email_input">
@@ -665,45 +666,52 @@
                             @if ($nature == 'Couple')
 
 
-                                <div class="mb-3 ">
-                                    <label for="civilite2" class="form-label">
-                                        Civilité <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select select2" id="civilite2" name="civilite2"
-                                        wire:model.defer="civilite2">
-                                        <option value="{{ old('civilite2') }}">
-                                            {{ old('civilite2') }}</option>
-                                        <option value="M.">M.</option>
-                                        <option value="Mme">Mme</option>
-                                    </select>
-
-                                    @if ($errors->has('civilite2'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('civilite2') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
-
-
-                                <div class="mb-3 ">
+                                <div class="mb-3 div_couple">
                                     <label for="nom2" class="form-label">
                                         Nom <span class="text-danger">*</span>
                                     </label>
-                                    <input type="text" id="nom2" name="nom2" wire:model.defer="nom2"
-                                        required value="{{ old('nom2') ? old('nom2') : '' }}" class="form-control">
 
-                                    @if ($errors->has('nom2'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('nom2') }}</strong>
+                                    <div class="container_indicatif">
+                                        <div class="item_indicatif">
+                                            <select class="form-select select2" id="civilite2" name="civilite2"
+                                                wire:model.defer="civilite2">
+
+                                                <option value="M.">M.</option>
+                                                <option value="Mme">Mme</option>
+                                            </select>
+
+                                            @if ($errors->has('civilite2'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('civilite2') }}</strong>
+                                                </div>
+                                            @endif
+
+
                                         </div>
-                                    @endif
+
+                                        <div class="item_input">
+                                            <input type="text" id="nom2" name="nom2"
+                                                wire:model.defer="nom2" required
+                                                value="{{ old('nom2') ? old('nom2') : '' }}" class="form-control">
+                                            @if ($errors->has('nom2'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('nom2') }}</strong>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                    </div>
+
                                 </div>
+
+
+
                                 <div class="mb-3 ">
                                     <label for="prenom2" class="form-label">
                                         Prénom(s) <span class="text-danger">*</span>
@@ -853,7 +861,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" wire:ignore>
 
 
                         <div class="col-6">
