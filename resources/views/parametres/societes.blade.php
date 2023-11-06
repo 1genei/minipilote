@@ -29,7 +29,7 @@
     </div>
     <div class="modal-body">
         @csrf
-        <div class="col-lg-12">
+        <div class="col-lg-8">
             <div class="form-floating mb-3">
                 <div class="m-2">
                     <label for="raison_sociale">Raison Sociale</label>
@@ -41,22 +41,7 @@
                     <input type="text" name="numero_siret" class="form-control w-75"
                         value="{{ $societe->numero_siret }}" />
                 </div>
-                <div class="m-2">
-                    <label for="logo">Logo</label>
-                    <div>
-                        @if ($societe->logo)
-                            <img src="{{ $societe->logo }}" alt="Current Logo" style="width: 200px;" />
-                        @else
-                            <p>Pas de logo chargé</p>
-                        @endif
-                    </div>
-                    <div>
-                        <input type="file" name="edit_logo_file" id="edit-logo-file-{{ $index }}"
-                            accept="image/*" style="display: none;" />
-                        <button type="button" id="edit-browse-button-{{ $index }}"
-                            class="btn btn-success mt-1">Parcourir</button>
-                    </div>
-                </div>
+
                 <div class="m-2">
                     <label for="capital">Capital</label>
                     <input type="text" name="capital" class="form-control w-75" value="{{ $societe->capital }}" />
@@ -110,8 +95,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" id="save-button-{{ $index }}"
-            disabled>Sauvegarder</button>
+        <button type="submit" class="btn btn-primary" id="save-button-{{ $index }}">Sauvegarder</button>
         <button type="button" class="btn btn-light" id="cancel-button-{{ $index }}">Annuler</button>
     </div>
 </form>

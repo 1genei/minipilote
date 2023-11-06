@@ -3,6 +3,9 @@
 namespace App\Http\Livewire\Contact;
 
 use Livewire\Component;
+use App\Models\Contact;
+use App\Models\Societe;
+use Illuminate\Database\Eloquent\Builder;
 
 class EditForm extends Component
 {
@@ -62,10 +65,15 @@ class EditForm extends Component
        
     public $typecontacts;
     public $displaytypecontact;
+    public $commercial_id;
+    public $societe_id;
+    
+    public $collaborateurs;
+    public $societes;
     
     
     public function mount(){
-    
+
 
         $this->nature = $this->contact->nature;
         $this->raison_sociale = $this->cont->raison_sociale;
@@ -80,6 +88,8 @@ class EditForm extends Component
         // $this->email =  sizeof($this->emails) > 0 ? $this->emails[0] : "" ;
         $this->email1 =  $this->cont->email1;
         $this->email2 =  $this->cont->email2;
+        $this->commercial_id = $this->contact->commercial_id;
+        $this->societe_id = $this->contact->societe_id;
         
         $this->numero_voie = $this->cont->numero_voie;
         $this->nom_voie = $this->cont->nom_voie;
@@ -129,7 +139,7 @@ class EditForm extends Component
                 'raison_sociale' => 'required|string',
                 'forme_juridique' => 'required|string',
                 // 'emailx' => 'required|string',
-                'email' => 'required|email|unique:entites',
+                // 'email' => 'required|email|unique:entites',
             ];
 
         } elseif ($this->nature == "Personne physique") {
@@ -140,7 +150,7 @@ class EditForm extends Component
                 'nom' => 'required|string',
                 'prenom' => 'required|string',
                 // 'emailx' => 'required|string',
-                'email' => 'required|email|unique:individus',
+                // 'email' => 'required|email|unique:individus',
             ];
             
      
@@ -156,8 +166,8 @@ class EditForm extends Component
                 'prenom1' => 'required|string',
                 'nom2' => 'required|string',
                 'prenom2' => 'required|string',
-                'email1' => 'required|email|unique:entites',
-                'email2' => 'required|email|unique:entites',
+                // 'email1' => 'required|email|unique:entites',
+                // 'email2' => 'required|email|unique:entites',
 
             ];
 
@@ -168,7 +178,7 @@ class EditForm extends Component
                 'nom' => 'required|string',
                 'type' => 'required|string',
                 // 'emailx' => 'required|string',
-                'email' => 'required|email|unique:entites',
+                // 'email' => 'required|email|unique:entites',
 
             ];
 
@@ -188,6 +198,15 @@ class EditForm extends Component
         if($this->typecontact == "Collaborateur"){
             $this->nature = "Personne physique";
         }
+    
+        $this->collaborateurs = Contact::whereHas('typecontacts', function (Builder $query) {
+            $query->where('type', 'collaborateur');
+        })
+            ->where([["type", "individu"], ['archive', false]])
+            ->get();
+            
+        $this->societes = Societe::where('archive', false)->get();
+       
         return view('livewire.contact.edit-form');
     }
 }

@@ -29,6 +29,7 @@ class ContactController extends Controller
         $contactentites = Contact::where([["type","entite"], ['archive', false]])->get();
         $contactindividus = Contact::where([["type","individu"], ['archive', false]])->get();
 
+
         return view('contact.index', compact('contactentites', 'contactindividus'));
     }
 
@@ -81,6 +82,8 @@ class ContactController extends Controller
             "user_id" => Auth::user()->id,
             "type" => $type_contact,
             "nature" => $request->nature,
+            "commercial_id" => $request->commercial_id,
+            "societe_id" => $request->societe_id,
 
         ]);
         
@@ -240,13 +243,6 @@ class ContactController extends Controller
         }
         $typecontact = $contact->typecontacts[0]->type;
         
-        // if($cont->email != null){
-        //     $emails = json_decode($cont->email) != null ? json_decode($cont->email)  : array($cont->email);
-        
-        // }else{
-        //     $emails =  [];
-        
-        // }
         $typecontacts = Typecontact::where('archive', false)->get();
         
         
@@ -275,8 +271,12 @@ class ContactController extends Controller
       
         // modifier le type du contact
         
+
         $typecontact = Typecontact::where('type', $request->typecontact)->first();
+       
         
+        $contact->commercial_id = $request->commercial_id;
+        $contact->societe_id = $request->societe_id;
         
         $contact->typeContacts()->detach();
         $contact->typeContacts()->attach($typecontact->id);

@@ -8,41 +8,30 @@ use Illuminate\Support\Facades\Crypt;
 
 class SocieteController extends Controller
 {
+
+    /**
+    * Enregistrer une société
+    */
     public function store(Request $request){
+        
+       
         $request->validate([
             'raison_sociale' => 'required|string',
-            'numero_siret' => 'required|string',
-            //'logo' => 'string|nullable',
-            'capital' => 'required|string',
-            'gerant' => 'required|string',
-            'numero_tva' => 'required|string',
-            'email' => 'required|string',
-            'telephone' => 'required|string',
-            
-            'numero_voie' => 'string',
-            'nom_voie' => 'string',
-            'complement_voie' => 'string',
-            'code_postal' => 'string',
-            'ville' => 'string',
-            'pays' => 'string',
-            'code_insee' => 'string',
-            'code_cedex' => 'string',
-            'numero_cedex' => 'string',
-            'boite_postale' => 'string',
-            'residence' => 'string',
-            'batiment' => 'string',
-            'escalier' => 'string',
-            'etage' => 'string',
-            'porte' => 'string',
+            'email' => 'required|string',          
+           
         ]);
+        
+    
         Societe::create([
             'raison_sociale' => $request->raison_sociale,
             'numero_siret' => $request->numero_siret,
             //'logo' => $request->logo,
+            'forme_juridique' => $request->forme_juridique,
             'capital' => $request->capital,
             'gerant' => $request->gerant,
             'numero_tva' => $request->numero_tva,
             'email' => $request->email,
+            'indicatif' => $request->indicatif,
             'telephone' => $request->telephone,
             "numero_voie" => $request->numero_voie,
             "nom_voie" => $request->nom_voie,
@@ -50,15 +39,7 @@ class SocieteController extends Controller
             "code_postal" => $request->code_postal,
             "ville" => $request->ville,
             "pays" => $request->pays,
-            "code_insee" => $request->code_insee,
-            "code_cedex" => $request->code_cedex,
-            "numero_cedex" => $request->numero_cedex,
-            "boite_postale" => $request->boite_postale,
-            "residence" => $request->residence,
-            "batiment" => $request->batiment,
-            "escalier" => $request->escalier,
-            "etage" => $request->etage,
-            "porte" => $request->porte, 
+            "notes" => $request->notes,
             'est_societe_principale' => false,
             'archive' => false
         ]);
@@ -66,36 +47,22 @@ class SocieteController extends Controller
         return redirect()->route('parametre.index')->with('message', 'Société ajoutée');
     }
 
+
+    /**
+    * Modifier une société
+    */
     public function update(Request $request, $societeId){
+    
         $request->validate([
             'raison_sociale' => 'required|string',
-            'numero_siret' => 'required|string',
-            //'logo' => 'string|nullable',
-            'capital' => 'required|string',
-            'gerant' => 'required|string',
-            'numero_tva' => 'required|string',
             'email' => 'required|string',
-            'telephone' => 'required|string',
-            'numero_voie' => 'string',
-            'nom_voie' => 'string',
-            'complement_voie' => 'string',
-            'code_postal' => 'string',
-            'ville' => 'string',
-            'pays' => 'string',
-            'code_insee' => 'string',
-            'code_cedex' => 'string',
-            'numero_cedex' => 'string',
-            'boite_postale' => 'string',
-            'residence' => 'string',
-            'batiment' => 'string',
-            'escalier' => 'string',
-            'etage' => 'string',
-            'porte' => 'string',
+    
         ]);
         $societe = Societe::where('id', Crypt::decrypt($societeId))->first();
         
         $societe->raison_sociale = $request->raison_sociale;
         $societe->numero_siret = $request->numero_siret;
+        $societe->forme_juridique = $request->forme_juridique;
         //$societe->logo = $request->logo;
         $societe->capital = $request->capital;
         $societe->gerant = $request->gerant;
@@ -108,20 +75,18 @@ class SocieteController extends Controller
         $societe->code_postal = $request->code_postal;
         $societe->ville = $request->ville;
         $societe->pays = $request->pays;
-        $societe->code_insee = $request->code_insee;
-        $societe->code_cedex = $request->code_cedex;
-        $societe->numero_cedex = $request->numero_cedex;
-        $societe->boite_postale = $request->boite_postale;
-        $societe->residence = $request->residence;
-        $societe->batiment = $request->batiment;
-        $societe->escalier = $request->escalier;
-        $societe->etage = $request->etage;
-        $societe->porte = $request->porte;
+        $societe->notes = $request->notes;
+   
         $societe->update();
         
         return redirect()->route('parametre.index')->with('message', 'Société modifiée');
     }
 
+
+
+    /**
+    * Ajouter une société comme société principale
+    */
     public function setPrincipale(Request $request, $societeId) {
         $principale = Societe::where('est_societe_principale', true)->first();
         $societe = Societe::where('id', Crypt::decrypt($societeId))->first();
@@ -137,6 +102,11 @@ class SocieteController extends Controller
         return redirect()->route('parametre.index')->with('message', 'Société principale changée');
     }
 
+
+    /**
+    * Archiver une société
+    *
+    */
     public function archive($societeId) {
         $societe = Societe::where('id', Crypt::decrypt($societeId))->first();
         $societe->archive = true;
@@ -144,6 +114,10 @@ class SocieteController extends Controller
         return redirect()->route('parametre.index')->with('message', 'Société archivée');
     }
 
+    /**
+    * Desarchiver une société
+    *
+    */
     public function unarchive($societeId) {
         $societe = Societe::where('id', Crypt::decrypt($societeId))->first();
         $societe->archive = false;

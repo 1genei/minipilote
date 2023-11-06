@@ -75,7 +75,7 @@
                                 $principalSociete = null;
                                 $activeSocietes = [];
                                 $archivedSocietes = [];
-                                
+
                                 foreach ($societes as $societe) {
                                     if ($societe->est_societe_principale) {
                                         $principalSociete = $societe;
@@ -134,8 +134,7 @@
                                                 </option>
                                             @endforeach
                                         </select>
-                                        <button id="modif-principale" class="btn btn-primary mt-2"
-                                            disabled>Modifier</button>
+                                        <button id="modif-principale" class="btn btn-primary mt-2">Modifier</button>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -167,24 +166,13 @@
 @endsection
 
 @section('script')
-    <script>
-        const select = document.getElementById('principale-id');
-        const button = document.getElementById('modif-principale');
+    @include('components.contact.add_script')
 
-        let initialSelectedValue = select.value;
 
-        select.addEventListener('change', function() {
-            if (select.value !== initialSelectedValue) {
-                button.removeAttribute('disabled');
-            } else {
-                button.setAttribute('disabled', true);
-            }
-        });
-    </script>
     <script>
-        document.getElementById("add_browse_button").addEventListener("click", function() {
-            document.getElementById("add_logo_file").click();
-        });
+        // document.getElementById("add_browse_button").addEventListener("click", function() {
+        //     document.getElementById("add_logo_file").click();
+        // });
     </script>
     <script>
         const societes = @json($societes);
@@ -223,68 +211,7 @@
             });
         }
     </script>
-    <script>
-        // Ajout société
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
 
-            $('[data-toggle="tooltip"]').tooltip();
-
-            // $('#form-add-societe').submit(function(event) {
-            //     event.preventDefault(); // Prevent form submission
-            //     let that = $(this);
-
-            //     const swalWithBootstrapButtons = swal.mixin({
-            //         confirmButtonClass: 'btn btn-success',
-            //         cancelButtonClass: 'btn btn-danger',
-            //         buttonsStyling: false,
-            //     });
-
-            //     swalWithBootstrapButtons.fire({
-            //         title: 'Ajouter la société',
-            //         text: "Confirmer ?",
-            //         icon: 'warning',
-            //         showCancelButton: true,
-            //         confirmButtonText: 'Oui',
-            //         cancelButtonText: 'Non',
-            //         reverseButtons: false
-            //     }).then((result) => {
-            //         if (result.isConfirmed) {
-            //             $('[data-toggle="tooltip"]').tooltip('hide');
-            //             $.ajax({
-            //                 url: that.attr('action'),
-            //                 type: 'POST',
-            //                 data: that.serialize(),
-            //                 success: function(data) {
-            //                 },
-            //                 error: function(data) {
-            //                 }
-            //             }).done(function() {
-            //                 swalWithBootstrapButtons.fire(
-            //                     'Confirmation',
-            //                     'Société ajoutée avec succès',
-            //                     'success'
-            //                 ).then((result) => {
-            //                     if (result.isConfirmed) {
-            //                         document.location.reload();
-            //                     }
-            //                 });
-            //             });
-            //         } else if (result.dismiss === Swal.DismissReason.cancel) {
-            //             swalWithBootstrapButtons.fire(
-            //                 'Annulation',
-            //                 'Ajout annulé',
-            //                 'error'
-            //             );
-            //         }
-            //     });
-            // });
-        });
-    </script>
     <script>
         // Société principale
         $(function() {
@@ -403,4 +330,6 @@
 
         });
     </script>
+
+
 @endsection

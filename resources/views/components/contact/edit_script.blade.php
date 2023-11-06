@@ -10,10 +10,14 @@
 
 <script async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD0y8QWgApdFG33-i8dVHWia-fIXcOMyc&libraries=places&callback=initAutocomplete"
-    async defer></script>
-
+    defer></script>
 <script src="/js/mesfonctions.js"></script>
+
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        initAutocomplete();
+    });
+    formater_tel("#telephone", "#indicatif");
     formater_tel("#telephone_fixe", "#indicatif_fixe");
     formater_tel("#telephone_mobile", "#indicatif_mobile");
     formater_tel("#telephone_fixe1", "#indicatif_fixe1");
@@ -21,8 +25,6 @@
     formater_tel("#telephone_fixe2", "#indicatif_fixe2");
     formater_tel("#telephone_mobile2", "#indicatif_mobile2");
 </script>
-
-
 
 
 

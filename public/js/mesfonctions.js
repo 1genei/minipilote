@@ -17,11 +17,16 @@ function formater_tel(selecteur_telephone, selecteur_indicatif){
 
             // Formate le numéro avec un espace après chaque 2 chiffres
             var numeroFormate = '';
+            
             for (var i = 0; i < numero.length; i++) {
-                numeroFormate += numero[i];
-                if (i % 2 === 1 && i < numero.length - 1) {
+                if (i === 1) {
                     numeroFormate += ' ';
                 }
+                if (i > 1 && (i - 1) % 2 === 0) {
+                    numeroFormate += ' ';
+                }
+                numeroFormate += numero[i];
+                
             }
 
             var indicatif_fixe = $(selecteur_indicatif).val();

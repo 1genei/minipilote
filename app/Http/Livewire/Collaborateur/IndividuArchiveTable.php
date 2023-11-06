@@ -134,7 +134,9 @@ final class IndividuArchiveTable extends PowerGridComponent
             ->addColumn('email',fn (Individu $model) => decode_string($model->email))
             ->addColumn('telephone_fixe')
             ->addColumn('telephone_mobile')
-            ->addColumn('adresse')
+            ->addColumn('adresse', function (Individu $model) {          
+                return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
+            } )
             ->addColumn('code_postal')
             ->addColumn('ville')
             ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));

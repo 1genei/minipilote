@@ -21,6 +21,8 @@ class CreateContactsTable extends Migration
             $table->integer('user_id')->unsigned()->nullable();
             // Le commercial qui suit le contact
             $table->integer('commercial_id')->unsigned()->nullable();
+            // société lié au contact
+            $table->integer('societe_id')->unsigned()->nullable();
             // 'Personne physique', 'couple', 'Personne morale', 'groupe', 'autre'
             $table->string("nature")->nullable();
             $table->boolean("archive")->default(false);

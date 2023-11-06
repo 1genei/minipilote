@@ -151,7 +151,9 @@ final class EntiteArchiveTable extends PowerGridComponent
             ->addColumn('email',fn (Entite $model) => decode_string($model->email))
             ->addColumn('telephone_fixe')
             ->addColumn('telephone_mobile')
-            ->addColumn('adresse')
+            ->addColumn('adresse', function (Entite $model) {          
+                return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
+            } )
             ->addColumn('code_postal')
             ->addColumn('ville')
             ->addColumn('created_at_formatted', fn (Entite $model) => Carbon::parse($model->created_at)->format('d/m/Y'));

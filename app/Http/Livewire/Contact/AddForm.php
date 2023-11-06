@@ -3,6 +3,10 @@
 namespace App\Http\Livewire\Contact;
 
 use Livewire\Component;
+use App\Models\Contact;
+use App\Models\Societe;
+
+use Illuminate\Database\Eloquent\Builder;
 
 class AddForm extends Component
 {
@@ -56,11 +60,15 @@ class AddForm extends Component
     public $civilite2;
     public $notes;
     public $contactindividus;
+    public $commercial_id;
+    public $societe_id;
     
     public $typecontact;
     public $typecontacts;
     public $displaytypecontact;
     
+    public $collaborateurs;
+    public $societes;
     
     public function rules()
     {
@@ -85,7 +93,7 @@ class AddForm extends Component
                 'nom' => 'required|string',
                 'prenom' => 'required|string',
                 // 'emailx' => 'required|string',
-                'email' => 'required|email|unique:individus',
+                // 'email' => 'required|email|unique:individus',
             ];
 
         } elseif ($this->nature == "Couple") {
@@ -99,8 +107,8 @@ class AddForm extends Component
                 'prenom1' => 'required|string',
                 'nom2' => 'required|string',
                 'prenom2' => 'required|string',
-                'email1' => 'required|email|unique:entites',
-                'email2' => 'required|email|unique:entites',
+                // 'email1' => 'required|email|unique:entites',
+                // 'email2' => 'required|email|unique:entites',
 
             ];
 
@@ -111,7 +119,7 @@ class AddForm extends Component
                 'nom' => 'required|string',
                 'type' => 'required|string',
                 // 'emailx' => 'required|string',
-                'email' => 'required|email|unique:entites',
+                // 'email' => 'required|email|unique:entites',
 
             ];
 
@@ -130,6 +138,17 @@ class AddForm extends Component
         if($this->typecontact == "Collaborateur"){
             $this->nature = "Personne physique";
         }
+        
+        
+        $this->collaborateurs = Contact::whereHas('typecontacts', function (Builder $query) {
+            $query->where('type', 'collaborateur');
+        })
+            ->where([["type", "individu"], ['archive', false]])
+            ->get();
+            
+        $this->societes = Societe::where('archive', false)->get();
+
+            
         return view('livewire.contact.add-form');
     }
 }

@@ -98,7 +98,7 @@
                                                 <div class=" container_email_label">
                                                     <div class="">
                                                         <label for="email" class="form-label">
-                                                            Adresse mail <span class="text-danger">*</span>
+                                                            Adresse mail
                                                         </label>
                                                     </div>
                                                     {{-- <div class="">
@@ -111,7 +111,7 @@
                                                     <div class="container_email_input">
                                                         <div class="item_email">
                                                             <input type="email" id="email" name="email"
-                                                                wire:model.defer="email" required
+                                                                wire:model.defer="email"
                                                                 value="{{ old('email') ? old('email') : '' }}"
                                                                 class="form-control emails">
                                                         </div>
@@ -145,8 +145,8 @@
 
                                                     </div>
                                                     <div class="item_input">
-                                                        <input type="tel" pattern="[0-9]*" id="telephone"
-                                                            name="telephone" wire:model.defer="telephone"
+                                                        <input type="text" id="telephone" name="telephone"
+                                                            wire:model.defer="telephone"
                                                             value="{{ old('telephone') ? old('telephone') : '' }}"
                                                             class="form-control">
                                                     </div>

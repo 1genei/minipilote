@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\Route;
 Route::view('/powergrid', 'powergrid-demo');
 
 Route::get('/tests', [TestController::class, 'index'])->name('tests');
+Route::get('/import-contact', [TestController::class, 'importContact'])->name('import_contact');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
