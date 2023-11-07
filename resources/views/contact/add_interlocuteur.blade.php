@@ -218,8 +218,7 @@
                                             </select>
                                         </div>
                                         <div class="item_input">
-                                            <input type="tel" pattern="[0-9]*" id="telephone_mobile"
-                                                name="telephone_mobile"
+                                            <input type="text" id="telephone_mobile" name="telephone_mobile"
                                                 value="{{ old('telephone_mobile') ? old('telephone_mobile') : '' }}"
                                                 class="form-control">
                                         </div>
@@ -256,8 +255,8 @@
 
                                         </div>
                                         <div class="item_input">
-                                            <input type="tel" pattern="[0-9]*" id="telephone_fixe"
-                                                name="telephone_fixe" wire:model.defer="telephone_fixe"
+                                            <input type="text" id="telephone_fixe" name="telephone_fixe"
+                                                wire:model.defer="telephone_fixe"
                                                 value="{{ old('telephone_fixe') ? old('telephone_fixe') : '' }}"
                                                 class="form-control">
                                         </div>

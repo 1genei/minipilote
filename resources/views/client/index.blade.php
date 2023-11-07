@@ -267,7 +267,7 @@
 
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="contact1"
+                                        <input type="text" name="contact1"
                                             value="{{ old('contact1') ? old('contact1') : '' }}" class="form-control"
                                             id="floatingInput">
                                         <label for="floatingInput">Téléphone1</label>
@@ -283,7 +283,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="contact2"
+                                        <input type="text" name="contact2"
                                             value="{{ old('contact2') ? old('contact2') : '' }}" class="form-control"
                                             id="floatingInput">
                                         <label for="floatingInput">Téléphone2</label>
@@ -307,7 +307,7 @@
 
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="adresse"
+                                        <input type="text" name="adresse"
                                             value="{{ old('adresse') ? old('adresse') : '' }}" class="form-control"
                                             id="floatingInput">
                                         <label for="floatingInput">Adresse</label>
@@ -329,7 +329,7 @@
 
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="code_postal"
+                                        <input type="text" name="code_postal"
                                             value="{{ old('code_postal') ? old('code_postal') : '' }}"
                                             class="form-control" id="floatingInput">
                                         <label for="floatingInput">Code postal</label>
@@ -345,7 +345,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="ville"
+                                        <input type="text" name="ville"
                                             value="{{ old('ville') ? old('ville') : '' }}" class="form-control"
                                             id="floatingInput">
                                         <label for="floatingInput">Ville</label>
@@ -494,7 +494,7 @@
 
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="contact1"
+                                        <input type="text" name="contact1"
                                             value="{{ old('contact1') ? old('contact1') : '' }}" class="form-control"
                                             id="edit-contact1">
                                         <label for="floatingInput">Téléphone1</label>
@@ -510,7 +510,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="contact2"
+                                        <input type="text" name="contact2"
                                             value="{{ old('contact2') ? old('contact2') : '' }}" class="form-control"
                                             id="edit-contact2">
                                         <label for="floatingInput">Téléphone2</label>
@@ -534,7 +534,7 @@
 
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="adresse"
+                                        <input type="text" name="adresse"
                                             value="{{ old('adresse') ? old('adresse') : '' }}" class="form-control"
                                             id="edit-adresse">
                                         <label for="floatingInput">Adresse</label>
@@ -556,7 +556,7 @@
 
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="code_postal"
+                                        <input type="text" name="code_postal"
                                             value="{{ old('code_postal') ? old('code_postal') : '' }}"
                                             class="form-control" id="edit-code_postal">
                                         <label for="floatingInput">Code postal</label>
@@ -572,7 +572,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" name="ville"
+                                        <input type="text" name="ville"
                                             value="{{ old('ville') ? old('ville') : '' }}" class="form-control"
                                             id="edit-ville">
                                         <label for="floatingInput">Ville</label>

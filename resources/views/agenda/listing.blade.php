@@ -171,7 +171,7 @@
                                                             <thead class="table-secondary">
 
                                                                 <tr>
-                                                                    <th>Tâche prévu pour</th>
+                                                                    <th>Tâche créée par</th>
                                                                     <th>Contact</th>
                                                                     <th>Type</th>
                                                                     <th>Tâche</th>
@@ -191,7 +191,8 @@
                                                                         <td style="color: #450854; ">
                                                                             <span>
                                                                                 @if ($agenda->user != null)
-                                                                                    {{ $agenda->user->name }}
+                                                                                    {{ $agenda->user->contact?->infos()->prenom }}
+                                                                                    {{ $agenda->user->contact?->infos()->nom }}
                                                                                 @endif
                                                                             </span>
                                                                         </td>
@@ -251,6 +252,7 @@
                                                                                     data-heure_deb="{{ $agenda->heure_deb }}"
                                                                                     data-type="{{ $agenda->type_rappel }}"
                                                                                     data-est_lie="{{ $agenda->est_lie }} "
+                                                                                    data-est_terminee="{{ $agenda->est_terminee }} "
                                                                                     data-contact_id="{{ $agenda->contact_id }}"
                                                                                     title="@lang('Modifier ')"
                                                                                     title="@lang('modifier la tâche ') "
@@ -547,7 +549,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="date" min="{{ date('Y-m-d') }}" name="date_deb"
+                                        <input type="date" name="date_deb"
                                             value="{{ old('date_deb') ? old('date_deb') : '' }}" class="form-control"
                                             id="edit_date_deb" required>
                                         <label for="edit_date_deb">Date de début </label>
@@ -564,7 +566,7 @@
 
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
-                                        <input type="date" min="{{ date('Y-m-d') }}" name="date_fin"
+                                        <input type="date" name="date_fin"
                                             value="{{ old('date_fin') ? old('date_fin') : '' }}" class="form-control"
                                             id="edit_date_fin" required>
                                         <label for="edit_date_fin">Date de fin </label>
@@ -624,8 +626,27 @@
                                             </div>
                                         @endif
                                     </div>
-
                                 </div>
+                                <div class="col-6">
+                                    <div class="form-floating mb-3">
+                                        <select name="est_terminee" id="edit_est_terminee" class="form-select">
+                                            <option value="Oui">Oui</option>
+                                            <option value="Non">Non</option>
+                                        </select>
+                                        <label for="est_terminee" class="text-danger">Tâche Terminée ?</label>
+                                        @if ($errors->has('est_terminee'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('est_terminee') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+
+
                             </div>
 
 
@@ -786,7 +807,9 @@
 
 
             let currentEstlie = that.data('est_lie') == true ? "Oui" : "Non";
+            let currentEstterminee = that.data('est_terminee') == true ? "Oui" : "Non";
 
+            $('#edit_est_terminee option[value=' + currentEstterminee + ']').attr('selected', 'selected');
             $('#edit_type option[value=' + currentType + ']').attr('selected', 'selected');
             $('#edit_est_lie option[value=' + currentEstlie + ']').attr('selected', 'selected');
 

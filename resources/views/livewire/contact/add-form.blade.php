@@ -382,8 +382,8 @@
 
                                             </div>
                                             <div class="item_input">
-                                                <input type="tel" pattern="[0-9]*" id="telephone_fixe"
-                                                    name="telephone_fixe" wire:model.defer="telephone_fixe"
+                                                <input type="text" id="telephone_fixe" name="telephone_fixe"
+                                                    wire:model.defer="telephone_fixe"
                                                     value="{{ old('telephone_fixe') ? old('telephone_fixe') : '' }}"
                                                     class="form-control">
                                             </div>
@@ -416,8 +416,8 @@
                                                 </select>
                                             </div>
                                             <div class="item_input">
-                                                <input type="tel" pattern="[0-9]*" id="telephone_mobile"
-                                                    name="telephone_mobile" wire:model.defer="telephone_mobile"
+                                                <input type="text" id="telephone_mobile" name="telephone_mobile"
+                                                    wire:model.defer="telephone_mobile"
                                                     value="{{ old('telephone_mobile') ? old('telephone_mobile') : '' }}"
                                                     class="form-control">
                                             </div>
@@ -456,8 +456,8 @@
                                                 </select>
                                             </div>
                                             <div class="item_input">
-                                                <input type="tel" pattern="[0-9]*" id="telephone_fixe1"
-                                                    name="telephone_fixe1" wire:model.defer="telephone_fixe1"
+                                                <input type="text" id="telephone_fixe1" name="telephone_fixe1"
+                                                    wire:model.defer="telephone_fixe1"
                                                     value="{{ old('telephone_fixe1') ? old('telephone_fixe1') : '' }}"
                                                     class="form-control">
                                             </div>
@@ -490,8 +490,8 @@
                                                 </select>
                                             </div>
                                             <div class="item_input">
-                                                <input type="tel" pattern="[0-9]*" id="telephone_mobile1"
-                                                    name="telephone_mobile1" wire:model.defer="telephone_mobile1"
+                                                <input type="text" id="telephone_mobile1" name="telephone_mobile1"
+                                                    wire:model.defer="telephone_mobile1"
                                                     value="{{ old('telephone_mobile1') ? old('telephone_mobile1') : '' }}"
                                                     class="form-control">
                                             </div>
@@ -802,8 +802,8 @@
                                                 </select>
                                             </div>
                                             <div class="item_input">
-                                                <input type="tel" pattern="[0-9]*" id="telephone_fixe2"
-                                                    name="telephone_fixe2" wire:model.defer="telephone_fixe2"
+                                                <input type="text" id="telephone_fixe2" name="telephone_fixe2"
+                                                    wire:model.defer="telephone_fixe2"
                                                     value="{{ old('telephone_fixe2') ? old('telephone_fixe2') : '' }}"
                                                     class="form-control">
                                             </div>
@@ -836,8 +836,8 @@
                                                 </select>
                                             </div>
                                             <div class="item_input">
-                                                <input type="tel" pattern="[0-9]*" id="telephone_mobile2"
-                                                    name="telephone_mobile2" wire:model.defer="telephone_mobile2"
+                                                <input type="text" id="telephone_mobile2" name="telephone_mobile2"
+                                                    wire:model.defer="telephone_mobile2"
                                                     value="{{ old('telephone_mobile2') ? old('telephone_mobile2') : '' }}"
                                                     class="form-control">
                                             </div>

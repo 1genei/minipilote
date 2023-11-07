@@ -139,7 +139,7 @@ class AgendaController extends Controller
     public function update(Request $request, $agenda_id)
     {
         //       
-        
+
         $agenda = Agenda::where('id',$agenda_id)->first();
         // dd( $request->heure_fin);
         $agenda->titre =  $request->titre; 
@@ -150,11 +150,11 @@ class AgendaController extends Controller
         $agenda->heure_deb =  $request->heure_deb; 
         $agenda->heure_fin =  $request->heure_fin; 
         $agenda->est_lie =  $request->est_lie == "Non" ? false : true ; 
+        $agenda->est_terminee =  $request->est_terminee == "Non" ? false : true ; 
 
       
         if( $request->est_lie == "Oui" && $request->contact_id != "null") $agenda->contact_id =  $request->contact_id; 
         
-        $agenda->est_terminee = $request->est_terminee == "true" ? true : false;             
         
     
         $agenda->update();
