@@ -57,6 +57,8 @@ class CreateIndividusTable extends Migration
             $table->string('telephone_fixe1')->nullable();
             $table->string('telephone_mobile1')->nullable();
             $table->string('email1')->nullable();
+            $table->string('profession1')->nullable();
+            $table->string('profession2')->nullable();
 
             $table->string('civilite2')->nullable();
             $table->string('nom2')->nullable();

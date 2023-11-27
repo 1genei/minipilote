@@ -1,4 +1,4 @@
-<form action="{{ route('contact.update', Crypt::encrypt($contact->id)) }}" method="post">
+<form action="{{ route('contact.update', Crypt::encrypt($contact->id)) }}" method="post" id="edit-contact">
     @csrf
 
 
@@ -274,7 +274,8 @@
                                         </label>
                                         <input type="email" id="email1" name="email1"
                                             wire:model.defer="email1"
-                                            value="{{ old('email1') ? old('email1') : '' }}" class="form-control">
+                                            value="{{ old('email1') ? old('email1') : '' }}"
+                                            class="form-control emails">
 
                                         @if ($errors->has('email1'))
                                             <br>
@@ -285,6 +286,26 @@
                                             </div>
                                         @endif
                                     </div>
+                                    @if ($typecontact == 'Prospect' || $typecontact == 'Client')
+                                        <div class="mb-3 div_personne_physique">
+                                            <label for="profession1" class="form-label">
+                                                Profession
+                                            </label>
+                                            <input type="text" id="profession1" name="profession1"
+                                                wire:model.defer="profession1"
+                                                value="{{ old('profession1') ? old('profession1') : '' }}"
+                                                class="form-control">
+
+                                            @if ($errors->has('profession1'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('profession1') }}</strong>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endif
                                 @endif
 
                                 <style>
@@ -383,7 +404,7 @@
                                                 <input type="text" id="telephone_fixe" name="telephone_fixe"
                                                     wire:model.defer="telephone_fixe"
                                                     value="{{ old('telephone_fixe') ? old('telephone_fixe') : '' }}"
-                                                    class="form-control">
+                                                    class="form-control telephones">
                                             </div>
 
                                         </div>
@@ -417,7 +438,7 @@
                                                 <input type="text" id="telephone_mobile" name="telephone_mobile"
                                                     wire:model.defer="telephone_mobile"
                                                     value="{{ old('telephone_mobile') ? old('telephone_mobile') : '' }}"
-                                                    class="form-control">
+                                                    class="form-control telephones">
                                             </div>
 
                                         </div>
@@ -457,7 +478,7 @@
                                                 <input type="text" id="telephone_fixe1" name="telephone_fixe1"
                                                     wire:model.defer="telephone_fixe1"
                                                     value="{{ old('telephone_fixe1') ? old('telephone_fixe1') : '' }}"
-                                                    class="form-control">
+                                                    class="form-control telephones">
                                             </div>
 
                                         </div>
@@ -491,7 +512,7 @@
                                                 <input type="text" id="telephone_mobile1" name="telephone_mobile1"
                                                     wire:model.defer="telephone_mobile1"
                                                     value="{{ old('telephone_mobile1') ? old('telephone_mobile1') : '' }}"
-                                                    class="form-control">
+                                                    class="form-control telephones">
                                             </div>
 
                                         </div>
@@ -628,6 +649,26 @@
                                             </div>
                                         @endif
                                     </div>
+                                    @if ($typecontact == 'Prospect' || $typecontact == 'Client')
+                                        <div class="mb-3 div_personne_physique">
+                                            <label for="profession" class="form-label">
+                                                Profession
+                                            </label>
+                                            <input type="text" id="profession" name="profession"
+                                                wire:model.defer="profession"
+                                                value="{{ old('profession') ? old('profession') : '' }}"
+                                                class="form-control">
+
+                                            @if ($errors->has('profession'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('profession') }}</strong>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endif
                                 @endif
                                 @if ($nature == 'Personne morale')
                                     <div class="mb-3 div_personne_morale">
@@ -743,7 +784,8 @@
                                         </label>
                                         <input type="email" id="email2" name="email2"
                                             wire:model.defer="email2"
-                                            value="{{ old('email2') ? old('email2') : '' }}" class="form-control">
+                                            value="{{ old('email2') ? old('email2') : '' }}"
+                                            class="form-control emails">
 
                                         @if ($errors->has('email2'))
                                             <br>
@@ -754,6 +796,26 @@
                                             </div>
                                         @endif
                                     </div>
+                                    @if ($typecontact == 'Prospect' || $typecontact == 'Client')
+                                        <div class="mb-3 div_personne_physique">
+                                            <label for="profession2" class="form-label">
+                                                Profession
+                                            </label>
+                                            <input type="text" id="profession2" name="profession2"
+                                                wire:model.defer="profession2"
+                                                value="{{ old('profession2') ? old('profession2') : '' }}"
+                                                class="form-control">
+
+                                            @if ($errors->has('profession2'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('profession2') }}</strong>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endif
                                 @endif
 
                                 @if ($nature == 'Groupe')
@@ -806,7 +868,7 @@
                                                 <input type="text" id="telephone_fixe2" name="telephone_fixe2"
                                                     wire:model.defer="telephone_fixe2"
                                                     value="{{ old('telephone_fixe2') ? old('telephone_fixe2') : '' }}"
-                                                    class="form-control">
+                                                    class="form-control telephones">
                                             </div>
 
                                         </div>
@@ -840,7 +902,7 @@
                                                 <input type="text" id="telephone_mobile2" name="telephone_mobile2"
                                                     wire:model.defer="telephone_mobile2"
                                                     value="{{ old('telephone_mobile2') ? old('telephone_mobile2') : '' }}"
-                                                    class="form-control">
+                                                    class="form-control telephones">
                                             </div>
 
                                         </div>
@@ -1048,55 +1110,57 @@
                         <div class="row">
 
                             <div class="col-12">
+                                @if ($typecontact == 'Prospect' || $typecontact == 'Client')
+                                    <div class="mb-3 ">
+                                        <label for="commercial_id" class="form-label">
+                                            Suivi par
+                                        </label>
+                                        <select class="form-select select2" id="commercial_id" name="commercial_id"
+                                            wire:model.defer="commercial_id">
+                                            <option value=""></option>
+                                            @foreach ($collaborateurs as $collaborateur)
+                                                <option value="{{ $collaborateur->id }}">
+                                                    {{ $collaborateur->infos()->nom }}
+                                                </option>
+                                            @endforeach
+                                        </select>
 
-                                <div class="mb-3 ">
-                                    <label for="commercial_id" class="form-label">
-                                        Commercial
-                                    </label>
-                                    <select class="form-select select2" id="commercial_id" name="commercial_id"
-                                        wire:model.defer="commercial_id">
-                                        <option value=""></option>
-                                        @foreach ($collaborateurs as $collaborateur)
-                                            <option value="{{ $collaborateur->id }}">
-                                                {{ $collaborateur->infos()->nom }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                        @if ($errors->has('commercial_id'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close">
+                                                </button>
+                                                <strong>{{ $errors->first('commercial_id') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
+                                @if ($typecontact != 'Collaborateur')
+                                    <div class="mb-3 ">
+                                        <label for="societe_id" class="form-label">
+                                            Contact de la société
+                                        </label>
+                                        <select class="form-select select2" id="societe_id" name="societe_id"
+                                            wire:model.defer="societe_id">
+                                            <option value=""></option>
+                                            @foreach ($societes as $societe)
+                                                <option value="{{ $societe->id }}">{{ $societe->raison_sociale }}
+                                                </option>
+                                            @endforeach
+                                        </select>
 
-                                    @if ($errors->has('commercial_id'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close">
-                                            </button>
-                                            <strong>{{ $errors->first('commercial_id') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="mb-3 ">
-                                    <label for="societe_id" class="form-label">
-                                        Le contact est lié à
-                                    </label>
-                                    <select class="form-select select2" id="societe_id" name="societe_id"
-                                        wire:model.defer="societe_id">
-                                        <option value=""></option>
-                                        @foreach ($societes as $societe)
-                                            <option value="{{ $societe->id }}">{{ $societe->raison_sociale }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-
-                                    @if ($errors->has('societe_id'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close">
-                                            </button>
-                                            <strong>{{ $errors->first('societe_id') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
+                                        @if ($errors->has('societe_id'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close">
+                                                </button>
+                                                <strong>{{ $errors->first('societe_id') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
 
 

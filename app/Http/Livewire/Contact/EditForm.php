@@ -17,6 +17,9 @@ class EditForm extends Component
     public $prenom;
     public $prenom1;
     public $prenom2;
+    public $profession;
+    public $profession1;
+    public $profession2;
     public $forme_juridique;
     public $nature;
     // public $emailx;
@@ -84,6 +87,9 @@ class EditForm extends Component
         $this->prenom =  $this->cont->prenom;
         $this->prenom1 =  $this->cont->prenom1;
         $this->prenom2 =  $this->cont->prenom2;
+        $this->profession =  $this->cont->profession;
+        $this->profession1 =  $this->cont->profession1;
+        $this->profession2 =  $this->cont->profession2;
         $this->email =  $this->cont->email;
         // $this->email =  sizeof($this->emails) > 0 ? $this->emails[0] : "" ;
         $this->email1 =  $this->cont->email1;

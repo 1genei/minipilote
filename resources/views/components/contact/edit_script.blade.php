@@ -40,31 +40,42 @@
 
 {{-- Lorsqu'on submit le formulaire --}}
 <script>
-    $('#enregistrer').click(function(e) {
+    $('#modifier').on("click", function(e) {
+        e.preventDefault();
 
-        // e.preventDefault();
         var emails = [];
+        var telephones = [];
 
         var email_inputs = $('.emails');
-        email_inputs.each((index, input) => {
-            if (input.value != "") emails.push(input.value)
+        var telephone_inputs = $('.telephones');
+
+        email_inputs.each(function(index, input) {
+            if (input.value !== "") emails.push(input.value);
         });
 
+        telephone_inputs.each(function(index, input) {
+            if (input.value !== "") telephones.push(input.value);
+        });
 
-        if (emails.length == 0) {
+        if (emails.length === 0 && telephones.length === 0) {
             swal.fire(
                 'Erreur',
-                'Veuillez renseigner au moins une adresse mail',
+                'Veuillez renseigner au moins une adresse mail ou un numéro de téléphone',
                 'error'
-            )
+            );
         } else {
-            $('#emailx').val(JSON.stringify(emails));
-            // $('form').submit();
+            $('#modifier').trigger("soumettreFormulaire");
         }
+    });
 
+    // Créez un événement personnalisé pour soumettre le formulaire
+    var evenementSoumissionFormulaire = new Event('soumettreFormulaire');
+
+    // Liez un gestionnaire d'événements à l'événement personnalisé
+    $('#modifier').on('soumettreFormulaire', function(event) {
+        $('#edit-contact').submit();
     });
 </script>
-
 
 
 {{-- Suppression ou Ajout de champ email --}}

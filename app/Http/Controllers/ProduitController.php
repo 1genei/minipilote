@@ -65,6 +65,7 @@ class ProduitController extends Controller
         $produit = Produit::create([
             "nom" => $request->nom,
             "type" => "simple",
+            "nature" => $request->nature,
             "description" => $request->description,
             "reference" => $request->reference,
             "user_id" => Auth::user()->id,
@@ -154,6 +155,7 @@ class ProduitController extends Controller
            
         $produit->nom = $request->nom;
         $produit->description = $request->description;
+        $produit->nature = $request->nature;
         $produit->reference = $request->reference;
         $produit->marque_id = $request->marque;
         $produit->prix_vente_ht = $request->prix_vente_ht;

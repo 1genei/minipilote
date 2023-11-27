@@ -13,14 +13,18 @@ return new class extends Migration
     {
         Schema::create('produits', function (Blueprint $table) {
             $table->id();
+            $table->string("nom")->nullable();
             $table->string("reference")->nullable();
-            // Simple, déclinaison
+            
             $table->integer("fournisseur_id")->nullable();
             $table->integer("produit_id")->nullable();
             $table->integer("marque_id")->nullable();
             $table->integer("user_id")->nullable();
+            $table->integer("tva_id")->nullable();
+            // Simple, déclinaison
             $table->string("type")->nullable();
-            $table->string("nom")->nullable();
+            // Matériel, Prestation de service
+            $table->string("nature")->nullable();
             $table->boolean("a_declinaison")->default(false);
             $table->text("description")->nullable();
             $table->double("poids")->nullable();

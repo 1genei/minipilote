@@ -22,6 +22,7 @@ use App\Http\Controllers\MarqueController;
 use App\Http\Controllers\CaracteristiqueController;
 use App\Http\Controllers\ContratController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\DeviController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,7 +54,7 @@ Route::get('/login/o365/callback', [Autho365Controller::class, 'redirect'])->nam
 
 // Dashboard
 Route::controller(DashboardController::class)->group(function () {
-    Route::get('/', 'index')->name('welcome')->middleware(['auth']);
+    Route::get('/', 'index')->name('welcome');
 });
 
 Route::get('/dashboard', function () {
@@ -286,6 +287,20 @@ Route::controller(ContratController::class)->group(function () {
     Route::post('/contrats/modifier/{contratId}', 'update')->name('contrat.update')->middleware(['auth']);
     Route::put('/contrats/archiver/{contratId}', 'archive')->name('contrat.archive')->middleware(['auth']);
     Route::post('/contrats/desarchiver/{contratId}', 'unarchive')->name('contrat.unarchive')->middleware(['auth']);
+});
+
+
+// Devis
+Route::controller(DeviController::class)->group(function () {
+    Route::get('/devis', 'index')->name('devis.index')->middleware(['auth']);
+    Route::get('/devis/archives', 'archives')->name('devis.archives')->middleware(['auth']);
+    Route::get('/devis/create', 'create')->name('devis.create')->middleware(['auth']);
+    Route::get('/devis/detail/{deviId}', 'show')->name('devis.show')->middleware(['auth']);
+    Route::get('/devis/modifier/{deviId}', 'edit')->name('devis.edit')->middleware(['auth']);
+    Route::post('/devis/ajouter', 'store')->name('devis.store')->middleware(['auth']);
+    Route::post('/devis/modifier/{deviId}', 'update')->name('devis.update')->middleware(['auth']);
+    Route::post('/devis/archiver/{deviId}', 'archive')->name('devis.archive')->middleware(['auth']);
+    Route::post('/devis/desarchiver/{deviId}', 'unarchive')->name('devis.unarchive')->middleware(['auth']);
 });
 
 

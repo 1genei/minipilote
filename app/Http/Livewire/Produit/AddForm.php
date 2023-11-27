@@ -20,6 +20,7 @@ public $fiche_technique;
 public $reference;
 public $marque;
 public $type;
+public $nature;
 public $marques;
 public $prix_vente_ht;
 public $prix_vente_ttc;
@@ -39,6 +40,7 @@ public $seuil_alerte_stock;
     public function render()
     {
         $this->type = "simple";
+        $this->nature = "Matériel";
         return view('livewire.produit.add-form');
     }
     
@@ -52,6 +54,8 @@ public $seuil_alerte_stock;
         return [
             'nom' => 'required|string|unique:produits',
             'reference' => 'required|string|unique:produits',
+            'type' => 'required',
+            'nature' => 'required',
             'prix_vente_ht' => 'required',
             'prix_vente_ttc' => 'required',                
             'categories_id' => 'required',

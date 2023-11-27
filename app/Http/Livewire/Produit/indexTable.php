@@ -144,6 +144,7 @@ final class indexTable extends PowerGridComponent
                 }
                 return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
             } )
+            ->addColumn('nature')
             
             ->addColumn('image', function (Produit $model) {
                 if($model->imageproduits != null && sizeof($model->imageproduits)>0 ){
@@ -204,7 +205,8 @@ final class indexTable extends PowerGridComponent
     {
         return [
             // Column::make('Id', 'id'),
-            Column::make('Type', 'type')->sortable()->searchable(),            
+            Column::make('Type', 'type')->sortable()->searchable(), 
+            Column::make('Nature', 'nature')->sortable()->searchable(),
             Column::make('Image', 'image')->sortable()->searchable(),
             Column::make('Référence', 'reference')->sortable()->searchable(),
             Column::make('Nom', 'nom')->sortable()->searchable(),

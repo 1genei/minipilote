@@ -97,6 +97,9 @@ class ContactController extends Controller
                 "contact_id" => $contact->id,
                 "nom" => $request->nom,
                 "prenom" => $request->prenom,
+                "profession" => $request->profession,
+                "profession1" => $request->profession1,
+                "profession2" => $request->profession2,
                 "numero_voie" => $request->numero_voie,
                 "nom_voie" => $request->nom_voie,
                 "complement_voie" => $request->complement_voie,
@@ -184,7 +187,25 @@ class ContactController extends Controller
         }
         
         if($returnContact == true) return $contact;
-        return redirect()->back()->with('ok', 'Contact ajouté');
+        
+        return redirect()->route('contact.show', Crypt::encrypt($contact->id))->with('ok', 'Contact ajouté');
+        
+        // if($request->typecontact == "Prospect"){
+        //     return redirect()->route('prospect.index')->with('ok', 'Contact ajouté');
+        // }
+        // elseif($request->typecontact == "Fournisseur"){
+        //     return redirect()->route('fournisseur.index')->with('ok', 'Contact ajouté');
+        // }
+        // elseif($request->typecontact == "Client"){
+        //     return redirect()->route('client.index')->with('ok', 'Contact ajouté');
+        // }
+        // elseif($request->typecontact == "Collaborateur"){
+        //     return redirect()->route('collaborateur.index')->with('ok', 'Contact ajouté');
+        // }else{
+        //     return redirect()->route('contact.index')->with('ok', 'Contact ajouté');
+            
+        // }
+
         
     }
 
@@ -303,6 +324,9 @@ class ContactController extends Controller
             $individu->escalier = $request->escalier;
             $individu->etage = $request->etage;
             $individu->porte = $request->porte;
+            $individu->profession = $request->profession;
+            $individu->profession1 = $request->profession1;
+            $individu->profession2 = $request->profession2;
 
             $individu->civilite = $request->civilite;
             $individu->date_naissance = $request->date_naissance;
@@ -375,8 +399,9 @@ class ContactController extends Controller
         }
 
         
-        session()->flash('ok', 'Post successfully updated.');
-        return redirect()->back()->with('ok', 'Contact modifié');
+        return redirect()->route('contact.show', Crypt::encrypt($contact->id))->with('ok', 'Contact modifié');
+        
+
     }
 
 

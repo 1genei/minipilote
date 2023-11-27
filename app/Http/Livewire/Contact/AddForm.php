@@ -17,6 +17,9 @@ class AddForm extends Component
     public $prenom;
     public $prenom1;
     public $prenom2;
+    public $profession;
+    public $profession1;
+    public $profession2;
     public $forme_juridique;
     public $nature;
     // public $emailx;
@@ -74,7 +77,6 @@ class AddForm extends Component
     {
     
 
-
         if ($this->nature == "Personne morale") {
 
             return [
@@ -82,7 +84,7 @@ class AddForm extends Component
                 'raison_sociale' => 'required|string',
                 'forme_juridique' => 'required|string',
                 // 'emailx' => 'required|string',
-                'email' => 'required|email|unique:entites',
+                // 'email' => 'required|email|unique:entites',
             ];
 
         } elseif ($this->nature == "Personne physique") {

@@ -292,7 +292,7 @@
                             <li> <a href="#"> Propositions commerciales </a></li>
                         @endcan
                         @can('permission', 'afficher-devis')
-                            <li> <a href="#"> Devis </a></li>
+                            <li> <a href="{{route('devis.index')}}"> Devis </a></li>
                         @endcan
                     </ul>
                 </div>

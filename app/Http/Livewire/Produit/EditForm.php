@@ -10,6 +10,7 @@ class EditForm extends Component
     use WithFileUploads;
 
     public $type;
+    public $nature;
     public $nom;
     public $reference;
     public $description;
@@ -41,6 +42,7 @@ class EditForm extends Component
     public function mount(){
     
         $this->type = $this->produit->type;
+        $this->nature = $this->produit->nature;
         $this->reference = $this->produit->reference;
         $this->nom = $this->produit->nom;
         $this->description = $this->produit->description;
@@ -82,6 +84,7 @@ class EditForm extends Component
 
         $require = [
             'type' => 'required',
+            'nature' => 'required',
             'prix_vente_ht' => 'required',
             'prix_vente_ttc' => 'required',                
             'fiche_technique' => 'file:pdf'

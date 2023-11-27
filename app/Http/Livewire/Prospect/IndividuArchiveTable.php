@@ -69,7 +69,7 @@ final class IndividuArchiveTable extends PowerGridComponent
                 ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+                ->where([['contacts.type', 'individu'],['contacts.archive', true]])
                 ->where('typecontacts.type', 'Prospect')
                 ->get();
 
@@ -80,7 +80,7 @@ final class IndividuArchiveTable extends PowerGridComponent
                 ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false], ["contacts.user_id", $user->id]])
+                ->where([['contacts.type', 'individu'],['contacts.archive', true], ["contacts.user_id", $user->id]])
                 ->where('typecontacts.type', 'Prospect')
                 ->get();
         }

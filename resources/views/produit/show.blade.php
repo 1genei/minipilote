@@ -155,6 +155,10 @@
                                                             </h5>
 
                                                         </div>
+                                                        <div class="item-titre">
+                                                            <!-- Product title -->
+                                                            <span class="mt-0 ">{{ $produit->nature }} </span>
+                                                        </div>
                                                     </div>
 
 

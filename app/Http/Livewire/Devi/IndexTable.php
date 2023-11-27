@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Livewire\Produit;
-
+namespace App\Http\Livewire\Devi;
 
 use App\Models\Contact;
-use App\Models\Produit;
+use App\Models\Devi;
 use Crypt;
 use Auth;
 
@@ -16,11 +15,11 @@ use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 use Illuminate\Support\Facades\Gate;
 
-final class ArchiveTable extends PowerGridComponent
+final class IndexTable extends PowerGridComponent
 {
     use ActionButton;
     use WithExport;
-    public $produits;
+    public $devis;
     public $categories_id = [];
     
     /*
@@ -63,23 +62,11 @@ final class ArchiveTable extends PowerGridComponent
     public function datasource()
     {
     
-        $user = Auth::user();
-
-        if ($user->is_admin) {
-
-
-            $produits = Produit::where([['archive', true],['type','simple']])->get();
-       
-
-        } else {
+      
+            $devis = Devi::where([['archive', false],['type','simple']])->get();
+            
         
-            $produits = Produit::where([['archive', true],['type','simple'], ['user_id',$user->id]])->get();
-                
-        }
-    // dd($produits);
-       
-        
-        return $produits;
+        return $devis;
 
     }
 
@@ -116,56 +103,52 @@ final class ArchiveTable extends PowerGridComponent
     public function addColumns(): PowerGridColumns
     {
     
+    
         return PowerGrid::columns()
             // ->addColumn('id')
-            ->addColumn('type', function (Produit $model) {
-                if($model->type == "simple"){
-                    $color = "btn-secondary ";
-                }
-                else{
-                    $color = "btn-light ";                
-                }
-                return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
+            ->addColumn('type', function (Devi $model) {
+       
+                return  '<button type="button" class="btn btn-light btn-sm rounded-pill">'.$model->numero_devis.'</button>';
             } )
-            ->addColumn('nature')
-            ->addColumn('image', function (Produit $model) {
-                if($model->imageproduits != null && sizeof($model->imageproduits)>0 ){
-                    $src = asset('/images/images_produits/' . $model->imageproduits[0]?->nom_fichier) ;
-                    
-                    return  ' <img src="'.$src.'" class="img-fluid" style="max-width: 80px; min-width: 80px;" alt="Photo du produit" />';
-                
-                }else{
-                    return  '<span class="btn btn-sm rounded-pill"> sans image</span>';
-                    
-                }
-            } )
-            ->addColumn('reference')
+            
             ->addColumn('nom')
-            ->addColumn('categorie',function (Produit $model){
-                
-               
-                $cats = "";
-                foreach ($model->categorieproduits as $cat) {
-                
-               
-                    $cats .= $cat->nom .", " ;
-    
+            ->addColumn('statut', function (Devi $model) {
+                if($model->statut == "accepté"){
+                    $color = "btn-success ";
+                }
+                elseif($model->statut == "refusé"){
+                    $color = "btn-danger ";                
+                }else{
+                    $color = "btn-warning ";
                 }
                 
-                return $cats;
+                return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->statut.'</button>';
+                
             } )
-            ->addColumn('prix_vente_ht',function (Produit $model){
-                
-              
-                return $model->prix_vente_ht;
-            })
-            ->addColumn('stock',function (Produit $model){
-                
-                if($model->stock){
-                    return $model->stock->quantite;
+            ->addColumn('montant_ht')
+            ->addColumn('montant_ttc')
+            ->addColumn('remise')
+            ->addColumn('client_prospect', function (Devi $model) {
+                if($model->client_prospect){
+                    return  $model->client_prospect->nom;
                 }
-                return "non géré";
-            });
+                return "non renseigné";
+            } )
+            ->addColumn('collaborateur', function (Devi $model) {
+                if($model->collaborateur){
+                    return  $model->collaborateur->nom;
+                }
+                return "non renseigné";
+            } )
+            ->addColumn('date_devis', function (Devi $model) {
+                return  $model->date_devis->format('d/m/Y');
+            } )
+            ->addColumn('duree_validite', function (Devi $model) {
+                return  $model->duree_validite." jours";
+            } );
+      
+            
+           
          
     }
 
@@ -187,17 +170,21 @@ final class ArchiveTable extends PowerGridComponent
     {
         return [
             // Column::make('Id', 'id'),
-            Column::make('Type', 'type')->sortable()->searchable(),    
-            Column::make('Nature', 'nature')->sortable()->searchable(),
-            Column::make('Image', 'image')->sortable()->searchable(),
-            Column::make('Référence', 'reference')->sortable()->searchable(),
+            Column::make('Numéro devis', 'numero')->sortable()->searchable(), 
             Column::make('Nom', 'nom')->sortable()->searchable(),
-            Column::make('Catégories', 'categorie')->sortable()->searchable(),
-            Column::make('Prix de vente HT', 'prix_vente_ht')->sortable()->searchable(),
-            Column::make('Stock', 'stock')->sortable()->searchable(),
+            Column::make('Statut', 'Statut')->sortable()->searchable(),
+            Column::make('Montant ht', 'montant_ht')->sortable()->searchable(),
+            Column::make('Montant ttc', 'montant_ttc')->sortable()->searchable(),
+            Column::make('Remise', 'remise')->sortable()->searchable(),
+            Column::make('Client/Prospect', 'client_prospect')->sortable()->searchable(),
+            Column::make('Créé par', 'collaborateur')->sortable()->searchable(),
+            Column::make('Date', 'date_devis')->sortable()->searchable(),
+            Column::make('Durée validité', 'duree_validite')->sortable()->searchable(),
 
 
         ];
+        
+
     }
 
     /**
@@ -249,27 +236,27 @@ final class ArchiveTable extends PowerGridComponent
                
                
             Button::add('Afficher')
-                ->bladeComponent('button-show', function(Produit $produit) {
-                    return ['route' => route('produit.show', Crypt::encrypt($produit->id)),
+                ->bladeComponent('button-show', function(Devi $devi) {
+                    return ['route' => route('devi.show', Crypt::encrypt($devi->id)),
                     'tooltip' => "Afficher",
-                    'permission' => Gate::allows('permission', 'afficher-produit'),                    
+                    'permission' => Gate::allows('permission', 'afficher-devi'),                    
                     ];
                 }),
                 
             Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Produit $produit) {
-                return ['route' => route('produit.edit', Crypt::encrypt($produit->id)),
+            ->bladeComponent('button-edit', function(Devi $devi) {
+                return ['route' => route('devi.edit', Crypt::encrypt($devi->id)),
                 'tooltip' => "Modifier",
-                'permission' => Gate::allows('permission', 'modifier-produit'),                
+                'permission' => Gate::allows('permission', 'modifier-devi'),                
                 ];
             }),
             
-            Button::add('Restaurer')
-            ->bladeComponent('button-unarchive', function(Produit $produit) {
-                return ['route' => route('produit.unarchive', Crypt::encrypt($produit->id)),
-                'tooltip' => "Restaurer",
-                'classunarchive' => "unarchive_produit",
-                'permission' => Gate::allows('permission', 'archiver-produit'),
+            Button::add('Archiver')
+            ->bladeComponent('button-archive', function(Devi $devi) {
+                return ['route' => route('devi.archive', Crypt::encrypt($devi->id)),
+                'tooltip' => "Archiver",
+                'classarchive' => "archive_devi",
+                'permission' => Gate::allows('permission', 'archiver-devi'),
                 
                 ];
             }),
