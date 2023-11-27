@@ -54,7 +54,7 @@ Route::get('/login/o365/callback', [Autho365Controller::class, 'redirect'])->nam
 
 // Dashboard
 Route::controller(DashboardController::class)->group(function () {
-    Route::get('/', 'index')->name('welcome');
+    Route::get('/', 'index')->name('welcome')->middleware(['auth']);
 });
 
 Route::get('/dashboard', function () {

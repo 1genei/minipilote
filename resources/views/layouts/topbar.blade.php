@@ -110,7 +110,7 @@
                             class="rounded-circle">
                     </span>
                     <span>
-                        <span class="account-user-name">{{ Auth::user()->name }}</span>
+                        <span class="account-user-name">{{ Auth::user()?->name }}</span>
 
                     </span>
                 </a>
