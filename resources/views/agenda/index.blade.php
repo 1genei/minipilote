@@ -237,13 +237,13 @@
                                                     <option value="">Choisir le contact</option>
                                                     @foreach ($contacts as $contact)
                                                         <option
-                                                            data-tokens="@if ($contact->type == 'individu') {{ $contact->individu->nom }} {{ $contact->individu->prenom }}  @else  {{ $contact->entite->nom }} @endif"
+                                                            data-tokens="@if ($contact->type == 'individu') {{ $contact?->individu?->nom }} {{ $contact?->individu?->prenom }}  @else  {{ $contact?->entite?->nom }} @endif"
                                                             value="{{ $contact->id }}">
                                                             @if ($contact->type == 'individu')
-                                                                {{ $contact->individu->nom }}
-                                                                {{ $contact->individu->prenom }}
+                                                                {{ $contact?->individu?->nom }}
+                                                                {{ $contact?->individu?->prenom }}
                                                             @else
-                                                                {{ $contact->entite->nom }}
+                                                                {{ $contact?->entite?->nom }}
                                                             @endif
                                                         </option>
                                                     @endforeach
@@ -482,13 +482,13 @@
                                                     <option value="">Choisir le contact</option>
                                                     @foreach ($contacts as $contact)
                                                         <option
-                                                            data-tokens="@if ($contact->type == 'individu') {{ $contact->individu->nom }} {{ $contact->individu->prenom }}  @else  {{ $contact->entite->nom }} @endif"
+                                                            data-tokens="@if ($contact->type == 'individu') {{ $contact?->individu?->nom }} {{ $contact?->individu?->prenom }}  @else  {{ $contact?->entite?->nom }} @endif"
                                                             value="{{ $contact->id }}">
                                                             @if ($contact->type == 'individu')
-                                                                {{ $contact->individu->nom }}
-                                                                {{ $contact->individu->prenom }}
+                                                                {{ $contact?->individu?->nom }}
+                                                                {{ $contact?->individu?->prenom }}
                                                             @else
-                                                                {{ $contact->entite->nom }}
+                                                                {{ $contact?->entite?->nom }}
                                                             @endif
                                                         </option>
                                                     @endforeach
