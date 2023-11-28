@@ -118,24 +118,11 @@
 
                                         <div style="display:flex; flex-direction: row; justify-content:space-around; ">
 
-                                            <div class="media-left media-middle">
-                                                <i class="ti-list f-s-48 color-primary m-r-1"></i>
-                                                <label for="">
-                                                    <a style="font-weight: bold; color:#2483ac; font-size:18px "
-                                                        href="{{ route('agenda.listing') }}">Toutes les tâches
-                                                        <span
-                                                            class="badge bg-danger rounded-pill ">{{ \App\Models\Agenda::nb_taches('toutes') }}
-                                                        </span>
-
-                                                    </a>
-                                                </label>
-                                                <hr style="border-top: 5px solid #240c9a; margin-top: 10px">
-                                            </div>
-
+                                            
                                             <div class="media-left media-middle">
                                                 <i class="ti-list f-s-48 color-success m-r-1"></i>
                                                 <label for="">
-                                                    <a style="font-weight: bold; color:#14893f;"
+                                                    <a style="font-weight: bold; color:#14893f"
                                                         href="{{ route('agenda.listing_a_faire') }}">Tâches à faire
                                                         <span
                                                             class="badge bg-danger rounded-pill">{{ \App\Models\Agenda::nb_taches('a_faire') }}</span>
@@ -152,6 +139,20 @@
                                                             class="badge bg-danger rounded-pill">{{ \App\Models\Agenda::nb_taches('en_retard') }}</span>
                                                     </a>
                                                 </label>
+                                            </div>
+                                            
+                                            <div class="media-left media-middle">
+                                                <i class="ti-list f-s-48 color-primary m-r-1"></i>
+                                                <label for="">
+                                                    <a style="font-weight: bold; color:#2483ac; font-size:18px"
+                                                        href="{{ route('agenda.listing') }}">Toutes les tâches
+                                                        <span
+                                                            class="badge bg-danger rounded-pill ">{{ \App\Models\Agenda::nb_taches('toutes') }}
+                                                        </span>
+
+                                                    </a>
+                                                </label>
+                                                <hr style="border-top: 5px solid #240c9a; margin-top: 10px">
                                             </div>
 
 
