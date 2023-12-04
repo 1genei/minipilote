@@ -113,6 +113,7 @@ final class IndexTable extends PowerGridComponent
             ->addColumn('beneficiaire', function (Prestation $model) {          
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
             } )
+            ->addColumn('notes')
             ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation)->format('d/m/Y'))    
             ->addColumn('statut');
     }
@@ -141,6 +142,7 @@ final class IndexTable extends PowerGridComponent
             Column::make('Nom', 'nom')->searchable()->sortable(),
             Column::make('Montant', 'montant_ttc')->searchable()->sortable(),
             Column::make('Beneficiaire', 'beneficiaire')->searchable()->sortable(),
+            Column::make('Notes', 'notes')->searchable()->sortable(),
             Column::make('Date', 'date_prestation')->searchable()->sortable(),         
             Column::make('Statut', 'statut')->searchable()->sortable(),
             // Column::make('Actions')
@@ -214,16 +216,15 @@ final class IndexTable extends PowerGridComponent
                 ];
             }),
             
-            // Button::add('Retirer')
-            // ->bladeComponent('button-delete', function(Prestation $prestation) {
-            //     return ['route' => route('contact.deassociate', [intval($this->client_id), $prestation->contact_id] ),
-            //     'tooltip' => "Retirer",
-            //     'class' => "dissocier_individu",
-            //     'permission' => Gate::allows('permission', 'modifier-contact'),
+            Button::add('Archiver')
+            ->bladeComponent('button-archive', function(Prestation $prestation) {
+                return ['route' => route('prestation.archive', Crypt::encrypt($prestation->id)),
+                'tooltip' => "Archiver",
+                'classarchive' => "archive_prestation",
+                'permission' => Gate::allows('permission', 'modifier-contact'),
                 
-                
-            //     ];
-            // }),
+                ];
+            }),
         ];
     }
     

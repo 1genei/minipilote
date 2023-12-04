@@ -212,6 +212,7 @@ class PrestationController extends Controller
         $prestation = Prestation::where('id', Crypt::decrypt($prestation_id))->first();
         $prestation->archive = true;
         $prestation->save();
+        return "ok";
         
         return redirect()->back()->with('ok', 'Prestation archivée avec succès');
     
@@ -225,7 +226,7 @@ class PrestationController extends Controller
         $prestation = Prestation::where('id', Crypt::decrypt($prestation_id))->first();
         $prestation->archive = false;
         $prestation->save();
-        
+        return "ok";
         return redirect()->back()->with('ok', 'Prestation désarchivée avec succès');
     
     }

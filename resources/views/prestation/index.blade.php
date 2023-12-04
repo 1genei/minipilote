@@ -271,7 +271,7 @@
                 });
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Archiver le prestation',
+                    title: 'Archiver la prestation',
                     text: "Confirmer ?",
                     icon: 'warning',
                     showCancelButton: true,
@@ -286,7 +286,7 @@
                                 url: that.attr('data-href'),
                                 type: 'PUT',
                                 success: function(data) {
-                                    // document.location.reload();
+                                    document.location.reload();
                                 },
                                 error: function(data) {
                                     console.log(data);
@@ -299,9 +299,9 @@
                                     'Prestation archivée avec succès',
                                     'success'
                                 )
-                                // document.location.reload();
+                                document.location.reload();
 
-                                that.parents('tr').remove();
+                               
                             })
 
 
