@@ -30,9 +30,9 @@
                         <div class="col-sm-6">
 
                             <div class="col-sm-4 ">
-                                <a href="{{ route('produit.index') }}" type="button" class="btn btn-outline-primary"><i
+                                <a href="{{ route('contact.index') }}" type="button" class="btn btn-outline-primary"><i
                                         class="uil-arrow-left"></i>
-                                    Produits</a>
+                                    Contact</a>
 
                             </div>
                             @if (session('ok'))
