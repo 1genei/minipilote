@@ -1,23 +1,143 @@
-{{-- Ajout d'un individu --}}
-<div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
+{{-- Ajout d'une prestation --}}
+<div id="prestation-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="standard-modalLabel">Ajouter des interlocuteurs</h4>
+                <h4 class="modal-title" id="standard-modalLabel">Ajouter une prestation</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form action="{{ route('contact.associate', $contact->entite->id) }}" method="post">
+            <form action="{{ route('prestation.store') }}" method="post">
                 <div class="modal-body">
 
                     @csrf
-
-                    <input type="hidden" name="typecontact" value="Interlocuteur" />
+                    <input type="hidden" name="typecontact" value="Bénéficiaire" />
                     <input type="hidden" name="nature" value=" Personne physique" />
+                    <input type="hidden" name="client_id" value="{{$contact->id}}" />
+
+
+                    <div class="row">
+
+                            <div class="col-6 ">
+                                <div class="mb-3 ">
+                                    <label for="numero" class="form-label">
+                                        Numéro de la prestations <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="number" id="numero" name="numero" min="{{$prochain_numero_prestation}}"
+                                        value="{{$prochain_numero_prestation}}" class="form-control" style="font-size: 1.5rem;color: #772e7b;" required>
+
+                                    @if ($errors->has('numero'))
+                                        <br>
+                                        <div class="alert alert-warning text-secondary " role="alert">
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <strong>{{ $errors->first('numero') }}</strong>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+   
+                       
+                            <div class="col-6 ">
+                                <div class="mb-3 ">
+                                    <label for="nom_prestation" class="form-label">
+                                        Nom de la prestations <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" id="nom_prestation" name="nom_prestation" style="font-size: 1.5rem;color: #772e7b;"
+                                        value="{{ old('nom_prestation') ? old('nom_prestation') : '' }}" class="form-control" required>
+
+                                    @if ($errors->has('nom_prestation'))
+                                        <br>
+                                        <div class="alert alert-warning text-secondary " role="alert">
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <strong>{{ $errors->first('nom_prestation') }}</strong>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>                    
+
+                    </div>
+                    
+                    <div class="row">
+
+                        <div class="col-6 ">
+                            <div class=" mb-3">
+                                <label for="methode_paiement" class="form-label">
+                                    Méthode de paiement 
+                                </label>
+                                <select name="methode_paiement" id="methode_paiement" class=" form-control select2"
+                                    data-toggle="select2" >
+                                    <option value=""></option>
+                                    <option value="Espèces">Espèces</option>
+                                    <option value="Carte bancaire">Carte bancaire</option>
+                                    <option value="Virement">Virement</option>
+                                    <option value="Chèque">Chèque</option>
+                                    <option value="Autre">Autre</option>
+                                   
+                                </select>
+                                @if ($errors->has('methode_paiement'))
+                                    <br>
+                                    <div class="alert alert-warning text-secondary " role="alert">
+                                        <button type="button" class="btn-close btn-close-white"
+                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{{ $errors->first('methode_paiement') }}</strong>
+                                    </div>
+                                @endif
+                            </div>
+
+                        </div>
+
+                   
+                        <div class="col-6 ">
+                            <div class="mb-3 ">
+                                <label for="date_prestation" class="form-label">
+                                    Date de la prestations 
+                                </label>
+                                <input type="date" id="date_prestation" name="date_prestation" 
+                                    value="{{ old('date_prestation') ? old('date_prestation') : '' }}" class="form-control" >
+
+                                @if ($errors->has('date_prestation'))
+                                    <br>
+                                    <div class="alert alert-warning text-secondary " role="alert">
+                                        <button type="button" class="btn-close btn-close-white"
+                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{{ $errors->first('date_prestation') }}</strong>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>                    
+
+                    </div>
+                    
+                    <div class="row">
+
+                        <div class="col-6 ">
+                            <div class="mb-3 ">
+                                <label for="montant_ttc" class="form-label">
+                                    Montant de la prestations (TTC) <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" id="montant_ttc" name="montant_ttc" step="0.01"
+                                    value="{{ old('montant_ttc') ? old('montant_ttc') : '' }}" class="form-control" required>
+
+                                @if ($errors->has('montant_ttc'))
+                                    <br>
+                                    <div class="alert alert-warning text-secondary " role="alert">
+                                        <button type="button" class="btn-close btn-close-white"
+                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{{ $errors->first('montant_ttc') }}</strong>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>                    
+
+                    </div>
+
+                    <hr>
 
                     <div class="col-lg-12 mb-3">
-                        <label for="floatingInput">Contact existant ? </label> <br>
+                        <label for="floatingInput">Le Bénéficiaire existe ? </label> <br>
 
                         <input type="checkbox" name="contact_existant" id="contact_existant" checked
                             data-switch="success" />
@@ -30,10 +150,10 @@
                             <div class="col-6">
                                 <div class=" mb-3">
                                     <label for="newcontact" class="form-label">
-                                        Sélectionnez le contact <span class="text-danger">*</span>
+                                        Sélectionnez le Bénéficiaire <span class="text-danger">*</span>
                                     </label>
                                     <select name="newcontact" id="newcontact" class=" form-control select2"
-                                        data-toggle="select2" required>
+                                        data-toggle="select2" >
                                         <option value=""></option>
                                         @foreach ($newcontacts as $newcontact)
                                             <option value="{{ $newcontact->individu->id }}">
@@ -52,49 +172,8 @@
                                 </div>
 
 
-
                             </div>
-                            <div class="col-6">
-                                <div class="mb-3 ">
-                                    <label for="poste" class="form-label">
-                                        Fonction <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="select2 form-select" data-toggle="select2" id="poste" required
-                                        name="poste">
-                                        <option value=""></option>
-                                        <option value="Directeur">Directeur</option>
-                                        <option value="Président">Président</option>
-                                        <option value="Directeur général">Directeur général</option>
-                                        <option value="Gérant">Gérant</option>
-                                        <option value="Associé">Associé</option>
-                                        <option value="Chef d'entreprise">Chef d'entreprise</option>
-                                        <option value="Profession libérale">Profession libérale</option>
-                                        <option value="Directeur financier">Directeur financier</option>
-                                        <option value="Contrôleur(se) de gestion">Contrôleur(se) de gestion</option>
-                                        <option value="Assistant(e) de direction">Assistant(e) de direction</option>
-                                        <option value="Assistant(e)">Assistant(e)</option>
-                                        <option value="Comptable">Comptable</option>
-                                        <option value="Responsable administratif(ve)">Responsable administratif(ve)
-                                        </option>
-                                        <option value="Secrétaire">Secrétaire</option>
-                                        <option value="Responsable des achats">Responsable des achats</option>
-                                        <option value="Responsable comptable">Responsable comptable</option>
-                                        <option value="Directeur informatique">Directeur informatique</option>
-                                        <option value="Responsable informatique">Responsable informatique</option>
-                                        <option value="Autre">Autre</option>
-
-                                    </select>
-
-                                    @if ($errors->has('poste'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('poste') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
+                            
 
                         </div>
 
@@ -107,7 +186,7 @@
                             <div class="col-6">
                                 <div class="mb-3 ">
                                     <label for="email" class="form-label">
-                                        Email <span class="text-danger">*</span>
+                                        Email
                                     </label>
                                     <input type="email" id="email" name="email"
                                         value="{{ old('email') ? old('email') : '' }}" class="form-control">

@@ -1139,7 +1139,7 @@
                                 @if ($typecontact != 'Collaborateur')
                                     <div class="mb-3 ">
                                         <label for="societe_id" class="form-label">
-                                            Contact de la société
+                                            Est un contact de la société
                                         </label>
                                         <select class="form-select select2" id="societe_id" name="societe_id"
                                             wire:model.defer="societe_id">

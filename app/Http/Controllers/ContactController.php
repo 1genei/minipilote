@@ -10,6 +10,7 @@ use App\Models\Typecontact;
 use App\Models\Client;
 use App\Models\Fournisseur;
 use App\Models\EntiteIndividu;
+use App\Models\Prestation;
 use Auth;
 
 
@@ -122,20 +123,26 @@ class ContactController extends Controller
                 "nationalite" => $request->nationalite,
                 "situation_matrimoniale" => $request->situation_matrimoniale,
                 "nom_jeune_fille" => $request->nom_jeune_fille,
+                "indicatif_fixe" => $request->indicatif_fixe,
                 "telephone_fixe" => $request->telephone_fixe,
+                "indicatif_mobile" => $request->indicatif_mobile,
                 "telephone_mobile" => $request->telephone_mobile,
 
                 "civilite1" => $request->civilite1,
                 "nom1" => $request->nom1,
                 "prenom1" => $request->prenom1,
+                "indicatif_fixe1" => $request->indicatif_fixe1,
                 "telephone_fixe1" => $request->telephone_fixe1,
+                "indicatif_mobile1" => $request->indicatif_mobile1,
                 "telephone_mobile1" => $request->telephone_mobile1,
                 "email1" => $request->email1,
 
                 "civilite2" => $request->civilite2,
                 "nom2" => $request->nom2,
                 "prenom2" => $request->prenom2,
+                "indicatif_fixe2" => $request->indicatif_fixe2,
                 "telephone_fixe2" => $request->telephone_fixe2,
+                "indicatif_mobile2" => $request->indicatif_mobile2,
                 "telephone_mobile2" => $request->telephone_mobile2,
                 "email2" => $request->email2,
 
@@ -149,7 +156,9 @@ class ContactController extends Controller
                 "type" => $request->type,
                 "email" => $request->email,
                 "nom" => $request->nom,
+                "indicatif_fixe" => $request->indicatif_fixe,
                 "telephone_fixe" => $request->telephone_fixe,
+                "indicatif_mobile" => $request->indicatif_mobile,
                 "telephone_mobile" => $request->telephone_mobile,
                 "numero_voie" => $request->numero_voie,
                 "nom_voie" => $request->nom_voie,
@@ -219,10 +228,17 @@ class ContactController extends Controller
     {
         $contact = Contact::where('id', Crypt::decrypt($contact_id))->first();
         
-
+        $derniere_prestation = Prestation::orderBy('created_at', 'desc')->first();
+        
+        if($derniere_prestation){
+            $prochain_numero_prestation = $derniere_prestation->numero + 1;
+        }else{
+            $prochain_numero_prestation = 45264;
+        }
+    
     
         if($contact->type == "individu"){
-            return view('contact.show_individu', compact('contact'));
+            return view('contact.show_individu', compact('contact', 'prochain_numero_prestation'));
             
         }else{
         
@@ -238,7 +254,7 @@ class ContactController extends Controller
             
             $newcontacts = Contact::where([['archive', false], ['type', 'individu']])->whereNotIn('id', $ids_existant)->get();
 
-            return view('contact.show_entite', compact('contact', 'newcontacts', 'entite_id'));
+            return view('contact.show_entite', compact('contact', 'newcontacts', 'entite_id','prochain_numero_prestation'));
         }
     }
 
@@ -334,20 +350,26 @@ class ContactController extends Controller
             $individu->nationalite = $request->nationalite;
             $individu->situation_matrimoniale = $request->situation_matrimoniale;
             $individu->nom_jeune_fille = $request->nom_jeune_fille;
+            $individu->indicatif_fixe = $request->indicatif_fixe;
             $individu->telephone_fixe = $request->telephone_fixe;
+            $individu->indicatif_mobile = $request->indicatif_mobile;
             $individu->telephone_mobile = $request->telephone_mobile;
 
             $individu->civilite1 = $request->civilite1;
             $individu->nom1 = $request->nom1;
             $individu->prenom1 = $request->prenom1;
+            $individu->indicatif_fixe1 = $request->indicatif_fixe1;
             $individu->telephone_fixe1 = $request->telephone_fixe1;
+            $individu->indicatif_mobile1 = $request->indicatif_mobile1;
             $individu->telephone_mobile1 = $request->telephone_mobile1;
             $individu->email1 = $request->email1;
 
             $individu->civilite2 = $request->civilite2;
             $individu->nom2 = $request->nom2;
             $individu->prenom2 = $request->prenom2;
+            $individu->indicatif_fixe2 = $request->indicatif_fixe2;
             $individu->telephone_fixe2 = $request->telephone_fixe2;
+            $individu->indicatif_mobile2 = $request->indicatif_mobile2;
             $individu->telephone_mobile2 = $request->telephone_mobile2;
             $individu->email2 = $request->email2;
 
@@ -360,7 +382,9 @@ class ContactController extends Controller
             $entite->type = $request->type;
             $entite->email = $request->email;
             $entite->nom = $request->nom;
+            $entite->indicatif_fixe = $request->indicatif_fixe;
             $entite->telephone_fixe = $request->telephone_fixe;
+            $entite->indicatif_mobile = $request->indicatif_mobile;
             $entite->telephone_mobile = $request->telephone_mobile;
             
             $entite->numero_voie = $request->numero_voie;

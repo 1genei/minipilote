@@ -327,8 +327,7 @@
             }
         </style>
 
-        {{-- Ajout d'une tâche --}}
-        <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
+      <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -381,7 +380,26 @@
                             </div>
                             <br>
 
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="time" name="heure_deb" min="06:00" max="23:00"
+                                            value="{{ old('heure_deb') ? old('heure_deb') : '' }}" class="form-control"
+                                            id="heure_deb" required>
+                                        <label for="heure_deb">Heure de début </label>
+                                        @if ($errors->has('heure_deb'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('heure_deb') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
 
+
+                            </div>
 
                             <hr>
 
@@ -439,12 +457,12 @@
                                             <option value="">Choisir le contact</option>
                                             @foreach ($contacts as $contact)
                                                 <option
-                                                    data-tokens="@if ($contact->type == 'individu') {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}  @else  {{ $contact->entite?->nom }} @endif"
+                                                    data-tokens="@if ($contact->type == 'individu') {{ $contact->infos()?->nom }} {{ $contact->infos()?->prenom }}  @else  {{ $contact->infos()?->nom }} @endif"
                                                     value="{{ $contact->id }}">
                                                     @if ($contact->type == 'individu')
-                                                        {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}
+                                                        {{ $contact->infos()?->nom }} {{ $contact->infos()?->prenom }}
                                                     @else
-                                                        {{ $contact->entite?->raison_sociale }}
+                                                        {{ $contact->infos()?->nom }}
                                                     @endif
                                                 </option>
                                             @endforeach
