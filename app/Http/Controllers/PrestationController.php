@@ -38,10 +38,6 @@ class PrestationController extends Controller
         
  
         $type_contact = "individu";
-  
-
-    
-       
 
         // Client
         
@@ -137,6 +133,7 @@ class PrestationController extends Controller
         $prestation->date_prestation = $request->date_prestation;
         $prestation->methode_paiement = $request->methode_paiement;
         $prestation->montant_ttc = $request->montant_ttc;
+        $prestation->notes = $request->notes;
         $prestation->save();
         
         return redirect()->back()->with('ok', 'Prestation enregistrée avec succès');
@@ -200,6 +197,7 @@ class PrestationController extends Controller
         $prestation->date_prestation = $request->date_prestation;
         $prestation->methode_paiement = $request->methode_paiement;
         $prestation->montant_ttc = $request->montant_ttc;
+        $prestation->notes = $request->notes;
         $prestation->save();
         
         return redirect()->back()->with('ok', 'Prestation modifiée avec succès');

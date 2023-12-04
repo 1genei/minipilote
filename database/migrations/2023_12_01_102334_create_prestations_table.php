@@ -25,6 +25,7 @@ return new class extends Migration
             $table->double('montant_ttc')->nullable();
             $table->double('montant_tva')->nullable();
             $table->string('statut')->default('En attente');
+            $table->text('notes')->nullable();
             $table->boolean('archive')->default(false);
             
             

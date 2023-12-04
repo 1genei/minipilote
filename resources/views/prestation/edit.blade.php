@@ -131,7 +131,7 @@
                                                 Nom de la prestations <span class="text-danger">*</span>
                                             </label>
                                             <input type="text" id="nom_prestation" name="nom_prestation" style="font-size: 1.5rem;color: #772e7b;"
-                                                value="{{ $prestation->nom}}" class="form-control" required>
+                                                value="{{$prestation->nom}}" class="form-control" required>
         
                                             @if ($errors->has('nom_prestation'))
                                                 <br>
@@ -216,7 +216,27 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div>                    
+                                </div>    
+                                <div class="col-6">
+                                
+                                    <div class="mb-3 ">
+                                        <label for="notes" class="form-label">
+                                            Notes 
+                                        </label>
+                                        <textarea name="notes" id="notes" rows="5" class="form-control">{{$prestation->notes}}</textarea>
+        
+                                        @if ($errors->has('notes'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('notes') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    
+                                </div>
+                                
         
                             </div>
         

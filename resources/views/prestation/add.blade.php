@@ -111,7 +111,7 @@
                                     <div class="col-6 ">
                                         <div class="mb-3 ">
                                             <label for="numero" class="form-label">
-                                                Numéro de la prestations <span class="text-danger">*</span>
+                                                Numéro de la prestation <span class="text-danger">*</span>
                                             </label>
                                             <input type="number" id="numero" name="numero" min="{{$prochain_numero_prestation}}"
                                                 value="{{$prochain_numero_prestation}}" class="form-control" style="font-size: 1.5rem;color: #772e7b;" required>
@@ -131,7 +131,7 @@
                                     <div class="col-6 ">
                                         <div class="mb-3 ">
                                             <label for="nom_prestation" class="form-label">
-                                                Nom de la prestations <span class="text-danger">*</span>
+                                                Nom de la prestation <span class="text-danger">*</span>
                                             </label>
                                             <input type="text" id="nom_prestation" name="nom_prestation" style="font-size: 1.5rem;color: #772e7b;"
                                                 value="{{ old('nom_prestation') ? old('nom_prestation') : '' }}" class="form-control" required>
@@ -182,7 +182,7 @@
                                 <div class="col-6 ">
                                     <div class="mb-3 ">
                                         <label for="date_prestation" class="form-label">
-                                            Date de la prestations 
+                                            Date de la prestation 
                                         </label>
                                         <input type="date" id="date_prestation" name="date_prestation" 
                                             value="{{ old('date_prestation') ? old('date_prestation') : '' }}" class="form-control" >
@@ -205,7 +205,7 @@
                                 <div class="col-6 ">
                                     <div class="mb-3 ">
                                         <label for="montant_ttc" class="form-label">
-                                            Montant de la prestations (TTC) <span class="text-danger">*</span>
+                                            Montant de la prestation (TTC) <span class="text-danger">*</span>
                                         </label>
                                         <input type="text" id="montant_ttc" name="montant_ttc" step="0.01"
                                             value="{{ old('montant_ttc') ? old('montant_ttc') : '' }}" class="form-control" required>
@@ -219,7 +219,29 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div>                    
+                                </div>    
+                                
+                                <div class="col-6">
+                                
+                                    <div class="mb-3 ">
+                                        <label for="notes" class="form-label">
+                                            Notes 
+                                        </label>
+                                        <textarea name="notes" id="notes" rows="5" class="form-control"></textarea>
+        
+                                        @if ($errors->has('notes'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('notes') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    
+                                </div>
+                                
+                                
         
                             </div>
         
