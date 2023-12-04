@@ -194,14 +194,14 @@ final class PrestationTable extends PowerGridComponent
 
                
                
-            Button::add('Afficher')
-                ->bladeComponent('button-show', function(Prestation $prestation) {
-                    return ['route' => route('contact.show', Crypt::encrypt($prestation->contact_id)),
-                    'tooltip' => "Afficher",
-                    'permission' => Gate::allows('permission', 'afficher-contact'),
+            // Button::add('Afficher')
+            //     ->bladeComponent('button-show', function(Prestation $prestation) {
+            //         return ['route' => route('contact.show', Crypt::encrypt($prestation->contact_id)),
+            //         'tooltip' => "Afficher",
+            //         'permission' => Gate::allows('permission', 'afficher-contact'),
                     
-                    ];
-                }),
+            //         ];
+            //     }),
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(Prestation $prestation) {
