@@ -298,7 +298,15 @@
                 </div>
             </li>
         @endcan
-
+        @can('permission', 'afficher-contact')
+            <li class="side-nav-item {{ $li_agenda }}">
+                <a href="{{ route('prestation.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
+                    class="side-nav-link">
+                    <i class=" uil-briefcase"></i>
+                    <span> Prestations </span>
+                </a>
+            </li>
+        @endcan
         @can('permission', 'afficher-agenda')
             <li class="side-nav-item {{ $li_agenda }}">
                 <a href="{{ route('agenda.listing') }}" aria-expanded="false" aria-controls="sidebarDashboards"

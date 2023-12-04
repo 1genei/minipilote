@@ -28,6 +28,9 @@ class PrestationController extends Controller
     public function store(Request $request)
     {
     
+        dd($request->all());
+        
+        
         $request->validate([
             'numero' => 'required|integer|unique:prestations',
             'client_id' => 'required|integer',
@@ -38,6 +41,53 @@ class PrestationController extends Controller
   
 
     
+       
+
+        // Client
+        
+        if(!$request->client_existant){
+            $contact_client = Contact::create([
+                "user_id" => Auth::user()->id,
+                "type" => $type_contact,
+                "nature" => $request->nature,
+            ]);
+        }else{
+            $contact_client = Contact::where('id', $request->client_id)->first();
+        }
+       
+        
+        $typecontact = Typecontact::where('type', "Client")->first();
+        $contact_client->typeContacts()->attach($typecontact->id);
+
+        
+        $client = Individu::create([
+            "email" => $request->email_client,
+            "contact_id" => $contact_client->id,
+            "nom" => $request->nom_client,
+            "prenom" => $request->prenom_client,
+          
+            "numero_voie" => $request->numero_voie_client,
+            "nom_voie" => $request->nom_voie_client,
+            "complement_voie" => $request->complement_voie_client,
+            "code_postal" => $request->code_postal_client,
+            "ville" => $request->ville_client,
+            "pays" => $request->pays_client,
+
+            "civilite" => $request->civilite_client,
+           
+            "indicatif_fixe" => $request->indicatif_fixe_client,
+            "telephone_fixe" => $request->telephone_fixe_client,
+            "indicatif_mobile" => $request->indicatif_mobile_client,
+            "telephone_mobile" => $request->telephone_mobile_client,
+
+            "notes" => $request->notes_client,
+
+        ]);
+        
+        
+        
+        
+        // Bénéficiaire
         if(!$request->contact_existant){
             $contact = Contact::create([
                 "user_id" => Auth::user()->id,
@@ -51,7 +101,6 @@ class PrestationController extends Controller
         
         $typecontact = Typecontact::where('type', $request->typecontact)->first();
         $contact->typeContacts()->attach($typecontact->id);
-
         
         $beneficiaire = Individu::create([
             "email" => $request->email,
@@ -95,6 +144,32 @@ class PrestationController extends Controller
     
     
     /**
+    * Display the specified resource.
+    */
+    public function show($prestation_id){
+    
+        $prestation = Prestation::where('id', Crypt::decrypt($prestation_id))->first();
+        $newcontacts = Contact::where([['archive', false], ['type', 'individu']])->get();
+        
+        return view('prestation.show', compact('prestation','newcontacts'));
+    
+    }
+    
+    /**
+    * create the specified resource.
+    */
+    public function create(){
+    
+        $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
+        $prochain_numero_prestation = Prestation::max('numero') + 1;
+        $contacts = Contact::where([['archive', false], ['type', 'individu']])->get();
+        
+        return view('prestation.add', compact('beneficiaires', 'prochain_numero_prestation', 'contacts'));
+    
+    }
+    
+    
+    /**
     * edit the specified resource.
     */
     public function edit($prestation_id){
@@ -130,4 +205,46 @@ class PrestationController extends Controller
         return redirect()->back()->with('ok', 'Prestation modifiée avec succès');
     
     }
+    
+    /**
+    * archive the specified resource.
+    */
+    public function archive($prestation_id){
+    
+        $prestation = Prestation::where('id', Crypt::decrypt($prestation_id))->first();
+        $prestation->archive = true;
+        $prestation->save();
+        
+        return redirect()->back()->with('ok', 'Prestation archivée avec succès');
+    
+    }
+    
+    /**
+    * unarchive the specified resource.
+    */
+    public function unarchive($prestation_id){
+    
+        $prestation = Prestation::where('id', Crypt::decrypt($prestation_id))->first();
+        $prestation->archive = false;
+        $prestation->save();
+        
+        return redirect()->back()->with('ok', 'Prestation désarchivée avec succès');
+    
+    }
+    
+    /**
+    * delete the specified resource.
+    */
+    public function delete($prestation_id){
+    
+        $prestation = Prestation::where('id', Crypt::decrypt($prestation_id))->first();
+        $prestation->delete();
+        
+        return redirect()->back()->with('ok', 'Prestation supprimée avec succès');
+    
+    }
+    
+   
+    
+    
 }

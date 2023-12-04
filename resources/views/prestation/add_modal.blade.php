@@ -156,7 +156,7 @@
                                         data-toggle="select2" >
                                         <option value=""></option>
                                         @foreach ($beneficiaires as $beneficiaire)
-                                            <option value="{{ $beneficiaire->individu->id }}">
+                                            <option value="{{ $beneficiaire->id }}">
                                                 {{ $beneficiaire->individu->nom }} {{ $beneficiaire->individu->prenom }}
                                             </option>
                                         @endforeach

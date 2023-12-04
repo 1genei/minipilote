@@ -960,7 +960,7 @@
                                     <div class="col-lg-8">
                                         <div class="row mb-3">
                                             <div class="col-12">
-                                                <label for="telephone_fixe" class="form-label item_input">
+                                                <label for="nom_voie" class="form-label item_input">
                                                     Nom de la voie
                                                 </label>
                                             </div>

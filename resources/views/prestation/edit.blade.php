@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/vendor/dropzone-custom.css') }}">
 @endsection
 
-@section('title', 'Modifier produit')
+@section('title', 'Modifier prestation')
 
 @section('content')
 
@@ -44,7 +44,7 @@
                             <div class="col-sm-6">
 
                                 <div class="col-sm-4 ">
-                                    <a href="{{ route('produit.index') }}" type="button" class="btn btn-outline-primary"><i
+                                    <a href="{{ route('prestation.index') }}" type="button" class="btn btn-outline-primary"><i
                                             class="uil-arrow-left"></i>
                                         Prestation</a>
 
