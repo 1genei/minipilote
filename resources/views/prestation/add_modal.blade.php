@@ -155,9 +155,9 @@
                                     <select name="newcontact" id="newcontact" class=" form-control select2"
                                         data-toggle="select2" >
                                         <option value=""></option>
-                                        @foreach ($newcontacts as $newcontact)
-                                            <option value="{{ $newcontact->individu->id }}">
-                                                {{ $newcontact->individu->nom }} {{ $newcontact->individu->prenom }}
+                                        @foreach ($beneficiaires as $beneficiaire)
+                                            <option value="{{ $beneficiaire->individu->id }}">
+                                                {{ $beneficiaire->individu->nom }} {{ $beneficiaire->individu->prenom }}
                                             </option>
                                         @endforeach
                                     </select>

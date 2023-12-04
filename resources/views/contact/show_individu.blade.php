@@ -22,6 +22,35 @@
                 <h4 class="page-title">Contact - {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}</h4>
             </div>
         </div>
+        <div class="col-12">
+            <div class="card widget-inline">
+                <div class="card-body p-0">
+                    <div class="row g-0">
+
+                        <div class="col-sm-6">
+
+                            <div class="col-sm-4 ">
+                                <a href="{{ route('produit.index') }}" type="button" class="btn btn-outline-primary"><i
+                                        class="uil-arrow-left"></i>
+                                    Produits</a>
+
+                            </div>
+                            @if (session('ok'))
+                                <div class="col-6">
+                                    <div class="alert alert-success alert-dismissible text-center border-0 fade show"
+                                        role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                        <strong> {{ session('ok') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                    </div> <!-- end row -->
+                </div>
+            </div> <!-- end card-box-->
+        </div>
     </div>
     <!-- end page title --> 
 
@@ -30,8 +59,8 @@
             <div class="card text-center">
                 <div class="card-body">
                     
-                    <p class="text-muted font-14">{{ $contact->individu?->forme_juridique }}</p>
-                    <h4 class="mb-0 mt-2">{{ $contact->individu?->raison_sociale }} <a href="{{ route('contact.edit', Crypt::encrypt($contact->id)) }}" class="text-muted"><i class="mdi mdi-square-edit-outline ms-2"></i></a></h4>
+                 
+                    <h4 class="mb-0 mt-2">{{ $contact->individu?->civilite }} {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}<a href="{{ route('contact.edit', Crypt::encrypt($contact->id)) }}" class="text-muted"><i class="mdi mdi-square-edit-outline ms-2"></i></a></h4>
 
                     @foreach ($contact->typecontacts as $typecontact)
                     
@@ -117,14 +146,14 @@
             <div class="card">
                 <div class="card-body">
                     <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                        <li class="nav-item">
-                            <a href="#interlocuteur" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
+                        {{-- <li class="nav-item">
+                            <a href="#interlocuteur" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 ">
                                 Interlocuteurs
                             </a>
-                        </li>
+                        </li> --}}
                       
                         <li class="nav-item">
-                            <a href="#activite" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
+                            <a href="#activite" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
                                 Prestations
                             </a>
                         </li>
@@ -132,7 +161,7 @@
                     <div class="tab-content">
                         
                      
-                        <div class="tab-pane" id="activite">
+                        <div class="tab-pane show active" id="activite">
                             <button type="button" class="btn btn-secondary btn-sm rounded-pill"
                             data-bs-toggle="modal" data-bs-target="#prestation-modal"><i
                                 class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter prestation</span>
@@ -147,7 +176,7 @@
         </div> <!-- end col -->
     </div>
     <!-- end row-->
-    {{-- @include('prestation.add_modal')     --}}
+    @include('prestation.add_modal')    
     
 </div> <!-- End Content -->
 
@@ -185,76 +214,6 @@
     </script>
 
 
-    <script>
-        // Retirer
-
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            })
-            $('[data-toggle="tooltip"]').tooltip()
-            $('body').on('click', 'a.dissocier_individu', function(event) {
-                let that = $(this)
-                event.preventDefault();
-
-                const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                });
-
-                swalWithBootstrapButtons.fire({
-                    title: 'Retirer l\'interlocuteur',
-                    text: "Confirmer ?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui',
-                    cancelButtonText: 'Non'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        $('[data-toggle="tooltip"]').tooltip('hide')
-                        $.ajax({
-                                url: that.attr('data-href'),
-                                // url:"/role/desarchiver/2",
-
-                                type: 'POST',
-                                success: function(data) {
-
-                                    // document.location.reload();
-                                },
-                                error: function(data) {
-                                    console.log(data);
-                                }
-                            })
-                            .done(function() {
-
-                                swalWithBootstrapButtons.fire(
-                                    'Confirmation',
-                                    'Interlocuteur retiré',
-                                    'success'
-                                )
-                                document.location.reload();
-                            })
-
-
-                    } else if (
-                        /* Read more about handling dismissals below */
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        swalWithBootstrapButtons.fire(
-                            'Annulation',
-                            'Interlocuteur conservé',
-                            'error'
-                        )
-                    }
-                });
-            })
-
-        });
-    </script>
 
 
     <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>

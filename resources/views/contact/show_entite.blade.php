@@ -22,6 +22,39 @@
                 <h4 class="page-title">Contact - {{ $contact->entite?->raison_sociale }}</h4>
             </div>
         </div>
+        <div class="col-12">
+            <div class="card widget-inline">
+                <div class="card-body p-0">
+                    <div class="row g-0">
+
+                        <div class="col-sm-6">
+
+                            <div class="col-sm-4 ">
+                                <a href="{{ route('contact.index') }}" type="button" class="btn btn-outline-primary"><i
+                                        class="uil-arrow-left"></i>
+                                    Contact</a>
+
+                            </div>
+                            @if (session('ok'))
+                                <div class="col-6">
+                                    <div class="alert alert-success alert-dismissible text-center border-0 fade show"
+                                        role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                        <strong> {{ session('ok') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+
+
+
+
+                    </div> <!-- end row -->
+                </div>
+            </div> <!-- end card-box-->
+        </div>
     </div>
     <!-- end page title --> 
 
@@ -88,7 +121,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h4 class="header-title">Messages</h4>
+                        <h4 class="header-title"></h4>
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="mdi mdi-dots-vertical"></i>
@@ -105,11 +138,7 @@
                     <div class="inbox-widget">
                         <div class="inbox-item">
                             <div class="inbox-item-img"><img src="assets/images/users/avatar-2.jpg" class="rounded-circle" alt=""></div>
-                            <p class="inbox-item-author">Tomaslau</p>
-                            <p class="inbox-item-text">I've finished it! See you so...</p>
-                            <p class="inbox-item-date">
-                                <a href="#" class="btn btn-sm btn-link text-info font-13"> Reply </a>
-                            </p>
+                           
                         </div>
                        
 
