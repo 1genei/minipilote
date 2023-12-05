@@ -314,7 +314,7 @@ Route::controller(PrestationController::class)->group(function () {
     Route::get('/prestations/modifier/{prestationId}', 'edit')->name('prestation.edit')->middleware(['auth']);
     Route::post('/prestations/modifier/{prestationId}', 'update')->name('prestation.update')->middleware(['auth']);
     Route::put('/prestations/archiver/{prestationId}', 'archive')->name('prestation.archive')->middleware(['auth']);
-    Route::post('/prestations/desarchiver/{prestationId}', 'unarchive')->name('prestation.unarchive')->middleware(['auth']);
+    Route::put('/prestations/desarchiver/{prestationId}', 'unarchive')->name('prestation.unarchive')->middleware(['auth']);
 });
 
 

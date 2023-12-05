@@ -4,7 +4,7 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
-@section('title', 'Prestations')
+@section('title', 'Prestations archivées')
 
 @section('content')
     <div class="content">
@@ -15,10 +15,10 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{ route('prestation.index') }}">Prestations</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('prestation.index') }}">Prestations archivées</a></li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Prestations</h4>
+                    <h4 class="page-title">Prestations archivées</h4>
                 </div>
             </div>
         </div>
@@ -66,17 +66,11 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            @can('permission', 'ajouter-contact')
-                                <div class="d-flex justify-content-start">
-                                    <a href="{{ route('prestation.create') }}" class="btn btn-primary mb-2">
-                                        <i class="mdi mdi-plus-circle me-2"></i> Ajouter prestation
-                                    </a>                             
-                                </div>
-                            @endcan
+                            
                             <div class="d-flex justify-content-end">
                                 @can('permission', 'archiver-contact')
-                                    <a href="{{ route('prestation.archives') }}" class="btn btn-warning mb-2">
-                                        <i class="mdi mdi-archive me-2"></i> Prestations archivées
+                                    <a href="{{ route('prestation.index') }}" class="btn btn-success mb-2">
+                                        <i class="mdi mdi-archive me-2"></i> Prestations 
                                     </a>
                                 @endcan
                             </div>
@@ -107,7 +101,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <livewire:prestation.index-table />
+                                    <livewire:prestation.archive-table />
                                 </div>
                             </div>
                         </div>
@@ -321,37 +315,74 @@
         });
     </script>
 
-    <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/responsive.bootstrap5.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            "use strict";
-            $("#tab1").
-            DataTable({
-                language: {
-                    paginate: {
-                        previous: "<i class='mdi mdi-chevron-left'>",
-                        next: "<i class='mdi mdi-chevron-right'>"
-                    },
-                    info: "Showing actions _START_ to _END_ of _TOTAL_",
-                    lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
-                },
-                pageLength: 100,
+<script>
+    // desarchiver
+    $(function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+        $('[data-toggle="tooltip"]').tooltip()
+        $('body').on('click', 'a.unarchive_prestation', function(event) {
+            let that = $(this)
+            event.preventDefault();
 
-                select: {
-                    style: "multi"
-                },
-                drawCallback: function() {
-                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                        document.querySelector(".dataTables_wrapper .row").querySelectorAll(".col-md-6")
-                        .forEach(function(e) {
-                            e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
-                                .classList.remove("col-md-6")
+            const swalWithBootstrapButtons = swal.mixin({
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'désarchiver la prestation',
+                text: "Confirmer ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non',
+                reverseButtons: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $('[data-toggle="tooltip"]').tooltip('hide')
+                    $.ajax({
+                            url: that.attr('data-href'),
+                            type: 'PUT',
+                            success: function(data) {
+                                document.location.reload();
+                            },
+                            error: function(data) {
+                                console.log(data);
+                            }
                         })
+                        .done(function() {
+
+                            swalWithBootstrapButtons.fire(
+                                'Confirmation',
+                                'Prestation désarchivée avec succès',
+                                'success'
+                            )
+                            document.location.reload();
+
+                           
+                        })
+
+
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Annulation',
+                        'Prestation non désarchivée',
+                        'error'
+                    )
                 }
-            })
-        });
-    </script>
+            });
+        })
+
+    });
+</script>
+
 @endsection

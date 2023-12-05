@@ -206,6 +206,17 @@ class PrestationController extends Controller
     
     }
     
+    /*
+    * Liste des prestations archivées
+    */
+    public function archives(){
+    
+        $prestations = Prestation::where('archive', true)->get();
+        return view('prestation.archives', compact('prestations'));
+    
+    }
+    
+    
     /**
     * archive the specified resource.
     */
