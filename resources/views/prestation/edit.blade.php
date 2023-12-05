@@ -240,6 +240,41 @@
         
                             </div>
         
+        
+                            <div class="col-lg-12 client_existant">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class=" mb-3">
+                                            <label for="client_id" class="form-label">
+                                                Sélectionnez le Client <span class="text-danger">*</span>
+                                            </label>
+                                            <select name="client_id" id="client_id" class=" form-control select2"
+                                                data-toggle="select2" >
+                                                <option value="{{$prestation->client()?->id}}">
+                                                    {{$prestation->client()?->individu->nom}} {{$prestation->client()?->individu->prenom}}</option>
+                                                    @foreach ($newcontacts as $newcontact)
+                                                        <option value="{{ $newcontact->id }}">
+                                                            {{ $newcontact->individu->nom }} {{ $newcontact->individu->prenom }}
+                                                        </option>
+                                                    @endforeach
+                                            </select>
+                                            @if ($errors->has('client_id'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('client_id') }}</strong>
+                                                </div>
+                                            @endif
+                                        </div>
+        
+        
+                                    </div>
+                                    
+        
+                                </div>
+        
+                            </div>
                             <hr>
         
                            

@@ -110,6 +110,9 @@ final class IndexTable extends PowerGridComponent
             } )
             ->addColumn('nom')
             ->addColumn('montant_ttc')
+            ->addColumn('client', function (Prestation $model) {          
+                return  '<span >'.$model->client()?->individu?->civilite.' '.$model->client()?->individu?->nom.' '.$model->client()?->individu?->prenom.'</span>';
+            })
             ->addColumn('beneficiaire', function (Prestation $model) {          
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
             } )
@@ -141,6 +144,7 @@ final class IndexTable extends PowerGridComponent
                 ->sortable(),
             Column::make('Nom', 'nom')->searchable()->sortable(),
             Column::make('Montant', 'montant_ttc')->searchable()->sortable(),
+            Column::make('Client', 'client')->searchable()->sortable(),
             Column::make('Beneficiaire', 'beneficiaire')->searchable()->sortable(),
             Column::make('Notes', 'notes')->searchable()->sortable(),
             Column::make('Date', 'date_prestation')->searchable()->sortable(),         

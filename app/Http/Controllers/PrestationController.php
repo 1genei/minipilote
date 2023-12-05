@@ -193,6 +193,7 @@ class PrestationController extends Controller
         // dd($request->all());
         $prestation->numero = $request->numero;
         $prestation->nom = $request->nom_prestation;
+        $prestation->client_id= $request->client_id;
         $prestation->beneficiaire_id = $request->beneficiaire_id;
         // $prestation->client_est_beneficiaire = $request->client_est_beneficiaire;
         $prestation->date_prestation = $request->date_prestation;
