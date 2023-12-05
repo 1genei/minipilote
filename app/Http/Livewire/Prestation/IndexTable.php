@@ -117,7 +117,10 @@ final class IndexTable extends PowerGridComponent
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
             } )
             ->addColumn('notes')
-            ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation)->format('d/m/Y'))    
+            ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation)->format('d/m/Y'))  
+            ->addColumn('created_date', function (Prestation $model) {          
+                return $model->created_at->format('d/m/Y');
+            })
             ->addColumn('statut');
     }
 
@@ -147,8 +150,9 @@ final class IndexTable extends PowerGridComponent
             Column::make('Client', 'client')->searchable()->sortable(),
             Column::make('Beneficiaire', 'beneficiaire')->searchable()->sortable(),
             Column::make('Notes', 'notes')->searchable()->sortable(),
-            Column::make('Date', 'date_prestation')->searchable()->sortable(),         
+            Column::make('Date prestation', 'date_prestation')->searchable()->sortable(),         
             Column::make('Statut', 'statut')->searchable()->sortable(),
+            Column::make('Date d\'ajout', 'created_date')->searchable()->sortable(),
             // Column::make('Actions')
 
         ];
