@@ -247,12 +247,12 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class=" mb-3">
-                                            <label for="newcontact" class="form-label">
+                                            <label for="beneficiaire_id" class="form-label">
                                                 Sélectionnez le Bénéficiaire <span class="text-danger">*</span>
                                             </label>
-                                            <select name="newcontact" id="newcontact" class=" form-control select2"
+                                            <select name="beneficiaire_id" id="beneficiaire_id" class=" form-control select2"
                                                 data-toggle="select2" >
-                                                <option value="{{$prestation->beneficiaire()?->individu?->id}}">
+                                                <option value="{{$prestation->beneficiaire()?->id}}">
                                                 {{$prestation->beneficiaire()?->individu->nom}} {{$prestation->beneficiaire()?->individu->prenom}}</option>
                                                 @foreach ($newcontacts as $newcontact)
                                                     <option value="{{ $newcontact->id }}">
@@ -260,12 +260,12 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            @if ($errors->has('newcontact'))
+                                            @if ($errors->has('beneficiaire_id'))
                                                 <br>
                                                 <div class="alert alert-warning text-secondary " role="alert">
                                                     <button type="button" class="btn-close btn-close-white"
                                                         data-bs-dismiss="alert" aria-label="Close"></button>
-                                                    <strong>{{ $errors->first('newcontact') }}</strong>
+                                                    <strong>{{ $errors->first('beneficiaire_id') }}</strong>
                                                 </div>
                                             @endif
                                         </div>

@@ -190,6 +190,7 @@ class PrestationController extends Controller
             'numero' => 'required|integer',
         ]);
         
+        // dd($request->all());
         $prestation->numero = $request->numero;
         $prestation->nom = $request->nom_prestation;
         $prestation->beneficiaire_id = $request->beneficiaire_id;
