@@ -271,10 +271,16 @@
                                             <select name="client_id" id="client_id" class=" form-control select2"
                                                 data-toggle="select2" >
                                                 <option value=""></option>
-                                                @foreach ($contacts as $contact)
-                                                    <option value="{{ $contact->id }}">
-                                                        {{ $contact->individu->nom }} {{ $contact->individu->prenom }}
-                                                    </option>
+                                                @foreach ($contactclients as $contact)
+                                                    @if ($contact->type =="individu")
+                                                        <option value="{{ $contact->id }}">
+                                                            {{ $contact->individu->nom }} {{ $contact->individu->prenom }}
+                                                        </option>
+                                                    @else
+                                                        <option value="{{ $contact->id }}">
+                                                            {{ $contact->entite->raison_sociale }}
+                                                        </option>
+                                                    @endif
                                                 @endforeach
                                             </select>
                                             @if ($errors->has('client_id'))

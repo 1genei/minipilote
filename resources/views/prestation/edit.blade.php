@@ -250,12 +250,24 @@
                                             </label>
                                             <select name="client_id" id="client_id" class=" form-control select2"
                                                 data-toggle="select2" >
-                                                <option value="{{$prestation->client()?->id}}">
-                                                    {{$prestation->client()?->individu->nom}} {{$prestation->client()?->individu->prenom}}</option>
-                                                    @foreach ($newcontacts as $newcontact)
-                                                        <option value="{{ $newcontact->id }}">
-                                                            {{ $newcontact->individu->nom }} {{ $newcontact->individu->prenom }}
-                                                        </option>
+                                                    <option value="{{$prestation->client()?->id}}">
+                                                        @if ($prestation->client()?->type =="individu")
+                                                            {{$prestation->client()?->individu->nom}} {{$prestation->client()?->individu->prenom}}
+                                                        @else
+                                                            {{$prestation->client()?->entite->raison_sociale}}
+                                                        @endif
+                                                    </option>
+                                               
+                                                    @foreach ($contactclients as $contact)
+                                                        @if ($contact->type =="individu")
+                                                            <option value="{{ $contact->id }}">
+                                                                {{ $contact->individu->nom }} {{ $contact->individu->prenom }}
+                                                            </option>
+                                                        @else
+                                                            <option value="{{ $contact->id }}">
+                                                                {{ $contact->entite->raison_sociale }}
+                                                            </option>
+                                                        @endif
                                                     @endforeach
                                             </select>
                                             @if ($errors->has('client_id'))
@@ -289,9 +301,9 @@
                                                 data-toggle="select2" >
                                                 <option value="{{$prestation->beneficiaire()?->id}}">
                                                 {{$prestation->beneficiaire()?->individu->nom}} {{$prestation->beneficiaire()?->individu->prenom}}</option>
-                                                @foreach ($newcontacts as $newcontact)
-                                                    <option value="{{ $newcontact->id }}">
-                                                        {{ $newcontact->individu->nom }} {{ $newcontact->individu->prenom }}
+                                                @foreach ($contactbeneficiaires as $contactbeneficiaire)
+                                                    <option value="{{ $contactbeneficiaire->id }}">
+                                                        {{ $contactbeneficiaire->individu->nom }} {{ $contactbeneficiaire->individu->prenom }}
                                                     </option>
                                                 @endforeach
                                             </select>

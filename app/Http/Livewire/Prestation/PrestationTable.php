@@ -112,8 +112,11 @@ final class PrestationTable extends PowerGridComponent
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
             } )
             ->addColumn('notes')
-            ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation)->format('d/m/Y'))    
-            ->addColumn('statut');
+            ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation)->format('d/m/Y')) ;   
+            // ->addColumn('user', function (Prestation $model) {          
+            //     return  '<span >'.$model->user?->contact?->individu?->nom.' '.$model->user?->contact?->individu?->prenom.'</span>';
+            // });
+            // ->addColumn('statut');
     }
 
     /*
@@ -142,7 +145,7 @@ final class PrestationTable extends PowerGridComponent
             Column::make('Beneficiaire', 'beneficiaire')->searchable()->sortable(),
             Column::make('Notes', 'notes')->searchable()->sortable(),
             Column::make('Date', 'date_prestation')->searchable()->sortable(),         
-            Column::make('Statut', 'statut')->searchable()->sortable(),
+            // Column::make('Statut', 'statut')->searchable()->sortable(),
             // Column::make('Actions')
 
         ];

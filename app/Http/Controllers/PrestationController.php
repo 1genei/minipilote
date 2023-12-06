@@ -39,6 +39,7 @@ class PrestationController extends Controller
  
         $type_contact = "individu";
 
+
         // Client
         
         if(!$request->client_existant){
@@ -53,7 +54,7 @@ class PrestationController extends Controller
        
         
         $typecontact = Typecontact::where('type', "Client")->first();
-        $contact_client->typeContacts()->attach($typecontact->id);
+        $contact_client->typeContacts()->syncWithoutDetaching($typecontact->id);
 
         
         $client = Individu::create([
@@ -96,7 +97,7 @@ class PrestationController extends Controller
        
         
         $typecontact = Typecontact::where('type', $request->typecontact)->first();
-        $contact->typeContacts()->attach($typecontact->id);
+        $contact->typeContacts()->syncWithoutDetaching($typecontact->id);
         
         $beneficiaire = Individu::create([
             "email" => $request->email,
@@ -159,9 +160,9 @@ class PrestationController extends Controller
     
         $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
         $prochain_numero_prestation = Prestation::max('numero') + 1;
-        $contacts = Contact::where([['archive', false], ['type', 'individu']])->get();
+        $contactclients = Contact::where('archive', false)->get();
         
-        return view('prestation.add', compact('beneficiaires', 'prochain_numero_prestation', 'contacts'));
+        return view('prestation.add', compact('beneficiaires', 'prochain_numero_prestation', 'contactclients'));
     
     }
     
@@ -172,10 +173,11 @@ class PrestationController extends Controller
     public function edit($prestation_id){
     
         $prestation = Prestation::where('id', Crypt::decrypt($prestation_id))->first();
-        $newcontacts = Contact::where([['archive', false], ['type', 'individu']])->get();
+        $contactbeneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
+        $contactclients = Contact::where('archive', false)->get();
 
         
-        return view('prestation.edit', compact('prestation','newcontacts'));
+        return view('prestation.edit', compact('prestation','contactbeneficiaires','contactclients'));
     
     }
     

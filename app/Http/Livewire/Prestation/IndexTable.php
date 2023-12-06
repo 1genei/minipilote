@@ -110,18 +110,25 @@ final class IndexTable extends PowerGridComponent
             } )
             ->addColumn('nom')
             ->addColumn('montant_ttc')
-            ->addColumn('client', function (Prestation $model) {          
-                return  '<span >'.$model->client()?->individu?->civilite.' '.$model->client()?->individu?->nom.' '.$model->client()?->individu?->prenom.'</span>';
+            ->addColumn('client', function (Prestation $model) { 
+                if($model->client()?->type == 'individu'){
+                    return  '<span >'.$model->client()?->individu?->civilite.' '.$model->client()?->individu?->nom.' '.$model->client()?->individu?->prenom.'</span>';
+                }else{
+                    return  '<span >'.$model->client()?->entite?->raison_sociale.'</span>';
+                }
             })
             ->addColumn('beneficiaire', function (Prestation $model) {          
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
             } )
             ->addColumn('notes')
             ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation)->format('d/m/Y'))  
+            ->addColumn('user', function (Prestation $model) {          
+                return  '<span >'.$model->user?->contact?->individu?->nom.' '.$model->user?->contact?->individu?->prenom.'</span>';
+            })
             ->addColumn('created_date', function (Prestation $model) {          
                 return $model->created_at->format('d/m/Y');
-            })
-            ->addColumn('statut');
+            });
+            // ->addColumn('statut');
     }
 
     /*
@@ -140,7 +147,7 @@ final class IndexTable extends PowerGridComponent
       */
     public function columns(): array
     {
-        return [
+        $colums =  [
             // Column::make('Id', 'id'),
             Column::make('Numero', 'numero')
                 ->searchable()
@@ -150,12 +157,18 @@ final class IndexTable extends PowerGridComponent
             Column::make('Client', 'client')->searchable()->sortable(),
             Column::make('Beneficiaire', 'beneficiaire')->searchable()->sortable(),
             Column::make('Notes', 'notes')->searchable()->sortable(),
-            Column::make('Date prestation', 'date_prestation')->searchable()->sortable(),         
-            Column::make('Statut', 'statut')->searchable()->sortable(),
+            Column::make('Date prestation', 'date_prestation')->searchable()->sortable(),  
+            // Column::make('Statut', 'statut')->searchable()->sortable(),
             Column::make('Date d\'ajout', 'created_date')->searchable()->sortable(),
             // Column::make('Actions')
 
         ];
+        
+        if(Auth::user()->is_admin ){
+            $colums[] = Column::make('Saisi par', 'user')->searchable()->sortable();
+        }
+        
+        return $colums;
     }
 
     /**
@@ -167,16 +180,7 @@ final class IndexTable extends PowerGridComponent
     {
     
         return [
-            // Filter::datetimepicker('created_at'),
-            // Filter::datetimepicker('nom'),
-            // Filter::inputText('nom')->operators(['contains']),
-            // Filter::inputText('prenom')->operators(['contains']),
-            // Filter::inputText('email')->operators(['contains']),
-            // Filter::inputText('telephone')->operators(['contains']),
-            // Filter::inputText('adresse')->operators(['contains']),
-            // Filter::inputText('code_postal')->operators(['contains']),
-            // Filter::inputText('ville')->operators(['contains']),
-            // Filter::inputText('pays')->operators(['contains']),
+      
         ];
     }
 
@@ -206,14 +210,14 @@ final class IndexTable extends PowerGridComponent
 
                
                
-            // Button::add('Afficher')
-            //     ->bladeComponent('button-show', function(Prestation $prestation) {
-            //         return ['route' => route('contact.show', Crypt::encrypt($prestation->contact_id)),
-            //         'tooltip' => "Afficher",
-            //         'permission' => Gate::allows('permission', 'afficher-contact'),
-                    
-            //         ];
-            //     }),
+        // Button::add('Afficher')
+        //     ->bladeComponent('button-show', function(Prestation $prestation) {
+        //         return ['route' => route('contact.show', Crypt::encrypt($prestation->contact_id)),
+        //         'tooltip' => "Afficher",
+        //         'permission' => Gate::allows('permission', 'afficher-contact'),
+                
+        //         ];
+        //     }),
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(Prestation $prestation) {

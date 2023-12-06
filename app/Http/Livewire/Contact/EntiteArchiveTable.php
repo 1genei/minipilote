@@ -66,7 +66,7 @@ final class EntiteArchiveTable extends PowerGridComponent
         if ($user->is_admin) {
 
             // On réccupère tous les contacts de type entité
-            $contactentites = Entite::select('entites.*','contacts.*','typecontacts.type')
+            $contactentites = Entite::select('entites.*','contacts.*')
                 ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
                 ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
                 ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
@@ -78,10 +78,10 @@ final class EntiteArchiveTable extends PowerGridComponent
         } else {
             //   On réccupère uniquement les contacts de l'utilisateur connecté
          
-            $contactentites = Entite::select('entites.*','contacts.*', 'typecontacts.type')
+            $contactentites = Entite::select('entites.*','contacts.*')
                 ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+                // ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+                // ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
                 ->where([['contacts.type', 'entité'],['contacts.archive', true], ["contacts.user_id", $user->id]])
                 // ->where('typecontacts.type', 'Fournisseur')
                 ->get();
@@ -131,20 +131,28 @@ final class EntiteArchiveTable extends PowerGridComponent
         return PowerGrid::columns()
             // ->addColumn('id')
             ->addColumn('type', function (Entite $model) {
-                if($model->type == "Prospect"){
-                    $color = "btn-secondary ";
-                }elseif($model->type == "Client"){
-                    $color = "btn-info";                
-                }elseif($model->type == "Fournisseur"){
-                    $color = "btn-warning";                
+                $btn = "";
+                foreach($model->contact?->typeContacts as $typecontact){
+                    $type = $typecontact->type;
+                    if($type == "Prospect"){
+                        $color = "btn-secondary ";
+                    }elseif($type == "Client"){
+                        $color = "btn-info";                
+                    }elseif($type == "Fournisseur"){
+                        $color = "btn-warning";                
+                    }
+                    elseif($type == "Collaborateur"){
+                        $color = "btn-danger";                
+                    }
+                    else{
+                        $color = "btn-primary ";                
+                    }
+                    
+                    $btn.='<div class="badge btn '.$color.' btn-sm font-11 mt-2">'.$type.'</div>';
+                    
                 }
-                elseif($model->type == "Collaborateur"){
-                    $color = "btn-danger";                
-                }
-                else{
-                    $color = "btn-light ";                
-                }
-                return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
+                
+                return $btn;
             } )
             ->addColumn('raison_sociale')
             ->addColumn('forme_juridique')
