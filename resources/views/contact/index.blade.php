@@ -76,7 +76,7 @@
                             <div class="d-flex justify-content-end">
                                 @can('permission', 'archiver-tous-les-contacts')
                                     <a href="{{ route('contact.archives') }}" class="btn btn-warning mb-2">
-                                        <i class="mdi mdi-archive me-2"></i> Contact archivés
+                                        <i class="mdi mdi-archive me-2"></i> Contacts archivés
                                     </a>
                                 @endcan
                             </div>

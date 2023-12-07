@@ -48,6 +48,30 @@ class PrestationController extends Controller
                 "type" => $type_contact,
                 "nature" => $request->nature,
             ]);
+            
+            $client = Individu::create([
+                "email" => $request->email_client,
+                "contact_id" => $contact_client->id,
+                "nom" => $request->nom_client,
+                "prenom" => $request->prenom_client,
+              
+                "numero_voie" => $request->numero_voie_client,
+                "nom_voie" => $request->nom_voie_client,
+                "complement_voie" => $request->complement_voie_client,
+                "code_postal" => $request->code_postal_client,
+                "ville" => $request->ville_client,
+                "pays" => $request->pays_client,
+    
+                "civilite" => $request->civilite_client,
+               
+                "indicatif_fixe" => $request->indicatif_fixe_client,
+                "telephone_fixe" => $request->telephone_fixe_client,
+                "indicatif_mobile" => $request->indicatif_mobile_client,
+                "telephone_mobile" => $request->telephone_mobile_client,
+    
+                "notes" => $request->notes_client,
+    
+            ]);
         }else{
             $contact_client = Contact::where('id', $request->client_id)->first();
         }
@@ -57,29 +81,7 @@ class PrestationController extends Controller
         $contact_client->typeContacts()->syncWithoutDetaching($typecontact->id);
 
         
-        $client = Individu::create([
-            "email" => $request->email_client,
-            "contact_id" => $contact_client->id,
-            "nom" => $request->nom_client,
-            "prenom" => $request->prenom_client,
-          
-            "numero_voie" => $request->numero_voie_client,
-            "nom_voie" => $request->nom_voie_client,
-            "complement_voie" => $request->complement_voie_client,
-            "code_postal" => $request->code_postal_client,
-            "ville" => $request->ville_client,
-            "pays" => $request->pays_client,
-
-            "civilite" => $request->civilite_client,
-           
-            "indicatif_fixe" => $request->indicatif_fixe_client,
-            "telephone_fixe" => $request->telephone_fixe_client,
-            "indicatif_mobile" => $request->indicatif_mobile_client,
-            "telephone_mobile" => $request->telephone_mobile_client,
-
-            "notes" => $request->notes_client,
-
-        ]);
+        
         
         
         
@@ -91,6 +93,31 @@ class PrestationController extends Controller
                 "type" => $type_contact,
                 "nature" => $request->nature,
             ]);
+            
+            $beneficiaire = Individu::create([
+                "email" => $request->email,
+                "contact_id" => $contact->id,
+                "nom" => $request->nom,
+                "prenom" => $request->prenom,
+              
+                "numero_voie" => $request->numero_voie,
+                "nom_voie" => $request->nom_voie,
+                "complement_voie" => $request->complement_voie,
+                "code_postal" => $request->code_postal,
+                "ville" => $request->ville,
+                "pays" => $request->pays,
+    
+                "civilite" => $request->civilite,
+               
+                "indicatif_fixe" => $request->indicatif_fixe,
+                "telephone_fixe" => $request->telephone_fixe,
+                "indicatif_mobile" => $request->indicatif_mobile,
+                "telephone_mobile" => $request->telephone_mobile,
+    
+                "notes" => $request->notes,
+    
+            ]);
+            
         }else{
             $contact = Contact::where('id', $request->newcontact)->first();
         }
@@ -99,29 +126,7 @@ class PrestationController extends Controller
         $typecontact = Typecontact::where('type', $request->typecontact)->first();
         $contact->typeContacts()->syncWithoutDetaching($typecontact->id);
         
-        $beneficiaire = Individu::create([
-            "email" => $request->email,
-            "contact_id" => $contact->id,
-            "nom" => $request->nom,
-            "prenom" => $request->prenom,
-          
-            "numero_voie" => $request->numero_voie,
-            "nom_voie" => $request->nom_voie,
-            "complement_voie" => $request->complement_voie,
-            "code_postal" => $request->code_postal,
-            "ville" => $request->ville,
-            "pays" => $request->pays,
-
-            "civilite" => $request->civilite,
-           
-            "indicatif_fixe" => $request->indicatif_fixe,
-            "telephone_fixe" => $request->telephone_fixe,
-            "indicatif_mobile" => $request->indicatif_mobile,
-            "telephone_mobile" => $request->telephone_mobile,
-
-            "notes" => $request->notes,
-
-        ]);
+   
         
                
         $prestation = new Prestation();
