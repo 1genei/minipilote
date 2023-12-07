@@ -261,11 +261,11 @@
                                                     @foreach ($contactclients as $contact)
                                                         @if ($contact->type =="individu")
                                                             <option value="{{ $contact->id }}">
-                                                                {{ $contact->individu->nom }} {{ $contact->individu->prenom }}
+                                                                {{ $contact->individu?->nom }} {{ $contact->individu->prenom }}
                                                             </option>
                                                         @else
                                                             <option value="{{ $contact->id }}">
-                                                                {{ $contact->entite->raison_sociale }}
+                                                                {{ $contact->entite?->raison_sociale }}
                                                             </option>
                                                         @endif
                                                     @endforeach
