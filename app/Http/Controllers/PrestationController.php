@@ -28,12 +28,11 @@ class PrestationController extends Controller
     public function store(Request $request)
     {
     
-        // dd($request->all());
-        
+       
         
         $request->validate([
             'numero' => 'required|integer|unique:prestations',
-            'client_id' => 'required|integer',
+            // 'client_id' => 'required|integer',
         ]);
         
  
@@ -42,7 +41,7 @@ class PrestationController extends Controller
 
         // Client
         
-        if(!$request->client_existant){
+        if(!$request->client_existant && $request->client_id == null){
             $contact_client = Contact::create([
                 "user_id" => Auth::user()->id,
                 "type" => $type_contact,

@@ -199,21 +199,7 @@ class ContactController extends Controller
         
         return redirect()->route('contact.show', Crypt::encrypt($contact->id))->with('ok', 'Contact ajouté');
         
-        // if($request->typecontact == "Prospect"){
-        //     return redirect()->route('prospect.index')->with('ok', 'Contact ajouté');
-        // }
-        // elseif($request->typecontact == "Fournisseur"){
-        //     return redirect()->route('fournisseur.index')->with('ok', 'Contact ajouté');
-        // }
-        // elseif($request->typecontact == "Client"){
-        //     return redirect()->route('client.index')->with('ok', 'Contact ajouté');
-        // }
-        // elseif($request->typecontact == "Collaborateur"){
-        //     return redirect()->route('collaborateur.index')->with('ok', 'Contact ajouté');
-        // }else{
-        //     return redirect()->route('contact.index')->with('ok', 'Contact ajouté');
-            
-        // }
+      
 
         
     }

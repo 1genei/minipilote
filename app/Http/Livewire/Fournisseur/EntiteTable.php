@@ -131,7 +131,7 @@ final class EntiteTable extends PowerGridComponent
             // ->addColumn('id')
             ->addColumn('raison_sociale')
             ->addColumn('forme_juridique')
-            ->addColumn('email',fn (Entite $model) => decode_string($model->email))
+            ->addColumn('email',fn (Entite $model) => $model->email)
             ->addColumn('telephone_fixe')
             ->addColumn('telephone_mobile')
             ->addColumn('adresse', function (Entite $model) {          

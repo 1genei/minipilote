@@ -204,7 +204,7 @@
                                         <label for="montant_ttc" class="form-label">
                                             Montant de la prestations (TTC) <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" id="montant_ttc" name="montant_ttc" step="0.01"
+                                        <input type="number" id="montant_ttc" name="montant_ttc" step="0.01"
                                             value="{{ $prestation->montant_ttc}}" class="form-control" required>
         
                                         @if ($errors->has('montant_ttc'))

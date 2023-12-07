@@ -95,7 +95,7 @@ class AddForm extends Component
                 'nom' => 'required|string',
                 'prenom' => 'required|string',
                 // 'emailx' => 'required|string',
-                // 'email' => 'required|email|unique:individus',
+                'email' => 'required|email|unique:individus',
             ];
 
         } elseif ($this->nature == "Couple") {
