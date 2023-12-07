@@ -228,6 +228,9 @@ class ContactController extends Controller
     {
         $contact = Contact::where('id', Crypt::decrypt($contact_id))->first();
         
+        dd($contact);
+        
+        
         $derniere_prestation = Prestation::orderBy('created_at', 'desc')->first();
         
         if($derniere_prestation){
