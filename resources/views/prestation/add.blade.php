@@ -260,6 +260,7 @@
                                 <label for="client_existant" data-on-label="Oui" data-off-label="Non"></label>
         
                             </div>
+                            {{dd($contactclients)}}
         
                             <div class="col-lg-12 client_existant">
                                 <div class="row">
@@ -273,7 +274,6 @@
                                                 <option value=""></option>
                                                 @foreach ($contactclients as $contact)
                                                 
-                                                {{dd($contact)}}
                                                     @if ($contact->type =="individu")
                                                         <option value="{{ $contact->id }}">
                                                             {{ $contact->individu->nom }} {{ $contact->individu->prenom }}
