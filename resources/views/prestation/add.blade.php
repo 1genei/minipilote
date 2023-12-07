@@ -272,6 +272,8 @@
                                                 data-toggle="select2" >
                                                 <option value=""></option>
                                                 @foreach ($contactclients as $contact)
+                                                
+                                                {{dd($contact))}}
                                                     @if ($contact->type =="individu")
                                                         <option value="{{ $contact->id }}">
                                                             {{ $contact->individu->nom }} {{ $contact->individu->prenom }}
