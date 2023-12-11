@@ -73,6 +73,14 @@
                                     </a>                             
                                 </div>
                             @endcan
+                            
+                            @if(Auth::user()->is_admin)
+                            
+                                <div class="">
+                                    <strong>Montant total des prestations :<span class="badge bg-danger text-white font-bold px-2 fs-5">  {{ $montant_total_prestations }} €</span></strong>                  
+                                </div>
+                            @endif
+                          
                             <div class="d-flex justify-content-end">
                                 @can('permission', 'archiver-contact')
                                     <a href="{{ route('prestation.archives') }}" class="btn btn-warning mb-2">

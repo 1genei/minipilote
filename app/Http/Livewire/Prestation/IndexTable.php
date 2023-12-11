@@ -6,6 +6,7 @@ use App\Models\Contact;
 use App\Models\Individu;
 use App\Models\EntiteIndividu;
 use App\Models\Prestation;
+use App\Models\User;
 use Crypt;
 use Auth;
 
@@ -121,16 +122,17 @@ final class IndexTable extends PowerGridComponent
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
             } )
             ->addColumn('notes')
-            ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation))  
+            ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation)->format('d-m-Y')  )
             ->addColumn('user', function (Prestation $model) {        
                 
-                return  '<span >'.$model->id.'</span>';
-                // $contact = Contact::where('id', $model->user_id)->first();
-                // $individu = $model->user?->contact?->individu;
-                // return  '<span >'.$individu?->nom.' '.$individu?->prenom.'</span>';
+                $user = User::where('id', $model->user_id)->first();
+                $contact = $user?->contact;
+                $individu = $contact?->individu;
+                
+                return  '<span >'.$individu?->nom.' '.$individu?->prenom.'</span>';
             })
             ->addColumn('created_date', function (Prestation $model) {          
-                return $model->created_at->format('d/m/Y');
+                return $model->created_at->format('d-m-Y');
             });
             // ->addColumn('statut');
     }

@@ -19,7 +19,9 @@ class PrestationController extends Controller
     public function index()
     {
         $prestations = Prestation::all();
-        return view('prestation.index', compact('prestations'));
+        $montant_total_prestations = Prestation::sum('montant_ttc');
+        
+        return view('prestation.index', compact('prestations', 'montant_total_prestations'));
     }
     
     /**

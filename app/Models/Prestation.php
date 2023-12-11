@@ -21,6 +21,7 @@ class Prestation extends Model
         
     }
     
+    
     /**
     * Get the beneficiaire that owns the Prestation
     */
