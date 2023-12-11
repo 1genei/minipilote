@@ -124,6 +124,7 @@ final class IndexTable extends PowerGridComponent
             ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation))  
             ->addColumn('user', function (Prestation $model) {        
                 
+                return  '<span >'.$model->id.'</span>';
                 // $contact = Contact::where('id', $model->user_id)->first();
                 // $individu = $model->user?->contact?->individu;
                 // return  '<span >'.$individu?->nom.' '.$individu?->prenom.'</span>';
