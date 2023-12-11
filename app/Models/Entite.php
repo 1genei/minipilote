@@ -43,6 +43,14 @@ class Entite extends Model
     }
     
     
-    
+    /*
+    * Retourne l'utilisateur qui a cree l'entité
+    */
+    public function user()
+    {
+        $user_id = $this->contact->user_id;
+        return User::find($user_id);
+       
+    }
     
 }

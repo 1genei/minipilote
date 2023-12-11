@@ -140,6 +140,9 @@ final class EntiteTable extends PowerGridComponent
             } )
             ->addColumn('code_postal')
             ->addColumn('ville')
+            ->addColumn('user', function (Entite $model) {          
+                return  '<span >'.$model->user()?->infos()?->nom.' '.$model->user()?->infos()?->prenom.'</span>';
+            })
             ->addColumn('created_at_formatted', fn (Entite $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
     }
 
@@ -159,7 +162,7 @@ final class EntiteTable extends PowerGridComponent
       */
     public function columns(): array
     {
-        return [
+        $colums = [
             // Column::make('Id', 'id'),
             Column::make('Raison sociale', 'raison_sociale')->sortable()->searchable(),
             Column::make('Forme juridique', 'forme_juridique')->sortable()->searchable(),
@@ -173,6 +176,12 @@ final class EntiteTable extends PowerGridComponent
                 ->sortable(),
 
         ];
+        
+        if(Auth::user()->is_admin ){
+            $colums[] = Column::make('Saisi par', 'user')->searchable()->sortable();
+        }
+        
+        return $colums;
     }
 
     /**

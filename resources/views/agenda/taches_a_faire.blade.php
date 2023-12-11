@@ -403,8 +403,8 @@
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
                                         <select name="type_rappel" id="edit_type" class="form-select">
-                                            <option value="appel">appel</option>
-                                            <option value="rappel">rappel</option>
+                                            <option value="contacter">contacter</option>
+                                            <option value="recontacter">recontacter</option>
                                             <option value="rdv">rdv</option>
                                             <option value="autre">autre</option>
                                         </select>
@@ -626,8 +626,8 @@
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
                                         <select name="type_rappel" id="edit_type" class="form-select">
-                                            <option value="appel">appel</option>
-                                            <option value="rappel">rappel</option>
+                                            <option value="contacter">contacter</option>
+                                            <option value="recontacter">recontacter</option>
                                             <option value="rdv">rdv</option>
                                             <option value="autre">autre</option>
                                         </select>

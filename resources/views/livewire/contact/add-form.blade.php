@@ -83,7 +83,7 @@
                                     </div>
 
                                 </div>
-                                <div class="col-sm-3">
+                                {{-- <div class="col-sm-3">
 
                                     <div class="form-check form-check-inline">
                                         <input type="radio" id="nature3" name="nature" wire:model="nature"
@@ -95,7 +95,7 @@
 
                                     </div>
 
-                                </div>
+                                </div> --}}
                                 <div class="col-sm-3">
                                     <div class="form-check form-check-inline">
                                         <input type="radio" id="nature4" name="nature" wire:model="nature"
@@ -551,6 +551,7 @@
                                                 {{ old('forme_juridique') }}</option>
 
                                             <option value="Non défini">Non défini</option>
+                                            <option value="CE">CE - Comité d'Entreprise </option>                                            
                                             <option value="EURL">
                                                 EURL - Entreprise unipersonnelle à responsabilité limitée
                                             </option>

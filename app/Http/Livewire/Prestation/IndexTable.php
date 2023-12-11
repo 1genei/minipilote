@@ -121,9 +121,12 @@ final class IndexTable extends PowerGridComponent
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
             } )
             ->addColumn('notes')
-            ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation)->format('d/m/Y'))  
-            ->addColumn('user', function (Prestation $model) {          
-                return  '<span >'.$model->user?->contact?->individu?->nom.' '.$model->user?->contact?->individu?->prenom.'</span>';
+            ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation))  
+            ->addColumn('user', function (Prestation $model) {        
+                
+                // $contact = Contact::where('id', $model->user_id)->first();
+                // $individu = $model->user?->contact?->individu;
+                // return  '<span >'.$individu?->nom.' '.$individu?->prenom.'</span>';
             })
             ->addColumn('created_date', function (Prestation $model) {          
                 return $model->created_at->format('d/m/Y');

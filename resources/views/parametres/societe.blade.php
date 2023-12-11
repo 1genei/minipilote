@@ -199,6 +199,7 @@
                                                         {{ old('forme_juridique') }}</option>
 
                                                     <option value="Non défini">Non défini</option>
+                                                    <option value="CE">CE - Comité d'Entreprise </option>  
                                                     <option value="EURL">
                                                         EURL - Entreprise unipersonnelle à responsabilité limitée
                                                     </option>

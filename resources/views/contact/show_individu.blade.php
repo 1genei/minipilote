@@ -123,7 +123,7 @@
                                 <i class="mdi mdi-dots-vertical"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                            
+                           
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,15 @@
                     <div class="inbox-widget">
                         <div class="inbox-item">
                             <div class="inbox-item-img"><img src="assets/images/users/avatar-2.jpg" class="rounded-circle" alt=""></div>
-                           
+                            
+                            @if( sizeof($contact->individu?->entites) > 0)
+                            <h4 class="header-title">Entreprises</h4>
+                                @foreach($contact->individu?->entites as $entite)
+                                    <a href="{{ route('contact.show', Crypt::encrypt($entite->contact_id)) }}" class="text-muted">
+                                        <span class="badge text-info font-15"><li> {{$entite->raison_sociale}}<i class="mdi mdi-eye-outline ms-2"></i></li></span>
+                                    </a>
+                                @endforeach
+                            @endif
                         </div>
                        
 

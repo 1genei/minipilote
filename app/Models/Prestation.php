@@ -9,7 +9,7 @@ class Prestation extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    
+    protected $dates = ['date_prestation'];
     
     /**
     * Get the client that owns the Prestation

@@ -190,6 +190,7 @@ class ContactController extends Controller
                 "bic" => $request->bic,
                 "site_web" => $request->site_web,
                 "contact_id" => $contact->id,
+                "notes" => $request->notes,
 
             ]);
 
@@ -234,7 +235,7 @@ class ContactController extends Controller
             $ids_existant = array();
             $entite_id = $contact->entite->id;
            
-          
+      
             foreach ($individus_existants as $ind) {
                 array_push($ids_existant, $ind->individu->contact->id); 
             }
@@ -404,6 +405,7 @@ class ContactController extends Controller
             $entite->bic = $request->bic;
             $entite->site_web = $request->site_web;
             $entite->contact_id = $contact->id;
+            $entite->notes = $request->notes;
 
             $entite->update();
 

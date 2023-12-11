@@ -70,10 +70,10 @@ final class AssociesTable extends PowerGridComponent
             array_push($ids_existant, $ind->individu_id); 
         }
         
-        $contactsassocies = Individu::select('individus.*','contacts.*','contact_typecontact.*','typecontacts.type')
+        $contactsassocies = Individu::select('individus.*','contacts.*')
                 ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+                // ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+                // ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
                 ->where([['contacts.type', 'individu'],['contacts.archive', false]])
                 ->whereIn('individus.id', $ids_existant)
                 ->get();
@@ -117,22 +117,7 @@ final class AssociesTable extends PowerGridComponent
     
         return PowerGrid::columns()
             // ->addColumn('id')
-            ->addColumn('type', function (Individu $model) {
-                if($model->type == "Prospect"){
-                    $color = "btn-secondary ";
-                }elseif($model->type == "Client"){
-                    $color = "btn-info";                
-                }elseif($model->type == "Fournisseur"){
-                    $color = "btn-warning";                
-                }
-                elseif($model->type == "Collaborateur"){
-                    $color = "btn-danger";                
-                }
-                else{
-                    $color = "btn-light ";                
-                }
-                return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
-            } )
+    
             ->addColumn('nom')
             ->addColumn('prenom')
             ->addColumn('email',fn (Individu $model) => $model->email)
@@ -164,7 +149,7 @@ final class AssociesTable extends PowerGridComponent
     {
         return [
             // Column::make('Id', 'id'),
-            Column::make('Type', 'type')->sortable()->searchable(),            
+       
             Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Prénom', 'prenom')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),

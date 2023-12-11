@@ -30,4 +30,14 @@ class Individu extends Model
     {
         return $this->belongsToMany(Entite::class);
     }
+    
+    /*
+    * Retourne l'utilisateur qui a cree l'individu
+    */
+    public function user()
+    {
+        $user_id = $this->contact->user_id;
+        return User::find($user_id);
+       
+    }
 }
