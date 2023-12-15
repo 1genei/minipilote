@@ -22,8 +22,8 @@ return new class extends Migration
             $table->double('montant_ht')->nullable();
             $table->double('montant_ttc')->nullable();
             $table->double('montant_tva')->nullable();
+            $table->string('type_remise')->nullable();
             $table->double('remise')->nullable();
-            $table->double('taux_remise')->nullable();
             $table->integer('collaborateur_id')->nullable();
             $table->integer('client_prospect_id')->nullable();
             $table->boolean('archive')->default(false);

@@ -64,7 +64,7 @@ final class IndexTable extends PowerGridComponent
     public function datasource()
     {
       
-        $prestations = Prestation::where('archive', false)->get();
+        $prestations = Prestation::where('archive', false)->orderBy('created_at', 'desc')->get();
 
         return $prestations;
 
