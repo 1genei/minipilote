@@ -24,6 +24,9 @@ final class IndexTable extends PowerGridComponent
     use ActionButton;
     use WithExport;
     public $client_id;
+    public string $sortField = 'created_at';
+    
+    public string $sortDirection = 'desc';
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
