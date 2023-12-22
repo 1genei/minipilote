@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
 @endsection
 
-@section('title', 'Ajout devi')
+@section('title', 'Modification devis')
 
 @section('content')
     <div class="content">
@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <form action="{{ route('devis.store') }}" method="post" id="form_devis">
+                        <form action="{{ route('devis.update', Crypt::encrypt($devis->id)) }}" method="post" id="form_devis">
                             @csrf
 
                         
@@ -101,8 +101,8 @@
                                                         <label for="numero_devis" class="form-label">
                                                             Numéro du devis <span class="text-danger">*</span>
                                                         </label>
-                                                        <input type="number" id="numero_devis" name="numero_devis" min="{{$prochain_numero_devis}}"
-                                                            value="{{$prochain_numero_devis}}" class="form-control" style="font-size: 1.3rem;color: #772e7b; width: 200px;" required>
+                                                        <input type="number" id="numero_devis" name="numero_devis" 
+                                                            value="{{$devis->numero_devis}}" class="form-control" style="font-size: 1.3rem;color: #772e7b; width: 200px;" required>
                     
                                                         @if ($errors->has('numero_devis'))
                                                             <br>
@@ -122,7 +122,7 @@
                                                             Nom du devis 
                                                         </label>
                                                         <input type="text" id="nom_devis" name="nom_devis" style="font-size: 1.3rem;color: #772e7b;width: 200px;"
-                                                            value="{{ old('nom_devis') ? old('nom_devis') : '' }}" class="form-control" >
+                                                            value="{{$devis->nom_devis}}" class="form-control" >
                     
                                                         @if ($errors->has('nom_devis'))
                                                             <br>
@@ -142,7 +142,18 @@
                                                         </label>
                                                         <select name="client_prospect_id" id="client_prospect_id" class=" form-control select2" required
                                                             data-toggle="select2" >
-                                                            <option value=""></option>
+                                                            
+                                                            @if($devis->client_prospect_id != null)
+                                                                @if($devis->client_prospect()->type == "individu")
+                                                                    <option value="{{ $devis->client_prospect_id }}">
+                                                                        {{ $devis->client_prospect()->individu->nom }} {{ $devis->client_prospect()->individu->prenom }}
+                                                                    </option>
+                                                                @else
+                                                                    <option value="{{ $devis->client_prospect_id }}">
+                                                                        {{ $devis->client_prospect()->entite->raison_sociale }}
+                                                                    </option>
+                                                                @endif
+                                                            @endif
                                                             @foreach ($contactclients as $contact)
                                                             
                                                                 @if ($contact->type =="individu")
@@ -174,57 +185,59 @@
                                                 <button class="btn btn-warning add_field_button" style="margin-left: 53px;">
                                                     Ajouter un produit
                                                 </button>
-                                                <div class="row gy-2 gx-2 align-items-center field1">
-                        
-                        
-                                                    <div class="col-auto">
-                                                        <label for="produit1">Produit: </label>
-                                                        <select class="form-control select2 select_produit" id="produit1" name="produit1" data-toggle="select2" required>
-                                                            <option value=""></option>
-                                                            @foreach ($produits as $produit)
-                                                                <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
-                                                            @endforeach
-                                                     
-                                                        </select>
-                                                     
-                                                            
+                                                
+                                                 {{-- 0 = id_produit, 1 = quantité, 2 = prix_unitaire ht, 3 = id_tva, 4 = type_remise, 5 = remise --}}
+                                                
+                                                @foreach($paliers as $key => $palier)
+                                                    @php $key++; @endphp
+                                                    <div class="row gy-2 gx-2 align-items-center field{{$key}}">
+                                                        <div class="col-auto">
+                                                            <label for="produit{{$key}}">Produit: </label>
+                                                            <select class="form-control select2 select_produit" id="produit{{$key}}" name="produit{{$key}}" data-toggle="select2" required>
+                                                                <option value=""></option>
+                                                                @foreach ($produits as $produit)
+                                                                    <option value="{{ $produit->id }}" {{ $palier[0]== $produit->id ? 'selected' : '' }}>{{ $produit->nom }}</option>
+                                                                @endforeach                                                     
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <label for="quantite{{$key}}">Quantité: </label>
+                                                            <input class="form-control quantite" type="number" min="1"  id="quantite{{$key}}" name="quantite{{$key}}" value="{{$palier[1]}}" >
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <label for="prix_ht{{$key}}">prix HT (€): </label>
+                                                            <input class="form-control prix_ht" type="number" min="1"  value="{{$palier[2]}}" id="prix_ht{{$key}}" name="prix_ht{{$key}}" required>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <label for="tva{{$key}}">Tva: </label>                                                    
+                                                            <select class="form-select tva" id="tva{{$key}}" name="tva{{$key}}">
+                                                                <option> </option>
+                                                                @foreach ($tvas as $tva)
+                                                                    <option value="{{ $tva->id }}" {{ $palier[3] == $tva->id ? 'selected' : '' }}>{{ $tva->nom }}</option>
+                                                                @endforeach                                                     
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <label for="type_reduction{{$key}}">Réduction: </label>                                                    
+                                                            <select class="form-select type_reduction" id="type_reduction{{$key}}" name="type_reduction{{$key}}">
+                                                                <option> </option>
+                                                                <option value="pourcentage" {{ $palier[4] == "pourcentage" ? 'selected' : '' }}>%</option>
+                                                                <option value="montant" {{ $palier[4] == "montant" ? 'selected' : '' }}>EUR</option>                                                     
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <label for="reduction{{$key}}"> </label>
+                                                            <input class="form-control reduction" type="number" step="0.01" min="0" id="reduction{{$key}}" name="reduction{{$key}}" value="{{$palier[5]}}" @if($palier[4] == "")readonly @endif >
+                                                        </div>
+                                                        <div class="col-auto"> <button href="#" id="pal{{$key}}" class="btn btn-danger remove_field">Enlever</button></div></br>
                                                     </div>
-                                                    <div class="col-auto">
-                                                        <label for="quantite1">Quantité: </label>
-                                                        <input class="form-control quantite" type="number" min="1"  id="quantite1" name="quantite1" value="1" >
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <label for="prix_ht1">prix HT (€): </label>
-                                                        <input class="form-control prix_ht" type="number" min="1"  value="0" id="prix_ht1" name="prix_ht1" required>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <label for="tva1">Tva: </label>
-                                                    
-                                                        <select class="form-select tva" id="tva1" name="tva1">
-                                                            <option> </option>
-                                                            @foreach ($tvas as $tva)
-                                                                <option value="{{ $tva->id }}">{{ $tva->nom }}</option>
-                                                            @endforeach
-                                                     
-                                                        </select>
-                                                    </div>
-                                                    
-                                                    <div class="col-auto">
-                                                        <label for="type_reduction1">Réduction: </label>
-                                                    
-                                                        <select class="form-select type_reduction" id="type_reduction1" name="type_reduction1">
-                                                            <option> </option>
-                                                           <option value="pourcentage">%</option>
-                                                           <option value="montant">EUR</option>
-                                                     
-                                                        </select>
-                                                    </div>
-                                                   
-                                                    <div class="col-auto">
-                                                        <label for="reduction1"> </label>
-                                                        <input class="form-control reduction" type="number" step="0.01" min="0" id="reduction1" name="reduction1" readonly >
-                                                    </div>
-                                                </div>
+                                                
+                                                
+                                                @endforeach
+                                            
+                                                
+                                                
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -238,7 +251,7 @@
 
                                     <div class="table-responsive">
                                         <table class="table mb-0">
-                                            <tbody >
+                                            <tbody>
                                                 
                                                 <th>
                                                     <th>Produit :</th>
@@ -252,7 +265,32 @@
                                         <table class="table mb-0">
                                             <tbody class="resume_devis">
                                                 
-                                                
+                                                @foreach($paliers as $key => $palier)
+                                                    @php 
+                                                        $key++;
+                                                       
+                                                        $montant_reduction = 0;
+                                                        if($palier[4] == "pourcentage"){
+                                                            $montant_reduction = $palier[2] * $palier[1] * $palier[5] / 100;
+                                                        }else if($palier[4] == "montant"){
+                                                            $montant_reduction = $palier[5];
+                                                        }
+                                                        
+                                                    @endphp
+                                                    
+                                                    
+                                                    @if($palier[0] != "")
+                                                        <tr>
+                                                            <td>{{ $tab_produits[$palier[0]]->nom }} x {{ $palier[1] }}</td>
+                                                            <td>{{ $palier[2] * $palier[1] * (1 + $tab_tvas[$palier[3]] / 100) }} @if($montant_reduction != 0) <span class="text-danger"> (-{{number_format($montant_reduction,2)}})</span> @endif </td>
+                                                            <td>{{ $palier[2] * $palier[1] * $tab_tvas[$palier[3]] / 100 }} </td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                                <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TTC :</td><td class="total_ttc"> {{$devis->montant_ttc}} </th><th></th> </tr>
+                                                <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TVA :</td><td class="">{{$devis->montant_tva}} </th><th></th> </tr>
+                                                <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Réduction :</td><td class="text-danger total_reduction"> - {{$devis->montant_remise}} </th><th></th> </tr>
+                                                <tr style="background-color: #f1f3fa;font-size: 15px; font-weight: bold;border:2px solid #ff5b5b"><th>NET A PAYER :</td><td class="net_a_payer"> {{$devis->net_a_payer}} €</th> <th></th> </tr>
                                                 
                                             </tbody>
                                         </table>
@@ -266,15 +304,16 @@
                                     
                                         <select class="form-select type_reduction_globale" id="type_reduction_globale" name="type_reduction_globale">
                                             <option> </option>
-                                           <option value="pourcentage">%</option>
-                                           <option value="montant">EUR</option>
+                                           <option @if($devis->type_remise == "pourcentage") selected @endif value="pourcentage">%</option>
+                                           <option @if($devis->type_remise == "montant") selected @endif value="montant">EUR</option>
                                      
                                         </select>
                                     </div>
                                    
                                     <div class="col-auto">
                                         <label for="reduction_globale"> </label>
-                                        <input class="form-control reduction_total" type="number" step="0.01" min="0" value="" id="reduction_globale" name="reduction_globale" readonly >
+                                        <input class="form-control reduction_total" type="number" step="0.01" min="0" value="{{$devis->remise}}" id="reduction_globale" name="reduction_globale" 
+                                        @if($devis->type_remise == "") readonly @endif >
                                     </div>
                                     
                                     <div class="col-auto">
@@ -297,8 +336,8 @@
                         <div class="row mt-3">
                             <div class="modal-footer" style="justify-content:flex-start;">
 
-                                <button type="submit" id="enregistrer" wire:click="submit"
-                                    class="btn btn-primary">Enregistrer</button>
+                                <button type="submit" id="modifier" wire:click="submit"
+                                    class="btn btn-success">Modifier</button>
 
                             </div>
                         </div>
@@ -400,7 +439,7 @@
         
        
        
-        var y = 1;
+        var y = "{{ $key }}";
         $(document).ready(function() {
             var max_produits = 30;
             var wrapper = $(".input_fields_wrap");
@@ -630,6 +669,7 @@
             
             reduction_globale = $("#reduction_globale").val();
             
+            console.log(reduction_globale+" ".prix_ttc_total);
             if(reduction_globale != ""){
             
                 if(type_reduction_globale == "pourcentage"){

@@ -22,10 +22,14 @@ return new class extends Migration
             $table->double('montant_ht')->nullable();
             $table->double('montant_ttc')->nullable();
             $table->double('montant_tva')->nullable();
+            $table->double('net_a_payer')->nullable();
             $table->string('type_remise')->nullable();
             $table->double('remise')->nullable();
+            $table->double('montant_remise')->nullable();
             $table->integer('collaborateur_id')->nullable();
             $table->integer('client_prospect_id')->nullable();
+            $table->text('palier')->nullable();
+            $table->text('url_pdf')->nullable();
             $table->boolean('archive')->default(false);
             
             $table->timestamps();

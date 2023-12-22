@@ -9,6 +9,7 @@ class Devi extends Model
 {
     use HasFactory;
     protected $guarded =[];
+    protected $casts  = ['date_devis' => 'date'];
     /**
     *   retourne tous les produits liés au devis
     */
@@ -30,6 +31,8 @@ class Devi extends Model
     */
     public function collaborateur(){
     
-        return $this->belongsTo(Collaborateur::class);
+        $collaborateur = User::where('id', $this->collaborateur_id)->first();
+        
+        return $collaborateur;
     }
 }

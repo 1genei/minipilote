@@ -63,17 +63,14 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        @can('permission', 'ajouter-devis')
-                            <div class="d-flex justify-content-start">
-                                <a href="{{ route('devis.create') }}" class="btn btn-primary mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Ajouter devis
-                                </a>
-                            @endcan
+                      
+                        <div class="d-flex justify-content-start">
+                           
                         </div>
                         <div class="d-flex justify-content-end">
                             @can('permission', 'archiver-devis')
-                                <a href="{{ route('devis.archives') }}" class="btn btn-warning mb-2">
-                                    <i class="mdi mdi-archive me-2"></i> devis archivés
+                                <a href="{{ route('devis.index') }}" class="btn btn-success mb-2">
+                                    <i class="mdi mdi-archive me-2"></i> devis actifs
                                 </a>
                             @endcan
                         </div>
@@ -104,7 +101,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <livewire:devi.index-table />
+                                <livewire:devi.archive-table />
                             </div>
                         </div>
                     </div>
@@ -257,7 +254,7 @@
             }
         })
         $('[data-toggle="tooltip"]').tooltip()
-        $('body').on('click', 'a.archive_devis', function(event) {
+        $('body').on('click', 'a.unarchive_devis', function(event) {
             let that = $(this)
             event.preventDefault();
 
@@ -268,7 +265,7 @@
             });
 
             swalWithBootstrapButtons.fire({
-                title: 'Archiver le devis',
+                title: 'Désarchiver le devis',
                 text: "Confirmer ?",
                 icon: 'warning',
                 showCancelButton: true,
@@ -293,7 +290,7 @@
 
                             swalWithBootstrapButtons.fire(
                                 'Confirmation',
-                                'devis archivé avec succès',
+                                'devis désarchivé avec succès',
                                 'success'
                             )
                             // document.location.reload();
@@ -308,7 +305,7 @@
                 ) {
                     swalWithBootstrapButtons.fire(
                         'Annulation',
-                        'devis non archivé',
+                        'devis non désarchivé',
                         'error'
                     )
                 }

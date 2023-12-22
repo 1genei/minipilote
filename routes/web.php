@@ -300,8 +300,9 @@ Route::controller(DeviController::class)->group(function () {
     Route::get('/devis/modifier/{deviId}', 'edit')->name('devis.edit')->middleware(['auth']);
     Route::post('/devis/ajouter', 'store')->name('devis.store')->middleware(['auth']);
     Route::post('/devis/modifier/{deviId}', 'update')->name('devis.update')->middleware(['auth']);
-    Route::post('/devis/archiver/{deviId}', 'archive')->name('devis.archive')->middleware(['auth']);
-    Route::post('/devis/desarchiver/{deviId}', 'unarchive')->name('devis.unarchive')->middleware(['auth']);
+    Route::post('/devis/modifier-statut/{devis}/{statut}', 'modifierStatut')->name('devis.updateStatut')->middleware(['auth']);
+    Route::post('/devis/archiver/{deviId}', 'archiver')->name('devis.archiver')->middleware(['auth']);
+    Route::post('/devis/desarchiver/{deviId}', 'desarchiver')->name('devis.desarchiver')->middleware(['auth']);
 });
 
 

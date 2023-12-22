@@ -63,10 +63,10 @@ final class IndexTable extends PowerGridComponent
     {
     
       
-            $devis = Devi::where([['archive', false],['type','simple']])->get();
+            $devis = Devi::where('archive', false)->get();
             
         
-        return $devis;
+            return $devis;
 
     }
 
@@ -128,24 +128,49 @@ final class IndexTable extends PowerGridComponent
             ->addColumn('montant_ht')
             ->addColumn('montant_ttc')
             ->addColumn('remise')
+            ->addColumn('net_a_payer', function (Devi $model) {
+                return "<span class='text-info fw-bold'>".$model->net_a_payer."</span>";
+            } )
             ->addColumn('client_prospect', function (Devi $model) {
-                if($model->client_prospect){
-                    return  $model->client_prospect->nom;
+                if($model->client_prospect()->type == "individu"){
+                    return  $model->client_prospect()?->infos()->nom." ".$model->client_prospect()?->infos()->prenom;
+                }else{
+                    return $model->client_prospect()?->infos()->raison_sociale;
                 }
-                return "non renseigné";
+              
             } )
             ->addColumn('collaborateur', function (Devi $model) {
-                if($model->collaborateur){
-                    return  $model->collaborateur->nom;
+             
+                return  $model->collaborateur()?->infos()->nom." ".$model->collaborateur()?->infos()->prenom;               
+            } )
+            
+            ->addColumn('statut', function (Devi $model) {
+                if($model->statut == "accepté"){
+                    $color = "btn-success ";
+                    return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->statut.'</button>';
+                    
                 }
-                return "non renseigné";
+                elseif($model->statut == "refusé"){
+                    $color = "btn-danger ";   
+                    return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->statut.'</button>';
+                    
+                }else{
+                   
+                   return   "<a data-href='".route('devis.updateStatut', [$model->id, 'accepté'])."' style='cursor: pointer;' class='action-icon text-success accepter_devis' data-bs-container='#tooltip-archive'
+                            data-bs-toggle='tooltip' data-bs-placement='top' title='Accepter'><i class='mdi mdi-check'></i></a>".''.
+                            
+                            "<a data-href='".route('devis.updateStatut', [$model->id, 'refusé'])."' style='cursor: pointer;' class='action-icon text-danger refuser_devis ' data-bs-container='#tooltip-archive' data-bs-toggle='tooltip' data-bs-placement='top'
+                            title='Refuser'><i class='mdi mdi-window-close'></i></a>  ";
+                }
+                
+                
             } )
             ->addColumn('date_devis', function (Devi $model) {
-                return  $model->date_devis->format('d/m/Y');
-            } )
-            ->addColumn('duree_validite', function (Devi $model) {
-                return  $model->duree_validite." jours";
+                return  $model->date_devis;
             } );
+            // ->addColumn('duree_validite', function (Devi $model) {
+            //     return  $model->duree_validite." jours";
+            // } );
       
             
            
@@ -170,16 +195,17 @@ final class IndexTable extends PowerGridComponent
     {
         return [
             // Column::make('Id', 'id'),
-            Column::make('Numéro devis', 'numero')->sortable()->searchable(), 
-            Column::make('Nom', 'nom')->sortable()->searchable(),
-            Column::make('Statut', 'Statut')->sortable()->searchable(),
+            Column::make('Numéro devis', 'numero_devis')->sortable()->searchable(), 
+            Column::make('Nom', 'nom_devis')->sortable()->searchable(),
             Column::make('Montant ht', 'montant_ht')->sortable()->searchable(),
             Column::make('Montant ttc', 'montant_ttc')->sortable()->searchable(),
             Column::make('Remise', 'remise')->sortable()->searchable(),
+            Column::make('Net à payer', 'net_a_payer')->sortable()->searchable(),
             Column::make('Client/Prospect', 'client_prospect')->sortable()->searchable(),
             Column::make('Créé par', 'collaborateur')->sortable()->searchable(),
-            Column::make('Date', 'date_devis')->sortable()->searchable(),
-            Column::make('Durée validité', 'duree_validite')->sortable()->searchable(),
+            Column::make('Statut', 'statut')->sortable()->searchable(),
+            Column::make('Crée le', 'date_devis')->sortable()->searchable(),
+            // Column::make('Durée validité', 'duree_validite')->sortable()->searchable(),
 
 
         ];
@@ -237,29 +263,29 @@ final class IndexTable extends PowerGridComponent
                
             Button::add('Afficher')
                 ->bladeComponent('button-show', function(Devi $devi) {
-                    return ['route' => route('devi.show', Crypt::encrypt($devi->id)),
+                    return ['route' => route('devis.show', Crypt::encrypt($devi->id)),
                     'tooltip' => "Afficher",
-                    'permission' => Gate::allows('permission', 'afficher-devi'),                    
+                    'permission' => Gate::allows('permission', 'afficher-devis'),                    
                     ];
                 }),
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(Devi $devi) {
-                return ['route' => route('devi.edit', Crypt::encrypt($devi->id)),
+                return ['route' => route('devis.edit', Crypt::encrypt($devi->id)),
                 'tooltip' => "Modifier",
-                'permission' => Gate::allows('permission', 'modifier-devi'),                
+                'permission' => Gate::allows('permission', 'modifier-devis'),                
                 ];
             }),
             
             Button::add('Archiver')
             ->bladeComponent('button-archive', function(Devi $devi) {
-                return ['route' => route('devi.archive', Crypt::encrypt($devi->id)),
+                return ['route' => route('devis.archiver', Crypt::encrypt($devi->id)),
                 'tooltip' => "Archiver",
-                'classarchive' => "archive_devi",
-                'permission' => Gate::allows('permission', 'archiver-devi'),
-                
+                'classarchive' => "archive_devis",
+                'permission' => Gate::allows('permission', 'archiver-devis'),
                 ];
             }),
+            
         ];
     }
     
