@@ -267,12 +267,7 @@ final class IndexTable extends PowerGridComponent
    
     public function actionRules(): array
     {
-    //    return [
-
-    //        //Hide button edit for ID 1
-    //         Rule::button('edit')
-    //             ->when(fn($contact) => $contact->id === 1)
-    //             ->hide(),
-    //     ];
+       return [
+        ];
     }
 }
