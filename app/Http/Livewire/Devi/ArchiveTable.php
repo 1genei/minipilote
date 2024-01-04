@@ -107,7 +107,8 @@ final class ArchiveTable extends PowerGridComponent
             // ->addColumn('id')
             ->addColumn('type', function (Devi $model) {
        
-                return  '<button type="button" class="btn btn-light btn-sm rounded-pill">'.$model->numero_devis.'</button>';
+                $url_pdf = route('devis.telecharger', Crypt::encrypt($model->id));
+                return  '<a href='.$url_pdf.' type="button" class="btn btn-info btn-sm rounded-pill">'.$model->numero_devis.'<i class="mdi mdi-download"></i> </a>';
             } )
             
             ->addColumn('nom')
@@ -198,7 +199,7 @@ final class ArchiveTable extends PowerGridComponent
             Column::make('Nom', 'nom_devis')->sortable()->searchable(),
             Column::make('Montant ht', 'montant_ht')->sortable()->searchable(),
             Column::make('Montant ttc', 'montant_ttc')->sortable()->searchable(),
-            Column::make('Remise', 'remise')->sortable()->searchable(),
+            Column::make('Remise', 'montant_remise_total')->sortable()->searchable(),
             Column::make('Net à payer', 'net_a_payer')->sortable()->searchable(),
             Column::make('Client/Prospect', 'client_prospect')->sortable()->searchable(),
             Column::make('Créé par', 'collaborateur')->sortable()->searchable(),

@@ -232,7 +232,7 @@
 			<td>&nbsp;</td>
 		</tr>
 
-		<tr height="42"  style="font-weight: bold;">
+		<tr height="42"  style="font-weight: bold; font-size:20px">
 			<td height="42" style="height:42px;">&nbsp;</td>
 			<td colspan="9"></td>
 			<td>&nbsp;</td>			
@@ -245,7 +245,7 @@
 			<td>&nbsp;</td>
 		</tr>
 	<br>
-		<tr height="42"  style="font-weight: bold;">
+		<tr height="42"  style="font-weight: bold; background-color:#35b8e0; color:#fff">
 			<td height="42" style="height:42px;">&nbsp;</td>
 			<td colspan="9">Description</td>
 			<td>&nbsp;</td>
@@ -266,15 +266,28 @@
 			<td colspan="9">{{$tab["produit"]->nom}}</td>
 			<td>&nbsp;</td>
 		
-			<td colspan="2">{{$tab["quantite"]}}</td>
-			<td colspan="4">{{$tab["prix_unitaire_ht"]}}</td>
-			<td colspan="4" style="color: brown">@if($tab["remise"] > 0) -{{$tab["remise"]}} @endif  </td>
-			<td colspan="4">{{$tab["prix_unitaire_ht_total"]}}</td>
+			<td colspan="2">{{number_format($tab["quantite"],2,',',' ')}}</td>
+			<td colspan="4">{{number_format($tab["prix_unitaire_ht"],2,',',' ')}}</td>
+			<td colspan="4" style="color: brown">@if($tab["remise"] > 0) -{{number_format($tab["remise"],2,',',' ')}} @endif  </td>
+			<td colspan="4">{{number_format($tab["prix_unitaire_ht_total"],2,',',' ')}}</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>
 	@endforeach
-	
+	@if($devis->montant_remise_total != null)
+		<tr height="21">
+			<td height="21" style="height:21px;">&nbsp;</td>
+			<td colspan="9">Remise globale</td>
+			<td>&nbsp;</td>
+		
+			<td colspan="2">&nbsp;</td>
+			<td colspan="4">&nbsp;</td>
+			<td colspan="4" style="color: brown"> -{{number_format($montant_remise,2,',',' ')}} </td>
+			<td colspan="4">&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	@endif
 		<br>
 		
 		<tr height="42">
@@ -307,7 +320,7 @@
 			<td colspan="2"></td>
 			<td colspan="4"></td>
 			<td colspan="9" >Remise</td>
-			<td colspan="4" style="color: brown" >-{{number_format($devis->montant_remise,2,',',' ')}} &euro;</td>
+			<td colspan="4" style="color: brown" >-{{number_format($devis->montant_remise_total,2,',',' ')}} &euro;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>

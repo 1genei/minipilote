@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('type_remise')->nullable();
             $table->double('remise')->nullable();
             $table->double('montant_remise')->nullable();
+            $table->double('montant_remise_total')->nullable();
             $table->integer('collaborateur_id')->nullable();
             $table->integer('client_prospect_id')->nullable();
             $table->text('palier')->nullable();

@@ -298,6 +298,8 @@ Route::controller(DeviController::class)->group(function () {
     Route::get('/devis/create', 'create')->name('devis.create')->middleware(['auth']);
     Route::get('/devis/detail/{deviId}', 'show')->name('devis.show')->middleware(['auth']);
     Route::get('/devis/modifier/{deviId}', 'edit')->name('devis.edit')->middleware(['auth']);
+    Route::get('/devis/telecharger/{deviId}', 'telecharger')->name('devis.telecharger')->middleware(['auth']);    
+    Route::get('/devis/envoyer_mail/{deviId}', 'envoyer_mail')->name('devis.envoyer_mail')->middleware(['auth']);    
     Route::post('/devis/ajouter', 'store')->name('devis.store')->middleware(['auth']);
     Route::post('/devis/modifier/{deviId}', 'update')->name('devis.update')->middleware(['auth']);
     Route::post('/devis/modifier-statut/{devis}/{statut}', 'modifierStatut')->name('devis.updateStatut')->middleware(['auth']);

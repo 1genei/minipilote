@@ -142,7 +142,7 @@ class CaracteristiqueController extends Controller
     public function store_valeur(Request $request)
     {
         $request->validate([
-            "nom" => "required|unique:valeurcaracteristiques"
+            "nom" => "required"
         ]);
         
         Valeurcaracteristique::create([
@@ -163,7 +163,7 @@ class CaracteristiqueController extends Controller
         
         if($request->nom != $valeur->nom){
             $request->validate([
-                "nom" => "required|unique:valeurcaracteristiques"
+                "nom" => "required"
             ]);
             
         }else{
