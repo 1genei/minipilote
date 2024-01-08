@@ -32,6 +32,12 @@
                                                 <!-- task -->
                                                 <span class="text-dark fw-bold fs-4">{{ $caracteristique->nom }}</span>
                                                 <div class="mt-2" style="margin-left: 20px;">
+                                                    <div class="form-check">
+                                                        <input type="radio" id="customRadio{{ $caracteristique->id }}" name="valeurNom_{{ $caracteristique->id }}" value="" class="form-check-input check-decli">
+                                                        <label class="form-check-label"
+                                                            for="customRadio{{ $caracteristique->id }}">Aucun
+                                                        </label>
+                                                    </div>
                                                     @foreach ($caracteristique->valeurcaracteristiques as $valeur)
                                                         <div class="form-check">
                                                             <input type="radio" id="customRadio1{{ $valeur->id }}"
@@ -105,16 +111,16 @@
 
                             <div class="row">
 
-                                <div class="col-12">
+                                {{-- <div class="col-12">
                                     <label for="nom" id="tooltip-prix" class="form-label fs-5 mb-2 text-bold">
                                         Prix de Vente Max
                                         <i class=" mdi mdi-information text-primary " data-bs-container="#tooltip-prix"
                                             data-bs-toggle="tooltip" data-bs-placement="right"
                                             title="Prix de vente à ne pas dépasser"></i>
                                     </label>
-                                </div>
+                                </div> --}}
 
-                                <div class="row">
+                                {{-- <div class="row">
 
                                     <div class="col-sm-6 col-lg-6 col-xxl-4 mb-3">
                                         <label for="edit_prix_vente_max_ht_decli" class="form-label">Montant HT
@@ -150,7 +156,7 @@
                                         @endif
 
                                     </div>
-                                </div>
+                                </div> --}}
 
                             </div>
 
@@ -208,11 +214,10 @@
                                 </div>
 
 
-                                <div class="col-lg-12">
+                                {{-- <div class="col-lg-12">
                                     <div class="col-12">
                                         <label for="nom" id="tooltip-prix"
-                                            class="form-label fs-5 mb-2 text-bold">Prix
-                                            d'Achat Commercial
+                                            class="form-label fs-5 mb-2 text-bold">Prix d'Achat Commercial
                                             <i class=" mdi mdi-information text-primary "
                                                 data-bs-container="#tooltip-prix" data-bs-toggle="tooltip"
                                                 data-bs-placement="right"
@@ -260,7 +265,7 @@
                                         </div>
                                     </div>
 
-                                </div>
+                                </div> --}}
                             </div>
 
                             <hr>

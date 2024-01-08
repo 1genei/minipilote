@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('tvas', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->float('taux');
+            $table->float('taux')->nullable();
+            $table->boolean('est_principal')->default(false);
             $table->boolean('archive')->default(false);
             $table->timestamps();
         });

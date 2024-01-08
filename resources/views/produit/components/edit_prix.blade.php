@@ -53,14 +53,13 @@
 
         <div class="col-6">
             <div class="mb-3">
-                <label for="categorie_id" class="form-label">Taxe</label>
-                <select wire:model.defer="categorie_id" name="categorie_id" id="categorie_id"
+                <label for="tva_id" class="form-label">Taxe</label>
+                <select wire:model.defer="tva_id" name="tva_id" id="tva_id"
                     class="form-select select2">
+                    @foreach ($tvas as $tva)
+                        <option value="{{ $tva->id }}">{{ $tva->nom }}</option>
+                    @endforeach
                     <option value="">Aucune taxe</option>
-                    {{-- @foreach ($tvas as $tva)
-                        <option value="{{ $tva->id }}">{{ $tva->nom }}
-                        </option>
-                    @endforeach --}}
                 </select>
             </div>
         </div>
@@ -70,7 +69,7 @@
 
 
 <div class="row">
-    <div class="col-lg-6">
+    {{-- <div class="col-lg-6">
         <div class="col-12">
             <label for="nom" id="tooltip-prix" class="form-label fs-5 mb-2 text-bold">Prix de Vente Max
                 <i class=" mdi mdi-information text-primary " data-bs-container="#tooltip-prix" data-bs-toggle="tooltip"
@@ -113,7 +112,7 @@
         </div>
 
 
-    </div>
+    </div> --}}
 
 
     <div class="col-6">
@@ -170,7 +169,7 @@
     </div>
 
 
-    <div class="col-lg-6">
+    {{-- <div class="col-lg-6">
         <div class="col-12">
             <label for="nom" id="tooltip-prix" class="form-label fs-5 mb-2 text-bold">Prix d'Achat Commercial
                 <i class=" mdi mdi-information text-primary " data-bs-container="#tooltip-prix"
@@ -214,5 +213,5 @@
         </div>
 
 
-    </div>
+    </div> --}}
 </div>

@@ -74,10 +74,10 @@
                                     <button class="btn btn-primary" type="submit"> Se connecter </button>
                                 </div>
 
-                                <div class="mb-3 mt-15 text-center">
+                                {{-- <div class="mb-3 mt-15 text-center">
                                     <a href="{{ route('logino365') }}" class="btn btn-danger" type="submit"> Se
                                         connecter avec Office 365</a>
-                                </div>
+                                </div> --}}
                             </form>
 
                             @if (session('error'))

@@ -300,16 +300,16 @@
                                                                         <th class="text-primary">Prix d'achat TTC</th>
                                                                         <th class="text-danger">Prix de vente HT</th>
                                                                         <th class="text-danger">Prix de vente TTC</th>
-                                                                        <th class="text-dark">Prix de vente max HT</th>
+                                                                        {{-- <th class="text-dark">Prix de vente max HT</th>
                                                                         <th class="text-dark">
                                                                             Prix de vente max TTC
-                                                                        </th>
-                                                                        <th class="text-secondary">Prix d'achat commerciaux
+                                                                        </th> --}}
+                                                                        {{-- <th class="text-secondary">Prix d'achat commerciaux
                                                                             HT
                                                                         </th>
                                                                         <th class="text-secondary">Prix d'achat commerciaux
                                                                             TTC
-                                                                        </th>
+                                                                        </th> --}}
 
                                                                     </tr>
                                                                 </thead>
@@ -333,7 +333,7 @@
                                                                             <a href="#"
                                                                                 class="text-body fw-bold">{{ $produit->prix_vente_ttc }}</a>
                                                                         </td>
-                                                                        <td>
+                                                                        {{-- <td>
                                                                             <a href="#"
                                                                                 class="text-body fw-bold">{{ $produit->prix_vente_max_ht }}</a>
                                                                         </td>
@@ -348,7 +348,7 @@
                                                                         <td>
                                                                             <a href="#"
                                                                                 class="text-body fw-bold">{{ $produit->prix_achat_commerciaux_ttc }}</a>
-                                                                        </td>
+                                                                        </td> --}}
 
 
 

@@ -30,6 +30,12 @@
                                                 <!-- task -->
                                                 <span class="text-dark fw-bold fs-4">{{ $caracteristique->nom }}</span>
                                                 <div class="mt-2" style="margin-left: 20px;">
+                                                    <div class="form-check">
+                                                        <input type="radio" id="customRadio1{{ $caracteristique->id }}" name="valeurNom_{{ $caracteristique->id }}" value="" class="form-check-input check-decli">
+                                                        <label class="form-check-label"
+                                                            for="customRadio1{{ $caracteristique->id }}">Aucun
+                                                        </label>
+                                                    </div>
                                                     @foreach ($caracteristique->valeurcaracteristiques as $valeur)
                                                         <div class="form-check">
                                                             <input type="radio" id="valeurId{{ $valeur->id }}"
@@ -102,7 +108,7 @@
 
 
 
-                            <div class="row">
+                            {{-- <div class="row">
 
                                 <div class="col-12">
                                     <label for="nom" id="tooltip-prix" class="form-label fs-5 mb-2 text-bold">
@@ -149,7 +155,7 @@
                                     </div>
                                 </div>
 
-                            </div>
+                            </div> --}}
 
 
                             <hr>
@@ -205,11 +211,10 @@
                                 </div>
 
 
-                                <div class="col-lg-12">
+                                {{-- <div class="col-lg-12">
                                     <div class="col-12">
                                         <label for="nom" id="tooltip-prix"
-                                            class="form-label fs-5 mb-2 text-bold">Prix
-                                            d'Achat Commercial
+                                            class="form-label fs-5 mb-2 text-bold">Prix d'Achat Commercial
                                             <i class=" mdi mdi-information text-primary "
                                                 data-bs-container="#tooltip-prix" data-bs-toggle="tooltip"
                                                 data-bs-placement="right"
@@ -255,7 +260,7 @@
                                         </div>
                                     </div>
 
-                                </div>
+                                </div> --}}
                             </div>
 
                             <hr>

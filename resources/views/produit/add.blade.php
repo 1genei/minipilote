@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <livewire:produit.add-form :categories="$categories" :marques="$marques">
+                        <livewire:produit.add-form :categories="$categories" :marques="$marques" :tvas="$tvas">
 
                             <style>
                                 .select2-container .select2-selection--single {
@@ -110,6 +110,38 @@
 
 @section('script')
 
+{{-- prix produit --}}
+    <script>
+        var tva = "{{$valeur_tva }}";
+        
+        $('#prix_vente_ht').keyup(function() {
+            var prix_vente_ht = $('#prix_vente_ht').val();
+            var prix_vente_ttc = (prix_vente_ht * tva) / 100 + parseInt(prix_vente_ht);
+            $('#prix_vente_ttc').val(prix_vente_ttc);
+        });
+        
+        $('#prix_vente_ttc').keyup(function() {
+            var prix_vente_ttc = $('#prix_vente_ttc').val();
+            
+            var prix_vente_ht = (prix_vente_ttc * 100) / (100 + tva);
+            console.log((prix_vente_ttc * 100));
+            $('#prix_vente_ht').val(prix_vente_ht);
+        });
+        
+        $('#prix_achat_ht').keyup(function() {
+            var prix_achat_ht = $('#prix_achat_ht').val();
+            var prix_achat_ttc = (prix_achat_ht * tva) / 100 + parseInt(prix_achat_ht);
+            $('#prix_achat_ttc').val(prix_achat_ttc);
+        });
+        
+        $('#prix_achat_ttc').keyup(function() {
+            var prix_achat_ttc = $('#prix_achat_ttc').val();
+            var prix_achat_ht = (prix_achat_ttc * 100) / (100 + tva);
+            $('#prix_achat_ht').val(prix_achat_ht);
+        });
+      
+    </script>
+
     {{-- Gestion de stock --}}
     <script>
         $(".div_stock").hide();
@@ -135,4 +167,7 @@
             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
     </script>
+    
+    
+    
 @endsection

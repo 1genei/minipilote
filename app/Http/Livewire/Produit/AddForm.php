@@ -30,6 +30,10 @@ public $prix_achat_ht;
 public $prix_achat_ttc;
 public $prix_achat_commerciaux_ht;
 public $prix_achat_commerciaux_ttc;
+public $tvas;
+public $tva_id;
+public $tva;
+public $tva_valeur;
 
 public $quantite;
 public $quantite_min_vente;
@@ -40,7 +44,12 @@ public $seuil_alerte_stock;
     public function render()
     {
         $this->type = "simple";
-        $this->nature = "Matériel";
+        $this->nature = "Prestation de service";
+        $this->tva= \App\Models\Tva::where('est_principal',1)->first();
+        $this->tva_id = $this->tva->id;
+        $this->tva_valeur = $this->tva->taux;
+        
+       
         return view('livewire.produit.add-form');
     }
     

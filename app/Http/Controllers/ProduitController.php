@@ -8,6 +8,8 @@ use App\Models\Stock;
 use App\Models\Marque;
 use App\Models\Categorieproduit;
 use App\Models\Caracteristique;
+use App\Models\Tva;
+
 use Crypt;
 use Auth;
 use Illuminate\Http\Request;
@@ -49,9 +51,12 @@ class ProduitController extends Controller
     
         $categories = Categorieproduit::where([['parent_id', null], ['archive',false]])->get();
         $marques = Marque::where('archive', false)->get();
-    
+        
+        $tvas = Tva::where('archive', false)->get();
+        $tva_principale = Tva::where('est_principal', true)->first();
+        $valeur_tva = $tva_principale->taux;
  
-        return view('produit.add', compact('categories','marques'));
+        return view('produit.add', compact('categories','marques', 'tvas','tva_principale','valeur_tva'));
         
     }
 
@@ -72,12 +77,13 @@ class ProduitController extends Controller
             "marque_id" => $request->marque,
             "prix_vente_ht" => $request->prix_vente_ht,
             "prix_vente_ttc" => $request->prix_vente_ttc,
-            "prix_vente_max_ht" => $request->prix_vente_max_ht,
-            "prix_vente_max_ttc" => $request->prix_vente_max_ttc,
+            "tva_id" => $request->tva_id,
+            // "prix_vente_max_ht" => $request->prix_vente_max_ht,
+            // "prix_vente_max_ttc" => $request->prix_vente_max_ttc,
             "prix_achat_ht" => $request->prix_achat_ht,
             "prix_achat_ttc" => $request->prix_achat_ttc,
-            "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht,
-            "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc,
+            // "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht,
+            // "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc,
             "gerer_stock" => $request->gerer_stock ? true : false,
          
         ]);
@@ -141,8 +147,11 @@ class ProduitController extends Controller
         
         $categories = Categorieproduit::where([['parent_id', null], ['archive',false]])->get();
         $marques = Marque::where('archive', false)->get();
+        $tvas = Tva::where('archive', false)->get();
+        $tva_principale = Tva::where('est_principal', true)->first();
+        $valeur_tva = $tva_principale->taux;
         
-        return view('produit.edit', compact('categories', 'produit','marques','caracteristiques'));
+        return view('produit.edit', compact('categories', 'produit','marques','caracteristiques','tvas','tva_principale','valeur_tva'));
  
     }
 
@@ -160,12 +169,14 @@ class ProduitController extends Controller
         $produit->marque_id = $request->marque;
         $produit->prix_vente_ht = $request->prix_vente_ht;
         $produit->prix_vente_ttc = $request->prix_vente_ttc;
-        $produit->prix_vente_max_ht = $request->prix_vente_max_ht;
-        $produit->prix_vente_max_ttc = $request->prix_vente_max_ttc;
+        $produit->tva_id = $request->tva_id;
+        
+        // $produit->prix_vente_max_ht = $request->prix_vente_max_ht;
+        // $produit->prix_vente_max_ttc = $request->prix_vente_max_ttc;
         $produit->prix_achat_ht = $request->prix_achat_ht;
         $produit->prix_achat_ttc = $request->prix_achat_ttc;
-        $produit->prix_achat_commerciaux_ht = $request->prix_achat_commerciaux_ht;
-        $produit->prix_achat_commerciaux_ttc = $request->prix_achat_commerciaux_ttc;
+        // $produit->prix_achat_commerciaux_ht = $request->prix_achat_commerciaux_ht;
+        // $produit->prix_achat_commerciaux_ttc = $request->prix_achat_commerciaux_ttc;
         $produit->gerer_stock = $request->gerer_stock ? true : false;
         
         
@@ -418,7 +429,7 @@ class ProduitController extends Controller
     
         $produit = Produit::where('id', $request->produit_id)->first();
         
-        
+
         $produitdecli = Produit::create([
             "nom" => $produit->nom,
             "produit_id" => $produit->id,
@@ -427,16 +438,15 @@ class ProduitController extends Controller
             "reference" => $produit->reference,
             "fiche_technique" => $produit->fiche_technique,
             "user_id" => Auth::user()->id,
-            "marque_id" => $produit->marque,
             "prix_vente_ht" => $request->prix_vente_ht_decli,
             "type" => "declinaison",
             "prix_vente_ttc" => $request->prix_vente_ttc_decli,
-            "prix_vente_max_ht" => $request->prix_vente_max_ht_decli,
-            "prix_vente_max_ttc" => $request->prix_vente_max_ttc_decli,
+            // "prix_vente_max_ht" => $request->prix_vente_max_ht_decli,
+            // "prix_vente_max_ttc" => $request->prix_vente_max_ttc_decli,
             "prix_achat_ht" => $request->prix_achat_ht_decli,
             "prix_achat_ttc" => $request->prix_achat_ttc_decli,
-            "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht_decli,
-            "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc_decli,
+            // "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht_decli,
+            // "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc_decli,
             "gerer_stock" => $request->gerer_stock_decli ? true : false,     
         ]);
         
@@ -444,7 +454,7 @@ class ProduitController extends Controller
        // On réccupère les ids des valeurs des caractéristiques
         $valeurids = [];
         foreach ($request->all() as $key => $value) {
-            if(str_contains($key, "valeurNom" ) ){
+            if(str_contains($key, "valeurNom" ) && $value != null ){
                $valeurids [] = $value;            
             }         
         }
@@ -484,20 +494,20 @@ class ProduitController extends Controller
         // dd($request->all());
         $produitdecli->prix_vente_ht = $request->prix_vente_ht_decli;
         $produitdecli->prix_vente_ttc = $request->prix_vente_ttc_decli;
-        $produitdecli->prix_vente_max_ht = $request->prix_vente_max_ht_decli;
-        $produitdecli->prix_vente_max_ttc = $request->prix_vente_max_ttc_decli;
+        // $produitdecli->prix_vente_max_ht = $request->prix_vente_max_ht_decli;
+        // $produitdecli->prix_vente_max_ttc = $request->prix_vente_max_ttc_decli;
         $produitdecli->prix_achat_ht = $request->prix_achat_ht_decli;
         $produitdecli->prix_achat_ttc = $request->prix_achat_ttc_decli;
-        $produitdecli->prix_achat_commerciaux_ht = $request->prix_achat_commerciaux_ht_decli;
-        $produitdecli->prix_achat_commerciaux_ttc = $request->prix_achat_commerciaux_ttc_decli;
+        // $produitdecli->prix_achat_commerciaux_ht = $request->prix_achat_commerciaux_ht_decli;
+        // $produitdecli->prix_achat_commerciaux_ttc = $request->prix_achat_commerciaux_ttc_decli;
         $produitdecli->gerer_stock = $request->gerer_stock_decli ? true : false;
 
        $produitdecli->update(); 
-       
+
        // On réccupère les ids des valeurs des caractéristiques
         $valeurids = [];
         foreach ($request->all() as $key => $value) {
-            if(str_contains($key, "valeurNom" ) ){
+            if(str_contains($key, "valeurNom" ) && $value != null ){
                $valeurids [] = $value;            
             }         
         }

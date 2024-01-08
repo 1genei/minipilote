@@ -30,6 +30,10 @@ class EditForm extends Component
     public $prix_achat_ttc;
     public $prix_achat_commerciaux_ht;
     public $prix_achat_commerciaux_ttc;
+    public $tvas;
+    public $tva_id;
+    public $tva;
+    public $tva_valeur;
     
     public $quantite;
     public $quantite_min_vente;
@@ -48,6 +52,8 @@ class EditForm extends Component
         $this->description = $this->produit->description;
         $this->images = $this->produit->images;
         $this->categories_id = $this->produit->categorieproduitsId();
+        $this->tva_id = $this->produit->tva_id != null ? $this->produit->tva_id : '';
+        $this->tva = $this->produit->tva_id != null ? $this->produit->tva?->taux : 0;
         
         $this->fiche_technique = $this->produit->fiche_technique;
         $this->a_declinaison = $this->produit->a_declinaison;
@@ -70,6 +76,9 @@ class EditForm extends Component
     
     public function render()
     {
+        $this->tva= \App\Models\Tva::where('est_principal',1)->first();
+        $this->tva_valeur = $this->tva->taux;
+        
         return view('livewire.produit.edit-form');
     }
     

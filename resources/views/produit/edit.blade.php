@@ -105,7 +105,7 @@
                         </div>
 
 
-                        <livewire:produit.edit-form :produit="$produit" :categories="$categories" :caracteristiques="$caracteristiques" :marques="$marques">
+                        <livewire:produit.edit-form :produit="$produit" :categories="$categories" :caracteristiques="$caracteristiques" :marques="$marques" :tvas="$tvas">
 
                             <style>
                                 .select2-container .select2-selection--single {
@@ -151,6 +151,12 @@
 
     {{-- Gestion de stock Ajout déclinaison --}}
     <script>
+    
+    $('input[type="radio"]').on('change', function(e) {
+    
+        console.log(e.target);
+    //    $('input[type="radio"]').not(this).prop('checked', 'unchecked');
+    }); 
         var gerer_stock = @json($produit->gerer_stock);
 
         if (gerer_stock == false) {
