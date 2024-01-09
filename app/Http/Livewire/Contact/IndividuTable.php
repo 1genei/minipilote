@@ -200,9 +200,9 @@ final class IndividuTable extends PowerGridComponent
 
         ];
         
-        if(Auth::user()->is_admin ){
-            $colums[] = Column::make('Saisi par', 'user')->searchable()->sortable();
-        }
+        // if(Auth::user()->is_admin ){
+        //     $colums[] = Column::make('Saisi par', 'user')->searchable()->sortable();
+        // }
         
         return $colums;
         
