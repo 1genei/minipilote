@@ -124,8 +124,9 @@ final class IndexTable extends PowerGridComponent
             ->addColumn('beneficiaire', function (Prestation $model) {          
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
             } )
+            ->addColumn('methode_paiement')
             ->addColumn('notes')
-            ->addColumn('date_prestation', fn (Prestation $model) =>  $model->date_prestation  )
+            // ->addColumn('date_prestation', fn (Prestation $model) =>  $model->date_prestation  )
             ->addColumn('user', function (Prestation $model) {        
                 
                 $user = User::where('id', $model->user_id)->first();
@@ -135,7 +136,7 @@ final class IndexTable extends PowerGridComponent
                 return  '<span >'.$individu?->nom.' '.$individu?->prenom.'</span>';
             })
             ->addColumn('created_date', function (Prestation $model) {          
-                return $model->created_at->format('d-m-Y');
+                return $model->created_at->format('d/m/Y H:i:s');
             });
             // ->addColumn('statut');
     }
@@ -165,8 +166,9 @@ final class IndexTable extends PowerGridComponent
             Column::make('Montant', 'montant_ttc')->searchable()->sortable(),
             Column::make('Client', 'client')->searchable()->sortable(),
             Column::make('Beneficiaire', 'beneficiaire')->searchable()->sortable(),
+            Column::make('M. Paiement', 'methode_paiement')->searchable()->sortable(),
             Column::make('Notes', 'notes')->searchable()->sortable(),
-            Column::make('Date prestation', 'date_prestation')->searchable()->sortable(),  
+            // Column::make('Date prestation', 'date_prestation')->searchable()->sortable(),  
             // Column::make('Statut', 'statut')->searchable()->sortable(),
             Column::make('Date d\'ajout', 'created_date')->searchable()->sortable(),
             // Column::make('Actions')
