@@ -182,6 +182,22 @@
 
 
                                                 </div>
+                                                @else 
+                                            
+                                                <div class="item_input">
+                                                    <input type="text" id="nom" name="raison_sociale"
+                                                        wire:model.defer="raison_sociale" required
+                                                        value="{{ old('raison_sociale') ? old('raison_sociale') : '' }}" class="form-control">
+                                                    @if ($errors->has('raison_sociale'))
+                                                        <br>
+                                                        <div class="alert alert-warning text-secondary " role="alert">
+                                                            <button type="button" class="btn-close btn-close-white"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                            <strong>{{ $errors->first('raison_sociale') }}</strong>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                
                                             @endif
                                             <div class="item_input">
                                                 <input type="text" id="nom" name="nom"
@@ -823,13 +839,13 @@
 
 
                                     <div class="mb-3 ">
-                                        <label for="type" class="form-label">
+                                        <label for="forme_juridique" class="form-label">
                                             Type de groupe <span class="text-danger">*</span>
                                         </label>
-                                        <select class="form-select select2" id="type" name="type"
-                                            wire:model.defer="type">
-                                            <option value="{{ old('type') }}">
-                                                {{ old('type') }}</option>
+                                        <select class="form-select select2" id="forme_juridique" name="forme_juridique"
+                                            wire:model.defer="forme_juridique">
+                                            <option value="{{ old('forme_juridique') }}">
+                                                {{ old('forme_juridique') }}</option>
                                             <option value=""> </option>
                                             <option value="Succession">Succession </option>
                                             <option value="Association">Association </option>
@@ -837,12 +853,12 @@
                                             <option value="Autre">Autre</option>
                                         </select>
 
-                                        @if ($errors->has('type'))
+                                        @if ($errors->has('forme_juridique'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " role="alert">
                                                 <button type="button" class="btn-close btn-close-white"
                                                     data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('type') }}</strong>
+                                                <strong>{{ $errors->first('forme_juridique') }}</strong>
                                             </div>
                                         @endif
                                     </div>

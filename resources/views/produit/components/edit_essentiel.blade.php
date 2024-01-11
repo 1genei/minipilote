@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="col-12 mb-3" wire:ignore>
-            <label for="description" class="form-label">Description *</label>
+            <label for="description" class="form-label">Description</label>
 
             <textarea rows="10" id="description" name="description" wire:model.defer="description"> </textarea>
         </div>

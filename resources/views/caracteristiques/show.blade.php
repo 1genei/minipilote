@@ -97,6 +97,7 @@
                                 id="tab1">
                                 <thead class="table-light">
                                     <tr>
+                                        <th>Nom</th>
                                         <th>Valeurs</th>
                                         <th>Statut</th>
                                         <th style="width: 125px;">Action</th>
@@ -111,6 +112,9 @@
                                             </td>
 
                                             <td>
+                                                <a href="#" class="text-body fw-bold">{{ $valeur->valeur }}</a>
+                                            </td>
+                                            <td>
                                                 @if ($valeur->archive == false)
                                                     <span class="badge bg-success">Actif</span>
                                                 @else
@@ -121,7 +125,7 @@
                                             <td>
 
                                                 <a data-href="{{ route('caracteristique_valeur.update', Crypt::encrypt($valeur->id)) }}"
-                                                    data-nom="{{ $valeur->nom }}" data-bs-toggle="modal"
+                                                    data-nom="{{ $valeur->nom }}" data-valeur="{{ $valeur->valeur }}" data-bs-toggle="modal"
                                                     data-bs-target="#edit-caracteristique-valeur"
                                                     class="action-icon edit-caracteristique-valeur text-success">
                                                     <i class="mdi mdi-square-edit-outline"></i>
@@ -178,12 +182,13 @@
                         <div class="modal-body">
 
                             @csrf
-                            <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-6">
                                 <input type="hidden" name="caracteristique_id" value="{{ $caracteristique->id }}">
                                 <div class="form-floating mb-3">
                                     <input type="text" name="nom" value="{{ old('nom') ? old('nom') : '' }}"
-                                        class="form-control" id="floatingInput">
-                                    <label for="floatingInput">Valeur</label>
+                                        class="form-control" id="nom">
+                                    <label for="nom">Nom (ex: BMW)</label>
                                     @if ($errors->has('nom'))
                                         <br>
                                         <div class="alert alert-warning text-secondary " caracteristique="alert">
@@ -195,7 +200,23 @@
                                 </div>
 
                             </div>
+                            <div class="col-lg-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" min="0" step="0.01" name="valeur" value="{{ old('valeur') ? old('valeur') : '' }}"
+                                        class="form-control" id="valeur">
+                                    <label for="valeur">Valeur (ex: 50)</label>
+                                    @if ($errors->has('valeur'))
+                                        <br>
+                                        <div class="alert alert-warning text-secondary " caracteristique="alert">
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <strong>{{ $errors->first('valeur') }}</strong>
+                                        </div>
+                                    @endif
+                                </div>
 
+                            </div>
+                        </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
@@ -227,18 +248,40 @@
                             @csrf
                             <div class="col-lg-12">
 
-                                <div class="form-floating mb-3">
-                                    <input type="text" name="nom" value="{{ old('nom') ? old('nom') : '' }}"
-                                        class="form-control" id="edit_nom">
-                                    <label for="edit_nom">Valeur</label>
-                                    @if ($errors->has('nom'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " caracteristique="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('nom') }}</strong>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <input type="hidden" name="caracteristique_id" value="{{ $caracteristique->id }}">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" name="nom" value="{{ old('nom') ? old('nom') : '' }}"
+                                                class="form-control" id="edit_nom">
+                                            <label for="edit_nom">Nom (ex: BMW)</label>
+                                            @if ($errors->has('nom'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " caracteristique="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('nom') }}</strong>
+                                                </div>
+                                            @endif
                                         </div>
-                                    @endif
+        
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="number" min="0" step="0.01" name="valeur" value="{{ old('valeur') ? old('valeur') : '' }}"
+                                                class="form-control" id="edit_valeur">
+                                            <label for="edit_valeur">Valeur (ex: 50)</label>
+                                            @if ($errors->has('valeur'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " caracteristique="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('valeur') }}</strong>
+                                                </div>
+                                            @endif
+                                        </div>
+        
+                                    </div>
                                 </div>
 
                             </div>
@@ -268,9 +311,11 @@
         $('.edit-caracteristique-valeur').click(function(e) {
 
             let that = $(this);
-            let currentCaracteristique = that.data('nom');
+            let currentNom = that.data('nom');
+            let currentValeur = that.data('valeur');
             let currentFormAction = that.data('href');
-            $('#edit_nom').val(currentCaracteristique);
+            $('#edit_nom').val(currentNom);
+            $('#edit_valeur').val(currentValeur);
             $('#edit_form').attr('action', currentFormAction);
 
         })

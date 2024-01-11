@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <livewire:produit.add-form :categories="$categories" :marques="$marques" :tvas="$tvas">
+                        <livewire:produit.add-form :categories="$categories" :marques="$marques" :tvas="$tvas" :caracteristiques="$caracteristiques">
 
                             <style>
                                 .select2-container .select2-selection--single {
@@ -110,34 +110,36 @@
 
 @section('script')
 
-{{-- prix produit --}}
+{{-- Convertion du prix ht en ttc  --}}
     <script>
         var tva = "{{$valeur_tva }}";
+        tva = parseInt(tva);
         
         $('#prix_vente_ht').keyup(function() {
             var prix_vente_ht = $('#prix_vente_ht').val();
             var prix_vente_ttc = (prix_vente_ht * tva) / 100 + parseInt(prix_vente_ht);
-            $('#prix_vente_ttc').val(prix_vente_ttc);
+            $('#prix_vente_ttc').val(prix_vente_ttc.toFixed(2));
         });
         
         $('#prix_vente_ttc').keyup(function() {
             var prix_vente_ttc = $('#prix_vente_ttc').val();
             
+      
             var prix_vente_ht = (prix_vente_ttc * 100) / (100 + tva);
-            console.log((prix_vente_ttc * 100));
-            $('#prix_vente_ht').val(prix_vente_ht);
+            
+            $('#prix_vente_ht').val( prix_vente_ht.toFixed(2));
         });
         
         $('#prix_achat_ht').keyup(function() {
             var prix_achat_ht = $('#prix_achat_ht').val();
             var prix_achat_ttc = (prix_achat_ht * tva) / 100 + parseInt(prix_achat_ht);
-            $('#prix_achat_ttc').val(prix_achat_ttc);
+            $('#prix_achat_ttc').val(prix_achat_ttc.toFixed(2));
         });
         
         $('#prix_achat_ttc').keyup(function() {
             var prix_achat_ttc = $('#prix_achat_ttc').val();
             var prix_achat_ht = (prix_achat_ttc * 100) / (100 + tva);
-            $('#prix_achat_ht').val(prix_achat_ht);
+            $('#prix_achat_ht').val(prix_achat_ht.toFixed(2));
         });
       
     </script>

@@ -55,8 +55,9 @@ class ProduitController extends Controller
         $tvas = Tva::where('archive', false)->get();
         $tva_principale = Tva::where('est_principal', true)->first();
         $valeur_tva = $tva_principale->taux;
+        $caracteristiques = Caracteristique::where('archive',false)->get();
  
-        return view('produit.add', compact('categories','marques', 'tvas','tva_principale','valeur_tva'));
+        return view('produit.add', compact('categories','marques', 'tvas','tva_principale','valeur_tva','caracteristiques'));
         
     }
 
@@ -66,6 +67,9 @@ class ProduitController extends Controller
     public function store(Request $request)
     {
         
+        
+        dd($request->all());
+   
    
         $produit = Produit::create([
             "nom" => $request->nom,
@@ -196,7 +200,6 @@ class ProduitController extends Controller
                     "quantite" => $request->quantite,
                     "quantite_min" => $request->quantite_min_vente,
                     "seuil_alerte" => $request->seuil_alerte_stock,
-                   
                 ]);
             
             }else{
@@ -206,8 +209,6 @@ class ProduitController extends Controller
                 $stock->update(); 
             }
                 
-                       
-             
         }
         
         
@@ -221,7 +222,7 @@ class ProduitController extends Controller
         
         if($request->hasFile('fiche_technique') ){
          
-        //  Supprimer l'ancienne fiche technique
+            //  Supprimer l'ancienne fiche technique
             // return response()->download(storage_path('app/pdf_compromis/pdf_compro.pdf'));
             $file_path = storage_path('app/public/fiche_technique/');
             

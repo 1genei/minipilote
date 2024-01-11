@@ -39,11 +39,11 @@ public $quantite;
 public $quantite_min_vente;
 public $gerer_stock;
 public $seuil_alerte_stock;
-
+public $caracteristiques;
     
     public function render()
     {
-        $this->type = "simple";
+        // $this->type = "simple";
         $this->nature = "Prestation de service";
         $this->tva= \App\Models\Tva::where('est_principal',1)->first();
         $this->tva_id = $this->tva->id;
@@ -59,17 +59,31 @@ public $seuil_alerte_stock;
     */
     public function rules()
     {
-
-        return [
-            'nom' => 'required|string|unique:produits',
-            'reference' => 'required|string|unique:produits',
-            'type' => 'required',
-            'nature' => 'required',
-            'prix_vente_ht' => 'required',
-            'prix_vente_ttc' => 'required',                
-            'categories_id' => 'required',
-          
-        ];
+        
+        if($this->type == "declinaison"){
+        
+            return [
+                'nom' => 'required|string|unique:produits',
+                'type' => 'required',
+                'nature' => 'required',                             
+                'categories_id' => 'required',              
+            ];
+        
+        }else{
+        
+           
+            return [
+                'nom' => 'required|string|unique:produits',
+                'type' => 'required',
+                'nature' => 'required',
+                'prix_vente_ht' => 'required',
+                'prix_vente_ttc' => 'required',                
+                'categories_id' => 'required',
+              
+            ];
+        
+        }
+        
 
     
 

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer("caracteristique_id")->nullable();
             $table->string("nom")->nullable();
+            $table->double("valeur")->nullable();
             $table->boolean("archive")->nullable();
             $table->timestamps();
         });

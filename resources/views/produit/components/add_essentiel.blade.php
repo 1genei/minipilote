@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="col-12 mb-3" wire:ignore>
-            <label for="description" class="form-label">Description *</label>
+            <label for="description" class="form-label">Description</label>
 
             <textarea rows="10" id="description" name="description" wire:model.defer="description"> </textarea>
         </div>
@@ -53,7 +53,7 @@
 
                 <label for="reference" class="form-label">Référence produit</label>
                 <input type="text" class="form-control" name="reference" wire:model.defer="reference"
-                    value="{{ old('reference') }}" id="reference" required>
+                    value="{{ old('reference') }}" id="reference" >
                 @if ($errors->has('reference'))
                     <br>
                     <div class="alert alert-danger" role="alert">
@@ -68,7 +68,7 @@
             <div class="col-sm-6 col-lg-12 mb-3">
 
                 <div class="form-check form-check-inline">
-                    <input type="radio" id="type1" name="type" wire:model.defer="type" value="simple" required
+                    <input type="radio" id="type1" name="type" wire:model="type" value="simple" required
                         class="form-check-input">
                     <label class="form-check-label" for="type1">
                         Produit simple
@@ -77,10 +77,10 @@
                 </div>
 
                 <div class="form-check form-check-inline">
-                    <input type="radio" id="type2" name="type" wire:model.defer="type" value="declinaison"
+                    <input type="radio" id="type2" name="type" wire:model="type" value="declinaison"
                         class="form-check-input">
                     <label class="form-check-label" for="type2">
-                        Produit avec déclinaison
+                        Produit avec déclinaisons
                     </label>
 
                 </div>

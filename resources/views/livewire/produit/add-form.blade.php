@@ -12,12 +12,25 @@
                         <span class="d-none d-md-block">Essentiel</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#prix-tab" data-bs-toggle="tab" aria-expanded="true" class="nav-link ">
-                        <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                        <span class="d-none d-md-block">Prix</span>
-                    </a>
-                </li>
+                
+                @if ($type == "declinaison")
+                    <li class="nav-item">
+                        <a href="#declinaison-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                            <span class="d-none d-md-block">Déclinaisons</span>
+                        </a>
+                    </li>
+                @else 
+                
+                    <li class="nav-item">
+                        <a href="#prix-tab" data-bs-toggle="tab" aria-expanded="true" class="nav-link ">
+                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                            <span class="d-none d-md-block">Prix</span>
+                        </a>
+                    </li>
+                @endif
+                
+                
 
                 <li class="nav-item">
                     <a href="#stock-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
@@ -32,10 +45,17 @@
                 <div class="tab-pane show active" id="essentiel-tab">
                     @include('produit.components.add_essentiel')
                 </div>
-                <div class="tab-pane " id="prix-tab">
-                    @include('produit.components.add_prix')
-
-                </div>
+                
+                @if ($type == "declinaison")
+                    <div class="tab-pane" id="declinaison-tab">
+                        @include('produit.components.add_declinaison')
+                    </div>
+                @else                    
+                    <div class="tab-pane " id="prix-tab">
+                        @include('produit.components.add_prix')
+                    </div>
+                @endif         
+               
 
                 <div class="tab-pane" id="stock-tab">
                     @include('produit.components.add_stock')

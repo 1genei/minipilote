@@ -147,7 +147,8 @@ class CaracteristiqueController extends Controller
         
         Valeurcaracteristique::create([
             "caracteristique_id" => $request->caracteristique_id,
-            "nom" => $request->nom
+            "nom" => $request->nom,
+            "valeur" => $request->valeur
         ]);
         
         return redirect()->back()->with('ok','Nouvelle valeur ajoutée');
@@ -161,20 +162,15 @@ class CaracteristiqueController extends Controller
     {
         $valeur = Valeurcaracteristique::where('id', Crypt::decrypt($valeur_id))->first();
         
-        if($request->nom != $valeur->nom){
-            $request->validate([
-                "nom" => "required"
-            ]);
-            
-        }else{
-            $request->validate([
-                "nom" => "required"
-            ]);
-            
-        }
+        $request->validate([
+            "nom" => "required"
+        ]);
+  
         
         
         $valeur->nom = $request->nom;
+        $valeur->valeur = $request->valeur;
+        
         $valeur->update();
         
         return redirect()->back()->with('ok','Valeur modifiée');
