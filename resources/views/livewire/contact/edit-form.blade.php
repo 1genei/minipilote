@@ -179,8 +179,19 @@
                                                             <strong>{{ $errors->first('civilite') }}</strong>
                                                         </div>
                                                     @endif
-
-
+                                                </div>
+                                                <div class="item_input">
+                                                    <input type="text" id="nom" name="nom"
+                                                        wire:model.defer="nom" required
+                                                        value="{{ old('nom') ? old('nom') : '' }}" class="form-control">
+                                                    @if ($errors->has('nom'))
+                                                        <br>
+                                                        <div class="alert alert-warning text-secondary " role="alert">
+                                                            <button type="button" class="btn-close btn-close-white"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                            <strong>{{ $errors->first('nom') }}</strong>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                                 @else 
                                             
@@ -199,19 +210,7 @@
                                                 </div>
                                                 
                                             @endif
-                                            <div class="item_input">
-                                                <input type="text" id="nom" name="nom"
-                                                    wire:model.defer="nom" required
-                                                    value="{{ old('nom') ? old('nom') : '' }}" class="form-control">
-                                                @if ($errors->has('nom'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('nom') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
+                                            
 
                                         </div>
 
