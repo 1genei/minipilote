@@ -24,6 +24,8 @@ use App\Http\Controllers\ContratController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\DeviController;
 use App\Http\Controllers\PrestationController;
+use App\Http\Controllers\VoitureController;
+use App\Http\Controllers\CircuitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -103,6 +105,34 @@ Route::controller(CaracteristiqueController::class)->group(function () {
     Route::post('/caracteristique-valeur/archiver/{valeur_caracteristiqueId}', 'archive_valeur')->name('caracteristique_valeur.archive')->middleware(['auth']);
     Route::post('/caracteristique-valeur/desarchiver/{valeur_caracteristiqueId}', 'unarchive_valeur')->name('caracteristique_valeur.unarchive')->middleware(['auth']);
 });
+
+// Voiture
+Route::controller(VoitureController::class)->group(function () {
+    Route::get('/voitures', 'index')->name('voiture.index')->middleware(['auth']);
+    Route::get('/voitures/archives', 'archives')->name('voiture.archives')->middleware(['auth']);
+    Route::get('/voitures/detail/{voitureId}', 'show')->name('voiture.show')->middleware(['auth']);
+    Route::get('/voitures/modifier/{voitureId}', 'edit')->name('voiture.edit')->middleware(['auth']);
+    Route::post('/voitures/ajouter', 'store')->name('voiture.store')->middleware(['auth']);
+    Route::post('/voitures/modifier/{voitureId}', 'update')->name('voiture.update')->middleware(['auth']);
+    Route::post('/voitures/archiver/{voitureId}', 'archiver')->name('voiture.archiver')->middleware(['auth']);
+    Route::post('/voitures/desarchiver/{voitureId}', 'desarchiver')->name('voiture.desarchiver')->middleware(['auth']);
+});
+
+// Circuit
+Route::controller(CircuitController::class)->group(function () {
+    Route::get('/circuits', 'index')->name('circuit.index')->middleware(['auth']);
+    Route::get('/circuits/archives', 'archives')->name('circuit.archives')->middleware(['auth']);
+    Route::get('/circuits/detail/{circuitId}', 'show')->name('circuit.show')->middleware(['auth']);
+    Route::get('/circuits/modifier/{circuitId}', 'edit')->name('circuit.edit')->middleware(['auth']);
+    Route::post('/circuits/ajouter', 'store')->name('circuit.store')->middleware(['auth']);
+    Route::post('/circuits/modifier/{circuitId}', 'update')->name('circuit.update')->middleware(['auth']);
+    Route::post('/circuits/archiver/{circuitId}', 'archiver')->name('circuit.archiver')->middleware(['auth']);
+    Route::post('/circuits/desarchiver/{circuitId}', 'desarchiver')->name('circuit.desarchiver')->middleware(['auth']);
+});
+
+
+
+
 
 // Categorieproduit
 Route::controller(CategorieproduitController::class)->group(function () {
@@ -272,6 +302,7 @@ Route::controller(ProduitController::class)->group(function () {
     // Déclinaisons du produit
     Route::post('/produit-declinaison/ajouter', 'store_declinaison')->name('produit_declinaison.store')->middleware(['auth']);
     Route::post('/produit-declinaison/modifier/{produitId}', 'update_declinaison')->name('produit_declinaison.update')->middleware(['auth']);
+    Route::post('/produit-declinaison-all/modifier/{produitId}', 'update_all_declinaison')->name('produit_all_declinaison.update')->middleware(['auth']);
     Route::post('/produit-declinaison/archiver/{produitId}', 'archive_declinaison')->name('produit_declinaison.archive')->middleware(['auth']);
     Route::post('/produit-declinaison/desarchiver/{produitId}', 'unarchive_declinaison')->name('produit_declinaison.unarchive')->middleware(['auth']);
     

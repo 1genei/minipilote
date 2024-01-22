@@ -94,6 +94,10 @@ class Produit extends Model
         }
     }
     
+    /**
+     * Retourne les valeurs de caracteristiques du produit
+     *
+     */
    public function valeurcaracteristique_id(){
     
         $valeurcaracteristiques = ProduitValeurcaracteristique::where('produit_id', $this->id)->get();
@@ -106,4 +110,12 @@ class Produit extends Model
         
         return json_encode($valids);    
    }
+   
+   /**
+    * Retourne la tva du produit
+    */
+    public function tva(){
+    
+        return $this->belongsTo(Tva::class);
+    }
 }

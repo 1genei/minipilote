@@ -62,7 +62,7 @@ final class IndividuTable extends PowerGridComponent
     
         $user = Auth::user();
 
-        if ($user->is_admin) {
+        // if ($user->is_admin) {
 
             // On réccupère tous les contacts de type individu
                 
@@ -74,17 +74,17 @@ final class IndividuTable extends PowerGridComponent
                 // ->where('typecontacts.type', 'Fournisseur')
                 ->get();
 
-        } else {
-            //   On réccupère uniquement les contacts de l'utilisateur connecté
+        // } else {
+        //     //   On réccupère uniquement les contacts de l'utilisateur connecté
                 
-            $contactindividus = Individu::select('individus.*','contacts.*')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                // ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                // ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false], ["contacts.user_id", $user->id]])
-                // ->where('typecontacts.type', 'Fournisseur')
-                ->get();
-        }
+        //     $contactindividus = Individu::select('individus.*','contacts.*')
+        //         ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+        //         // ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+        //         // ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+        //         ->where([['contacts.type', 'individu'],['contacts.archive', false], ["contacts.user_id", $user->id]])
+        //         // ->where('typecontacts.type', 'Fournisseur')
+        //         ->get();
+        // }
     // dd($contactindividus);
        
         

@@ -105,7 +105,7 @@
                         </div>
 
 
-                        <livewire:produit.edit-form :produit="$produit" :categories="$categories" :caracteristiques="$caracteristiques" :marques="$marques" :tvas="$tvas">
+                        <livewire:produit.edit-form :produit="$produit" :categories="$categories" :caracteristiques="$caracteristiques" :marques="$marques" :tvas="$tvas" :circuits="$circuits" :voitures="$voitures">
 
                             <style>
                                 .select2-container .select2-selection--single {

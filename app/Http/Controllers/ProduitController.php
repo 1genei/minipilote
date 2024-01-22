@@ -9,6 +9,8 @@ use App\Models\Marque;
 use App\Models\Categorieproduit;
 use App\Models\Caracteristique;
 use App\Models\Tva;
+use App\Models\Voiture;
+use App\Models\Circuit;
 
 use Crypt;
 use Auth;
@@ -36,11 +38,10 @@ class ProduitController extends Controller
      */
     public function index()
     {
-        // $produits = Produit::where('archive', false)->get();
-        
+      
         $categories = Categorieproduit::where([['parent_id', null], ['archive',false]])->get();
         return view('produit.index',compact('categories'));
-        // return view('produit.index', compact('produits'));
+
     }
 
     /**
@@ -56,8 +57,10 @@ class ProduitController extends Controller
         $tva_principale = Tva::where('est_principal', true)->first();
         $valeur_tva = $tva_principale->taux;
         $caracteristiques = Caracteristique::where('archive',false)->get();
- 
-        return view('produit.add', compact('categories','marques', 'tvas','tva_principale','valeur_tva','caracteristiques'));
+        $voitures = Voiture::where('archive',false)->get();
+        $circuits = Circuit::where('archive',false)->get();
+        
+        return view('produit.add', compact('categories','marques', 'tvas','tva_principale','valeur_tva','caracteristiques','voitures','circuits'));
         
     }
 
@@ -68,49 +71,70 @@ class ProduitController extends Controller
     {
         
         
-        dd($request->all());
-   
-   
-        $produit = Produit::create([
-            "nom" => $request->nom,
-            "type" => "simple",
-            "nature" => $request->nature,
-            "description" => $request->description,
-            "reference" => $request->reference,
-            "user_id" => Auth::user()->id,
-            "marque_id" => $request->marque,
-            "prix_vente_ht" => $request->prix_vente_ht,
-            "prix_vente_ttc" => $request->prix_vente_ttc,
-            "tva_id" => $request->tva_id,
-            // "prix_vente_max_ht" => $request->prix_vente_max_ht,
-            // "prix_vente_max_ttc" => $request->prix_vente_max_ttc,
-            "prix_achat_ht" => $request->prix_achat_ht,
-            "prix_achat_ttc" => $request->prix_achat_ttc,
-            // "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht,
-            // "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc,
-            "gerer_stock" => $request->gerer_stock ? true : false,
-         
-        ]);
+  
+        if($request->type == "declinaison"){
+            
+            $produit = Produit::create([
+                "nom" => $request->nom,
+                "type" => "simple",
+                "a_declinaison" => true,
+                "nature" => $request->nature,
+                "description" => $request->description,
+                "reference" => $request->reference,
+                "user_id" => Auth::user()->id,
+                "marque_id" => $request->marque,              
+                "tva_id" => $request->tva_id,             
+            ]);
+            
+          
+            $this->generer_declinaison($request, $produit->id);
+            
+            
+        }
+        
+        else{
+        
+            $produit = Produit::create([
+                "nom" => $request->nom,
+                "type" => "simple",
+                "nature" => $request->nature,
+                "description" => $request->description,
+                "reference" => $request->reference,
+                "user_id" => Auth::user()->id,
+                "marque_id" => $request->marque,
+                "prix_vente_ht" => $request->prix_vente_ht,
+                "prix_vente_ttc" => $request->prix_vente_ttc,
+                "tva_id" => $request->tva_id,
+                // "prix_vente_max_ht" => $request->prix_vente_max_ht,
+                // "prix_vente_max_ttc" => $request->prix_vente_max_ttc,
+                "prix_achat_ht" => $request->prix_achat_ht,
+                "prix_achat_ttc" => $request->prix_achat_ttc,
+                // "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht,
+                // "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc,
+                "gerer_stock" => $request->gerer_stock ? true : false,
+             
+            ]);
+            
+            // stock
+            if( $request->gerer_stock){
+            
+                $stock = Stock::create([
+                    "produit_id" => $produit->id,
+                    "quantite" => $request->quantite,
+                    "quantite_min" => $request->quantite_min_vente,
+                    "seuil_alerte" => $request->seuil_alerte_stock,
+                   
+                ]);
+                
+            }
+        }
+        
         
         if($request->categories_id){
             $produit->categorieproduits()->attach($request->categories_id);
         }
         
-        
-      
-        // stock
-        if( $request->gerer_stock){
-        
-            $stock = Stock::create([
-                "produit_id" => $produit->id,
-                "quantite" => $request->quantite,
-                "quantite_min" => $request->quantite_min_vente,
-                "seuil_alerte" => $request->seuil_alerte_stock,
-               
-            ]);
-            
-        }
-       
+
         if($request->hasFile('fiche_technique')){
          
             $filename = 'fiche_technique_'.$produit->id.'.pdf';
@@ -154,8 +178,10 @@ class ProduitController extends Controller
         $tvas = Tva::where('archive', false)->get();
         $tva_principale = Tva::where('est_principal', true)->first();
         $valeur_tva = $tva_principale->taux;
+        $voitures = Voiture::where('archive',false)->get();
+        $circuits = Circuit::where('archive',false)->get();
         
-        return view('produit.edit', compact('categories', 'produit','marques','caracteristiques','tvas','tva_principale','valeur_tva'));
+        return view('produit.edit', compact('categories', 'produit','marques','caracteristiques','tvas','tva_principale','valeur_tva','voitures','circuits'));
  
     }
 
@@ -422,6 +448,133 @@ class ProduitController extends Controller
     
     // #### DECLINAISON DE PRODUIT
     
+    /**
+    * Génération des déclinaisons d'un produit
+    */
+    public function generer_declinaison(Request $request, $produit_id){
+     
+        $produit_parent = Produit::where('id', $produit_id)->first();
+         
+            $valeurids = [];
+            foreach ($request->all() as $key => $value) {
+                if(str_contains($key, "valeurNom" ) ){                    
+                    array_push($valeurids, $value);
+                    
+                }         
+            }
+            
+          
+            $combinaisons =  $this->genererCombinaisons($valeurids);          
+            
+           
+            $voitures = $request->voitures;
+            $circuits = $request->circuits;
+            
+            $combinaison_voiture_circuit = [];
+            
+            foreach ($circuits as $circuit_id) {
+                
+                $circuitModel = Circuit::where('id', $circuit_id)->first();
+                
+                foreach ($voitures as $voiture_id) {
+                    $voitureModel = Voiture::where('id', $voiture_id)->first();
+                    
+                    $nom_produit_temp = $produit_parent->nom.'-'.$voitureModel->nom.'-'.$circuitModel->nom;
+                    $prix_produit_temp =  $voitureModel->prix_kilometrique * $circuitModel->distance;
+                    
+                    $combinaison_voiture_circuit[] = [
+                        "nom_produit" => $nom_produit_temp,
+                        "prix_produit" => $prix_produit_temp,
+                        "voiture_id" => $voiture_id,
+                        "circuit_id" => $circuit_id,
+                    ];
+                }
+                
+            }
+            
+            
+            foreach ($combinaisons as $combinaison) {
+                
+                foreach ($combinaison_voiture_circuit as $combi_v_c) {
+                   
+                   
+                    //    On calcul le nombre de tours total de la combianaison                    
+                    $nb_tours = array_sum($combinaison);
+          
+                                        
+                    // $cartacteristique = xxxxxxxxxxxxxxxxx
+                    $nom_produit_temp = $combi_v_c["nom_produit"].'-'.implode('-', $combinaison);
+                    $prix_produit_temp = $combi_v_c["prix_produit"];
+                    $voiture_id = $combi_v_c["voiture_id"];
+                    $circuit_id = $combi_v_c["circuit_id"];
+                    
+                    $prix_declinaison_ttc = $prix_produit_temp * $nb_tours;
+                    $prix_declinaison_ht = $prix_declinaison_ttc / (1 + ($produit_parent->tva->taux / 100));
+                    
+                    $produit_decli = Produit::create([
+                    
+                        "nom" => $nom_produit_temp,
+                        "type" => "declinaison",
+                        "produit_id" => $produit_parent->id,
+                        "nature" => $produit_parent->nature,
+                        "description" => $produit_parent->description,
+                        "reference" => $produit_parent->reference,
+                        "user_id" => Auth::user()->id,
+                        "marque_id" => $produit_parent->marque,
+                        "prix_vente_ht" => $prix_declinaison_ht,
+                        "prix_vente_ttc" => $prix_declinaison_ttc,
+                        "tva_id" => $produit_parent->tva_id,
+                        // "prix_achat_ht" => $produit_parent->prix_achat_ht,
+                        // "prix_achat_ttc" => $produit_parent->prix_achat_ttc,
+                      
+                    ]);
+                    
+
+
+                    $produit_decli->valeurcaracteristiques()->attach($combinaison, ['voiture_id' => $voiture_id, 'circuit_id' => $circuit_id]);
+                }
+            }
+            
+          return true;
+
+            
+        }
+    
+    
+
+function genererCombinaisons($GAB) {
+
+    $combinations = [[]];
+
+    foreach ($GAB as $tab) {
+        $temp = [];
+        foreach ($combinations as $combination) {
+            $temp[] = $combination;
+            foreach ($tab as $value) {
+                $temp[] = array_merge($combination, [$value]);
+            }
+        }
+        
+        $combinations = $temp;
+
+    }
+    
+    // $combinations = array_filter($combinations, function($value) { return $value !== []; });
+    $combinaisons = array_shift($combinations);
+    return $combinations;
+    
+}
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      /**
      * Création d'une déclinaison de  produit
      */
@@ -540,8 +693,7 @@ class ProduitController extends Controller
                 $stock->quantite_min = $request->quantite_min_vente_decli;
                 $stock->seuil_alerte = $request->seuil_alerte_stock_decli;
                 $stock->update(); 
-            }
-                
+            }              
                        
              
         }
@@ -549,6 +701,33 @@ class ProduitController extends Controller
         return redirect()->back()->with('ok', 'Déclinaison modifiée');
     }
     
+    
+    /**
+    * Modifier toutes les declinations d'un produit
+    */
+    public function update_all_declinaison(Request $request){
+        
+        $params = $request->all();
+        unset($params["_token"]) ;
+       
+        $tab_produits = array_chunk($params, 4);
+        
+        // dd($tab_produits);
+        
+        foreach ($tab_produits as $key => $prod) {
+            
+            // prod[0] = nom, prod[1] = prix_ht, prod[2] =  prix_ttc, prod[3] = id
+            $produitdecli = Produit::where('id', $prod[3])->first();
+            
+            $produitdecli->nom = $prod[0];
+            $produitdecli->prix_vente_ht = $prod[1];
+            $produitdecli->prix_vente_ttc = $prod[2];
+            $produitdecli->update();
+            
+        }
+        
+        return redirect()->back()->with('ok', 'Les déclinaisons ont été modifiées');
+    }
     
     /**
      * Listes des produits archivés

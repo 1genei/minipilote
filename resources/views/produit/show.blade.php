@@ -140,6 +140,8 @@
                                                                 </a>
                                                             </h3>
                                                         </div>
+                                                        @if($produit->nature == "Matériel" )
+                                                        
                                                         <div class="item-titre">
                                                             <!-- Product stock -->
                                                             <h5 class="mt-0">
@@ -155,6 +157,7 @@
                                                             </h5>
 
                                                         </div>
+                                                        @endif
                                                         <div class="item-titre">
                                                             <!-- Product title -->
                                                             <span class="mt-0 ">{{ $produit->nature }} </span>
@@ -169,13 +172,14 @@
 
 
 
+                                                    @if($produit->prix_vente_ht != null )
 
-                                                    <!-- Product description -->
-                                                    <div class="mt-4">
-                                                        <h6 class="font-14">Prix de vente HT</h6>
-                                                        <h4> {{ $produit->prix_vente_ht }} € </h4>
-                                                    </div>
-
+                                                        <!-- Product description -->
+                                                        <div class="mt-4">
+                                                            <h6 class="font-14">Prix de vente HT</h6>
+                                                            <h4> {{ $produit->prix_vente_ht }} € </h4>
+                                                        </div>
+                                                    @endif
 
 
                                                     <!-- Product description -->
@@ -187,10 +191,24 @@
                                                     <!-- Product information -->
                                                     <div class="mt-4">
                                                         <div class="row">
+                                                            @if($produit->nature == "Matériel" )
+                                                        
+                                                                <div class="col-md-4">
+                                                                    <h6 class="font-14">Stock restant:</h6>
+                                                                    <p class="text-sm lh-150">{{ $produit->stock?->quantite }}
+                                                                    </p>
+                                                                </div>
+                                                            @endif
                                                             <div class="col-md-4">
-                                                                <h6 class="font-14">Stock restant:</h6>
-                                                                <p class="text-sm lh-150">{{ $produit->stock?->quantite }}
-                                                                </p>
+                                                                <h6 class="font-14">Catégories:</h6>
+                                                                @foreach ($produit->categorieproduits as $key => $categorieproduit)
+                                                                                <span class="text-body fw-bold">
+                                                                        {{ $categorieproduit->nom }}
+                                                                    </span>
+                                                                    @if ($key < count($produit->categorieproduits) - 1)
+                                                                        ,
+                                                                    @endif
+                                                                @endforeach
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <h6 class="font-14">Nombre de commandes:</h6>
@@ -210,36 +228,40 @@
                                             @csrf
 
                                             <ul class="nav nav-tabs nav-bordered mb-3">
-                                                <li class="nav-item">
-                                                    <a href="#essentiel-tab" data-bs-toggle="tab" aria-expanded="false"
-                                                        class="nav-link active">
-                                                        <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                                        <span class="d-none d-md-block">Essentiel</span>
-                                                    </a>
-                                                </li>
-
+                                                
+                                                @if($produit->nature == "Matériel" )
+                                                
+                                                    <li class="nav-item">
+                                                        <a href="#essentiel-tab" data-bs-toggle="tab" aria-expanded="false"
+                                                            class="nav-link active">
+                                                            <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                                            <span class="d-none d-md-block">Essentiel</span>
+                                                        </a>
+                                                    </li>
+                                                @endif
                                                 @if ($produit->a_declinaison == true)
                                                     <li class="nav-item">
                                                         <a href="#declinaison-tab" data-bs-toggle="tab"
-                                                            aria-expanded="false" class="nav-link">
+                                                            aria-expanded="false" class="nav-link @if($produit->nature != 'Matériel' ) active @endif">
                                                             <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                                                             <span class="d-none d-md-block">Déclinaisons</span>
                                                         </a>
                                                     </li>
                                                 @endif
-
-                                                <li class="nav-item">
+                                                @if($produit->nature == "Matériel" )
+                                               <li class="nav-item">
                                                     <a href="#stock-tab" data-bs-toggle="tab" aria-expanded="false"
                                                         class="nav-link">
                                                         <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                                                         <span class="d-none d-md-block">Stock</span>
                                                     </a>
-                                                </li>
+                                                </li> 
+                                                @endif
                                             </ul>
 
 
                                             <div class="tab-content">
-
+                                                @if($produit->nature == "Matériel" )                                                
                                                 {{-- ESSENTIEL --}}
                                                 <div class="tab-pane show active" id="essentiel-tab">
                                                     <div class="col-lg-12">
@@ -250,7 +272,7 @@
                                                                     <tr>
                                                                         <th>Référence produit</th>
                                                                         <th>Fiche technique</th>
-                                                                        <th>Catégories</th>
+                                                                        {{-- <th>Catégories</th> --}}
                                                                         <th>Marque</th>
                                                                     </tr>
                                                                 </thead>
@@ -273,7 +295,7 @@
                                                                                 </a>
                                                                             @endif
                                                                         </td>
-                                                                        <td>
+                                                                        {{-- <td>
                                                                             @foreach ($produit->categorieproduits as $key => $categorieproduit)
                                                                                 <span class="text-body fw-bold">
                                                                                     {{ $categorieproduit->nom }}
@@ -282,7 +304,7 @@
                                                                                     ,
                                                                                 @endif
                                                                             @endforeach
-                                                                        </td>
+                                                                        </td> --}}
                                                                         <td>{{ $produit->marque?->nom }}</td>
                                                                     </tr>
 
@@ -333,28 +355,7 @@
                                                                             <a href="#"
                                                                                 class="text-body fw-bold">{{ $produit->prix_vente_ttc }}</a>
                                                                         </td>
-                                                                        {{-- <td>
-                                                                            <a href="#"
-                                                                                class="text-body fw-bold">{{ $produit->prix_vente_max_ht }}</a>
-                                                                        </td>
-                                                                        <td>
-                                                                            <a href="#"
-                                                                                class="text-body fw-bold">{{ $produit->prix_vente_max_ttc }}</a>
-                                                                        </td>
-                                                                        <td>
-                                                                            <a href="#"
-                                                                                class="text-body fw-bold">{{ $produit->prix_achat_commerciaux_ht }}</a>
-                                                                        </td>
-                                                                        <td>
-                                                                            <a href="#"
-                                                                                class="text-body fw-bold">{{ $produit->prix_achat_commerciaux_ttc }}</a>
-                                                                        </td> --}}
-
-
-
-
-
-
+      
                                                                     </tr>
 
 
@@ -367,11 +368,13 @@
                                                     </div> <!-- end col -->
 
                                                 </div>
-
+                                                @endif
                                                 {{-- DECLINAISONS --}}
                                                 @if ($produit->a_declinaison == true)
-                                                    <div class="tab-pane" id="declinaison-tab">
+                                                    <div class="tab-pane @if($produit->nature != 'Matériel' ) show active @endif" id="declinaison-tab">
                                                         <div class="table-responsive">
+                                                            <form action="{{ route('produit_all_declinaison.update', $produit->id) }}" method="POST">    
+                                                                @csrf
                                                             <table
                                                                 class="table table-centered table-borderless table-hover w-100 dt-responsive "
                                                                 id="tab1">
@@ -379,24 +382,30 @@
                                                                     <tr>
 
                                                                         <th>Déclinaisons</th>
-                                                                        <th>Prix d'achat HT</th>
-                                                                        <th>Prix d'achat TTC</th>
+                                                                       
                                                                         <th>Prix de vente HT</th>
                                                                         <th>Prix de vente TTC</th>
-                                                                        <th>Statut</th>
+                                                                        @if($produit->nature == "Matériel" )                                                                        
+                                                                        <th>Prix d'achat HT</th>
+                                                                        <th>Prix d'achat TTC</th>
                                                                         <th>Stock</th>
+                                                                        @endif
+                                                                        <th>Statut</th>
                                                                     </tr>
                                                                 </thead>
+                                                                
                                                                 <tbody>
+                                                                
                                                                     @foreach ($produit->declinaisons() as $proddecli)
                                                                         <tr>
                                                                             <td>
-
-                                                                                @foreach ($proddecli->valeurcaracteristiques as $key => $valeurcaracteristique)
+                                                                                <input type="text" class="form-control champ" name="nom_{{$proddecli->id}}" value="{{$proddecli->nom }}"
+                                                                                 required readonly>
+                                                                               @foreach ($proddecli->valeurcaracteristiques as $key => $valeurcaracteristique)
                                                                                     <span
                                                                                         class="text-body fw-bold">{{ $valeurcaracteristique->caracteristique?->nom }}
                                                                                     </span>
-                                                                                    - <span class="text-body">
+                                                                                    : <span class="text-body">
                                                                                         {{ $valeurcaracteristique->nom }}
                                                                                     </span>
                                                                                     @if ($key < count($proddecli->valeurcaracteristiques) - 1)
@@ -404,23 +413,42 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             </td>
+                                                                           
                                                                             <td>
-                                                                                <a href="#"
-                                                                                    class="text-body fw-bold">{{ $proddecli->prix_achat_ht }}</a>
+                                                                                <input type="number" step="0.01" class="form-control champ prixventeht" name="prixventeht_{{$proddecli->id}}" value="{{$proddecli->prix_vente_ht }}"
+                                                                                required readonly>
+                                                                                
+                                                                                
+                                                                                {{-- <a href="#" class="text-body fw-bold">{{ $proddecli->prix_vente_ht }}</a> --}}
                                                                             </td>
                                                                             <td>
-                                                                                <a href="#"
-                                                                                    class="text-body fw-bold">{{ $proddecli->prix_achat_ttc }}</a>
+                                                                                <input type="number" step="0.01" class="form-control champ prixventettc" name="prixventettc_{{$proddecli->id}}" value="{{$proddecli->prix_vente_ttc }}"
+                                                                                required readonly>
+                                                                                <input type="hidden"  name="id_{{$proddecli->id}}" value="{{$proddecli->id }}">
+                                                                                
+                                                                                {{-- <a href="#" class="text-body fw-bold">{{ $proddecli->prix_vente_ttc }}</a> --}}
                                                                             </td>
-                                                                            <td>
-                                                                                <a href="#"
-                                                                                    class="text-body fw-bold">{{ $proddecli->prix_vente_ht }}</a>
-                                                                            </td>
-                                                                            <td>
-                                                                                <a href="#"
-                                                                                    class="text-body fw-bold">{{ $proddecli->prix_vente_ttc }}</a>
-                                                                            </td>
-
+                                                                            @if($produit->nature == "Matériel" )
+                                                                                <td>
+                                                                                    <a href="#"
+                                                                                        class="text-body fw-bold">{{ $proddecli->prix_achat_ht }}</a>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a href="#"
+                                                                                        class="text-body fw-bold">{{ $proddecli->prix_achat_ttc }}</a>
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if ($proddecli->gerer_stock)
+                                                                                        <span class="fw-bold">
+                                                                                            {{ $proddecli->stock->quantite }}</span>
+                                                                                    @else
+                                                                                        <span class="fst-italic">non
+                                                                                            géré</span>
+                                                                                    @endif   
+    
+                                                                                </td>
+    
+                                                                            @endif
 
                                                                             <td>
                                                                                 @if ($proddecli->archive == false)
@@ -432,30 +460,26 @@
                                                                                 @endif
                                                                             </td>
 
-                                                                            <td>
-
-                                                                                @if ($proddecli->gerer_stock)
-                                                                                    <span class="fw-bold">
-                                                                                        {{ $proddecli->stock->quantite }}</span>
-                                                                                @else
-                                                                                    <span class="fst-italic">non
-                                                                                        géré</span>
-                                                                                @endif
-
-
-                                                                            </td>
-
+                                                                            
 
                                                                         </tr>
                                                                     @endforeach
 
-
+                                                                    <div class="modal-footer" style="position: fixed;bottom: 10px; margin: 0;  left: 50%; z-index:1 ;">
+                                                                        {{-- <a class="btn btn-light btn-lg " href="{{ route('produit.index') }}">Annuler</a> --}}
+                                                                        <button type="submit" class="btn btn-info btn-flat btn-addon btn-lg "
+                                                                            wire:click="submit">Modifier les déclinaisons</button>
+                                                                    </div>
+                                            
                                                                 </tbody>
+                                                                
                                                             </table>
+                                                        </form> 
                                                         </div>
                                                     </div>
                                                 @endif
-
+                                                
+                                                @if($produit->nature == "Matériel" )
                                                 {{-- STOCK --}}
                                                 <div class="tab-pane" id="stock-tab" wire:ignore>
                                                     @if ($produit->gerer_stock && $produit->stock != null)
@@ -499,6 +523,7 @@
                                                         </div> <!-- end col -->
                                                     @endif
                                                 </div>
+                                                @endif
                                             </div>
 
 
@@ -528,12 +553,37 @@
 
 
 
-
-
     </div> <!-- End Content -->
 @endsection
 
 @section('script')
+    
+    <script>
+        $('.champ').on('focus', function(e) {
+            this.removeAttribute('readonly');
+        });
+    </script>
+
+
+    {{-- Lorsqu'on modifie le prix HT d'une déclinaison --}}
+    
+    <script>
+        tva = "{{ $produit->tva->taux }}";
+        
+        $(document).on('keyup', '.prixventeht', function() { 
+            var prix_ht = $(this).val();
+            var prix_ttc = prix_ht * (1 + tva / 100);
+            $(this).parent().parent().find('.prixventettc').val(prix_ttc.toFixed(2));
+        });
+        
+        $(document).on('keyup', '.prixventettc', function() { 
+            var prix_ttc = $(this).val();
+            var prix_ht = prix_ttc / (1 + tva / 100);
+            $(this).parent().parent().find('.prixventeht').val(prix_ht.toFixed(2));
+          
+        });
+    </script>
+    
 
 
     {{-- Gestion de stock Ajout déclinaison --}}

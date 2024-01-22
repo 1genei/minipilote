@@ -63,7 +63,7 @@ final class EntiteArchiveTable extends PowerGridComponent
     
         $user = Auth::user();
 
-        if ($user->is_admin) {
+        // if ($user->is_admin) {
 
             // On réccupère tous les contacts de type entité
             $contactentites = Entite::select('entites.*','contacts.*')
@@ -75,19 +75,19 @@ final class EntiteArchiveTable extends PowerGridComponent
                 ->get();
                 
 
-        } else {
-            //   On réccupère uniquement les contacts de l'utilisateur connecté
+        // } else {
+        //     //   On réccupère uniquement les contacts de l'utilisateur connecté
          
-            $contactentites = Entite::select('entites.*','contacts.*')
-                ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
-                // ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                // ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', true], ["contacts.user_id", $user->id]])
-                // ->where('typecontacts.type', 'Fournisseur')
-                ->get();
+        //     $contactentites = Entite::select('entites.*','contacts.*')
+        //         ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
+        //         // ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+        //         // ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+        //         ->where([['contacts.type', 'entité'],['contacts.archive', true], ["contacts.user_id", $user->id]])
+        //         // ->where('typecontacts.type', 'Fournisseur')
+        //         ->get();
                 
         
-        }
+        // }
 
         
     

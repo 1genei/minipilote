@@ -22,6 +22,8 @@ final class indexTable extends PowerGridComponent
     use WithExport;
     public $produits;
     public $categories_id = [];
+    public string $sortField = 'id';    
+    public string $sortDirection = 'desc';
     
     /*
     |--------------------------------------------------------------------------

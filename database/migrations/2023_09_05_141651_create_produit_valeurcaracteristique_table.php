@@ -16,6 +16,9 @@ return new class extends Migration
             $table->integer('produit_id')->nullable();
             $table->integer('valeurcaracteristique_id')->nullable();
             $table->integer('caracteristique_id')->nullable();
+            $table->integer('voiture_id')->nullable();
+            $table->integer('circuit_id')->nullable();
+            
             $table->timestamps();
         });
     }

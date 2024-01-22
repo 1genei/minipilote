@@ -2,8 +2,8 @@
     $curent_url = $_SERVER['REQUEST_URI'];
     $curent_url = explode('/', $curent_url);
 
-    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_contrat_parrainage = $li_contrat = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = '';
-    $li_simulations = $li_utilisateur_show = $li_contact_show = $li_contrat_show = $li_catalogue_show = $li_parametre_show = false;
+    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_contrat_parrainage = $li_contrat = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_voiture = $li_parametre_circuit = '';
+    $li_simulations = $li_utilisateur_show = $li_contact_show = $li_contrat_show = $li_catalogue_show = $li_parametre_show  = false;
 
     switch ($curent_url[1]) {
         case '/':
@@ -90,6 +90,12 @@
                     $li_parametre_contact = 'menuitem-active';
                 } elseif ($curent_url[2] == 'produit') {
                     $li_parametre_produit = 'menuitem-active';
+                }
+                elseif ($curent_url[2] == 'voiture') {
+                    $li_parametre_voiture = 'menuitem-active';
+                }
+                elseif ($curent_url[2] == 'circuit') {
+                    $li_parametre_circuit = 'menuitem-active';
                 }
             } else {
                 $li_parametre_generaux = 'menuitem-active';
@@ -336,6 +342,12 @@
                         <li class="{{ $li_parametre_produit }}"> <a href="{{ route('parametre.produit') }}"> Catalogue
                             </a>
                         </li>
+                        <li class="{{ $li_parametre_voiture }}"> <a href="{{ route('voiture.index') }}"> Voitures
+                        </a>
+                        </li>
+                        <li class="{{ $li_parametre_circuit }}"> <a href="{{ route('circuit.index') }}"> Circuits
+                        </a>
+                </li>
                     </ul>
                 </div>
             </li>

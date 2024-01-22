@@ -284,11 +284,6 @@
                                </div>
                                
                                
-                                <div class="alert alert-warning mt-3" role="alert">
-                                    <strong>HYPBM</strong>
-                                </div>
-
-                               
 
                             </div> <!-- end col -->
                         </div>
