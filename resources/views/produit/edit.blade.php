@@ -146,7 +146,46 @@
     </div> <!-- End Content -->
 @endsection
 
+
+
 @section('script')
+
+    <script>
+          
+        $('.champ').on('focus', function(e) {
+            this.removeAttribute('readonly');
+        });
+      
+        // $('.champ').hover(
+        //     function() { // mouse enter
+        //         $(this).removeAttr('readonly');
+        //     },
+        //     function() { // mouse leave
+        //         $(this).attr('readonly', true);
+        //     }
+        // );
+ 
+    </script>
+    
+    {{-- Lorsqu'on modifie le prix HT d'une déclinaison --}}
+    
+    <script>
+        tva = "{{ $produit->tva->taux }}";
+        
+        $(document).on('keyup', '.prixventeht', function() { 
+            var prix_ht = $(this).val();
+            var prix_ttc = prix_ht * (1 + tva / 100);
+            $(this).parent().parent().find('.prixventettc').val(prix_ttc.toFixed(2));
+        });
+        
+        $(document).on('keyup', '.prixventettc', function() { 
+            var prix_ttc = $(this).val();
+            var prix_ht = prix_ttc / (1 + tva / 100);
+            $(this).parent().parent().find('.prixventeht').val(prix_ht.toFixed(2));
+          
+        });
+    </script>
+
     {{-- Convertion du prix ht en ttc  --}}
     <script>
         var tva = "{{$valeur_tva }}";

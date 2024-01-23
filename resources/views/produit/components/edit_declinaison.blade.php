@@ -1,8 +1,27 @@
 <div class="row">
-    <div class="col-lg-11">
+    <div class="col-lg-12">
 
+        <div class="col-lg-6">
 
-
+            <div class="col-12">
+                <label for="nom" id="tooltip-prix" class="form-label fs-5 mb-2 text-bold">&nbsp;</label>
+            </div>
+    
+            <div class="col-6">
+                <div class="mb-3">
+                    <label for="tva_id" class="form-label">Taxe</label>
+                    <select wire:model.defer="tva_id" name="tva_id" id="tva_id"
+                        class="form-select select2">
+                        @foreach ($tvas as $tva)
+                            <option value="{{ $tva->id }}">{{ $tva->nom }}</option>
+                        @endforeach
+                        <option value="">Aucune taxe</option>
+                    </select>
+                </div>
+            </div>
+    
+        </div>
+        
         <div class="col-lg-12">
 
             <div class="table-responsive">
@@ -10,13 +29,15 @@
                     <thead class="table-light">
                         <tr>
 
-                            <th>Déclinaisons</th>
-                            <th>Prix d'achat HT</th>
-                            <th>Prix d'achat TTC</th>
+                            <th>Déclinaisons</th>                               
                             <th>Prix de vente HT</th>
                             <th>Prix de vente TTC</th>
+                            @if($produit->nature == "Matériel" )
+                                <th>Prix d'achat HT</th>
+                                <th>Prix d'achat TTC</th>
+                                <th>Stock</th>
+                            @endif
                             <th>Statut</th>
-                            <th>Stock</th>
                             <th style="width: 125px;">Action</th>
                         </tr>
                     </thead>
@@ -24,31 +45,49 @@
                         @foreach ($produit->declinaisons() as $proddecli)
                             <tr>
                                 <td>
-
-                                    @foreach ($proddecli->valeurcaracteristiques as $key => $valeurcaracteristique)
+                                    <input type="text" class="form-control champ" name="nom_{{$proddecli->id}}" value="{{$proddecli->nom }}"
+                                     required readonly>
+                                   @foreach ($proddecli->valeurcaracteristiques as $key => $valeurcaracteristique)
                                         <span
                                             class="text-body fw-bold">{{ $valeurcaracteristique->caracteristique?->nom }}
                                         </span>
-                                        - <span class="text-body"> {{ $valeurcaracteristique->nom }} </span>
+                                        : <span class="text-body">
+                                            {{ $valeurcaracteristique->nom }}
+                                        </span>
                                         @if ($key < count($proddecli->valeurcaracteristiques) - 1)
                                             /
                                         @endif
                                     @endforeach
                                 </td>
+                               
+                        
                                 <td>
-                                    <a href="#" class="text-body fw-bold">{{ $proddecli->prix_achat_ht }}</a>
+                                    <input type="number" step="0.01" class="form-control champ prixventeht" name="prixventeht_{{$proddecli->id}}" value="{{$proddecli->prix_vente_ht }}"
+                                    required readonly>
                                 </td>
                                 <td>
-                                    <a href="#" class="text-body fw-bold">{{ $proddecli->prix_achat_ttc }}</a>
-                                </td>
-                                <td>
-                                    <a href="#" class="text-body fw-bold">{{ $proddecli->prix_vente_ht }}</a>
-                                </td>
-                                <td>
-                                    <a href="#" class="text-body fw-bold">{{ $proddecli->prix_vente_ttc }}</a>
+                                    <input type="number" step="0.01" class="form-control champ prixventettc" name="prixventettc_{{$proddecli->id}}" value="{{$proddecli->prix_vente_ttc }}"
+                                    required readonly>
+                                    <input type="hidden"  name="id_{{$proddecli->id}}" value="{{$proddecli->id }}">
                                 </td>
 
-
+                                @if($produit->nature == "Matériel" )
+                                
+                                    <td>
+                                        <a href="#" class="text-body fw-bold">{{ $proddecli->prix_achat_ht }}</a>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="text-body fw-bold">{{ $proddecli->prix_achat_ttc }}</a>
+                                    </td>
+                                    <td>
+                                        @if ($proddecli->gerer_stock)
+                                            <span class="fw-bold"> {{ $proddecli->stock->quantite }}</span>
+                                        @else
+                                            <span class="fst-italic">non géré</span>
+                                        @endif
+                                    </td>
+    
+                                @endif
                                 <td>
                                     @if ($proddecli->archive == false)
                                         <span class="badge bg-success">Actif</span>
@@ -57,17 +96,7 @@
                                     @endif
                                 </td>
 
-                                <td>
-
-                                    @if ($proddecli->gerer_stock)
-                                        <span class="fw-bold"> {{ $proddecli->stock->quantite }}</span>
-                                    @else
-                                        <span class="fst-italic">non géré</span>
-                                    @endif
-
-
-                                </td>
-
+                                
 
                                 <td>
 

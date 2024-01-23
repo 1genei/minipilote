@@ -29,7 +29,7 @@
         <div class="col-sm-6 col-lg-12 mb-3">
 
             <div class="form-check form-check-inline">
-                <input type="radio" id="nature1" name="nature" wire:model.defer="nature" value="Matériel" required
+                <input type="radio" id="nature1" name="nature" wire:model="nature" value="Matériel" required
                     class="form-check-input">
                 <label class="form-check-label" for="nature1">
                     Matériel
@@ -38,7 +38,7 @@
             </div>
 
             <div class="form-check form-check-inline">
-                <input type="radio" id="nature2" name="nature" wire:model.defer="nature"
+                <input type="radio" id="nature2" name="nature" wire:model="nature"
                     value="Prestation de service" class="form-check-input">
                 <label class="form-check-label" for="nature2">
                     Prestation de service
@@ -51,7 +51,7 @@
             <div class="mb-3">
                 <label for="reference" class="form-label">Référence produit</label>
                 <input type="text" class="form-control" name="reference" wire:model.defer="reference"
-                    value="{{ old('reference') }}" id="reference" required>
+                    value="{{ old('reference') }}" id="reference" >
                 @if ($errors->has('reference'))
                     <br>
                     <div class="alert alert-danger" role="alert">

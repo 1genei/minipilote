@@ -562,6 +562,7 @@
         $('.champ').on('focus', function(e) {
             this.removeAttribute('readonly');
         });
+        
     </script>
 
 

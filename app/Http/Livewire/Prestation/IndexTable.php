@@ -121,8 +121,18 @@ final class IndexTable extends PowerGridComponent
                     return  '<span >'.$model->client()?->entite?->raison_sociale.'</span>';
                 }
             })
+            ->addColumn('email_client', function (Prestation $model) { 
+                if($model->client()?->type == 'individu'){
+                    return  '<span >'.$model->client()?->individu?->email.'</span>';
+                }else{
+                    return  '<span >'.$model->client()?->entite?->email.'</span>';
+                }
+            })
             ->addColumn('beneficiaire', function (Prestation $model) {          
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
+            } )
+            ->addColumn('email_beneficiaire', function (Prestation $model) {          
+                return  '<span >'.$model->beneficiaire()?->individu?->email.'</span>';
             } )
             ->addColumn('methode_paiement')
             ->addColumn('notes')
@@ -165,7 +175,9 @@ final class IndexTable extends PowerGridComponent
             Column::make('Nom', 'nom')->searchable()->sortable(),
             Column::make('Montant', 'montant_ttc')->searchable()->sortable(),
             Column::make('Client', 'client')->searchable()->sortable(),
+            Column::make('Email Client', 'email_client')->searchable()->sortable(),
             Column::make('Beneficiaire', 'beneficiaire')->searchable()->sortable(),
+            Column::make('Email Beneficiaire', 'email_beneficiaire')->searchable()->sortable(),
             Column::make('M. Paiement', 'methode_paiement')->searchable()->sortable(),
             Column::make('Notes', 'notes')->searchable()->sortable(),
             // Column::make('Date prestation', 'date_prestation')->searchable()->sortable(),  

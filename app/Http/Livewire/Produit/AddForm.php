@@ -46,8 +46,8 @@ public $circuits;
     public function render()
     {
         // $this->type = "simple";
-        $this->nature = "Prestation de service";
-        $this->tva= \App\Models\Tva::where('est_principal',1)->first();
+        $this->nature = $this->nature == null ? "Prestation de service" : $this->nature;
+        $this->tva= \App\Models\Tva::where('est_principal',true)->first();
         $this->tva_id = $this->tva->id;
         $this->tva_valeur = $this->tva->taux;
         

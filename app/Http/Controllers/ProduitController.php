@@ -190,8 +190,9 @@ class ProduitController extends Controller
      */
     public function update(Request $request, string $produit_id)
     {
-        $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
-           
+        $produit = Produit::where('id', Crypt::decrypt($produit_id))->first(); 
+
+
         $produit->nom = $request->nom;
         $produit->description = $request->description;
         $produit->nature = $request->nature;
@@ -212,6 +213,10 @@ class ProduitController extends Controller
         
         $produit->update();
         
+        
+        // MAJ des déclinaisons
+        
+        $retour = $this->update_all_declinaison($request);
 
 
         // stock
@@ -707,8 +712,13 @@ function genererCombinaisons($GAB) {
     */
     public function update_all_declinaison(Request $request){
         
-        $params = $request->all();
-        unset($params["_token"]) ;
+       
+        $params = array_filter($request->all(), function($key){
+            return (str_contains($key,"nom_" ) || str_contains($key,"prixventeht_" ) || str_contains($key,"prixventettc_" ) || str_contains($key,"id_" )  );
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+        
        
         $tab_produits = array_chunk($params, 4);
         

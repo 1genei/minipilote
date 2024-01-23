@@ -12,12 +12,7 @@
                         <span class="d-none d-md-block">Essentiel</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#prix-tab" data-bs-toggle="tab" aria-expanded="true" class="nav-link ">
-                        <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                        <span class="d-none d-md-block">Prix</span>
-                    </a>
-                </li>
+                
                 @if ($a_declinaison == true)
                     <li class="nav-item">
                         <a href="#declinaison-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
@@ -25,14 +20,25 @@
                             <span class="d-none d-md-block">Déclinaisons</span>
                         </a>
                     </li>
+                
+                @else 
+                    <li class="nav-item">
+                        <a href="#prix-tab" data-bs-toggle="tab" aria-expanded="true" class="nav-link ">
+                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                            <span class="d-none d-md-block">Prix</span>
+                        </a>
+                    </li>
+                    @if($nature == "Matériel")
+                    <li class="nav-item">
+                        <a href="#stock-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                            <span class="d-none d-md-block">Stock</span>
+                        </a>
+                    </li>
+                    @endif
                 @endif
 
-                <li class="nav-item">
-                    <a href="#stock-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                        <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                        <span class="d-none d-md-block">Stock</span>
-                    </a>
-                </li>
+                
             </ul>
 
 
@@ -40,18 +46,22 @@
                 <div class="tab-pane show active" id="essentiel-tab">
                     @include('produit.components.edit_essentiel')
                 </div>
-                <div class="tab-pane " id="prix-tab" wire:ignore>
-                    @include('produit.components.edit_prix')
-
-                </div>
+              
                 @if ($a_declinaison == true)
                     <div class="tab-pane" id="declinaison-tab">
                         @include('produit.components.edit_declinaison')
                     </div>
+                @else 
+                    <div class="tab-pane " id="prix-tab" wire:ignore>
+                        @include('produit.components.edit_prix')    
+                    </div>
+                    @if($nature == "Matériel")
+                    <div class="tab-pane" id="stock-tab" wire:ignore>
+                        @include('produit.components.edit_stock')
+                    </div>
+                    @endif
                 @endif
-                <div class="tab-pane" id="stock-tab" wire:ignore>
-                    @include('produit.components.edit_stock')
-                </div>
+                
             </div>
 
 

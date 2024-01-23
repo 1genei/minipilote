@@ -31,7 +31,7 @@
             <div class="col-sm-6 col-lg-12 mb-3">
 
                 <div class="form-check form-check-inline">
-                    <input type="radio" id="nature1" name="nature" wire:model.defer="nature" value="Matériel"
+                    <input type="radio" id="nature1" name="nature" wire:model="nature" value="Matériel"
                         required class="form-check-input">
                     <label class="form-check-label" for="nature1">
                         Matériel
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="form-check form-check-inline">
-                    <input type="radio" id="nature2" name="nature" wire:model.defer="nature"
+                    <input type="radio" id="nature2" name="nature" wire:model="nature"
                         value="Prestation de service" class="form-check-input">
                     <label class="form-check-label" for="nature2">
                         Prestation de service

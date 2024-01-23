@@ -28,16 +28,21 @@
                             <span class="d-none d-md-block">Prix</span>
                         </a>
                     </li>
+                    @if($nature == "Matériel")
+                    
+                        <li class="nav-item">
+                            <a href="#stock-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                                <span class="d-none d-md-block">Stock</span>
+                            </a>
+                        </li>
+                    @endif
                 @endif
                 
+               
                 
 
-                <li class="nav-item">
-                    <a href="#stock-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                        <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                        <span class="d-none d-md-block">Stock</span>
-                    </a>
-                </li>
+                
             </ul>
 
 
@@ -54,12 +59,15 @@
                     <div class="tab-pane " id="prix-tab">
                         @include('produit.components.add_prix')
                     </div>
+                    @if($nature == "Matériel")
+                        <div class="tab-pane" id="stock-tab">
+                            @include('produit.components.add_stock')
+                        </div>
+                    @endif
                 @endif         
                
 
-                <div class="tab-pane" id="stock-tab">
-                    @include('produit.components.add_stock')
-                </div>
+                
             </div>
 
 

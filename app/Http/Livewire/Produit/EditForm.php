@@ -91,14 +91,21 @@ class EditForm extends Component
     {
     
        
-
-        $require = [
-            'type' => 'required',
-            'nature' => 'required',
-            'prix_vente_ht' => 'required',
-            'prix_vente_ttc' => 'required',                
-            'fiche_technique' => 'file:pdf'
-        ];
+        if($this->a_declinaison == false){
+            $require = [             
+                'nature' => 'required',
+                'prix_vente_ht' => 'required',
+                'prix_vente_ttc' => 'required',                
+                'fiche_technique' => 'file:pdf'
+            ];
+        }
+        else{
+        
+            $require = [                
+                'nature' => 'required',                         
+                'fiche_technique' => 'file:pdf'
+            ];
+        }
         
        
         if($this->nom == $this->produit->nom){
@@ -109,16 +116,12 @@ class EditForm extends Component
         }
         
         
-        if($this->reference == $this->produit->reference){
-            
-            $require = array_merge($require,['reference' => 'required|string']);           
-           
-        }
-        else{
-
-            $require = array_merge($require,['reference' => 'required|string|unique:produits']);
-        
-        }
+        // if($this->reference == $this->produit->reference){
+        //     $require = array_merge($require,['reference' => 'string']);
+        // }
+        // else{
+        //     $require = array_merge($require,['reference' => 'string|unique:produits']);
+        // }
         
         
 // dd($require);
