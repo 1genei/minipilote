@@ -584,7 +584,7 @@
        
        
         var y = "{{ $key }}";
-        console.log(y);
+      
         $(document).ready(function() {
             var max_produits = 30;
             var wrapper = $(".input_fields_wrap");

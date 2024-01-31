@@ -133,15 +133,15 @@ final class ArchiveTable extends PowerGridComponent
             } )
             ->addColumn('client_prospect', function (Devi $model) {
                 if($model->client_prospect()->type == "individu"){
-                    return  $model->client_prospect()?->infos()->nom." ".$model->client_prospect()?->infos()->prenom;
+                    return  $model->client_prospect()?->infos()?->nom." ".$model->client_prospect()?->infos()?->prenom;
                 }else{
-                    return $model->client_prospect()?->infos()->raison_sociale;
+                    return $model->client_prospect()?->infos()?->raison_sociale;
                 }
               
             } )
             ->addColumn('collaborateur', function (Devi $model) {
              
-                return  $model->collaborateur()?->infos()->nom." ".$model->collaborateur()?->infos()->prenom;               
+                return  $model->collaborateur()?->infos()?->nom." ".$model->collaborateur()?->infos()?->prenom;               
             } )
             
             ->addColumn('statut', function (Devi $model) {
