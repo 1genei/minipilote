@@ -8,19 +8,23 @@ use App\Models\Stock;
 use App\Models\Marque;
 use App\Models\Categorieproduit;
 use App\Models\Caracteristique;
+use App\Models\Valeurcaracteristique;
 use App\Models\Tva;
 use App\Models\Voiture;
 use App\Models\Circuit;
 
+
 use Crypt;
 use Auth;
+use DB;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-
+use Illuminate\Database\Query\JoinClause;
 
 class ProduitController extends Controller
 {
@@ -150,7 +154,7 @@ class ProduitController extends Controller
         }
         
         
-        return redirect()->back()->with('ok', 'Nouveau produit ajouté');
+        return redirect()->route('produit.index')->with('ok', 'Nouveau produit ajouté');
     }
 
     /**
@@ -485,8 +489,8 @@ class ProduitController extends Controller
                     $voitureModel = Voiture::where('id', $voiture_id)->first();
                     
                     $nom_produit_temp = $produit_parent->nom.'-'.$voitureModel->nom.'-'.$circuitModel->nom;
-                    $prix_produit_temp =  $voitureModel->prix_kilometrique * $circuitModel->distance;
-                    
+                    $prix_produit_temp =  $voitureModel->prix_vente_kilometrique * $circuitModel->distance;
+                 
                     $combinaison_voiture_circuit[] = [
                         "nom_produit" => $nom_produit_temp,
                         "prix_produit" => $prix_produit_temp,
@@ -500,22 +504,23 @@ class ProduitController extends Controller
             
             foreach ($combinaisons as $combinaison) {
                 
+                $nomcaracteristique = $this->generer_nom_caracteristique($combinaison);
+                
                 foreach ($combinaison_voiture_circuit as $combi_v_c) {
                    
                    
                     //    On calcul le nombre de tours total de la combianaison                    
                     $nb_tours = array_sum($combinaison);
-          
-                                        
+
                     // $cartacteristique = xxxxxxxxxxxxxxxxx
-                    $nom_produit_temp = $combi_v_c["nom_produit"].'-'.implode('-', $combinaison);
+                    $nom_produit_temp = $combi_v_c["nom_produit"]." / $nomcaracteristique";
                     $prix_produit_temp = $combi_v_c["prix_produit"];
                     $voiture_id = $combi_v_c["voiture_id"];
                     $circuit_id = $combi_v_c["circuit_id"];
                     
-                    $prix_declinaison_ttc = $prix_produit_temp * $nb_tours;
-                    $prix_declinaison_ht = $prix_declinaison_ttc / (1 + ($produit_parent->tva->taux / 100));
-                    
+                    $prix_declinaison_ttc = round($prix_produit_temp * $nb_tours,2);
+                    $prix_declinaison_ht = round($prix_declinaison_ttc / (1 + ($produit_parent->tva->taux / 100)),2);
+                
                     $produit_decli = Produit::create([
                     
                         "nom" => $nom_produit_temp,
@@ -526,6 +531,8 @@ class ProduitController extends Controller
                         "reference" => $produit_parent->reference,
                         "user_id" => Auth::user()->id,
                         "marque_id" => $produit_parent->marque,
+                        "voiture_id" => $voiture_id,
+                        "circuit_id" => $circuit_id,
                         "prix_vente_ht" => $prix_declinaison_ht,
                         "prix_vente_ttc" => $prix_declinaison_ttc,
                         "tva_id" => $produit_parent->tva_id,
@@ -533,47 +540,67 @@ class ProduitController extends Controller
                         // "prix_achat_ttc" => $produit_parent->prix_achat_ttc,
                       
                     ]);
-                    
-
 
                     $produit_decli->valeurcaracteristiques()->attach($combinaison, ['voiture_id' => $voiture_id, 'circuit_id' => $circuit_id]);
+                    if($request->categories_id){
+                        $produit_decli->categorieproduits()->attach($request->categories_id);
+                    }
                 }
             }
             
           return true;
-
-            
+          
         }
     
     
-
-function genererCombinaisons($GAB) {
-
-    $combinations = [[]];
-
-    foreach ($GAB as $tab) {
-        $temp = [];
-        foreach ($combinations as $combination) {
-            $temp[] = $combination;
-            foreach ($tab as $value) {
-                $temp[] = array_merge($combination, [$value]);
+    /**
+     * Fonction de création des combinaisons
+     */
+    function genererCombinaisons($GAB) {
+    
+        $combinations = [[]];
+    
+        foreach ($GAB as $tab) {
+            $temp = [];
+            foreach ($combinations as $combination) {
+                $temp[] = $combination;
+                foreach ($tab as $value) {
+                    $temp[] = array_merge($combination, [$value]);
+                }
             }
+            
+            $combinations = $temp;
+    
         }
         
-        $combinations = $temp;
-
+        // $combinations = array_filter($combinations, function($value) { return $value !== []; });
+        $combinaisons = array_shift($combinations);
+        return $combinations;
+        
     }
     
-    // $combinations = array_filter($combinations, function($value) { return $value !== []; });
-    $combinaisons = array_shift($combinations);
-    return $combinations;
     
-}
-
+    /**
+     * Fonction de génération de nom par les caracteristiques
+     */
+    function generer_nom_caracteristique($combinaison){
     
-    
-    
-    
+        $nomcaracteristique = "";
+        foreach ($combinaison as  $combi) {
+            $valeurcaract = Valeurcaracteristique::where('id', $combi)->first();
+            if(sizeof($combinaison) > 1){
+                $nomcaracteristique .= $valeurcaract->caracteristique->nom." : ".$valeurcaract->nom." / ";
+            }else{
+                $nomcaracteristique .= $valeurcaract->caracteristique->nom." : ".$valeurcaract->nom;
+            }
+            
+        }
+        return $nomcaracteristique;
+    }
+        
+        
+        
+        
     
     
     
@@ -734,11 +761,50 @@ function genererCombinaisons($GAB) {
             $produitdecli->prix_vente_ttc = $prod[2];
             $produitdecli->update();
             
+            if($request->categories_id){
+        
+                $produitdecli->categorieproduits()->detach();
+                $produitdecli->categorieproduits()->attach($request->categories_id);
+            }
+            
         }
         
         return redirect()->back()->with('ok', 'Les déclinaisons ont été modifiées');
     }
+
+    /**
+    * Recaluler les prix des déclinaisons du produit
+    */
+    public function recalculer_declinaisons($produit_parent_id){
     
+    
+        $produitparent = Produit::where('id', Crypt::decrypt($produit_parent_id))->first();
+        
+        $produitdeclis = Produit::where('produit_id', $produitparent->id)->get();
+
+
+
+        foreach ($produitdeclis as $key => $produitdecli) {
+            
+            // dd($produitdecli->valeurcaracteristiques);
+            $prix_declinaison_ht = 0;
+            foreach($produitdecli->valeurcaracteristiques as $valcarac){
+                if($valcarac->calcul_prix_produit){
+                    
+                    $prix_declinaison_ht += $valcarac->valeur * $produitdecli->voiture->prix_vente_kilometrique * $produitdecli->circuit->distance ;
+                    // $prix_declinaison_ttc += $prix_declinaison_ht * (1 + ($produitdecli->tva->taux / 100));
+                }
+                  
+            }
+            $produitdecli->prix_vente_ht = $prix_declinaison_ht;
+            $produitdecli->prix_vente_ttc = $prix_declinaison_ht * (1 + ($produitdecli->tva->taux / 100));
+            $produitdecli->save();
+        }
+        
+        return redirect()->back()->with('ok', 'Les prix des déclinaisons ont été recalculées');
+    }
+
+
     /**
      * Listes des produits archivés
     */
@@ -756,11 +822,10 @@ function genererCombinaisons($GAB) {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function archive($produit_id)
+    public function archiver($produit_id)
     {
         $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
-        
-        
+
         $produit->archive = true;
         $produit->update();
         
@@ -773,7 +838,7 @@ function genererCombinaisons($GAB) {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function unarchive($produit_id)
+    public function desarchiver($produit_id)
     {
         $produit = Produit::where('id', Crypt::decrypt($produit_id))->first();
         
@@ -782,5 +847,39 @@ function genererCombinaisons($GAB) {
         $produit->update();
         
         return "200";
+    }
+    
+    /**
+    * Rechercher des produits 
+    */
+    public function rechercher_produit(Request $request){
+        
+        // {categorie_id: '4', voiture_id: '1', circuit_id: null}
+        $produits = DB::table('produits')
+                    ->where(function($query) use ($request){
+                        // if($request->categorie_id != null){
+                        //     $query->where('categorieproduit_id', $request->categorie_id);
+                        // }
+                        if($request->voiture_id != null){
+                            $query->where('voiture_id', $request->voiture_id);
+                        }
+                        if($request->circuit_id != null){
+                            $query->where('circuit_id', $request->circuit_id);
+                        }
+                    })
+                    ->join('categorieproduit_produit', function(JoinClause $join) use ($request){
+                    
+                        $join->on('produits.id', '=', 'categorieproduit_produit.produit_id');
+                        if($request->categorie_id != null){
+                            $join->where('categorieproduit_produit.categorieproduit_id', '=', $request->categorie_id);
+                        }
+                    })
+                    
+                    // ->join('categorieproduits', 'categoriesproduit_produits.categorieproduit_id', '=', 'categorieproduits.id')
+                    ->select('produits.*','categorieproduit_produit.categorieproduit_id')
+                    ->get();
+                    
+                    
+        return $produits;
     }
 }

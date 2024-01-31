@@ -341,7 +341,7 @@
 		
 		<tr height="31">
 			<td height="31" style="height:31px;">&nbsp;</td>
-			<td colspan="5" style="font-weight: bold;"> NET A PAYER:  </td>
+			<td colspan="5" style="font-weight: bold;"> NET À PAYER:  </td>
 			<td>&nbsp;</td>
 			<td colspan="4" style="font-weight: bold;"> {{$devis->net_a_payer}} &euro; </td>
 			<td colspan="4"> </td>

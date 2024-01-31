@@ -179,12 +179,95 @@
                                                 </div>   
                     
                                         </div>
+                                        <hr>
+                                        
+                                        <div class="filtres">
+                                            <div class="row">
+                                                   
+                                                    <div class="col-auto ">
+                                                        <div class="mb-3 ">
+                                                            <label for="categorie" class="form-label">
+                                                                Catégorie
+                                                            </label>
+                                                            <select name="categorie" id="categorie" class="filtrer form-control select2"
+                                                                data-toggle="select2" >
+                                                                <option value="">Sélectionnez la catégorie</option>
+                                                                @foreach ($categories as $categorie)
+                                                                    <option value="{{ $categorie->id }}">
+                                                                        {{ $categorie->nom }}
+                                                                    </option>
+                                                                @endforeach 
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-auto ">
+                                                        <div class="mb-3 ">
+                                                            <label for="voiture" class="form-label">
+                                                                Voiture
+                                                            </label>
+                                                            <select name="voiture" id="voiture" class=" filtrer form-control select2"
+                                                                data-toggle="select2" >
+                                                                <option value="">Sélectionnez la voiture  </option>
+                                                                @foreach ($voitures as $voiture)
+                                                                    <option value="{{ $voiture->id }}">
+                                                                        {{ $voiture->nom }}
+                                                                    </option>
+                                                                @endforeach 
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-auto ">
+                                                        <div class="mb-3 ">
+                                                            <label for="circuit" class="form-label">
+                                                                Circuit
+                                                            </label>
+                                                            <select name="circuit" id="circuit" class=" filtrer form-control select2"
+                                                                data-toggle="select2" >
+                                                                <option value="">Sélectionnez le circuit</option>
+                                                                @foreach ($circuits as $circuit)
+                                                                    <option value="{{ $circuit->id }}">
+                                                                        {{ $circuit->nom }}
+                                                                    </option>
+                                                                @endforeach 
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                       
+                                            </div>
+                                                
+                                            <div class="row">
+                                                <div class="col-auto ">
+                                                    <div class="mb-3 ">
+                                                        <label for="produit" class="form-label">
+                                                            Produit
+                                                        </label>
+                                                        <span id="nb_produit" ></span>
+                                                        <select name="produit" id="produit" class=" form-control select2"
+                                                            data-toggle="select2" >
+                                                            <option value=""></option>
+                                                            {{-- @foreach ($produits as $produit)
+                                                                <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
+                                                            @endforeach --}}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto ">
+                                                    <div class="mb-3 mt-3 ">
+                                                      
+                                                        <button class="btn btn-warning add_field_button" style="margin-left: 53px;">
+                                                            Ajouter au devis
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
                                         
                                         <hr>
                                             <div class="input_fields_wrap">
-                                                <button class="btn btn-warning add_field_button" style="margin-left: 53px;">
-                                                    Ajouter un produit
-                                                </button>
+                                                
                                                 
                                                  {{-- 0 = id_produit, 1 = quantité, 2 = prix_unitaire ht, 3 = id_tva, 4 = type_remise, 5 = remise --}}
                                                 
@@ -206,7 +289,7 @@
                                                         </div>
                                                         <div class="col-auto">
                                                             <label for="prix_ht{{$key}}">prix HT (€): </label>
-                                                            <input class="form-control prix_ht" type="number" min="1"  value="{{$palier[2]}}" id="prix_ht{{$key}}" name="prix_ht{{$key}}" required>
+                                                            <input class="form-control prix_ht" type="number" min="1" step="0.01"  value="{{$palier[2]}}" id="prix_ht{{$key}}" name="prix_ht{{$key}}" required>
                                                         </div>
                                                         <div class="col-auto">
                                                             <label for="tva{{$key}}">Tva: </label>                                                    
@@ -229,7 +312,7 @@
                                                             <label for="reduction{{$key}}"> </label>
                                                             <input class="form-control reduction" type="number" step="0.01" min="0" id="reduction{{$key}}" name="reduction{{$key}}" value="{{$palier[5]}}" @if($palier[4] == "")readonly @endif >
                                                         </div>
-                                                        <div class="col-auto"> <button href="#" id="pal{{$key}}" class="btn btn-danger remove_field">Enlever</button></div></br>
+                                                        <div class="col-auto"> <button href="#" id="pal{{$key}}" class="btn btn-danger remove_field"><i class="mdi mdi-delete"></i></button></div></br>
                                                     </div>
                                                 
                                                 
@@ -290,7 +373,7 @@
                                                 <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TTC :</td><td class="total_ttc"> {{$devis->montant_ttc}} </th><th></th> </tr>
                                                 <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TVA :</td><td class="">{{$devis->montant_tva}} </th><th></th> </tr>
                                                 <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Réduction :</td><td class="text-danger total_reduction"> - {{$devis->montant_remise}} </th><th></th> </tr>
-                                                <tr style="background-color: #f1f3fa;font-size: 15px; font-weight: bold;border:2px solid #ff5b5b"><th>NET A PAYER :</td><td class="net_a_payer"> {{$devis->net_a_payer}} €</th> <th></th> </tr>
+                                                <tr style="background-color: #f1f3fa;font-size: 15px; font-weight: bold;border:2px solid #ff5b5b"><th>NET À PAYER :</td><td class="net_a_payer"> {{$devis->net_a_payer}} €</th> <th></th> </tr>
                                                 
                                             </tbody>
                                         </table>
@@ -350,7 +433,8 @@
                                 .select2-container .select2-selection--single {
                                     height: calc(1.69em + 0.9rem + 2px);
                                     min-width: 110px;
-                                    max-width: 150px;
+                                    /* max-width: 150px; */
+                                    
                                 }
                             }
                             
@@ -360,6 +444,11 @@
                                     height: calc(1.69em + 0.9rem + 2px);
                                     min-width: 150px;
                                     /* max-width: 200px; */
+                                }
+                                .select_produit{
+                                    width: 300px;
+                                    font-size:12px;
+                                
                                 }
                             }
                             .quantite{
@@ -377,6 +466,10 @@
                             .reduction{
                                 width: 100px;}
                                                         
+                            .filtres{
+                                background-color:#f1f1f1;
+                                padding: 40px 40px 40px 40px;
+                            }
                         </style>
 
 
@@ -396,19 +489,68 @@
 
 @section('script')
 
-    {{-- #####  Ajouts de produits  --}}
-
+    {{-- Filtrer les produits --}}
     <script>
-    
         var produits = @json($produits);
-        var tvas = @json($tvas);
         var tab_produits = [];
+        var liste_produits = "";
+        
+        
+        $("#produit").empty(); // Clear the current options in the select
+        produits.forEach(function(produit) {
+            $("#produit").append('<option value="' + produit.id + '">' + produit.nom + '</option>');
+            
+        });
+        
+        $(".filtrer").change(function(e){
+            
+            e.preventDefault();
+            
+            $.ajax({
+                url: '/produits/rechercher', 
+                type: 'GET',
+                data: {
+                    categorie_id: $('#categorie').val(), 
+                    voiture_id: $('#voiture').val(), 
+                    circuit_id: $('#circuit').val() 
+                },
+                success: function(response) {
+                    
+                    var nb_produit = response.length;
+                    $('#nb_produit').html('<span class="text-danger">'+nb_produit+' produits trouvés</span>');
+                    tab_produits = [];
+                    liste_produits = "";
+                    
+                    $("#produit").empty(); 
+                    response.forEach(function(produit) {
+                        $("#produit").append('<option value="' + produit.id + '">' + produit.nom + '</option>');
+                        liste_produits += '<option value="' + produit.id + '">' + produit.nom + '</option>';        
+                        tab_produits[produit.id] = produit;
+                        
+                    });
+                    
+                    
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    console.error("An error occurred: " + status + " " + error);
+                }
+            });
+        
+        });
+        
+        
+        // #####  Ajouts de produits 
+
+   
+        var tvas = @json($tvas);
         var tab_tvas = [];
         var resume_devis = [];
         
+        var nb_produit = produits.length;
+        $('#nb_produit').html('<span class="text-danger">'+nb_produit+' produits trouvés</span>');
        
 
-        var liste_produits = "";
         var liste_tvas = "";
         
         tvas.forEach(element => {
@@ -421,14 +563,16 @@
             tab_produits[element.id] = element;
         });
         
-     
+        var tab_produits_init = tab_produits;
+        
+  
         //    Lorsqu'on change le produit
         
         $(document).on('change', '.select_produit', function() { 
             var id = $(this).val();
 
-            var prix_ht = tab_produits[id].prix_vente_ht;
-            var tva = tab_produits[id].tva_id;
+            var prix_ht = tab_produits_init[id].prix_vente_ht;
+            var tva = tab_produits_init[id].tva_id;
             var prix_ttc = prix_ht * (1 + tva / 100);
             
             
@@ -440,6 +584,7 @@
        
        
         var y = "{{ $key }}";
+        console.log(y);
         $(document).ready(function() {
             var max_produits = 30;
             var wrapper = $(".input_fields_wrap");
@@ -458,59 +603,110 @@
                     var montant_tva_total = 0;
                     
                
-                    nom_produit = $("#produit" + y + '').val();
-                        
+                    nom_produit = $("#produit").val();
 
                     if(nom_produit != "" && nom_produit !== undefined ){
                         y++;
                     
-                        $(wrapper).append(`
+                        var fieldHTML = `
+                                <div class = "row gy-2 gx-2 align-items-center field${y}"> 
+                                    <div class="col-auto">
+                                        <label for="produit${y}">Produit: </label> 
+                                        <select class="form-control select2 liste_produits select_produit" width="80px" required id="produit${y}" name="produit${y}">
+                                            <option></option>
+                                            ${liste_produits}
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="quantite${y}">Quantité: </label>
+                                        <input class="form-control quantite" type="number"  min="1" value="1" id="quantite${y}" required name="quantite${y}"/>
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="prix_ht${y}">Prix HT (€): </label>
+                                        <input class="form-control prix_ht" type="number" min="1" step="0.01" value="${prix_ht}" required id="prix_ht${y}" name="prix_ht${y}" >
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="tva${y}">Tva: </label>
+                                        <select class="form-select liste_tvas tva" width="80px" id="tva${y}" name="tva${y}">
+                                            <option></option>
+                                            ${liste_tvas}
+                                        </select>
+                                    </div> 
+                                    <div class="col-auto">
+                                        <label for="type_reduction${y}">Réduction: </label>
+                                        <select class="form-select type_reduction" id="type_reduction${y}" name="type_reduction${y}">
+                                            <option> </option>
+                                            <option value="pourcentage">%</option>
+                                            <option value="montant">EUR</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="reduction${y}"> </label>
+                                        <input class="form-control reduction" type="number" step="0.01" min="0" id="reduction${y}" name="reduction${y}" readonly >
+                                    </div>
+                                    <div class="col-auto"><a href="#" class="remove_field btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></a></div></br>
+                                </div>`
+             
+                        $(wrapper).append(fieldHTML);
                         
-                            <div class = "row gy-2 gx-2 align-items-center field${y}"> 
-                                <div class="col-auto">
-                                    <label for="produit${y}">Produit: </label> 
-                                    <select class="form-control select2 liste_produits select_produit" width="80px" required id="produit${y}" name="produit${y}">
-                                        <option></option>
-                                        ${liste_produits}
-                                    </select>
-                                </div>
-                                <div class="col-auto">
-                                    <label for="quantite${y}">Quantité: </label>
-                                    <input class="form-control quantite" type="number"  min="1" value="1" id="quantite${y}" required name="quantite${y}"/>
-                                </div>
-                                <div class="col-auto">
-                                    <label for="prix_ht${y}">Prix HT (€): </label>
-                                    <input class="form-control prix_ht" type="number" min="1 step="0.01" value="${prix_ht}" required id="prix_ht${y}" name="prix_ht${y}" >
-                                </div>
-                                <div class="col-auto">
-                                    <label for="tva${y}">Tva: </label>
-                                    <select class="form-select liste_tvas tva" width="80px" id="tva${y}" name="tva${y}">
-                                        <option></option>
-                                        ${liste_tvas}
-                                    </select>
-                                </div> 
-                                <div class="col-auto">
-                                    <label for="type_reduction${y}">Réduction: </label>
-                                    <select class="form-select type_reduction" id="type_reduction${y}" name="type_reduction${y}">
-                                        <option> </option>
-                                        <option value="pourcentage">%</option>
-                                        <option value="montant">EUR</option>
-                                    </select>
-                                </div>
-                                <div class="col-auto">
-                                    <label for="reduction${y}"> </label>
-                                    <input class="form-control reduction" type="number" step="0.01" min="0" id="reduction${y}" name="reduction${y}" readonly >
-                                </div>
-                                <div class="col-auto"> <button href="#" id="pal${y}" class="btn btn-danger remove_field">Enlever</button></div></br>
-                            </div>`
-                        ); //add input box
+                        $("#produit" + y + ' option[value="'+nom_produit+'"]').attr("selected",true);                        
+                        $("#quantite" + y + '').val(1);                        
+                        $("#prix_ht" + y + '').val(tab_produits[nom_produit].prix_vente_ht);                        
+                        $("#tva" + y + ' option[value="'+tab_produits[nom_produit].tva_id+'"]').attr("selected",true);                        
+                        $("#type_reduction" + y + ' option[value="pourcentage"]').attr("selected",true);                        
+                        $("#reduction" + y + '').val(0);                        
+                        $("#pal" + y + '').hide();                        
+                        $("#quantite" + y + '').change(function() {
+                            var quantite = $(this).val();
+                            var prix_ht = $("#prix_ht" + y + '').val();
+                            var tva = $("#tva" + y + '').val();
+                            var prix_ttc = quantite*prix_ht * (1 + tva / 100);
+                            var montant_tva = prix_ttc - prix_ht;
+                            
+                            prix_ttc = prix_ttc.toFixed(2);
+                            montant_tva = montant_tva.toFixed(2);
+                            
+                            $("#prix_ttc" + y + '').val(prix_ttc);
+                            $("#montant_tva" + y + '').val(montant_tva);
+                            
+                        });
                         
-                         // Réinitialiser le plugin select2 pour le nouveau champ ajouté
-                  
-                         $('#produit' + y).select2();
+                        $("#prix_ht" + y + '').change(function() {
+                            var quantite = $("#quantite" + y + '').val();
+                            var prix_ht = $(this).val();
+                            var tva = $("#tva" + y + '').val();
+                            var prix_ttc = quantite*prix_ht * (1 + tva / 100);
+                            var montant_tva = prix_ttc - prix_ht;
+                            
+                            prix_ttc = prix_ttc.toFixed(2);
+                            montant_tva = montant_tva.toFixed(2);
+                            
+                            $("#prix_ttc" + y + '').val(prix_ttc);
+                            $("#montant_tva" + y + '').val(montant_tva);
+                            
+                        });
+                        
+                        $("#tva" + y + '').change(function() {
+                            var quantite = $("#quantite" + y + '').val();
+                            var prix_ht = $("#prix_ht" + y + '').val();
+                            var tva = $(this).val();
+                            var prix_ttc = quantite*prix_ht * (1 + tva / 100);
+                            var montant_tva = prix_ttc - prix_ht;
+                            
+                            prix_ttc = prix_ttc.toFixed(2);
+                            montant_tva = montant_tva.toFixed(2);
+                            
+                            $("#prix_ttc" + y + '').val(prix_ttc);
+                            $("#montant_tva" + y + '').val(montant_tva);
+                            
+                        });
                         
                         
-                    }    
+                        // Réinitialiser le plugin select2 pour le nouveau champ ajouté
+              
+                        $('#produit' + y).select2();
+                        
+                    }  
                  
                 }else{
                 
@@ -595,8 +791,8 @@
                 prix_ttc = parseFloat(prix_ttc).toFixed(2);
                 montant_tva = parseFloat(montant_tva).toFixed(2);
                 
-                if (nom_produit != "" && tab_produits[nom_produit] !== undefined && prix_ht != "" && tva != "" && quantite != "") {
-                    resume_devis[i] = `<tr><td> ${tab_produits[nom_produit].nom}  x ${quantite} </td><td> ${prix_ttc} ${libelle_reduction } </td> <td> ${montant_tva} </td> </tr>`;
+                if (nom_produit != "" && tab_produits_init[nom_produit] !== undefined && prix_ht != "" && tva != "" && quantite != "") {
+                    resume_devis[i] = `<tr><td> ${tab_produits_init[nom_produit].nom}  x ${quantite} </td><td> ${prix_ttc} ${libelle_reduction } </td> <td> ${montant_tva} </td> </tr>`;
                 }
                 i++;
             }
@@ -609,7 +805,7 @@
                 <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TTC :</td><td class="total_ttc"> ${prix_ttc_total.toFixed(2)} </th><th></th> </tr>
                 <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TVA :</td><td class=""> ${montant_tva_total.toFixed(2)} </th><th></th> </tr>
                 <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Réduction :</td><td class="text-danger total_reduction"> - ${montant_reduction_total.toFixed(2)} </th><th></th> </tr>
-                <tr style="background-color: #f1f3fa;font-size: 15px; font-weight: bold;border:2px solid #ff5b5b"><th>NET A PAYER :</td><td class="net_a_payer"> ${net_a_payer.toFixed(2)} €</th> <th></th> </tr>`);
+                <tr style="background-color: #f1f3fa;font-size: 15px; font-weight: bold;border:2px solid #ff5b5b"><th>NET À PAYER :</td><td class="net_a_payer"> ${net_a_payer.toFixed(2)} €</th> <th></th> </tr>`);
                 
                 $('.resume_devis').html(resume_devis.join(" "));
             
@@ -669,7 +865,7 @@
             
             reduction_globale = $("#reduction_globale").val();
             
-            console.log(reduction_globale+" ".prix_ttc_total);
+           
             if(reduction_globale != ""){
             
                 if(type_reduction_globale == "pourcentage"){

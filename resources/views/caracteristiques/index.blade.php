@@ -141,7 +141,7 @@
                                                 @endcan
                                                 @can('permission', 'modifier-caracteristique-produit')
                                                     <a data-href="{{ route('caracteristique.update', Crypt::encrypt($caracteristique->id)) }}"
-                                                        data-nom="{{ $caracteristique->nom }}" data-bs-toggle="modal"
+                                                        data-nom="{{ $caracteristique->nom }}" data-calcul_prix_produit = "{{$caracteristique->calcul_prix_produit}}" data-bs-toggle="modal"
                                                         data-bs-target="#edit-caracteristique"
                                                         class="action-icon edit-caracteristique text-success">
                                                         <i class="mdi mdi-square-edit-outline"></i>
@@ -201,7 +201,23 @@
                                         </div>
                                     @endif
                                 </div>
-
+                                <div class="mt-2">
+                              
+                                    <div class="form-check form-check-inline">
+                                        <input type="checkbox" class="form-check-input" value="true" name="calcul_prix_produit"  id="calcul_prix_produit">
+                                        <label class="form-check-label" for="calcul_prix_produit">Calculer le prix des produits avec les caracteristiques</label>
+                                        
+                                        @if ($errors->has('calcul_prix_produit'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " caracteristique="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('calcul_prix_produit') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                
                             </div>
 
                         </div>
@@ -248,7 +264,21 @@
                                         </div>
                                     @endif
                                 </div>
-
+                                
+                                
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="calcul_prix_produit" value="true" id="edit_calcul_prix_produit">
+                                    <label class="form-check-label"  for="edit_calcul_prix_produit">Calculer le prix des produits avec les caracteristiques</label>
+                                    
+                                    @if ($errors->has('calcul_prix_produit'))
+                                        <br>
+                                        <div class="alert alert-warning text-secondary " caracteristique="alert">
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <strong>{{ $errors->first('calcul_prix_produit') }}</strong>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
 
                         </div>
@@ -273,8 +303,10 @@
 
             let that = $(this);
             let currentCaracteristique = that.data('nom');
+            let currentCalculPrixProduit = that.data('calcul_prix_produit');
             let currentFormAction = that.data('href');
             $('#edit_nom').val(currentCaracteristique);
+            $('#edit_calcul_prix_produit').prop('checked', currentCalculPrixProduit == "1" ? true : false);
             $('#edit_form').attr('action', currentFormAction);
 
         })

@@ -106,7 +106,9 @@
                                     <tr>
 
                                         <th>Nom</th>
-                                        <th>Prix kilométrique</th>
+                                        <th>Coût km</th>
+                                        <th>Coefficient</th>
+                                        <th>Prix vente km</th>
                                         <th>Seuil alerte km pneu</th>
                                         <th>Seuil alerte km vidange</th>
                                         <th>Seuil alerte km révision</th>
@@ -124,8 +126,15 @@
                                             <td>
                                                 <a href="#" class="text-body fw-bold">{{ $voiture->nom }}</a>
                                             </td>
+                                            
                                             <td>
-                                                {{ number_format($voiture->prix_kilometrique, 2, ',', ' ') }}
+                                                {{ number_format($voiture->cout_kilometrique, 2, ',', ' ') }}
+                                            </td>
+                                            <td>
+                                                <a href="#" class="text-body fw-bold">{{ $voiture->coefficient_prix }}</a>
+                                            </td>
+                                            <td>
+                                                {{ number_format($voiture->prix_vente_kilometrique, 2, ',', ' ') }}
 
                                             </td>
                                             <td>
@@ -163,7 +172,8 @@
                                                 @can('permission', 'modifier-voiture')
                                                     <a data-href="{{ route('voiture.update', Crypt::encrypt($voiture->id)) }}"
                                                         data-nom="{{ $voiture->nom }}"
-                                                        data-prix_kilometrique = "{{ $voiture->prix_kilometrique }}"
+                                                        data-cout_kilometrique = "{{ $voiture->cout_kilometrique }}"
+                                                        data-coefficient_prix = "{{ $voiture->coefficient_prix }}"
                                                         data-seuil_alerte_km_pneu = "{{ $voiture->seuil_alerte_km_pneu }}"
                                                         data-seuil_alerte_km_vidange = "{{ $voiture->seuil_alerte_km_vidange }}"
                                                         data-seuil_alerte_km_revision = "{{ $voiture->seuil_alerte_km_revision }}"
@@ -223,7 +233,7 @@
                                 
                                     <div class="form-floating mb-3">
                                         <input type="text" name="nom" value="{{ old('nom') ? old('nom') : '' }}"
-                                            class="form-control" id="floatingInput">
+                                            class="form-control" id="floatingInput" style="background-color: #f9f0f0;">
                                         <label for="floatingInput">Nom de la Voiture</label>
                                         @if ($errors->has('nom'))
                                             <br>
@@ -236,26 +246,45 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
+                                </div>
+                                <div class="col-lg-6">
                                     <div class="form-floating mb-3">
-                                        <input type="number" name="prix_kilometrique"  value="{{ old('prix_kilometrique') ? old('prix_kilometrique') : '' }}"
-                                            class="form-control" id="prix_kilometrique" step="0.01" required >
-                                        <label for="prix_kilometrique">Prix kilométrique</label>
-                                        @if ($errors->has('prix_kilometrique'))
+                                        <input type="number" name="cout_kilometrique"  value="{{ old('cout_kilometrique') ? old('cout_kilometrique') : '' }}"
+                                            class="form-control" id="cout_kilometrique" min="0" step="0.01" style="background-color: #f9f0f0;" required >
+                                        <label for="cout_kilometrique">Coût au kilométrique</label>
+                                        @if ($errors->has('cout_kilometrique'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " voiture="alert">
                                                 <button type="button" class="btn-close btn-close-white"
                                                     data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('prix_kilometrique') }}</strong>
+                                                <strong>{{ $errors->first('cout_kilometrique') }}</strong>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
-                                
+                                <div class="col-lg-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="number" name="coefficient_prix"  value="{{ old('coefficient_prix') ? old('coefficient_prix') : '' }}"
+                                            class="form-control" id="coefficient_prix" min="0" step="0.01" required style="background-color: #f9f0f0;" >
+                                        <label for="coefficient_prix">Coefficient</label>
+                                        @if ($errors->has('coefficient_prix'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " voiture="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('coefficient_prix') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <hr>
+                                <hr>
+                                <br>
                                 <div class="col-lg-6">
                                     <div class="form-floating mb-3">
                                         <input type="number" step="0.01" name="seuil_alerte_km_pneu" value="{{ old('seuil_alerte_km_pneu') ? old('seuil_alerte_km_pneu') : '' }}"
-                                            class="form-control" id="floatingInput">
-                                        <label for="floatingInput">Seuil alerte km pneu</label>
+                                            class="form-control" id="seuil_alerte_km_pneu">
+                                        <label for="seuil_alerte_km_pneu">Seuil alerte km pneu</label>
                                         @if ($errors->has('seuil_alerte_km_pneu'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " voiture="alert">
@@ -269,8 +298,8 @@
                                 <div class="col-lg-6">
                                     <div class="form-floating mb-3">
                                         <input type="number" step="0.01" name="seuil_alerte_km_vidange" value="{{ old('seuil_alerte_km_vidange') ? old('seuil_alerte_km_vidange') : '' }}"
-                                            class="form-control" id="floatingInput">
-                                        <label for="floatingInput">Seuil alerte km vidange</label>
+                                            class="form-control" id="seuil_alerte_km_vidange">
+                                        <label for="seuil_alerte_km_vidange">Seuil alerte km vidange</label>
                                         @if ($errors->has('seuil_alerte_km_vidange'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " voiture="alert">
@@ -284,8 +313,8 @@
                                 <div class="col-lg-6">
                                     <div class="form-floating mb-3">
                                         <input type="number" step="0.01" name="seuil_alerte_km_revision" value="{{ old('seuil_alerte_km_revision') ? old('seuil_alerte_km_revision') : '' }}"
-                                            class="form-control" id="floatingInput">
-                                        <label for="floatingInput">Seuil alerte km révision</label>
+                                            class="form-control" id="seuil_alerte_km_revision">
+                                        <label for="seuil_alerte_km_revision">Seuil alerte km révision</label>
                                         @if ($errors->has('seuil_alerte_km_revision'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " voiture="alert">
@@ -299,8 +328,8 @@
                                 <div class="col-lg-6">
                                     <div class="form-floating mb-3">
                                         <input type="number" step="0.01" name="seuil_alerte_km_courroie" value="{{ old('seuil_alerte_km_courroie') ? old('seuil_alerte_km_courroie') : '' }}"
-                                            class="form-control" id="floatingInput">
-                                        <label for="floatingInput">Seuil alerte km courroie</label>
+                                            class="form-control" id="seuil_alerte_km_courroie">
+                                        <label for="seuil_alerte_km_courroie">Seuil alerte km courroie</label>
                                         @if ($errors->has('seuil_alerte_km_courroie'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " voiture="alert">
@@ -314,8 +343,8 @@
                                 <div class="col-lg-6">
                                     <div class="form-floating mb-3">
                                         <input type="number" step="0.01" name="seuil_alerte_km_frein" value="{{ old('seuil_alerte_km_frein') ? old('seuil_alerte_km_frein') : '' }}"
-                                            class="form-control" id="floatingInput">
-                                        <label for="floatingInput">Seuil alerte km frein</label>
+                                            class="form-control" id="seuil_alerte_km_frein">
+                                        <label for="seuil_alerte_km_frein">Seuil alerte km frein</label>
                                         @if ($errors->has('seuil_alerte_km_frein'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " voiture="alert">
@@ -329,8 +358,8 @@
                                 <div class="col-lg-6">
                                     <div class="form-floating mb-3">
                                         <input type="number" step="0.01" name="seuil_alerte_km_amortisseur" value="{{ old('seuil_alerte_km_amortisseur') ? old('seuil_alerte_km_amortisseur') : '' }}"
-                                            class="form-control" id="floatingInput">
-                                        <label for="floatingInput">Seuil alerte km amortisseur</label>
+                                            class="form-control" id="seuil_alerte_km_amortisseur">
+                                        <label for="seuil_alerte_km_amortisseur">Seuil alerte km amortisseur</label>
                                         @if ($errors->has('seuil_alerte_km_amortisseur'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " voiture="alert">
@@ -380,7 +409,7 @@
                                 
                                     <div class="form-floating mb-3">
                                         <input type="text" name="nom" value="{{ old('nom') ? old('nom') : '' }}"
-                                            class="form-control" id="edit_nom">
+                                            class="form-control" id="edit_nom" style="background-color: #f9f0f0;">
                                         <label for="edit_nom">Nom de la Voiture</label>
                                         @if ($errors->has('nom'))
                                             <br>
@@ -393,20 +422,40 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
+                                </div>
+                                <div class="col-lg-6">
                                     <div class="form-floating mb-3">
-                                        <input type="number" name="prix_kilometrique" value="{{ old('prix_kilometrique') ? old('prix_kilometrique') : '' }}"
-                                            class="form-control" id="edit_prix_kilometrique" step="0.01" required>
-                                        <label for="edit_prix_kilometrique">Prix kilométrique</label>
-                                        @if ($errors->has('prix_kilometrique'))
+                                        <input type="number" name="cout_kilometrique"  value="{{ old('cout_kilometrique') ? old('cout_kilometrique') : '' }}"
+                                            class="form-control" id="edit_cout_kilometrique" min="0" step="0.01" style="background-color: #f9f0f0;" required >
+                                        <label for="edit_cout_kilometrique">Coût au kilométrique</label>
+                                        @if ($errors->has('cout_kilometrique'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " voiture="alert">
                                                 <button type="button" class="btn-close btn-close-white"
                                                     data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('prix_kilometrique') }}</strong>
+                                                <strong>{{ $errors->first('cout_kilometrique') }}</strong>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
+                                <div class="col-lg-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="number" name="coefficient_prix"  value="{{ old('coefficient_prix') ? old('coefficient_prix') : '' }}"
+                                            class="form-control" id="edit_coefficient_prix" min="0" step="0.01" required style="background-color: #f9f0f0;" >
+                                        <label for="edit_coefficient_prix">Coefficient</label>
+                                        @if ($errors->has('coefficient_prix'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " voiture="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('coefficient_prix') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <hr>
+                                <hr>
+                                <br>
                                 
                                 <div class="col-lg-6">
                                     <div class="form-floating mb-3">
@@ -525,7 +574,8 @@
 
             let that = $(this);
             let currentVoiture = that.data('nom');
-            let currentPrixKilometrique = that.data('prix_kilometrique');
+            let currentCoutKilometrique = that.data('cout_kilometrique');
+            let currentCoefficientPrix = that.data('coefficient_prix');
             let currentSeuilAlerteKmPneu = that.data('seuil_alerte_km_pneu');
             let currentSeuilAlerteKmVidange = that.data('seuil_alerte_km_vidange');
             let currentSeuilAlerteKmRevision = that.data('seuil_alerte_km_revision');
@@ -534,7 +584,8 @@
             let currentSeuilAlerteKmAmortisseur = that.data('seuil_alerte_km_amortisseur');
             let currentFormAction = that.data('href');
             $('#edit_nom').val(currentVoiture);
-            $('#edit_prix_kilometrique').val(currentPrixKilometrique);
+            $('#edit_cout_kilometrique').val(currentCoutKilometrique);
+            $('#edit_coefficient_prix').val(currentCoefficientPrix);
             $('#edit_seuil_alerte_km_pneu').val(currentSeuilAlerteKmPneu);
             $('#edit_seuil_alerte_km_vidange').val(currentSeuilAlerteKmVidange);
             $('#edit_seuil_alerte_km_revision').val(currentSeuilAlerteKmRevision);

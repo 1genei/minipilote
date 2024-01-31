@@ -74,7 +74,7 @@ class Produit extends Model
      */
     public function valeurcaracteristiques()
     {
-        return $this->belongsToMany(Valeurcaracteristique::class);
+        return $this->belongsToMany(Valeurcaracteristique::class)->withPivot('voiture_id', 'circuit_id');
     }
     
     /**
@@ -117,5 +117,23 @@ class Produit extends Model
     public function tva(){
     
         return $this->belongsTo(Tva::class);
+    }
+    
+    /**
+    * Retourne la voiture liée au produit
+    */
+    
+    public function voiture(){
+    
+        return $this->belongsTo(Voiture::class);
+    }
+    
+    /**
+    * Retourne la circuit liée au produit
+    */
+    
+    public function circuit(){
+    
+        return $this->belongsTo(Circuit::class);
     }
 }

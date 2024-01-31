@@ -167,7 +167,7 @@ final class IndexTable extends PowerGridComponent
                 
             } )
             ->addColumn('date_devis', function (Devi $model) {
-                return  Carbon::parse($model->date_devis)->format('d/m/Y');
+                // return  Carbon::parse($model->date_devis)->format('d/m/Y');
                 return  $model->created_at->format('d-m-Y');
             } );
             // ->addColumn('duree_validite', function (Devi $model) {

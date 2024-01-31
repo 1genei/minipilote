@@ -43,7 +43,8 @@ class CaracteristiqueController extends Controller
         ]);
         
         Caracteristique::create([
-            "nom" => $request->nom
+            "nom" => $request->nom,
+            "calcul_prix_produit" => $request->calcul_prix_produit == "true" ? true : false           
         ]);
         
         return redirect()->back()->with('ok','Nouvelle caractéristique ajoutée, vous pouvez ajouter ses valaurs');
@@ -87,10 +88,18 @@ class CaracteristiqueController extends Controller
             
         }
         
+        // dd($request->all());
         
         $caracteristique->nom = $request->nom;
+        $caracteristique->calcul_prix_produit = $request->calcul_prix_produit == "true" ? true : false;
+        
         $caracteristique->update();
         
+        foreach ($caracteristique->valeurcaracteristiques as $valeurcaracteristique) {
+            $valeurcaracteristique->calcul_prix_produit =  $caracteristique->calcul_prix_produit;
+            $valeurcaracteristique->update();
+        }
+
         return redirect()->back()->with('ok','Caractéristique modifiée');
         
     }
@@ -169,7 +178,7 @@ class CaracteristiqueController extends Controller
         
         
         $valeur->nom = $request->nom;
-        $valeur->valeur = $request->valeur;
+        $valeur->valeur = $request->valeur;       
         
         $valeur->update();
         

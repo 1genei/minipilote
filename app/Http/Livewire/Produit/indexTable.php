@@ -146,6 +146,8 @@ final class indexTable extends PowerGridComponent
                 }
                 return  '<button type="button" class="btn '.$color.' btn-sm rounded-pill">'.$model->type.'</button>';
             } )
+            ->addColumn('nom')
+            
             ->addColumn('nature')
             
             ->addColumn('image', function (Produit $model) {
@@ -160,7 +162,6 @@ final class indexTable extends PowerGridComponent
                 }
             } )
             ->addColumn('reference')
-            ->addColumn('nom')
             ->addColumn('categorie',function (Produit $model){
                 
                
@@ -208,10 +209,10 @@ final class indexTable extends PowerGridComponent
         return [
             // Column::make('Id', 'id'),
             Column::make('Type', 'type')->sortable()->searchable(), 
+            Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Nature', 'nature')->sortable()->searchable(),
             Column::make('Image', 'image')->sortable()->searchable(),
             Column::make('Référence', 'reference')->sortable()->searchable(),
-            Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Catégories', 'categorie')->sortable()->searchable(),
             Column::make('Prix de vente HT', 'prix_vente_ht')->sortable()->searchable(),
             Column::make('Stock', 'stock')->sortable()->searchable(),

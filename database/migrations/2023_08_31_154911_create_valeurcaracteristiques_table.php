@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer("caracteristique_id")->nullable();
             $table->string("nom")->nullable();
+            // Utiliser les valeurs de la caractéristique pour calculer le prix du produit
+            $table->boolean("calcul_prix_produit")->default(false);
             $table->double("valeur")->nullable();
             $table->boolean("archive")->nullable();
             $table->timestamps();

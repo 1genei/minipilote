@@ -284,8 +284,9 @@ Route::controller(ProduitController::class)->group(function () {
     Route::get('/produits/show/{produitId}', 'show')->name('produit.show')->middleware(['auth']);
     Route::get('/produits/modifier/{produitId}', 'edit')->name('produit.edit')->middleware(['auth']);
     Route::post('/produits/modifier/{produitId}', 'update')->name('produit.update')->middleware(['auth']);
-    Route::put('/produits/archiver/{produitId}', 'archive')->name('produit.archive')->middleware(['auth']);
-    Route::post('/produits/desarchiver/{produitId}', 'unarchive')->name('produit.unarchive')->middleware(['auth']);
+    Route::put('/produits/archiver/{produitId}', 'archiver')->name('produit.archive')->middleware(['auth']);
+    Route::post('/produits/desarchiver/{produitId}', 'desarchiver')->name('produit.unarchive')->middleware(['auth']);
+    Route::get('/produits/rechercher', 'rechercher_produit')->name('produit.rechercher')->middleware(['auth']);
     
     Route::post('/produit/images-create/{produitId}', 'uploadPhoto')->name('produit.uptof')->middleware(['auth']);
     Route::post('/produit/images-save/{produitId}', 'savePhoto')->name('produit.savetof')->middleware(['auth']);
@@ -302,6 +303,7 @@ Route::controller(ProduitController::class)->group(function () {
     // Déclinaisons du produit
     Route::post('/produit-declinaison/ajouter', 'store_declinaison')->name('produit_declinaison.store')->middleware(['auth']);
     Route::post('/produit-declinaison/modifier/{produitId}', 'update_declinaison')->name('produit_declinaison.update')->middleware(['auth']);
+    Route::get('/produit-declinaison/recalculer/{produitParentId}', 'recalculer_declinaisons')->name('produit_declinaison.recalculer')->middleware(['auth']);
     Route::post('/produit-declinaison-all/modifier/{produitId}', 'update_all_declinaison')->name('produit_all_declinaison.update')->middleware(['auth']);
     Route::post('/produit-declinaison/archiver/{produitId}', 'archive_declinaison')->name('produit_declinaison.archive')->middleware(['auth']);
     Route::post('/produit-declinaison/desarchiver/{produitId}', 'unarchive_declinaison')->name('produit_declinaison.unarchive')->middleware(['auth']);

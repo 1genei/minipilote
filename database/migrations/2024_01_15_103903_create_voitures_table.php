@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('voitures', function (Blueprint $table) {
             $table->id();
             $table->string('nom')->nullable();
-            $table->double('prix_kilometrique')->nullable(); 
+            $table->double('cout_kilometrique')->nullable(); 
+            $table->double('coefficient_prix')->nullable(); 
+            $table->double('prix_vente_kilometrique')->nullable(); 
             // seuil_alerte à partir duquel on doit changer les pneus, vidanger, etc.
             $table->integer('seuil_alerte_km_pneu')->nullable();
             $table->integer('seuil_alerte_km_vidange')->nullable();

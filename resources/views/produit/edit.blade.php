@@ -379,7 +379,7 @@
                         $('[data-toggle="tooltip"]').tooltip('hide')
                         $.ajax({
                                 url: that.attr('data-href'),
-                                type: 'POST',
+                                type: 'PUT',
                                 success: function(data) {
                                     // document.location.reload();
                                 },

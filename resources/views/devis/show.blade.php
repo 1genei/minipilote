@@ -183,7 +183,7 @@
                                                 <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TTC :</td><td class="total_ttc"> {{$devis->montant_ttc}} </th><th></th> </tr>
                                                 <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TVA :</td><td class="">{{$devis->montant_tva}} </th><th></th> </tr>
                                                 <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Réduction :</td><td class="text-danger total_reduction"> - {{$devis->montant_remise}} </th><th></th> </tr>
-                                                <tr style="background-color: #f1f3fa;font-size: 15px; font-weight: bold;border:2px solid #ff5b5b"><th>NET A PAYER :</td><td class="net_a_payer"> {{$devis->net_a_payer}} €</th> <th></th> </tr>
+                                                <tr style="background-color: #f1f3fa;font-size: 15px; font-weight: bold;border:2px solid #ff5b5b"><th>NET À PAYER :</td><td class="net_a_payer"> {{$devis->net_a_payer}} €</th> <th></th> </tr>
                                                 
                                             </tbody>
                                         </table>

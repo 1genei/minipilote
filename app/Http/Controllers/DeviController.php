@@ -7,6 +7,10 @@ use App\Models\Devi;
 use App\Models\Produit;
 use App\Models\Tva;
 use App\Models\Contact;
+use App\Models\Categorieproduit;
+use App\Models\Voiture;
+use App\Models\Circuit;
+
 use Auth;
 use Crypt;
 
@@ -46,12 +50,17 @@ class DeviController extends Controller
      */
     public function create()
     {
-        $produits = Produit::where('archive', false)->get();
+        $produits = Produit::where([['archive', false],['a_declinaison', 0]])->get();
         $tvas = Tva::where('archive', false)->get();
         $prochain_numero_devis = Devi::max('numero_devis') + 1;
         $contactclients = Contact::where('archive', false)->get();
         
-        return view('devis.add', compact('produits', 'tvas', 'prochain_numero_devis', 'contactclients'));
+        $categories = Categorieproduit::where('archive', false)->get();
+        $voitures = Voiture::where('archive', false)->get();
+        $circuits = Circuit::where('archive', false)->get();
+        
+        
+        return view('devis.add', compact('produits', 'tvas', 'prochain_numero_devis', 'contactclients','categories', 'voitures', 'circuits'));
     }
 
     /**
@@ -63,13 +72,17 @@ class DeviController extends Controller
         $request->validate([
             'numero_devis' => 'required|unique:devis',
         ]);
-    
+    // dd($request->all());
         $params = $request->all();
         unset($params["numero_devis"]);
         unset($params["nom_devis"]);
         unset($params["type_reduction_globale"]) ;
         unset($params["reduction_globale"]) ;
         unset($params["client_prospect_id"]) ;
+        unset($params["voiture"]) ;
+        unset($params["categorie"]) ;
+        unset($params["circuit"]) ;
+        unset($params["produit"]) ;
         unset($params["_token"]) ;
       
         $palier = array_chunk($params, 6);
@@ -213,10 +226,15 @@ class DeviController extends Controller
     {
         $devis = Devi::where('id', Crypt::decrypt($devis_id))->first();
         $paliers = json_decode($devis->palier);
+         
+        $produits = Produit::where([['archive', false],['a_declinaison', 0]])->get();
         
-        $produits = Produit::where('archive', false)->get();        
         $tvas = Tva::where('archive', false)->get();
         $prochain_numero_devis = Devi::max('numero_devis') + 1;
+        
+        $categories = Categorieproduit::where('archive', false)->get();
+        $voitures = Voiture::where('archive', false)->get();
+        $circuits = Circuit::where('archive', false)->get();
         
         $contactclients = Contact::where('archive', false)->get();
         $tab_produits = [];
@@ -228,7 +246,7 @@ class DeviController extends Controller
         foreach($tvas as $tva){
             $tab_tvas[$tva->id] = $tva->taux;
         }
-        return view('devis.edit', compact('devis', 'produits', 'tvas', 'contactclients','prochain_numero_devis', 'paliers','tab_produits', 'tab_tvas'));
+        return view('devis.edit', compact('devis', 'produits', 'tvas', 'contactclients','prochain_numero_devis', 'paliers','tab_produits', 'tab_tvas', 'categories', 'voitures', 'circuits'));
     }
 
     /**
@@ -245,7 +263,12 @@ class DeviController extends Controller
         unset($params["type_reduction_globale"]) ;
         unset($params["reduction_globale"]) ;
         unset($params["client_prospect_id"]) ;
+        unset($params["voiture"]) ;
+        unset($params["categorie"]) ;
+        unset($params["circuit"]) ;
+        unset($params["produit"]) ;
         unset($params["_token"]) ;
+      
         
         $palier = array_chunk($params, 6);
         
@@ -445,7 +468,7 @@ class DeviController extends Controller
         $devis = Devi::where('id', Crypt::decrypt($devis_id))->first();
         $contact = $devis->client_prospect();
         
-        $email = $contact->type == "individual" ? $contact->individu?->email : $contact->entite?->email;
+        $email = $contact->type == "individu" ? $contact->individu?->email : $contact->entite?->email;
 
         mail::to($email)->send(new EnvoyerDevis($devis, $contact));
         

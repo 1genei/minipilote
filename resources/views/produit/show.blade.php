@@ -371,6 +371,8 @@
                                                 @endif
                                                 {{-- DECLINAISONS --}}
                                                 @if ($produit->a_declinaison == true)
+                                                <a href="{{route('produit_declinaison.recalculer', Crypt::encrypt($produit->id))}}" type="button" class="btn btn-danger"><i class="mdi mdi-reload me-1"></i> <span>Recalculer le prix des déclinaisons</span> </a>
+                                                <hr>
                                                     <div class="tab-pane @if($produit->nature != 'Matériel' ) show active @endif" id="declinaison-tab">
                                                         <div class="table-responsive">
                                                             <form action="{{ route('produit_all_declinaison.update', $produit->id) }}" method="POST">    

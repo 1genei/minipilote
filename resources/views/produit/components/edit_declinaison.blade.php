@@ -2,11 +2,12 @@
     <div class="col-lg-12">
 
         <div class="col-lg-6">
+            <a href="{{route('produit_declinaison.recalculer', Crypt::encrypt($produit->id))}}" type="button" class="btn btn-danger"><i class="mdi mdi-reload me-1"></i> <span>Recalculer le prix des déclinaisons</span> </a>
 
             <div class="col-12">
                 <label for="nom" id="tooltip-prix" class="form-label fs-5 mb-2 text-bold">&nbsp;</label>
-            </div>
-    
+            </div>            
+
             <div class="col-6">
                 <div class="mb-3">
                     <label for="tva_id" class="form-label">Taxe</label>
@@ -121,12 +122,12 @@
                                         <i class="mdi mdi-square-edit-outline"></i>
                                     </a>
                                     @if ($proddecli->archive == false)
-                                        <a data-href="{{ route('produit_declinaison.archive', Crypt::encrypt($proddecli->id)) }}"
+                                        <a data-href="{{ route('produit.archive', Crypt::encrypt($proddecli->id)) }}"
                                             style="cursor: pointer;"
                                             class="action-icon archive-produit-decli text-warning"> <i
                                                 class="mdi mdi-archive-arrow-down"></i></a>
                                     @else
-                                        <a data-href="{{ route('produit_declinaison.unarchive', Crypt::encrypt($proddecli->id)) }}"
+                                        <a data-href="{{ route('produit.unarchive', Crypt::encrypt($proddecli->id)) }}"
                                             style="cursor: pointer;"
                                             class="action-icon unarchive-produit-decli text-success"> <i
                                                 class="mdi mdi-archive-arrow-up"></i></a>
