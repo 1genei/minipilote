@@ -85,7 +85,7 @@
 
                         
                         <div class="row">
-                            <div class="col-lg-8">
+                            <div class="col-lg-12">
                         
                                 <div class="col-lg-12 col-md-12 col-sm-12" id="palier">
                                     <div class="panel panel-pink m-t-15">
@@ -326,7 +326,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-12 mt-5">
                                 <button type="button" id="actualiser" class="btn btn-info"><i class="mdi mdi-reload me-1"></i> <span>Actualiser</span> </button>
 
                                 <div class="border p-3 mt-4 mt-lg-0 rounded">
@@ -701,6 +701,7 @@
                             
                         });
                         
+                        $('#actualiser').click();
                         
                         // Réinitialiser le plugin select2 pour le nouveau champ ajouté
               

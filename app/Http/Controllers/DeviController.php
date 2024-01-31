@@ -184,7 +184,7 @@ class DeviController extends Controller
         $this->generer_pdf_devis($devis->id, $tab_produits);
 
         
-        return redirect()->route('devis.index')->with('success', 'Devis ajouté avec succès');
+        return redirect()->route('devis.show',Crypt::encrypt($devis->id))->with('success', 'Devis ajouté avec succès');
         
         
         

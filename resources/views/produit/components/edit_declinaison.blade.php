@@ -26,11 +26,11 @@
         <div class="col-lg-12">
 
             <div class="table-responsive">
-                <table class="table table-centered table-borderless table-hover w-100 dt-responsive " id="tab1">
+                <table class="table table-centered table-borderless table-hover w-100 dt-responsive "  style="width:100%" id="tab1">
                     <thead class="table-light">
                         <tr>
 
-                            <th>Déclinaisons</th>                               
+                            <th style="width:45%">Déclinaisons</th>                              
                             <th>Prix de vente HT</th>
                             <th>Prix de vente TTC</th>
                             @if($produit->nature == "Matériel" )
@@ -65,20 +65,25 @@
                                 <td>
                                     <input type="number" step="0.01" class="form-control champ prixventeht" name="prixventeht_{{$proddecli->id}}" value="{{$proddecli->prix_vente_ht }}"
                                     required readonly>
+                                    <span> &nbsp;</span> 
                                 </td>
                                 <td>
                                     <input type="number" step="0.01" class="form-control champ prixventettc" name="prixventettc_{{$proddecli->id}}" value="{{$proddecli->prix_vente_ttc }}"
                                     required readonly>
-                                    <input type="hidden"  name="id_{{$proddecli->id}}" value="{{$proddecli->id }}">
+                                    <input type="hidden"  name="id_{{$proddecli->id}}" value="{{$proddecli->id }}"> 
+                                    <span> &nbsp;</span> 
+                                    
                                 </td>
 
                                 @if($produit->nature == "Matériel" )
                                 
                                     <td>
                                         <a href="#" class="text-body fw-bold">{{ $proddecli->prix_achat_ht }}</a>
+                                        <span> &nbsp;</span>
                                     </td>
                                     <td>
                                         <a href="#" class="text-body fw-bold">{{ $proddecli->prix_achat_ttc }}</a>
+                                        <span> &nbsp;</span>
                                     </td>
                                     <td>
                                         @if ($proddecli->gerer_stock)
@@ -86,6 +91,7 @@
                                         @else
                                             <span class="fst-italic">non géré</span>
                                         @endif
+                                        <span> &nbsp;</span>
                                     </td>
     
                                 @endif
@@ -95,6 +101,7 @@
                                     @else
                                         <span class="badge bg-warning">Archivé</span>
                                     @endif
+                                    <br><span> &nbsp;</span>
                                 </td>
 
                                 
@@ -132,6 +139,7 @@
                                             class="action-icon unarchive-produit-decli text-success"> <i
                                                 class="mdi mdi-archive-arrow-up"></i></a>
                                     @endif
+                                    <br><span> &nbsp;</span>
                                 </td>
                             </tr>
                         @endforeach
