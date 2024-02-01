@@ -793,17 +793,13 @@ class ProduitController extends Controller
                     
                     $prix_declinaison_ht += $valcarac->valeur * $produitdecli->voiture->prix_vente_kilometrique * $produitdecli->circuit->distance ;
                     // $prix_declinaison_ttc += $prix_declinaison_ht * (1 + ($produitdecli->tva->taux / 100));
-                    
-                    echo $valcarac->valeur ." * ".$produitdecli->voiture->prix_vente_kilometrique ." * ". $produitdecli->circuit->distance."  <br>";
                 }
                   
             }
-            
             $produitdecli->prix_vente_ht = $prix_declinaison_ht;
             $produitdecli->prix_vente_ttc = $prix_declinaison_ht * (1 + ($produitdecli->tva->taux / 100));
             $produitdecli->save();
         }
-        dd($produitdeclis);
         
         return redirect()->back()->with('ok', 'Les prix des déclinaisons ont été recalculées');
     }
