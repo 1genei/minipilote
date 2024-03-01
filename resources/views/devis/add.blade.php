@@ -274,11 +274,12 @@
                                         <table class="table mb-0">
                                             <tbody >
                                                 
-                                                <th>
-                                                    <th>Produit :</th>
-                                                    <th>Montant TTC</th>
-                                                    <th>Montant TVA</th>
-                                                </th>
+                                                <tr style="width:100%">
+                                                    <th style="width:40%" >Produit :</th>
+                                                    <th style="width:20%">Montant HT</th>
+                                                    <th style="width:20%">Montant TTC</th>
+                                                    <th style="width:20%">Montant TVA</th>
+                                                </tr>
                                                 
                                             </tbody>
                                         </table>
@@ -559,9 +560,7 @@
                         $("#produit" + y + ' option[value="'+nom_produit+'"]').attr("selected",true);                        
                         $("#quantite" + y + '').val(1);                        
                         $("#prix_ht" + y + '').val(tab_produits[nom_produit].prix_vente_ht);                        
-                        $("#tva" + y + ' option[value="'+tab_produits[nom_produit].tva_id+'"]').attr("selected",true);                        
-                        $("#type_reduction" + y + ' option[value="pourcentage"]').attr("selected",true);                        
-                        $("#reduction" + y + '').val(0);                        
+                        $("#tva" + y + ' option[value="'+tab_produits[nom_produit].tva_id+'"]').attr("selected",true);                       
                         $("#pal" + y + '').hide();                        
                         $("#quantite" + y + '').change(function() {
                             var quantite = $(this).val();
@@ -649,49 +648,54 @@
             e.preventDefault();
      
             resume_devis = [];
-
-            
             var i = 1;
             prix_ttc_total = 0;
+            prix_ht_total = 0;
+            prix_ht_reduction = 0;
             montant_tva_total = 0;
             montant_reduction_total = 0;
+            montant_reduction_globale = 0;
+            montant_reduction = 0;
+    
+           
             while (i <= y) {
                 let tmp = parseFloat($("#quantite" + i + '').change().val());
               
                 var libelle_reduction = "";
                 
+                quantite = $("#quantite" + i + '').val();
+                prix_ht = quantite * $("#prix_ht" + i + '').val();
                 nom_produit = $("#produit" + i + '').val();
-                prix_ht = $("#prix_ht" + i + '').val();
                 tva_id = $("#tva" + i + '').val();
                 tva = tab_tvas[tva_id];
-                quantite = $("#quantite" + i + '').val();
-                prix_ttc = quantite*prix_ht * (1 + tva / 100);
-                montant_tva = prix_ttc - prix_ht;
                 
-                prix_ttc = prix_ttc.toFixed(2);
-                montant_tva = montant_tva.toFixed(2);
-                
-                prix_ttc_total += parseFloat(prix_ttc); 
-                montant_tva_total += parseFloat(montant_tva); 
-                
-                // réduction
-                
+                // ##réduction
                 var type_reduction = $("#type_reduction"+i).val();
                 var reduction = $("#reduction"+i).val();
                 
-                var montant_reduction = 0;
                 
                 if(type_reduction == "pourcentage"){
                     
-                    montant_reduction = prix_ttc  * reduction / 100;
+                    montant_reduction =  prix_ht  * reduction / 100;
                 }else if(type_reduction == "montant"){
                     montant_reduction = parseFloat(reduction) ;
                     
                 }
                 montant_reduction_total += montant_reduction;
+
+                prix_ht_reduction = prix_ht - montant_reduction;
+                prix_ttc = prix_ht_reduction * (1 + tva / 100);
+                montant_tva = prix_ttc - prix_ht_reduction;
+                
+                prix_ttc = prix_ttc.toFixed(2);
+                montant_tva = montant_tva.toFixed(2);
+                
+                prix_ttc_total += parseFloat(prix_ttc); 
+                prix_ht_total += parseFloat(prix_ht_reduction); 
+                montant_tva_total += parseFloat(montant_tva); 
                 
                 
-                // prix_ttc_total = parseFloat(prix_ttc_total - montant_reduction);
+    
                 
                 if(montant_reduction > 0 ){
                     libelle_reduction = " <span class='text-danger'>(-"+montant_reduction.toFixed(2)+")</span>"; 
@@ -701,7 +705,8 @@
                 montant_tva = parseFloat(montant_tva).toFixed(2);
                 
                 if (nom_produit != "" && tab_produits_init[nom_produit] !== undefined && prix_ht != "" && tva != "" && quantite != "") {
-                    resume_devis[i] = `<tr><td> ${tab_produits_init[nom_produit].nom}  x ${quantite} </td><td> ${prix_ttc} ${libelle_reduction } </td> <td> ${montant_tva} </td> </tr>`;
+                    resume_devis[i] = `<tr style="width:100%" ><td style="width:40%" > ${tab_produits_init[nom_produit].nom}  x ${quantite} </td> <td style="width:20%"> ${prix_ht} ${libelle_reduction } </td> <td style="width:20%"> ${prix_ttc} </td> <td style="width:20%"> ${montant_tva} </td> </tr>`;
+
                 }
                 i++;
             }
@@ -711,10 +716,17 @@
                 net_a_payer = parseFloat(prix_ttc_total - montant_reduction_total);
             
                 resume_devis.push(`
-                <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TTC :</td><td class="total_ttc"> ${prix_ttc_total.toFixed(2)} </th><th></th> </tr>
-                <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Total TVA :</td><td class=""> ${montant_tva_total.toFixed(2)} </th><th></th> </tr>
-                <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold;"><th>Réduction :</td><td class="text-danger total_reduction"> - ${montant_reduction_total.toFixed(2)} </th><th></th> </tr>
-                <tr style="background-color: #f1f3fa;font-size: 15px; font-weight: bold;border:2px solid #ff5b5b"><th>NET À PAYER :</td><td class="net_a_payer"> ${net_a_payer.toFixed(2)} €</th> <th></th> </tr>`);
+                <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold; width:100%; ">
+                    <th style="width:40%">Total :</td>
+                    <td class="total_ttc" style="width:20%"> ${prix_ht_total.toFixed(2)} </td>
+                    <td class="total_ht" style="width:20%"> ${prix_ttc_total.toFixed(2)}</td>
+                    <td class="" style="width:20%">${montant_tva_total.toFixed(2)} </th><th style="width:20%"></td>
+                </tr>                                             
+
+                <tr style="background-color: #f1f3fa;font-size: 13px; font-weight: bold; width:100%; "><td style="width:40%">Réduction :</td><td class="text-danger total_reduction" style="width:20%">${montant_reduction_total.toFixed(2)} </td><td style="width:20%"></td> <td style="width:20%"></td></tr>
+                <tr style="background-color: #f1f3fa;font-size: 15px; font-weight: bold; width:100%; border:2px solid #ff5b5b"><td style="width:40%">NET À PAYER :</td><td class="net_a_payer" style="width:20%"> ${net_a_payer.toFixed(2)}  €</td> <td style="width:20%"></td> <td style="width:20%"></td></tr>
+                    
+                `);
                 
                 $('.resume_devis').html(resume_devis.join(" "));
             
@@ -727,7 +739,6 @@
             
         });
         
-       
         
         // Choix du type de réduction pour les produits
         

@@ -108,8 +108,10 @@ class DeviController extends Controller
             $tva_id = $ligne[3];
             $type_remise = $ligne[4];
             $remise = $ligne[5];
-            $montant_remise_total += $remise;
+            $montant_remise = 0;
+            $prix_unitaire_ht_total = 0;
             
+       
             $tva = 0 ;
             if($tva_id != null){
                 $tva = Tva::where('id', $tva_id)->first();
@@ -117,49 +119,74 @@ class DeviController extends Controller
             }
             
             $montant_ht += $quantite * $prix_unitaire_ht;
-            $montant_ttc += $quantite * $prix_unitaire_ht * (1 + $tva/100);
-            $montant_tva += $quantite * $prix_unitaire_ht * $tva/100;
-            
+    
             
             if($type_remise == 'montant'){
-                $montant_remise += $remise;
+                $montant_remise = $remise;
+                
+                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht - $montant_remise;
+                $prix_unitaire_ht = $prix_unitaire_ht  - $montant_remise;
+                
+                $montant_remise_total += $montant_remise;
+                
+                
             }
             else if($type_remise == 'pourcentage'){
-                $montant_remise += ($quantite * $prix_unitaire_ht * (1 + $tva/100)) * $remise/100;
+                $montant_remise = ($prix_unitaire_ht ) * $remise/100;
+                
+                $prix_unitaire_ht = $prix_unitaire_ht  - $montant_remise;
+                
+                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht;
+                
+                $montant_remise = $quantite * $montant_remise;
+                $montant_remise_total += $montant_remise ;
+                
             }
+            else{                
+                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht;            
+            }
+            
+            
+            
             
             $tab["produit"] = Produit::where('id', $ligne[0])->first();
             $tab["quantite"] = $quantite;
             $tab["prix_unitaire_ht"] = $prix_unitaire_ht;
-            $tab["prix_unitaire_ht_total"] = $quantite * $prix_unitaire_ht;
+            $tab["prix_unitaire_ht_total"] = $prix_unitaire_ht_total;
             $tab["tva"] = $tva;
             $tab["type_remise"] = $type_remise;
-            $tab["remise"] = $remise;
+            $tab["remise"] = $montant_remise;
             
             
             $tab_produits[] = $tab;
             
         }
         
+
         if($type_reduction_globale == 'montant'){
-            $montant_remise += $reduction_globale;
+            $montant_remise_total += $reduction_globale;
         }
         else if($type_reduction_globale == 'pourcentage'){
-            $montant_remise += ($montant_ttc) * $reduction_globale/100;
+            $montant_remise_total += ($montant_ttc) * $reduction_globale/100;
         }
         
+        $montant_ht = $montant_ht - $montant_remise_total;
+        
+        $montant_ttc = $montant_ht * (1 + $tva/100);
+        $montant_tva = $montant_ht * $tva/100;       
+        
         $montant_remise_total += $montant_remise;
-        $net_a_payer = $montant_ttc - $montant_remise_total;
+        $net_a_payer = $montant_ttc;
+        
+        
+    
+        // $net_a_payer = $montant_ttc - $montant_remise_total;
         
         // dd($montant_ht." ".$montant_ttc." ".$montant_tva." ".$montant_remise." ".$net_a_payer);        
 
         
         $palier = json_encode($palier);
-        
-        
-    
-        
-        
+
         $devis = new Devi();
         
         
@@ -294,8 +321,10 @@ class DeviController extends Controller
             $tva_id = $ligne[3];
             $type_remise = $ligne[4];
             $remise = $ligne[5];
-            $montant_remise_total += $remise;
+            $montant_remise = 0;
+            $prix_unitaire_ht_total = 0;
             
+       
             $tva = 0 ;
             if($tva_id != null){
                 $tva = Tva::where('id', $tva_id)->first();
@@ -303,40 +332,66 @@ class DeviController extends Controller
             }
             
             $montant_ht += $quantite * $prix_unitaire_ht;
-            $montant_ttc += $quantite * $prix_unitaire_ht * (1 + $tva/100);
-            $montant_tva += $quantite * $prix_unitaire_ht * $tva/100;
-            
+    
             
             if($type_remise == 'montant'){
-                $montant_remise += $remise;
+                $montant_remise = $remise;
+                
+                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht - $montant_remise;
+                $prix_unitaire_ht = $prix_unitaire_ht  - $montant_remise;
+                
+                $montant_remise_total += $montant_remise;
+                
+                
             }
             else if($type_remise == 'pourcentage'){
-                $montant_remise += ($quantite * $prix_unitaire_ht * (1 + $tva/100)) * $remise/100;
+                $montant_remise = ($prix_unitaire_ht ) * $remise/100;
+                
+                $prix_unitaire_ht = $prix_unitaire_ht  - $montant_remise;
+                
+                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht;
+                
+                $montant_remise = $quantite * $montant_remise;
+                $montant_remise_total += $montant_remise ;
+                
             }
+            else{                
+                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht;            
+            }
+            
+            
+            
             
             $tab["produit"] = Produit::where('id', $ligne[0])->first();
             $tab["quantite"] = $quantite;
             $tab["prix_unitaire_ht"] = $prix_unitaire_ht;
-            $tab["prix_unitaire_ht_total"] = $quantite * $prix_unitaire_ht;
+            $tab["prix_unitaire_ht_total"] = $prix_unitaire_ht_total;
             $tab["tva"] = $tva;
             $tab["type_remise"] = $type_remise;
-            $tab["remise"] = $remise;
+            $tab["remise"] = $montant_remise;
             
             
             $tab_produits[] = $tab;
             
         }
         
-
+// dd($tab_produits);
+       
         if($type_reduction_globale == 'montant'){
-            $montant_remise += $reduction_globale;
+            $montant_remise_total += $reduction_globale;
         }
         else if($type_reduction_globale == 'pourcentage'){
-            $montant_remise += ($montant_ttc) * $reduction_globale/100;
+            $montant_remise_total += ($montant_ttc) * $reduction_globale/100;
         }
         
+        $montant_ht = $montant_ht - $montant_remise_total;
+        
+        $montant_ttc = $montant_ht * (1 + $tva/100);
+        $montant_tva = $montant_ht * $tva/100;
+        
+        
         $montant_remise_total += $montant_remise;
-        $net_a_payer = $montant_ttc - $montant_remise_total;
+        $net_a_payer = $montant_ttc;
         
         // dd($montant_ht." ".$montant_ttc." ".$montant_tva." ".$montant_remise." ".$net_a_payer);
         

@@ -509,10 +509,16 @@ class ProduitController extends Controller
                 foreach ($combinaison_voiture_circuit as $combi_v_c) {
                    
                    
-                    //    On calcul le nombre de tours total de la combianaison                    
-                    $nb_tours = array_sum($combinaison);
+                    //    On calcul le nombre de tours total de la combianaison  
+                    $nb_tours = 0;
+                    foreach ($combinaison as $combi) {
+                        $valeurcaract = Valeurcaracteristique::where('id', $combi)->first();
+                        $nb_tours += $valeurcaract->valeur;
+                    }
+                  
+                    // $nb_tours = array_sum($combinaison);
 
-                    // $cartacteristique = xxxxxxxxxxxxxxxxx
+                    // $cartacteristique 
                     $nom_produit_temp = $combi_v_c["nom_produit"]." / $nomcaracteristique";
                     $prix_produit_temp = $combi_v_c["prix_produit"];
                     $voiture_id = $combi_v_c["voiture_id"];
@@ -787,17 +793,18 @@ class ProduitController extends Controller
         foreach ($produitdeclis as $produitdecli) {
             
             // dd($produitdecli->valeurcaracteristiques);
-            $prix_declinaison_ht = 0;
+            $prix_declinaison_ttc = 0;
             foreach($produitdecli->valeurcaracteristiques as $valcarac){
                 if($valcarac->calcul_prix_produit){
                     
-                    $prix_declinaison_ht += $valcarac->valeur * $produitdecli->voiture->prix_vente_kilometrique * $produitdecli->circuit->distance ;
+                    $prix_declinaison_ttc += $valcarac->valeur * $produitdecli->voiture->prix_vente_kilometrique * $produitdecli->circuit->distance ;
                     // $prix_declinaison_ttc += $prix_declinaison_ht * (1 + ($produitdecli->tva->taux / 100));
                 }
                   
             }
-            $produitdecli->prix_vente_ht = $prix_declinaison_ht;
-            $produitdecli->prix_vente_ttc = $prix_declinaison_ht * (1 + ($produitdecli->tva->taux / 100));
+            
+            $produitdecli->prix_vente_ttc = round($prix_declinaison_ttc,2); $prix_declinaison_ttc;
+            $produitdecli->prix_vente_ht = round($prix_declinaison_ttc / (1 + ($produitdecli->tva->taux / 100)),2);
             $produitdecli->save();
         }
         

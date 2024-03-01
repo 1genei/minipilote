@@ -93,7 +93,7 @@
 		</tr>
 		<tr height="20">
 			<td height="20" style="height:20px;">&nbsp;</td>
-			<td colspan="7">30200 BAGNOLS SUR CEZE</td>
+			<td colspan="7">30200 BAGNOLS-SUR-CEZE</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
@@ -127,8 +127,19 @@
 			<td colspan="3"></td>
 			
 			<td colspan="" > </td>
-			<td colspan="10">@if($devis->client_prospect()->type == "individu") {{$devis->client_prospect()->infos()?->civilite}} {{$devis->client_prospect()->infos()?->nom }} {{$devis->client_prospect()->infos()?->prenom }} @else 			
-				{{$devis->client_prospect()->infos()?->forme_juridique}} {{$devis->client_prospect()->infos()?->raison_sociale}} @endif</td>
+			<td colspan="10">@if($devis->client_prospect()?->type == "individu")
+								{{$devis->client_prospect()?->infos()?->civilite}} {{$devis->client_prospect()?->infos()?->nom }} {{$devis->client_prospect()?->infos()?->prenom }}
+							@else 			
+							{{$devis->client_prospect()?->infos()?->forme_juridique}} {{$devis->client_prospect()?->infos()?->raison_sociale}}
+							@endif
+							
+							<br>
+							@if($devis->client_prospect()) 
+								{{$devis->client_prospect()?->infos()?->nom_voie}} <br>
+								{{$devis->client_prospect()?->infos()?->code_postal}} {{$devis->client_prospect()?->infos()?->ville}}
+							@endif
+			</td>
+		
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
@@ -274,7 +285,7 @@
 			<td>&nbsp;</td>
 		</tr>
 	@endforeach
-	@if($devis->montant_remise_total != null)
+	{{-- @if($devis->montant_remise_total != null)
 		<tr height="21">
 			<td height="21" style="height:21px;">&nbsp;</td>
 			<td colspan="9">Remise globale</td>
@@ -287,7 +298,7 @@
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>
-	@endif
+	@endif --}}
 		<br>
 		
 		<tr height="42">
