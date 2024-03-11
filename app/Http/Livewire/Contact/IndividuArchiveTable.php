@@ -154,8 +154,14 @@ final class IndividuArchiveTable extends PowerGridComponent
             ->addColumn('nom')
             ->addColumn('prenom')
             ->addColumn('email',fn (Individu $model) => $model->email)
-            ->addColumn('telephone_fixe')
-            ->addColumn('telephone_mobile')
+            ->addColumn('telephone_fixe', function(Individu $model) {
+                if($model->telephone_fixe)
+                return  '<span >'.$model->indicatif_fixe.' '.$model->telephone_fixe.'</span>';
+            })
+            ->addColumn('telephone_mobile', function(Individu $model) {
+                if($model->telephone_mobile)
+                return  '<span >'.$model->indicatif_mobile.' '.$model->telephone_mobile.'</span>';
+            })
             ->addColumn('adresse', function (Individu $model) {          
                 return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
             } )

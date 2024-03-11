@@ -157,8 +157,14 @@ final class EntiteTable extends PowerGridComponent
             ->addColumn('raison_sociale')
             ->addColumn('forme_juridique')
             ->addColumn('email',fn (Entite $model) => $model->email)
-            ->addColumn('telephone_fixe')
-            ->addColumn('telephone_mobile')
+            ->addColumn('telephone_fixe', function(Entite $model) {
+                if($model->telephone_fixe)
+                return  '<span >'.$model->indicatif_fixe.' '.$model->telephone_fixe.'</span>';
+            })
+            ->addColumn('telephone_mobile', function(Entite $model) {
+                if($model->telephone_mobile)
+                return  '<span >'.$model->indicatif_mobile.' '.$model->telephone_mobile.'</span>';
+            })
             ->addColumn('adresse', function (Entite $model) {          
                 return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
             } )

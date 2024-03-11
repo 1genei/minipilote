@@ -1152,7 +1152,7 @@
                                         @endif
                                     </div>
                                 @endif
-                                @if ($typecontact != 'Collaborateur')
+                                @if ($typecontact != 'Collaborateur' && $nature == 'Personne physique')
                                     <div class="mb-3 ">
                                         <label for="societe_id" class="form-label">
                                             Est un contact de la société
