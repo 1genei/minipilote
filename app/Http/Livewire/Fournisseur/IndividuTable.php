@@ -230,7 +230,7 @@ final class IndividuTable extends PowerGridComponent
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(Individu $individu) {
-                return ['route' => route('fournisseur.edit', Crypt::encrypt($individu->contact_id)),
+                return ['route' => route('contact.edit', Crypt::encrypt($individu->contact_id)),
                 'tooltip' => "Modifier",
                 'permission' => Gate::allows('permission', 'modifier-fournisseur'),
                 ];

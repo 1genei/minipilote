@@ -233,7 +233,7 @@ final class EntiteTable extends PowerGridComponent
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(Entite $entite) {
-                return ['route' => route('client.edit', Crypt::encrypt($entite->contact_id)),
+                return ['route' => route('contact.edit', Crypt::encrypt($entite->contact_id)),
                 'tooltip' => "Modifier",
                 'permission' => Gate::allows('permission', 'modifier-client'),
                 ];

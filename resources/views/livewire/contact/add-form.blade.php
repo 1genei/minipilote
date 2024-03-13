@@ -28,6 +28,13 @@
                                                 <option value="{{ $type->type }}">{{ $type->type }}</option>
                                             @endforeach
                                         </select>
+                                        
+                                        {{-- <select class="select2 form-control select2-multiple"  id="typecontact" name="typecontact[]" wire:model="typecontact"  data-toggle="select2" multiple="multiple"
+                                        data-placeholder="Sélectionnez les types ...">
+                                            @foreach ($typecontacts as $type)
+                                                <option value="{{ $type->type }}">{{ $type->type }}</option>
+                                            @endforeach
+                                        </select> --}}
 
                                         @if ($errors->has('typecontact'))
                                             <br>

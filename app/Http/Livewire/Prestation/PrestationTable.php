@@ -112,7 +112,10 @@ final class PrestationTable extends PowerGridComponent
                 return  '<span >'.$model->beneficiaire()?->individu?->civilite.' '.$model->beneficiaire()?->individu?->nom.' '.$model->beneficiaire()?->individu?->prenom.'</span>';
             } )
             ->addColumn('notes')
-            ->addColumn('date_prestation', fn (Prestation $model) => Carbon::parse($model->date_prestation)->format('d/m/Y')) ;   
+            ->addColumn('date_prestation', function (Prestation $model){
+               return Carbon::parse($model->date_prestation)->format('d/m/Y'); 
+            }  );
+            
             // ->addColumn('user', function (Prestation $model) {          
             //     return  '<span >'.$model->user?->contact?->individu?->nom.' '.$model->user?->contact?->individu?->prenom.'</span>';
             // });

@@ -10,7 +10,8 @@ class Prestation extends Model
     use HasFactory;
     protected $guarded = [];
     // protected $dates = ['date_prestation'];
-    protected $casts  = ['date_prestation' => 'date'];
+    // protected $casts  = ['date_prestation' => 'date'];
+    
     /**
     * Get the client that owns the Prestation
     */

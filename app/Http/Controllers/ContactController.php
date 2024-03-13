@@ -13,6 +13,7 @@ use App\Models\EntiteIndividu;
 use App\Models\Prestation;
 use Auth;
 
+use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Facades\Crypt;
 
@@ -90,7 +91,7 @@ class ContactController extends Controller
         
         $typecontact = Typecontact::where('type', $request->typecontact)->first();
         $contact->typeContacts()->attach($typecontact->id);
-
+        
         if ($type_contact == "individu") {
 
             Individu::create([
@@ -285,6 +286,36 @@ class ContactController extends Controller
     {
         $contact = Contact::where('id', Crypt::decrypt($contact_id))->first();
         
+        if ($request->nature == "Personne morale") {
+         
+            $request->validate( [
+                'nature' => 'required',
+                'raison_sociale' => 'required|string',
+                'forme_juridique' => 'required|string',
+                'email' => Rule::unique('entites')->ignore($contact->entite->id), 
+            ]);
+
+        } elseif ($request->nature == "Personne physique") {
+    
+            $request->validate([
+                'nature' => 'required',
+                'nom' => 'required|string',
+                'prenom' => 'required|string',
+                'email' => Rule::unique('individus')->ignore($contact->individu->id),
+            ]);
+            
+
+        } else {
+
+            $request->validate( [
+                'nature' => 'required',
+                'nom' => 'required|string',
+                'type' => 'required|string',
+                'email' => Rule::unique('entites')->ignore($contact->entite->id),
+            ]);
+
+        }
+        
         if ($request->nature == "Personne morale" || $request->nature == "Groupe") {
             $type_contact = "entité";
         } else {
@@ -292,19 +323,26 @@ class ContactController extends Controller
         }
         $individu = $contact->individu;
         $entite = $contact->entite;
-
-      
-        // modifier le type du contact
         
-
-        $typecontact = Typecontact::where('type', $request->typecontact)->first();
-       
         
         $contact->commercial_id = $request->commercial_id;
         $contact->societe_id = $request->societe_id;
-        
+   
+      
+        // modifier le(s) type du contact          
         $contact->typeContacts()->detach();
+        
+        $typecontact = Typecontact::where('type', $request->typecontact)->first();
         $contact->typeContacts()->attach($typecontact->id);
+        
+        
+        // $typecontacts = $request->typecontact;
+        
+        // foreach ($typecontacts as $typecontact) {
+        
+        //     $typecontactinfo = Typecontact::where('type', $typecontact)->first();        
+        //     $contact->typeContacts()->attach($typecontactinfo->id);
+        // }
         
         $contact->update();
 
