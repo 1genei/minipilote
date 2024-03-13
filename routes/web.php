@@ -26,6 +26,8 @@ use App\Http\Controllers\DeviController;
 use App\Http\Controllers\PrestationController;
 use App\Http\Controllers\VoitureController;
 use App\Http\Controllers\CircuitController;
+use App\Http\Controllers\EvenementController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -353,5 +355,15 @@ Route::controller(PrestationController::class)->group(function () {
     Route::put('/prestations/desarchiver/{prestationId}', 'unarchive')->name('prestation.unarchive')->middleware(['auth']);
 });
 
-
+// Evenements
+Route::controller(EvenementController::class)->group(function () {
+    Route::get('/evenements', 'index')->name('evenement.index')->middleware(['auth']);
+    Route::get('/evenements/archives', 'archives')->name('evenement.archives')->middleware(['auth']);
+    Route::post('/evenements/ajouter', 'store')->name('evenement.store')->middleware(['auth']);
+    Route::get('/evenements/ajouter', 'create')->name('evenement.create')->middleware(['auth']);
+    Route::get('/evenements/modifier/{evenementId}', 'edit')->name('evenement.edit')->middleware(['auth']);
+    Route::post('/evenements/modifier/{evenementId}', 'update')->name('evenement.update')->middleware(['auth']);
+    Route::put('/evenements/archiver/{evenementId}', 'archive')->name('evenement.archive')->middleware(['auth']);
+    Route::put('/evenements/desarchiver/{evenementId}', 'unarchive')->name('evenement.unarchive')->middleware(['auth']);
+});
 require __DIR__ . '/auth.php';

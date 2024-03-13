@@ -107,7 +107,7 @@
                             <div class="col-6">
                                 <div class="mb-3 ">
                                     <label for="email" class="form-label">
-                                        Email <span class="text-danger">*</span>
+                                        Email 
                                     </label>
                                     <input type="email" id="email" name="email"
                                         value="{{ old('email') ? old('email') : '' }}" class="form-control">

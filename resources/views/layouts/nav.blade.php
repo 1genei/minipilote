@@ -2,8 +2,8 @@
     $curent_url = $_SERVER['REQUEST_URI'];
     $curent_url = explode('/', $curent_url);
 
-    $li_dashboard = $li_utilisateur = $li_utilisateur_droit = $li_ordre_simule_algo1 = $li_ordre_simule_algo2 = $li_ordre_simule_algo3 = $li_ordre_simule_algo4 = $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_contact_fournisseur = $li_contact = $li_contrat_parrainage = $li_contrat = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_voiture = $li_parametre_circuit = '';
-    $li_simulations = $li_utilisateur_show = $li_contact_show = $li_contrat_show = $li_catalogue_show = $li_parametre_show  = false;
+    $li_dashboard = $li_utilisateur = $li_utilisateur_droit =  $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_evenement = $li_contact_fournisseur = $li_contact = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_voiture = $li_parametre_circuit = '';
+    $li_utilisateur_show = $li_contact_show = $li_catalogue_show = $li_parametre_show  = false;
 
     switch ($curent_url[1]) {
         case '/':
@@ -46,19 +46,9 @@
             $li_contact_show = true;
             break;
 
-        // Contrats
-        case 'contrats':
-            $li_contrat = 'menuitem-active';
-            $li_contrat_show = true;
-            break;
         // Agenda
         case 'agendas':
             $li_agenda = 'menuitem-active';
-            break;
-
-        case 'parrainages':
-            $li_contrat_parrainage = 'menuitem-active';
-            $li_contrat_show = true;
             break;
 
         // Catalogue
@@ -102,32 +92,6 @@
             }
 
             $li_parametre_show = true;
-            break;
-
-        case 'ordres-simule':
-            if (sizeof($curent_url) > 3) {
-                switch (substr($curent_url[3], 0, 1)) {
-                    case '2':
-                        $li_ordre_simule_algo2 = 'menuitem-active';
-                        $li_simulations = 'true';
-                        break;
-                    case '3':
-                        $li_ordre_simule_algo3 = 'menuitem-active';
-                        $li_simulations = 'true';
-
-                        break;
-                    case '4':
-                        $li_ordre_simule_algo4 = 'menuitem-active';
-                        $li_simulations = 'true';
-
-                        break;
-
-                    default:
-                        $li_ordre_simule_algo1 = 'menuitem-active';
-                        $li_simulations = 'true';
-                        break;
-                }
-            }
             break;
 
         default:
@@ -227,28 +191,7 @@
             </li>
         @endcan
 
-        @can('permission', 'afficher-contrat')
-            <li class="side-nav-item {{ $li_contrat_parrainage }} {{ $li_contrat }} ">
-                <a data-bs-toggle="collapse" href="#contrats" aria-expanded="" aria-controls="contrats"
-                    class="side-nav-link">
-                    <i class="mdi mdi-book-edit-outline"></i>
-                    <span> Contrats</span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse @if ($li_contrat_show) show @endif" id="contrats">
-                    <ul class="side-nav-second-level">
-
-                        <li class="{{ $li_contrat }}">
-                            <a href="{{ route('contrat.index') }}">Gestion</a>
-                        </li>
-                        <li class="{{ $li_contrat_parrainage }}">
-                            <a href="#">Parrainages</a>
-
-                        </li>
-                    </ul>
-                </div>
-            </li>
-        @endcan
+        
 
 
 
@@ -305,6 +248,15 @@
             </li>
         @endcan
         @can('permission', 'afficher-contact')
+        <li class="side-nav-item {{ $li_evenement }}">
+            <a href="{{ route('prestation.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
+                class="side-nav-link">
+                <i class=" uil-briefcase"></i>
+                <span> Evènements </span>
+            </a>
+        </li>
+        @endcan
+        @can('permission', 'afficher-prestation')
             <li class="side-nav-item {{ $li_agenda }}">
                 <a href="{{ route('prestation.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
                     class="side-nav-link">

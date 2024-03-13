@@ -214,7 +214,7 @@
                 $('.nouveau_contact').hide();
                 $('.contact_existant').show();
                 $('#nom').removeAttr('required', 'required');
-                $('#email').removeAttr('required', 'required');
+                // $('#email').removeAttr('required', 'required');
                 $('#newcontact').attr('required', 'required');
                 $('#poste').attr('required', 'required');
 
@@ -222,7 +222,7 @@
                 $('.nouveau_contact').show();
                 $('.contact_existant').hide();
                 $('#nom').attr('required', 'required');
-                $('#email').attr('required', 'required');
+                // $('#email').attr('required', 'required');
                 $('#newcontact').removeAttr('required', 'required');
                 $('#poste').removeAttr('required', 'required');
             }
