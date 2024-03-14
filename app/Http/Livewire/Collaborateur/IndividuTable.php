@@ -22,7 +22,8 @@ final class IndividuTable extends PowerGridComponent
     use WithExport;
     
     public $contactindividus;
-
+    public string $sortField = 'created_at';    
+    public string $sortDirection = 'desc';
     /*
     |--------------------------------------------------------------------------
     |  Features Setup

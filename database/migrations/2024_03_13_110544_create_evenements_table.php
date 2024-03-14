@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('evenements', function (Blueprint $table) {
             $table->id();
             $table->string('nom')->nullable();
+            $table->integer('circuit_id')->nullable();
+            $table->double('prix_circuit')->nullable();            
             $table->date('date_debut')->nullable();
             $table->date('date_fin')->nullable();
             $table->string('lieu')->nullable();

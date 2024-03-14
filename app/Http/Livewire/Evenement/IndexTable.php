@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Prospect;
+namespace App\Http\Livewire\Evenement;
 
-use App\Models\Contact;
-use App\Models\Individu;
+use App\Models\Evenement;
+use App\Models\User;
 use Crypt;
 use Auth;
+
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
@@ -14,12 +15,15 @@ use PowerComponents\LivewirePowerGrid\Filters\Filter;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridColumns};
 use Illuminate\Support\Facades\Gate;
 
-final class IndividuTable extends PowerGridComponent
+
+final class IndexTable extends PowerGridComponent
 {
     use ActionButton;
+    use ActionButton;
     use WithExport;
-    public $contactindividus;
-    public string $sortField = 'created_at';    
+
+    public string $sortField = 'created_at';
+    
     public string $sortDirection = 'desc';
     /*
     |--------------------------------------------------------------------------
@@ -60,36 +64,10 @@ final class IndividuTable extends PowerGridComponent
      */
     public function datasource()
     {
-    
-        $user = Auth::user();
-
-        if ($user->is_admin) {
-
-            // On réccupère tous les contacts de type individu
-                
-            $contactindividus = Individu::select('individus.*','contacts.*')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
-                ->where('typecontacts.type', 'Prospect')
-                ->get();
-
-        } else {
-            //   On réccupère uniquement les contacts de l'utilisateur connecté
-                
-            $contactindividus = Individu::select('individus.*','contacts.*')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false], ["contacts.user_id", $user->id]])
-                ->where('typecontacts.type', 'Prospect')
-                ->get();
-        }
-    
-       
+      
+        $evenements = Evenement::where('archive', false)->orderBy('created_at', 'desc')->get();
         
-        return $contactindividus;
+        return $evenements;
 
     }
 
@@ -127,21 +105,37 @@ final class IndividuTable extends PowerGridComponent
     {
     
         return PowerGrid::columns()
-            // ->addColumn('id')
-            ->addColumn('nom')
-            ->addColumn('prenom')
-            ->addColumn('email',fn (Individu $model) => $model->email)
-            ->addColumn('telephone_fixe')
-            ->addColumn('telephone_mobile')
-            ->addColumn('adresse', function (Individu $model) {          
-                return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
+      
+            ->addColumn('nom', function (Evenement $model) {          
+                return  '<span class="badge bg-info text-white font-bold py-1 px-2 fs-6">'.$model->nom.'</span>';
+           
             } )
-            ->addColumn('code_postal')
-            ->addColumn('ville')
-            ->addColumn('user', function (Individu $model) {          
-                return  '<span >'.$model->user()?->infos()?->nom.' '.$model->user()?->infos()?->prenom.'</span>';
+            ->addColumn('date_debut', function (Evenement $model) {
+                return Carbon::parse($model->date_debut)->format('d/m/Y');
             })
-            ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
+           
+            ->addColumn('date_fin', function (Evenement $model) {
+                return Carbon::parse($model->date_fin)->format('d/m/Y');
+            })
+            ->addColumn('circuit_id', function (Evenement $model) {
+                return  '<span class="badge bg-warning text-white font-bold py-1 px-2 fs-6">'.$model->circuit->nom.'</span>';
+            })
+            ->addColumn('description')
+            
+            ->addColumn('notes')
+            // ->addColumn('date_evenement', fn (Evenement $model) =>  $model->date_evenement  )
+            ->addColumn('user', function (Evenement $model) {        
+                
+                $user = User::where('id', $model->user_id)->first();
+                $contact = $user?->contact;
+                $individu = $contact?->individu;
+                
+                return  '<span >'.$individu?->nom.' '.$individu?->prenom.'</span>';
+            })
+            ->addColumn('created_date', function (Evenement $model) {          
+                return $model->created_at->format('d/m/Y H:i:s');
+            });
+            // ->addColumn('statut');
     }
 
     /*
@@ -160,20 +154,20 @@ final class IndividuTable extends PowerGridComponent
       */
     public function columns(): array
     {
-        $colums = [
-            // Column::make('Id', 'id'),
-            Column::make('Nom', 'nom')->sortable()->searchable(),
-            Column::make('Prénom', 'prenom')->sortable()->searchable(),
-            Column::make('Email', 'email')->sortable()->searchable(),
-            Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
-            Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
-            Column::make('Adresse', 'adresse')->sortable()->searchable(),
-            Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
-            Column::make('Ville', 'ville')->sortable()->searchable(),
-            Column::make('Date de création', 'created_at_formatted', 'created_at')
-                ->sortable(),
+    
+        $colums =  [
+     
+            Column::make('Nom', 'nom')->searchable()->sortable(),
+            Column::make('Date de début', 'date_debut',)->searchable()->sortable(),
+            Column::make('Date de fin', 'date_fin')->searchable()->sortable(),
+            Column::make('Circuit', 'circuit_id')->searchable()->sortable(),
+            Column::make('Description', 'description')->searchable()->sortable(),
+            Column::make('Statut', 'statut')->searchable()->sortable(),
+            Column::make('Date d\'ajout', 'created_date')->searchable()->sortable(),
+            // Column::make('Actions')
 
         ];
+        
         if(Auth::user()->is_admin ){
              $colums[] = Column::make('Saisi par', 'user')->sortable();
         }
@@ -190,16 +184,7 @@ final class IndividuTable extends PowerGridComponent
     {
     
         return [
-            // Filter::datetimepicker('created_at'),
-            // Filter::datetimepicker('nom'),
-            // Filter::inputText('nom')->operators(['contains']),
-            // Filter::inputText('prenom')->operators(['contains']),
-            // Filter::inputText('email')->operators(['contains']),
-            // Filter::inputText('telephone')->operators(['contains']),
-            // Filter::inputText('adresse')->operators(['contains']),
-            // Filter::inputText('code_postal')->operators(['contains']),
-            // Filter::inputText('ville')->operators(['contains']),
-            // Filter::inputText('pays')->operators(['contains']),
+      
         ];
     }
 
@@ -229,30 +214,30 @@ final class IndividuTable extends PowerGridComponent
 
                
                
-            Button::add('Afficher')
-                ->bladeComponent('button-show', function(Individu $individu) {
-                    return ['route' => route('contact.show', Crypt::encrypt($individu->contact_id)),
-                    'tooltip' => "Afficher",
-                    'permission' => Gate::allows('permission', 'afficher-prospect'),
-                    
-                    ];
-                }),
+        // Button::add('Afficher')
+        //     ->bladeComponent('button-show', function(Evenement $evenement) {
+        //         return ['route' => route('contact.show', Crypt::encrypt($evenement->contact_id)),
+        //         'tooltip' => "Afficher",
+        //         'permission' => Gate::allows('permission', 'afficher-contact'),
+                
+        //         ];
+        //     }),
                 
             Button::add('Modifier')
-            ->bladeComponent('button-edit', function(Individu $individu) {
-                return ['route' => route('contact.edit', Crypt::encrypt($individu->contact_id)),
+            ->bladeComponent('button-edit', function(Evenement $evenement) {
+                return ['route' => route('evenement.edit', Crypt::encrypt($evenement->id)),
                 'tooltip' => "Modifier",
-                'permission' => Gate::allows('permission', 'modifier-prospect'),
+                'permission' => Gate::allows('permission', 'modifier-contact'),
                 
                 ];
             }),
             
             Button::add('Archiver')
-            ->bladeComponent('button-archive', function(Individu $individu) {
-                return ['route' => route('contact.archive', Crypt::encrypt($individu->contact_id)),
+            ->bladeComponent('button-archive', function(Evenement $evenement) {
+                return ['route' => route('evenement.archive', Crypt::encrypt($evenement->id)),
                 'tooltip' => "Archiver",
-                'classarchive' => "archive_contact",
-                'permission' => Gate::allows('permission', 'archiver-prospect'),
+                'classarchive' => "archive_evenement",
+                'permission' => Gate::allows('permission', 'modifier-contact'),
                 
                 ];
             }),
@@ -278,11 +263,6 @@ final class IndividuTable extends PowerGridComponent
     public function actionRules(): array
     {
        return [
-
-           //Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($contact) => $contact->id === 1)
-                ->hide(),
         ];
     }
 }

@@ -247,9 +247,9 @@
                 </div>
             </li>
         @endcan
-        @can('permission', 'afficher-contact')
+        @can('permission', 'afficher-evenement')
         <li class="side-nav-item {{ $li_evenement }}">
-            <a href="{{ route('prestation.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
+            <a href="{{ route('evenement.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
                 class="side-nav-link">
                 <i class=" uil-briefcase"></i>
                 <span> Evènements </span>

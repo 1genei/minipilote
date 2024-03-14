@@ -22,6 +22,8 @@ final class ArchiveTable extends PowerGridComponent
     use WithExport;
     public $produits;
     public $categories_id = [];
+    public string $sortField = 'created_at';    
+    public string $sortDirection = 'desc';
     
     /*
     |--------------------------------------------------------------------------

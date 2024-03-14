@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('beneficiaire_id')->nullable();
             $table->boolean('client_est_beneficiaire')->default(false);
             $table->integer('user_id')->nullable();
+            $table->integer('evenement_id')->nullable();
             $table->date('date_prestation')->nullable();
             $table->string('methode_paiement')->nullable();
             $table->double('montant_ht')->nullable();

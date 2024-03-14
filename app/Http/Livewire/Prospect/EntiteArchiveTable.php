@@ -20,6 +20,8 @@ final class EntiteArchiveTable extends PowerGridComponent
     use ActionButton;
     use WithExport;
     public $contactentites;
+    public string $sortField = 'created_at';    
+    public string $sortDirection = 'desc';
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
