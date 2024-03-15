@@ -214,20 +214,20 @@ final class IndexTable extends PowerGridComponent
 
                
                
-        // Button::add('Afficher')
-        //     ->bladeComponent('button-show', function(Evenement $evenement) {
-        //         return ['route' => route('contact.show', Crypt::encrypt($evenement->contact_id)),
-        //         'tooltip' => "Afficher",
-        //         'permission' => Gate::allows('permission', 'afficher-contact'),
+        Button::add('Afficher')
+            ->bladeComponent('button-show', function(Evenement $evenement) {
+                return ['route' => route('evenement.show', Crypt::encrypt($evenement->id)),
+                'tooltip' => "Afficher",
+                'permission' => Gate::allows('permission', 'afficher-evenement'),
                 
-        //         ];
-        //     }),
+                ];
+            }),
                 
             Button::add('Modifier')
             ->bladeComponent('button-edit', function(Evenement $evenement) {
                 return ['route' => route('evenement.edit', Crypt::encrypt($evenement->id)),
                 'tooltip' => "Modifier",
-                'permission' => Gate::allows('permission', 'modifier-contact'),
+                'permission' => Gate::allows('permission', 'modifier-evenement'),
                 
                 ];
             }),
@@ -237,7 +237,7 @@ final class IndexTable extends PowerGridComponent
                 return ['route' => route('evenement.archive', Crypt::encrypt($evenement->id)),
                 'tooltip' => "Archiver",
                 'classarchive' => "archive_evenement",
-                'permission' => Gate::allows('permission', 'modifier-contact'),
+                'permission' => Gate::allows('permission', 'modifier-evenement'),
                 
                 ];
             }),

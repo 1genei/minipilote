@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use  App\Models\Evenement;
 use  App\Models\Circuit;
+use  App\Models\Prestation;
+use  App\Models\Contact; 
 use Crypt;
 
 
@@ -34,7 +36,13 @@ class EvenementController extends Controller
     public function show($evenement_id)
     {
         $evenement = Evenement::find(Crypt::decrypt($evenement_id));
-        return view('evenement.show', compact('evenement'));
+        
+        $derniere_prestation = Prestation::orderBy('created_at', 'desc')->first();
+        $prochain_numero_prestation = $derniere_prestation->numero + 1;
+        $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
+        $contactclients = Contact::where('archive', false)->get();
+        
+        return view('evenement.show', compact('evenement', 'prochain_numero_prestation','beneficiaires', 'contactclients'));
     }
     
     /*

@@ -15,6 +15,8 @@ class Evenement extends Model
      * @var array
      */
     protected $guarded = [];
+    protected $casts  = ['date_debut' => 'date', 'date_fin' => 'date'];
+
     
     /*
     * Relation with Circuit

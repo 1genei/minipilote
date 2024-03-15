@@ -362,6 +362,7 @@ Route::controller(EvenementController::class)->group(function () {
     Route::post('/evenements/ajouter', 'store')->name('evenement.store')->middleware(['auth']);
     Route::get('/evenements/ajouter', 'create')->name('evenement.create')->middleware(['auth']);
     Route::get('/evenements/modifier/{evenementId}', 'edit')->name('evenement.edit')->middleware(['auth']);
+    Route::get('/evenements/details/{evenementId}', 'show')->name('evenement.show')->middleware(['auth']);
     Route::post('/evenements/modifier/{evenementId}', 'update')->name('evenement.update')->middleware(['auth']);
     Route::put('/evenements/archiver/{evenementId}', 'archive')->name('evenement.archive')->middleware(['auth']);
     Route::put('/evenements/desarchiver/{evenementId}', 'unarchive')->name('evenement.unarchive')->middleware(['auth']);
