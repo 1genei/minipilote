@@ -7,6 +7,9 @@ use App\Models\Prestation;
 use App\Models\Contact;
 use App\Models\Individu;
 use App\Models\Typecontact;
+use App\Models\Evenement;
+use App\Models\Produit;
+use App\Models\Voiture;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
@@ -162,13 +165,18 @@ class PrestationController extends Controller
     /**
     * create the specified resource.
     */
-    public function create(){
-    
+    public function create($evenement_id = null){
+        
+        
         $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
         $prochain_numero_prestation = Prestation::max('numero') + 1;
         $contactclients = Contact::where('archive', false)->get();
         
-        return view('prestation.add', compact('beneficiaires', 'prochain_numero_prestation', 'contactclients'));
+        $evenement = $evenement_id != null ? Evenement::where('id', Crypt::decrypt($evenement_id))->first() : null;
+        $produits = Produit::where([['archive', false],['a_declinaison', 0]])->get();
+        $voitures = Voiture::where('archive', false)->get();
+        
+        return view('prestation.add', compact('beneficiaires', 'prochain_numero_prestation', 'contactclients', 'evenement', 'produits', 'voitures'));
     
     }
     

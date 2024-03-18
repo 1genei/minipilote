@@ -348,8 +348,8 @@ Route::controller(PrestationController::class)->group(function () {
     Route::get('/prestations', 'index')->name('prestation.index')->middleware(['auth']);
     Route::get('/prestations/archives', 'archives')->name('prestation.archives')->middleware(['auth']);
     Route::post('/prestations/ajouter', 'store')->name('prestation.store')->middleware(['auth']);
-    Route::get('/prestations/ajouter', 'create')->name('prestation.create')->middleware(['auth']);
-    Route::get('/prestations/modifier/{prestationId}', 'edit')->name('prestation.edit')->middleware(['auth']);
+    Route::get('/prestations/ajouter/{evenement_id?}', 'create')->name('prestation.create')->middleware(['auth']);
+    Route::get('/prestations/modifier/{prestationId}/{evenement_id?}', 'edit')->name('prestation.edit')->middleware(['auth']);
     Route::post('/prestations/modifier/{prestationId}', 'update')->name('prestation.update')->middleware(['auth']);
     Route::put('/prestations/archiver/{prestationId}', 'archive')->name('prestation.archive')->middleware(['auth']);
     Route::put('/prestations/desarchiver/{prestationId}', 'unarchive')->name('prestation.unarchive')->middleware(['auth']);

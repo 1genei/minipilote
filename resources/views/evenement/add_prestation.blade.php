@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/vendor/dropzone-custom.css') }}">
 @endsection
 
-@section('title', 'Ajouter prestation')
+@section('title', 'Modifier prestation')
 
 @section('content')
 
@@ -105,98 +105,48 @@
                             <input type="hidden" name="nature" value=" Personne physique" />
                            
         
+        
                             <div class="row">
-                                <div class="col-4 offset-4 ">
-                                    <div class="mb-3 ">
-                                        <label for="numero" class="form-label">
-                                            Numéro de la prestation <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="number" id="numero" name="numero" min="{{$prochain_numero_prestation}}"
-                                            value="{{$prochain_numero_prestation}}" class="form-control" style="font-size: 1rem;  color: #772e7b; text-align: center;"
-                                            required>
-    
-                                        @if ($errors->has('numero'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('numero') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">       
-                             
-                                <div class="col-6 ">
-                                    <div class=" mb-3">
-                                        <label for="produit_id" class="form-label">
-                                            Produits
-                                        </label>
-                                        <select name="produit_id" id="produit_id" class=" form-control select2"
-                                            data-toggle="select2" >
-                                            <option value=""></option>
-                                           @foreach ($produits as $produit )
-                                               <option value="{{ $produit->id }}" prix="{{$produit->prix_vente_ttc}}">{{$produit->nom}} - {{ number_format($produit->prix_vente_ttc, 2, ',', ' ') }} €</option>
-                                           @endforeach
-                                           
-                                        </select>
-                                        @if ($errors->has('produit_id'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('produit_id') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
         
-                                </div>
+                                    <div class="col-6 ">
+                                        <div class="mb-3 ">
+                                            <label for="numero" class="form-label">
+                                                Numéro de la prestation <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="number" id="numero" name="numero" min="{{$prochain_numero_prestation}}"
+                                                value="{{$prochain_numero_prestation}}" class="form-control" style="font-size: 1.5rem;color: #772e7b;" required>
         
-
-
-                                <div class="col-6 ">
-                                    <div class="mb-3 ">
-                                        <label for="montant_ttc" class="form-label">
-                                            Montant de la prestation (TTC) <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="number" id="montant_ttc" name="montant_ttc" step="0.01"
-                                            value="{{ old('montant_ttc') ? old('montant_ttc') : '' }}" class="form-control" required>
-        
-                                        @if ($errors->has('montant_ttc'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('montant_ttc') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>                     
-        
-                            </div>
-                            
-                            <div class="row">
-                            
-                                <div class="col-6 offset-3 ">
-                                    <label for="voiture_id" class="form-label">Voiture</label><br>
-                                    @foreach ($voitures as $voiture)
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="voiture_id" id="voiture_{{ $voiture->id }}" value="{{ $voiture->id }}" {{ old('voiture_id') == $voiture->id ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="voiture_{{ $voiture->id }}">{{ $voiture->nom }} </label>
+                                            @if ($errors->has('numero'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('numero') }}</strong>
+                                                </div>
+                                            @endif
                                         </div>
-                                    @endforeach
-                                    @if ($errors->has('voiture_id'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('voiture_id') }}</strong>
+                                    </div>
+           
+                               
+                                    <div class="col-6 ">
+                                        <div class="mb-3 ">
+                                            <label for="nom_prestation" class="form-label">
+                                                Nom de la prestation <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" id="nom_prestation" name="nom_prestation" style="font-size: 1.5rem;color: #772e7b;"
+                                                value="{{ old('nom_prestation') ? old('nom_prestation') : '' }}" class="form-control" required>
+        
+                                            @if ($errors->has('nom_prestation'))
+                                                <br>
+                                                <div class="alert alert-warning text-secondary " role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('nom_prestation') }}</strong>
+                                                </div>
+                                            @endif
                                         </div>
-                                    @endif
-                                </div>
-
-                                
-                            
+                                    </div>                    
+        
                             </div>
                             
                             <div class="row">
@@ -252,7 +202,24 @@
                             
                             <div class="row">
         
-                        
+                                <div class="col-6 ">
+                                    <div class="mb-3 ">
+                                        <label for="montant_ttc" class="form-label">
+                                            Montant de la prestation (TTC) <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" id="montant_ttc" name="montant_ttc" step="0.01"
+                                            value="{{ old('montant_ttc') ? old('montant_ttc') : '' }}" class="form-control" required>
+        
+                                        @if ($errors->has('montant_ttc'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " role="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('montant_ttc') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>    
                                 
                                 <div class="col-6">
                                 
@@ -859,13 +826,5 @@
     });
 </script>
 
-<script>
-    $('#produit_id').change(function(e) {
-        var prix = e.currentTarget.options[e.currentTarget.selectedIndex].getAttribute('prix');
-        
-        $('#montant_ttc').val(prix);
-
-    });
-</script>
 
 @endsection
