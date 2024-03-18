@@ -135,10 +135,15 @@
                     <div class="tab-content">
                     
                         <div class="tab-pane show active" id="prestation">
-                            <button type="button" class="btn btn-secondary btn-sm rounded-pill"
+                            {{-- <button type="button" class="btn btn-secondary btn-sm rounded-pill"
                             data-bs-toggle="modal" data-bs-target="#prestation-modal"><i
                                 class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter prestation</span>
-                            </button> <hr>
+                            </button> --}}
+                            
+                            <a type="button" href="{{ route('prestation.create', Crypt::encrypt($evenement->id)) }}" class="btn btn-secondary btn-sm rounded-pill"><i
+                                class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter prestation</span>
+                            </a>
+                            <hr>
                             
                             <livewire:prestation.prestation-table client_id="{{ $evenement->id }}" />
                         </div>
