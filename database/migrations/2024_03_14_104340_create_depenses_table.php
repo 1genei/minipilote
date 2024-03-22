@@ -19,7 +19,9 @@ return new class extends Migration
             $table->double('montant')->nullable();
             $table->date('date')->nullable();            
             $table->integer('voiture_id')->nullable();
+            $table->integer('fournisseur_id')->nullable();
             $table->integer('evenement_id')->nullable();
+            $table->integer('prestation_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->boolean('archive')->default(false);
             $table->timestamps();

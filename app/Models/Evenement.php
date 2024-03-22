@@ -25,4 +25,19 @@ class Evenement extends Model
     {
         return $this->belongsTo(Circuit::class);
     }
+     
+    /*
+    * Retourne les prestations liees a l'evenement
+    */
+    public function prestations()
+    {
+        return $this->hasMany(Prestation::class);
+    }
+    
+    /*
+    * Retourne les dépenses liees a l'evenement
+    */
+    public function depenses(){
+        return $this->hasMany(Depense::class);
+    }
 }

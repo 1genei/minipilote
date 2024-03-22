@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('numero')->nullable();
             $table->string('nom')->nullable();
             $table->integer('client_id')->nullable();
+            $table->integer('produit_id')->nullable();
+            $table->integer('voiture_id')->nullable();
             $table->integer('beneficiaire_id')->nullable();
             $table->boolean('client_est_beneficiaire')->default(false);
             $table->integer('user_id')->nullable();
@@ -25,7 +27,7 @@ return new class extends Migration
             $table->double('montant_ht')->nullable();
             $table->double('montant_ttc')->nullable();
             $table->double('montant_tva')->nullable();
-            $table->string('statut')->default('En attente');
+            $table->string('statut')->default('En attente')->nullable();
             $table->text('notes')->nullable();
             $table->boolean('archive')->default(false);
             

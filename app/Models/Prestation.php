@@ -10,7 +10,7 @@ class Prestation extends Model
     use HasFactory;
     protected $guarded = [];
     // protected $dates = ['date_prestation'];
-    // protected $casts  = ['date_prestation' => 'date'];
+    protected $casts  = ['date_prestation' => 'date'];
     
     /**
     * Get the client that owns the Prestation
@@ -41,5 +41,40 @@ class Prestation extends Model
         return $this->belongsTo(User::class);        
     }
     
+    /*
+    * Retourne le produit lié  à la prestation
+    */
+    public function produit()
+    {
+        return $this->belongsTo(Produit::class);
+    }
     
+    /*
+    * Charges liées à  la prestation
+    */
+    
+    public function depenses()
+    {   
+        return $this->hasMany(Depense::class);
+    }
+    
+    /*
+    * Montant total des charges
+    */
+    public function montantCharges()
+    {
+        $total = 0;
+        foreach ($this->depenses as $depense) {
+            $total += $depense->montant;
+        }
+        return $total;
+    }
+    
+    /*
+    * Retourne la voiture liée à la prestation
+    */
+    public function voiture(){
+        
+        return $this->belongsTo(Voiture::class);
+    }
 }
