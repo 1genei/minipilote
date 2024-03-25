@@ -44,7 +44,7 @@ class DepenseController extends Controller
         $depense->libelle = $request->libelle;
         $depense->montant = $request->montant;
         $depense->description = $request->description;
-        $depense->date_depense = $request->date_depense;
+        $depense->date_depense = $request->date;
         $depense->user_id = Auth::user()->id;
         $depense->save();
         
@@ -81,13 +81,14 @@ class DepenseController extends Controller
      */
     public function update(Request $request, $depense_id)
     {
+    
         $depense_id = Crypt::decrypt($depense_id);
         $depense = depense::findOrFail($depense_id);
         $depense->type = $request->type;
         $depense->libelle = $request->libelle;
         $depense->montant = $request->montant;
         $depense->description = $request->description;
-        $depense->date_depense = $request->date_depense;
+        $depense->date_depense = $request->date;
         $depense->save();
         
         return redirect()->back()->with('ok', 'Depense modifiée.');

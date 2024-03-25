@@ -35,9 +35,9 @@
                     <td>{{ number_format($prestation->montantCharges(), 2, ',', ' ') }} €</td>
                     <td>
                         @if ($prestation->statut == 'Confirmé')
-                            <span class="text-primary">{{ $prestation->statut }} </span>
+                            <span class="badge bg-success">{{ $prestation->statut }} </span>
                         @else
-                            <span class="text-default"> {{ $prestation->statut }}</span>
+                            <span class="badge bg-danger"> {{ $prestation->statut }}</span>
                         @endif
                     </td>
 

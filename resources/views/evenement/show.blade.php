@@ -82,40 +82,13 @@
                             </p>
                         </div>
 
+                        <h4 class="header-title">Circuit: <span class="text-muted"> {{ $evenement->circuit?->nom }}
+                            </span> </h4>
+
 
 
                     </div> <!-- end card-body -->
                 </div> <!-- end card -->
-
-                <!-- Cicruit-->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center ">
-                            <h4 class="header-title">Circuit: <span class="text-muted"> {{ $evenement->circuit?->nom }}
-                                </span> </h4>
-                            <div class="dropdown">
-                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    <i class="mdi mdi-dots-vertical"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="inbox-widget">
-                            <div class="inbox-item">
-                                <h4 class="mb-0 "> </h4>
-
-
-                            </div>
-
-
-
-                        </div> <!-- end inbox-widget -->
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
 
 
                 {{-- Dépenses --}}
@@ -217,8 +190,6 @@
                                 ])
 
                             </div> <!-- end tab-pane -->
-
-
 
                         </div> <!-- end tab-content -->
                     </div> <!-- end card body -->
