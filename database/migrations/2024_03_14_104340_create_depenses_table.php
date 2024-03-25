@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('libelle')->nullable();
             $table->text('description')->nullable();
             $table->double('montant')->nullable();
-            $table->date('date')->nullable();            
+            $table->date('date_depense')->nullable();            
             $table->integer('voiture_id')->nullable();
             $table->integer('fournisseur_id')->nullable();
             $table->integer('evenement_id')->nullable();

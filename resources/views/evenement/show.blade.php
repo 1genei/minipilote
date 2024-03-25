@@ -87,7 +87,7 @@
                     </div> <!-- end card-body -->
                 </div> <!-- end card -->
 
-                <!-- Messages-->
+                <!-- Cicruit-->
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center ">
@@ -117,7 +117,52 @@
                     </div> <!-- end card-body-->
                 </div> <!-- end card-->
 
+
+                {{-- Dépenses --}}
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Bilan financier</h4>
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div dir="ltr">
+                                <div id="simple-donut" class="apex-charts" data-colors="#10c469,#ff5b5b,#e3eaef"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="chart-widget-list mt-3">
+                            <p>
+                                <i class="mdi mdi-square text-success"></i> <span class="fs-5"> Recettes </span>
+                                <span
+                                    class="float-end fw-bold fs-14">{{ number_format($evenement->recette(), 2, ',', ' ') }}
+                                    €</span>
+                            </p>
+
+                            <p>
+                                <i class="mdi mdi-square text-danger"></i> <span class="fs-5"> Charges </span>
+                                <span
+                                    class="float-end fw-bold fs-14">{{ number_format($evenement->montantDepenses(), 2, ',', ' ') }}
+                                    €
+                                </span>
+                            </p>
+
+
+                            <p>
+                                <i class="mdi mdi-square text-primary"></i> <span class="fs-5"> Marge nette </span>
+                                <span class="float-end fw-bold fs-4">
+                                    {{ number_format($evenement->benefices(), 2, ',', ' ') }} €
+                                </span>
+                            </p>
+
+                        </div>
+
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+
             </div> <!-- end col-->
+
 
             <div class="col-xl-8 col-lg-7">
                 <div class="card">
@@ -159,9 +204,12 @@
                             <div class="tab-pane " id="charge">
 
                                 <button type="button" class="btn btn-warning btn-sm rounded-pill" data-bs-toggle="modal"
-                                    data-bs-target="#standard-modal"><i class="mdi mdi-account-plus me-1"></i> <span>Ajouter
+                                    data-bs-target="#ajout-depense"><i class="mdi mdi-account-plus me-1"></i>
+                                    <span>Ajouter
                                         charge</span>
                                 </button>
+
+
                                 <hr>
 
                                 @include('evenement.depenses', [
@@ -310,6 +358,9 @@
     </script>
 
 
+    <script src="{{ asset('assets/js/vendor/apexcharts.min.js') }}"></script>
+
+
     <script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/dataTables.responsive.min.js') }}"></script>
@@ -350,5 +401,78 @@
     <script>
         formater_tel("#telephone_fixe", "#indicatif_fixe");
         formater_tel("#telephone_mobile", "#indicatif_mobile");
+    </script>
+
+    {{-- Modifier dépenses --}}
+    <script>
+        $('.edit-depense').click(function(e) {
+
+
+
+            let that = $(this);
+
+            let currentType = that.data('type');
+            let currentLibelle = that.data('libelle');
+            let currentDescription = that.data('description');
+            let currentMontant = that.data('montant');
+            let currentDate = that.data('date_depense');
+
+            let currentFormAction = that.data('href');
+            $('#edit_type option[value=' + currentType + ']').attr('selected',
+                'selected');
+
+            $('#edit_libelle').val(currentLibelle);
+
+            $('#edit_description').val(currentDescription);
+            $('#edit_montant').val(currentMontant);
+            $('#edit_date').val(currentDate);
+
+            $('#edit_form').attr('action', currentFormAction);
+
+        });
+    </script>
+
+
+    {{-- Stats Finances --}}
+    <script>
+        var recettes = "{{ $evenement->recette() }}";
+        var depesenses = "{{ $evenement->montantDepenses() }}";
+
+        recettes = parseInt(recettes);
+        depesenses = parseInt(depesenses);
+
+        colors = ["#10c469", "#3d73dd"];
+        (dataColors = $("#simple-donut").data("colors")) && (colors = dataColors.split(","));
+        options = {
+            chart: {
+                height: 320,
+                type: "donut"
+            },
+            series: [recettes, depesenses],
+            legend: {
+                show: !0,
+                position: "bottom",
+                horizontalAlign: "center",
+                verticalAlign: "middle",
+                floating: !1,
+                fontSize: "14px",
+                offsetX: 0,
+                offsetY: 7
+            },
+            labels: ["Recettes prestations", "Charges Totales"],
+            colors: colors,
+            responsive: [{
+                breakpoint: 600,
+                options: {
+                    chart: {
+                        height: 240
+                    },
+                    legend: {
+                        show: !1
+                    }
+                }
+            }]
+        };
+        (chart = new ApexCharts(document.querySelector("#simple-donut"), options)).render();
     </script>
 @endsection

@@ -44,9 +44,9 @@
                             <div class="col-sm-6">
 
                                 <div class="col-sm-4 ">
-                                    <a href="{{ route('prestation.index') }}" type="button"
-                                        class="btn btn-outline-primary"><i class="uil-arrow-left"></i>
-                                        Prestation</a>
+                                    <a href="@if ($evenement != null) {{ route('evenement.show', Crypt::encrypt($evenement->id)) }} @else {{ route('prestation.index') }} @endif"
+                                        type="button" class="btn btn-outline-primary"><i class="uil-arrow-left"></i>
+                                        Retour</a>
 
                                 </div>
                                 @if (session('ok'))
@@ -86,7 +86,8 @@
                                     <div class="alert alert-success text-secondary alert-dismissible ">
                                         <i class="dripicons-checkmark me-2"></i>
                                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                        <a href="#" class="alert-link"><strong> {{ session('message') }}</strong></a>
+                                        <a href="#" class="alert-link"><strong>
+                                                {{ session('message') }}</strong></a>
                                     </div>
                                 @endif
                             </div>
@@ -140,8 +141,10 @@
                                                 <option value=""></option>
                                                 @foreach ($produits as $produit)
                                                     <option value="{{ $produit->id }}"
-                                                        prix="{{ $produit->prix_vente_ttc }}">{{ $produit->nom }} -
-                                                        {{ number_format($produit->prix_vente_ttc, 2, ',', ' ') }} €
+                                                        prix="{{ $produit->prix_vente_ttc }}">
+                                                        {{ $produit->nom }} -
+                                                        {{ number_format($produit->prix_vente_ttc, 2, ',', ' ') }}
+                                                        €
                                                     </option>
                                                 @endforeach
 
@@ -186,7 +189,8 @@
                                 <div class="row mb-3">
 
                                     <div class="col-6 offset-3 ">
-                                        <label for="voiture_id" class="form-label fw-bold  text-secondary">Choisir une
+                                        <label for="voiture_id" class="form-label fw-bold  text-secondary">Choisir
+                                            une
                                             Voiture</label><br><br>
                                         @foreach ($voitures as $voiture)
                                             <div class="form-check form-check-inline">
@@ -194,7 +198,8 @@
                                                     id="voiture_{{ $voiture->id }}" value="{{ $voiture->id }}"
                                                     {{ old('voiture_id') == $voiture->id ? 'checked' : '' }}>
                                                 <label class="form-check-label"
-                                                    for="voiture_{{ $voiture->id }}">{{ $voiture->nom }} </label>
+                                                    for="voiture_{{ $voiture->id }}">{{ $voiture->nom }}
+                                                </label>
                                             </div>
                                         @endforeach
                                         @if ($errors->has('voiture_id'))
@@ -221,7 +226,8 @@
                                                 class=" form-control select2" data-toggle="select2">
                                                 <option value=""></option>
                                                 <option value="Espèces">Espèces</option>
-                                                <option value="Carte bancaire">Carte bancaire</option>
+                                                <option value="Carte bancaire">Carte bancaire
+                                                </option>
                                                 <option value="Virement">Virement</option>
                                                 <option value="Chèque">Chèque</option>
                                                 <option value="Autre">Autre</option>
@@ -544,7 +550,8 @@
                                 </div>
 
                                 <div class="col-lg-12 mb-3">
-                                    <label for="floatingInput">Le Bénéficiaire existe ? </label> <br>
+                                    <label for="floatingInput">Le Bénéficiaire existe ?
+                                    </label> <br>
 
                                     <input type="checkbox" name="contact_existant" id="contact_existant" checked
                                         data-switch="success" />

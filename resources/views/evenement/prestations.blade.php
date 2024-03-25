@@ -39,6 +39,7 @@
                         @else
                             <span class="text-default"> {{ $prestation->statut }}</span>
                         @endif
+                    </td>
 
                     <td>
                         <a href="{{ route('prestation.edit', [Crypt::encrypt($prestation->id), $evenement->id]) }}"

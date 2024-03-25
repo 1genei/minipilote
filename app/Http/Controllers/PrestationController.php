@@ -160,7 +160,7 @@ class PrestationController extends Controller
                 "type" => "prestation",
                 "prestation_id" => $prestation->id,
                 "libelle" => $charge[0],
-                "date" => $request->date_prestation,                
+                "date_depense" => $request->date_prestation,                
                 "montant" => $charge[1],
                 "user_id" => Auth::user()->id
             ]);
@@ -364,7 +364,7 @@ class PrestationController extends Controller
                 "type" => "prestation",
                 "prestation_id" => $prestation->id,
                 "libelle" => $charge[0],
-                "date" => $request->date_prestation,                
+                "date_depense" => $request->date_prestation,                
                 "montant" => $charge[1],
                 "user_id" => Auth::user()->id
             ]);

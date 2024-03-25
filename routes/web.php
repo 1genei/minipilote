@@ -27,6 +27,7 @@ use App\Http\Controllers\PrestationController;
 use App\Http\Controllers\VoitureController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\EvenementController;
+use App\Http\Controllers\DepenseController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -367,4 +368,18 @@ Route::controller(EvenementController::class)->group(function () {
     Route::put('/evenements/archiver/{evenementId}', 'archive')->name('evenement.archive')->middleware(['auth']);
     Route::put('/evenements/desarchiver/{evenementId}', 'unarchive')->name('evenement.unarchive')->middleware(['auth']);
 });
+
+// Dépenses
+Route::controller(DepenseController::class)->group(function () {
+    Route::get('/depenses', 'index')->name('depense.index')->middleware(['auth']);
+    Route::get('/depenses/archives', 'archives')->name('depense.archives')->middleware(['auth']);
+    Route::post('/depenses/ajouter', 'store')->name('depense.store')->middleware(['auth']);
+    Route::get('/depenses/ajouter', 'create')->name('depense.create')->middleware(['auth']);
+    Route::get('/depenses/modifier/{depenseId}', 'edit')->name('depense.edit')->middleware(['auth']);
+    Route::get('/depenses/details/{depenseId}', 'show')->name('depense.show')->middleware(['auth']);
+    Route::post('/depenses/modifier/{depenseId}', 'update')->name('depense.update')->middleware(['auth']);
+    Route::put('/depenses/archiver/{depenseId}', 'archive')->name('depense.archive')->middleware(['auth']);
+    Route::put('/depenses/desarchiver/{depenseId}', 'unarchive')->name('depense.unarchive')->middleware(['auth']);
+});
+
 require __DIR__ . '/auth.php';
