@@ -38,7 +38,8 @@ class Evenement extends Model
     * Retourne les dépenses liees a l'evenement
     */
     public function depenses(){
-        return $this->hasMany(Depense::class);
+        return $this->hasMany('App\Models\Depense');
+        // return $this->hasMany(Depense::class);
     }
     
     /*
