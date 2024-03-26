@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\depense;
+use App\Models\Depense;
 use Illuminate\Http\Request;
 use Auth;
 use Crypt;
@@ -60,21 +60,7 @@ class DepenseController extends Controller
         
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(depense $depense)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(depense $depense)
-    {
-        //
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -95,11 +81,5 @@ class DepenseController extends Controller
         
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(depense $depense)
-    {
-        //
-    }
+ 
 }
