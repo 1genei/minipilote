@@ -10,6 +10,4 @@ class Depense extends Model
     use HasFactory;
     protected $guarded =[];
     protected $casts = ['date_depense' => 'date'];
-    
-   
 }
