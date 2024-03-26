@@ -38,7 +38,7 @@ class DepenseController extends Controller
             "montant" => "required",
         ]);
         
-        $depense = new depense();
+        $depense = new Depense();
         $depense->type = $request->type;
         $depense->evenement_id = $request->evenement_id;
         $depense->libelle = $request->libelle;
