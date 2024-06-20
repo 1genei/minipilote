@@ -63,6 +63,9 @@ class TestController extends Controller
     
     }
     
+    public function abb(){
     
+        return view('abb');
+    }
 
 }

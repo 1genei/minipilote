@@ -46,6 +46,7 @@ Route::view('/powergrid', 'powergrid-demo');
 
 Route::get('/tests', [TestController::class, 'index'])->name('tests');
 Route::get('/import-contact', [TestController::class, 'importContact'])->name('import_contact');
+Route::get('/abb', [TestController::class, 'abb'])->name('abb');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
