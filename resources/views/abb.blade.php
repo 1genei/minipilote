@@ -66,11 +66,11 @@
             <div class="col-12">
 
 
-                <iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klcf/vues-abb?orgId=1&panelId=5" width="1200px" height="1000" frameborder="0"></iframe>
+                <iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klcf/vues-abb?orgId=1&panelId=5" width="1600px" height="1100px" frameborder="0"></iframe>
 
 <br><br>
 
-        <iframe src="http://51.77.193.222:3000/d-solo/fdns3n98dimm8f/chargeur-4-v3?orgId=1&panelId=1" width="1200px" height="1000" frameborder="0"></iframe>
+        <iframe src="http://51.77.193.222:3000/d-solo/fdns3n98dimm8f/chargeur-4-v3?orgId=1&panelId=1" width="1600px" height="1100px" frameborder="0"></iframe>
             </div>
         </div>
 
