@@ -10,6 +10,8 @@
     <meta content="minipilote" name="description" />
     <meta content="1genei" name="author" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+
 
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
