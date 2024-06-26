@@ -1,10 +1,10 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 @section('css')
     <link href="{{ asset('assets/css/vendor/dataTables.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
-@endsection
+@endsection --}}
 
-@section('content')
+{{-- @section('content') --}}
     <div class="content">
 
         <!-- start page title -->
@@ -59,25 +59,29 @@
             </div> <!-- end col-->
         </div>
         <!-- end row-->
+<iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klcf/vues-abb?orgId=1&refresh=15m&theme=light&panelId=5"  width="1600px" height="1100px" frameborder="0"></iframe>
+        {{-- <iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klco/vues-abb-2?orgId=1&refresh=15m&theme=light&panelId=5" width="1600px" height="1100px" frameborder="0"></iframe> --}}
+        {{-- <iframe src="http://51.77.193.222:3000/d-solo/fdns3n98dimm8fbcm/chargeur-4?orgId=1&refresh=15m&theme=light&panelId=2" width="100%" height="1000px" frameborder="0"></iframe>
+        <iframe src="http://51.77.193.222:3000/d-solo/fdns3n98dimm8fbcm/chargeur-4?orgId=1&from=1718784874332&to=1718806474332&panelId=2" width="450" height="200" frameborder="0"></iframe>
+     --}}
+        {{-- <div class="row">
+            <div class="col-12"> --}}
 
-
-
-        <div class="row">
-            <div class="col-12">
-
-
-                <iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klcf/vues-abb?orgId=1&panelId=5" width="1600px" height="1100px" frameborder="0"></iframe>
+                {{-- <iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klco/vues-abb-2?orgId=1&refresh=15m&theme=light&panelId=5" width="1600px" height="1100px" frameborder="0"></iframe> --}}
+                <br><br>
+                
+                {{-- <iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klcf/vues-abb?orgId=1&panelId=5" width="1600px" height="1100px" scrolling="yes" frameborder="0"></iframe> --}}
 
 <br><br>
 
-        <iframe src="http://51.77.193.222:3000/d-solo/fdns3n98dimm8f/chargeur-4-v3?orgId=1&panelId=1" width="1600px" height="1100px" frameborder="0"></iframe>
-            </div>
-        </div>
+        {{-- <iframe src="http://51.77.193.222:3000/d-solo/fdns3n98dimm8f/chargeur-4-v3?orgId=1&panelId=1" width="1600px" height="1100px" frameborder="0"></iframe> --}}
+            {{-- </div>
+        </div> --}}
 
 
     </div> <!-- End Content -->
-@endsection
+{{-- @endsection
 
 @section('script')
     <script src="{{ asset('assets/js/vendor/responsive.bootstrap5.min.js') }}"></script>
-@endsection
+@endsection --}}
