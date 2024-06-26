@@ -59,7 +59,8 @@
             </div> <!-- end col-->
         </div>
         <!-- end row-->
-<iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klcf/vues-abb?orgId=1&refresh=15m&theme=light&panelId=5"  width="1600px" height="1100px" frameborder="0"></iframe>
+        <iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klcf/vues-abb?orgId=1&from=1719394220888&to=1719394520888&panelId=5" width="1600px" height="1100px" frameborder="0"></iframe>
+{{-- <iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klcf/vues-abb?orgId=1&refresh=15m&theme=light&panelId=5"  width="1600px" height="1100px" frameborder="0"></iframe> --}}
         {{-- <iframe src="http://51.77.193.222:3000/d-solo/ddnnyrz7g7klco/vues-abb-2?orgId=1&refresh=15m&theme=light&panelId=5" width="1600px" height="1100px" frameborder="0"></iframe> --}}
         {{-- <iframe src="http://51.77.193.222:3000/d-solo/fdns3n98dimm8fbcm/chargeur-4?orgId=1&refresh=15m&theme=light&panelId=2" width="100%" height="1000px" frameborder="0"></iframe>
         <iframe src="http://51.77.193.222:3000/d-solo/fdns3n98dimm8fbcm/chargeur-4?orgId=1&from=1718784874332&to=1718806474332&panelId=2" width="450" height="200" frameborder="0"></iframe>
