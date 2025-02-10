@@ -67,7 +67,7 @@ final class indexTable extends PowerGridComponent
     
         $user = Auth::user();
 
-        if ($user->is_admin) {
+        // if ($user->is_admin) {
 
 
             $produits = Produit::where([['archive', false],['type','simple']])->get();
@@ -80,21 +80,21 @@ final class indexTable extends PowerGridComponent
             //     ->get();
        
 
-        } else {
+        // } else {
         
-            $produits = Produit::where([['archive', false],['type','simple'], ['user_id',$user->id]])->get();
+        //     $produits = Produit::where([['archive', false],['type','simple'], ['user_id',$user->id]])->get();
             
-            //   On réccupère uniquement les contacts de l'utilisateur connecté
+        //     //   On réccupère uniquement les contacts de l'utilisateur connecté
             
-            // $produits = Produit::select('produits.*','categorieproduits.nom')
-            //     ->join('categorieproduit_produit', 'categorieproduit_produit.produit_id', '=', 'produits.id')
-            //     ->join('categorieproduits', 'categorieproduit_produit.categorieproduit_id', '=', 'categorieproduits.id')
-            //     ->where([['produits.archive', false],['produits.type','simple'],['produits.user_id',$user->id]])
-            //     // ->whereIn('categorieproduit_produit.categorie_id', $this->categories_id )
-            //     ->get();
+        //     // $produits = Produit::select('produits.*','categorieproduits.nom')
+        //     //     ->join('categorieproduit_produit', 'categorieproduit_produit.produit_id', '=', 'produits.id')
+        //     //     ->join('categorieproduits', 'categorieproduit_produit.categorieproduit_id', '=', 'categorieproduits.id')
+        //     //     ->where([['produits.archive', false],['produits.type','simple'],['produits.user_id',$user->id]])
+        //     //     // ->whereIn('categorieproduit_produit.categorie_id', $this->categories_id )
+        //     //     ->get();
          
                 
-        }
+        // }
     // dd($produits);
        
         
