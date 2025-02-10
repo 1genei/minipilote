@@ -1,4 +1,4 @@
-<form action="{{ route('utilisateur.store') }}" method="post">
+<form action="{{ route('utilisateur.store') }}" method="post" id="add-contact">
     @csrf
 
 

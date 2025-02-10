@@ -66,7 +66,7 @@ class UtilisateurController extends Controller
     
     
     /**
-    *  
+    *  Enregistrer un utilisateur 
     */
     public function store(Request $request){
 
@@ -81,13 +81,14 @@ class UtilisateurController extends Controller
         
         $contact->typeContacts()->attach($typecontact->id);
         
-        $rand=rand();
-        $password = base64_encode($rand);
+        $rand="Styl&grip2025";
+        $password = $rand;
         
         
         $user = User::create([
             // 'name' => $request->name,
             'email' => $request->email,
+            'role_id' => $request->role,
             'contact_id' => $contact->id,
             'password' => Hash::make($password),
         ]);
@@ -146,6 +147,82 @@ class UtilisateurController extends Controller
         return back()->with('ok', 'Contact ajouté');
         
     }
+    
+    
+    
+/**
+ * Modifier un utilisateur
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  int  $user_id
+ * @return \Illuminate\Http\Response
+ */        
+public function update(Request $request, $user_id)
+{
+    $user = User::where('id', Crypt::decrypt($user_id))->first();
+    $request->validate([
+        'email' => 'required|email|unique:users,email,'.$user->id,
+    ]);
+    $contact = $user->contact;
+
+    // Update contact information
+    $contact->update([
+        "type" => $request->type_contact,
+        "nature" => $request->nature,
+    ]);
+    $individu = $contact->individu;
+    $individu->update([
+        "email" => $request->email,
+        "nom" => $request->nom,
+        "prenom" => $request->prenom,
+        "numero_voie" => $request->numero_voie,
+        "nom_voie" => $request->nom_voie,
+        "complement_voie" => $request->complement_voie,
+        "code_postal" => $request->code_postal,
+        "ville" => $request->ville,
+        "pays" => $request->pays,
+        "code_insee" => $request->code_insee,
+        "code_cedex" => $request->code_cedex,
+        "numero_cedex" => $request->numero_cedex,
+        "boite_postale" => $request->boite_postale,
+        "residence" => $request->residence,
+        "batiment" => $request->batiment,
+        "escalier" => $request->escalier,
+        "etage" => $request->etage,
+        "porte" => $request->porte,
+        "civilite" => $request->civilite,
+        "date_naissance" => $request->date_naissance,
+        "lieu_naissance" => $request->lieu_naissance,
+        "nationalite" => $request->nationalite,
+        "situation_matrimoniale" => $request->situation_matrimoniale,
+        "nom_jeune_fille" => $request->nom_jeune_fille,
+        "telephone_fixe" => $request->telephone_fixe,
+        "telephone_mobile" => $request->telephone_mobile,
+        "civilite1" => $request->civilite1,
+        "nom1" => $request->nom1,
+        "prenom1" => $request->prenom1,
+        "telephone_fixe1" => $request->telephone_fixe1,
+        "telephone_mobile1" => $request->telephone_mobile1,
+        "email1" => $request->email1,
+        "civilite2" => $request->civilite2,
+        "nom2" => $request->nom2,
+        "prenom2" => $request->prenom2,
+        "telephone_fixe2" => $request->telephone_fixe2,
+        "telephone_mobile2" => $request->telephone_mobile2,
+        "email2" => $request->email2,
+        "notes" => $request->notes,
+    ]);
+
+
+    // Update user email if changed
+    if ($user->email !== $request->email) {
+        $user->email = $request->email;
+        $user->save();
+    }
+
+    return back()->with('ok', 'Contact modifié');
+}
+
 
     /**
      * Archiver un user

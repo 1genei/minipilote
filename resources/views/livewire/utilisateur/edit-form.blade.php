@@ -1,4 +1,4 @@
-<form action="{{ route('utilisateur.store') }}" method="post">
+<form action="{{ route('utilisateur.update', Crypt::encrypt(1)) }}" method="post">
     @csrf
 
 
