@@ -304,13 +304,7 @@
                 </div>
             </li>
         @endcan
-       
-        <li class="side-nav-item ">
-            <a href="{{ route('abb') }}" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
-                <i class="mdi mdi-view-dashboard"></i>
-                <span> ABB </span>
-            </a>
-        </li>
+
     
     </ul>
 
