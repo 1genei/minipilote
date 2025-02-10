@@ -2,7 +2,7 @@
     $curent_url = $_SERVER['REQUEST_URI'];
     $curent_url = explode('/', $curent_url);
 
-    $li_dashboard = $li_utilisateur = $li_utilisateur_droit =  $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_evenement = $li_contact_fournisseur = $li_contact = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_voiture = $li_parametre_circuit = '';
+    $li_dashboard = $li_utilisateur = $li_utilisateur_droit =  $li_contact_collaborateur = $li_contact_prospect = $li_contact_client = $li_evenement = $li_contact_fournisseur = $li_contact = $li_catalogue_produit = $li_catalogue_stock = $li_catalogue_categorie = $li_catalogue_caracteristique = $li_prestation = $li_agenda = $li_parametre_contact = $li_parametre_generaux = $li_parametre_produit = $li_parametre_voiture = $li_parametre_circuit = '';
     $li_utilisateur_show = $li_contact_show = $li_catalogue_show = $li_parametre_show  = false;
 
     switch ($curent_url[1]) {
@@ -45,7 +45,10 @@
             $li_contact = 'menuitem-active';
             $li_contact_show = true;
             break;
-
+        // Prestation
+        case 'prestations':
+            $li_prestation = 'menuitem-active';
+            break;
         // Agenda
         case 'agendas':
             $li_agenda = 'menuitem-active';
@@ -257,7 +260,7 @@
         </li>
         @endcan
         @can('permission', 'afficher-prestation')
-            <li class="side-nav-item {{ $li_agenda }}">
+            <li class="side-nav-item {{ $li_prestation }}">
                 <a href="{{ route('prestation.index') }}" aria-expanded="false" aria-controls="sidebarDashboards"
                     class="side-nav-link">
                     <i class=" uil-briefcase"></i>
