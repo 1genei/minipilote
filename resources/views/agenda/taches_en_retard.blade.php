@@ -4,6 +4,52 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <style>
+        /* Forcer l'affichage de toutes les colonnes */
+        .table-responsive {
+            overflow-x: auto !important;
+            min-width: 100%;
+        }
+        
+        /* Définir des largeurs minimales pour certaines colonnes */
+        .table th, .table td {
+            white-space: normal;
+            min-width: 100px;
+        }
+        
+        /* Largeurs spécifiques pour chaque colonne */
+        .table th.col-user, .table td.col-user { min-width: 150px; }
+        .table th.col-contact, .table td.col-contact { min-width: 200px; }
+        .table th.col-type, .table td.col-type { min-width: 120px; }
+        .table th.col-task, .table td.col-task { min-width: 250px; }
+        .table th.col-date, .table td.col-date { min-width: 150px; }
+        .table th.col-status, .table td.col-status { min-width: 100px; }
+        .table th.col-actions, .table td.col-actions { min-width: 100px; }
+
+        /* Style pour les tâches en retard */
+        .task-overdue {
+            background-color: rgba(255, 0, 0, 0.05);
+        }
+        
+        /* Style pour forcer le retour à la ligne dans la colonne tâche */
+        .task-description {
+            white-space: normal !important;
+            word-wrap: break-word;
+            max-width: 250px;
+        }
+        
+        .task-title {
+            font-weight: bold;
+            color: #e05555;
+            margin-bottom: 5px;
+        }
+        
+        .task-details {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -15,10 +61,13 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="">Tâches </a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('agenda.index') }}">Agenda</a></li>
+                            <li class="breadcrumb-item active">Tâches en retard</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Tâches </h4>
+                    <h4 class="page-title text-danger">
+                        <i class="mdi mdi-alert-circle me-1"></i> Tâches en retard
+                    </h4>
                 </div>
             </div>
         </div>
@@ -157,21 +206,20 @@
 
 
 
-                                                    <div class="table-responsive" style="overflow-x: inherit !important;">
+                                                    <div class="table-responsive">
                                                         <table
                                                             class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap"
                                                             id="tab1">
                                                             <thead class="table-secondary">
 
                                                                 <tr>
-                                                                    <th>Tâche créée par</th>
-                                                                    <th>Contact</th>
-                                                                    <th>Type</th>
-                                                                    <th>Tâche</th>
-                                                                    {{-- <th>Tâche</th> --}}
-                                                                    <th>Date prévue de réalisation</th>
-                                                                    <th>Statut</th>
-                                                                    <th>Action</th>
+                                                                    <th class="col-user">Tâche créée par</th>
+                                                                    <th class="col-contact">Contact</th>
+                                                                    <th class="col-type">Type</th>
+                                                                    <th class="col-task">Tâche</th>
+                                                                    <th class="col-date">Date prévue de réalisation</th>
+                                                                    <th class="col-status">Statut</th>
+                                                                    <th class="col-actions">Action</th>
 
 
                                                                 </tr>
@@ -181,11 +229,13 @@
                                                                 @foreach ($agendas as $agenda)
                                                                     <tr>
 
-                                                                        <td style="color: #450854; ">
+                                                                        <td style="color: #450854;">
                                                                             <span>
-                                                                                @if ($agenda->user != null)
-                                                                                    {{ $agenda->user->contact?->infos()->prenom }}
-                                                                                    {{ $agenda->user->contact?->infos()->nom }}
+                                                                                @if ($agenda->user && $agenda->user->contact && $agenda->user->contact->individu)
+                                                                                    {{ $agenda->user->contact->individu->prenom }}
+                                                                                    {{ $agenda->user->contact->individu->nom }}
+                                                                                @else
+                                                                                    <span class="text-muted">Utilisateur non défini</span>
                                                                                 @endif
                                                                             </span>
                                                                         </td>
@@ -208,10 +258,9 @@
                                                                             <p class="media-heading">
                                                                                 {{ $agenda->type_rappel }} </p>
                                                                         </td>
-                                                                        <td>
-                                                                            <p style="color: #e05555; font-weight:bold; ">
-                                                                                {{ $agenda->titre }} </p>
-                                                                            <p> <i>{{ $agenda->description }} </i> </p>
+                                                                        <td class="task-description">
+                                                                            <div class="task-title">{{ $agenda->titre }}</div>
+                                                                            <div class="task-details">{{ $agenda->description }}</div>
                                                                         </td>
 
                                                                         <td style="color: #32ade1;">
@@ -965,7 +1014,18 @@
                     lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
                 },
                 pageLength: 100,
-
+                scrollX: true, // Activer le défilement horizontal
+                autoWidth: false, // Désactiver l'ajustement automatique de la largeur
+                responsive: false, // Désactiver le responsive pour éviter le bouton +
+                columnDefs: [
+                    { orderable: true, width: '150px', targets: 0 }, // Tâche créée par
+                    { orderable: true, width: '200px', targets: 1 }, // Contact
+                    { orderable: true, width: '120px', targets: 2 }, // Type
+                    { orderable: true, width: '250px', targets: 3 }, // Tâche
+                    { orderable: true, width: '150px', targets: 4 }, // Date
+                    { orderable: true, width: '100px', targets: 5 }, // Statut
+                    { orderable: false, width: '100px', targets: 6 } // Actions
+                ],
                 select: {
                     style: "multi"
                 },
@@ -976,6 +1036,9 @@
                             e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
                                 .classList.remove("col-md-6")
                         })
+                },
+                createdRow: function(row, data, dataIndex) {
+                    $(row).addClass('task-overdue'); // Ajoute une classe pour le style des tâches en retard
                 }
             })
         });

@@ -25,6 +25,7 @@ class CreateAgendasTable extends Migration
             $table->string('heure_fin')->nullable();
             $table->boolean('est_lie')->default(false);
             $table->integer('contact_id')->nullable();
+            $table->string('priorite')->default('moyenne');
             $table->boolean('est_terminee')->default(false);
             $table->boolean("archive")->default(false);            
             $table->timestamps();

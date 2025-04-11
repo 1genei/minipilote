@@ -4,6 +4,29 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <style>
+        /* Forcer l'affichage de toutes les colonnes */
+        .table-responsive {
+            overflow-x: auto !important;
+            min-width: 100%;
+        }
+        
+        /* Définir des largeurs minimales pour certaines colonnes */
+        .table th, .table td {
+            white-space: normal; /* Permettre le retour à la ligne */
+            min-width: 100px; /* Largeur minimale par défaut */
+        }
+        
+        /* Largeurs spécifiques pour certaines colonnes */
+        .table th.col-statut, .table td.col-statut { min-width: 100px; }
+        .table th.col-priorite, .table td.col-priorite { min-width: 80px; }
+        .table th.col-type, .table td.col-type { min-width: 120px; }
+        .table th.col-titre, .table td.col-titre { min-width: 250px; }
+        .table th.col-contact, .table td.col-contact { min-width: 200px; }
+        .table th.col-assigne, .table td.col-assigne { min-width: 200px; }
+        .table th.col-date, .table td.col-date { min-width: 150px; }
+        .table th.col-actions, .table td.col-actions { min-width: 100px; }
+    </style>
 @endsection
 
 @section('content')
@@ -24,12 +47,6 @@
         </div>
         <!-- end page title -->
 
-        <style>
-            body {
-
-                font-size: 14px;
-            }
-        </style>
 
         <!-- end row-->
 
@@ -165,115 +182,162 @@
 
 
 
-                                                    <div class="table-responsive" style="overflow-x: inherit !important;">
-                                                        <table
-                                                            class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap"
-                                                            id="tab1">
-                                                            <thead class="table-secondary">
-
+                                                    <div class="table-responsive">
+                                                        <table class="table table-centered table-hover w-100 dt-responsive no-wrap" id="tab1">
+                                                            <thead class="table-light">
                                                                 <tr>
-                                                                    <th>Tâche créée par</th>
-                                                                    <th>Contact</th>
-                                                                    <th>Type</th>
-                                                                    <th>Tâche</th>
-                                                                    {{-- <th>Tâche</th> --}}
-                                                                    <th>Date prévue de réalisation</th>
-                                                                    <th>Statut</th>
-                                                                    <th>Action</th>
-
-
+                                                                    <th class="col-statut">Statut</th>
+                                                                    <th class="col-date">Date & Heure</th>
+                                                                    <th class="col-priorite">Priorité</th>
+                                                                    <th class="col-titre">Titre & Description</th>
+                                                                    <th class="col-contact">Contact lié</th>
+                                                                    @if(in_array(Auth::user()?->role?->nom, ['Admin', 'SuperAdmin']))
+                                                                        <th class="col-assigne">Assigné à</th>
+                                                                    @endif
+                                                                    <th class="col-actions">Actions</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-
                                                                 @foreach ($agendas as $agenda)
                                                                     <tr>
-
-                                                                        <td style="color: #450854; ">
-                                                                            <span>
-                                                                                @if ($agenda->user != null)
-                                                                                    {{ $agenda->user->contact?->infos()->prenom }}
-                                                                                    {{ $agenda->user->contact?->infos()->nom }}
-                                                                                @endif
-                                                                            </span>
-                                                                        </td>
-
-                                                                        <td style="color: #450854; ">
-                                                                            <span>
-                                                                                @if ($agenda->est_lie == true && $agenda->contact)
-                                                                                    @if ($agenda->contact?->type == 'individu')
-                                                                                        {{ $agenda->contact?->individu?->nom }}
-                                                                                        {{ $agenda->contact?->individu?->prenom }}
-                                                                                    @else
-                                                                                        {{ $agenda->contact?->entite?->raison_sociale }}
-                                                                                    @endif
-                                                                                @endif
-
-                                                                            </span>
-                                                                        </td>
-
-                                                                        <td style="color: #450854; ">
-                                                                            <p class="media-heading">
-                                                                                {{ $agenda->type_rappel }} </p>
-                                                                        </td>
                                                                         <td>
-                                                                            <p style="color: #e05555; font-weight:bold; ">
-                                                                                {{ $agenda->titre }} </p>
-                                                                            <p> <i>{{ $agenda->description }} </i> </p>
-                                                                        </td>
-
-                                                                        <td style="color: #32ade1;">
-
-                                                                            <p class="" style="font-weight: bold;">
-                                                                                {{ string_to_date($agenda->date_deb) }} à
-                                                                                {{ $agenda->heure_deb }}</p>
-                                                                        </td>
-
-                                                                        <td style="color: #32ade1;">
-                                                                            <div class="comment-action">
-                                                                                @if ($agenda->est_terminee == true)
-                                                                                    <div class="badge bg-success">Terminée
-                                                                                    </div>
+                                                                            @if ($agenda->est_terminee)
+                                                                                <span class="badge bg-success-subtle text-success">Terminée</span>
+                                                                            @else
+                                                                                @if ($agenda->date_deb < date('Y-m-d'))
+                                                                                    <span class="badge bg-danger-subtle text-danger">En retard</span>
                                                                                 @else
-                                                                                    <div class="badge bg-danger">Non
-                                                                                        Terminée</div>
+                                                                                    <span class="badge bg-warning-subtle text-warning">À faire</span>
                                                                                 @endif
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="d-flex align-items-center">
+                                                                                <i class="mdi mdi-calendar me-1 text-muted"></i>
+                                                                                <p class="mb-0">{{ \Carbon\Carbon::parse($agenda->date_deb)->format('d/m/Y') }}</p>
                                                                             </div>
-
+                                                                            <div class="d-flex align-items-center mt-1">
+                                                                                <i class="mdi mdi-clock-outline me-1 text-muted"></i>
+                                                                                <p class="mb-0">{{ $agenda->heure_deb }}</p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            @switch($agenda->priorite)
+                                                                                @case('haute')
+                                                                                    <i class="mdi mdi-arrow-up-bold text-danger" data-bs-toggle="tooltip" title="Haute"></i>
+                                                                                    @break
+                                                                                @case('moyenne')
+                                                                                    <i class="mdi mdi-arrow-right-bold text-warning" data-bs-toggle="tooltip" title="Moyenne"></i>
+                                                                                    @break
+                                                                                @default
+                                                                                    <i class="mdi mdi-arrow-down-bold text-success" data-bs-toggle="tooltip" title="Basse"></i>
+                                                                            @endswitch
+                                                                                <span class="text-muted">{{ $agenda->priorite }}
+                                                                                </span>
                                                                         </td>
 
                                                                         <td>
+                                                                            @switch($agenda->type_rappel)
+                                                                                @case('rdv')
+                                                                                    <span class="badge bg-primary">
+                                                                                        <i class="mdi mdi-calendar-clock me-1"></i> Rendez-vous
+                                                                                    </span>
+                                                                                    @break
+                                                                                @case('contacter')
+                                                                                    <span class="badge bg-info">
+                                                                                        <i class="mdi mdi-phone me-1"></i> À contacter
+                                                                                    </span>
+                                                                                    @break
+                                                                                @case('recontacter')
+                                                                                    <span class="badge bg-warning">
+                                                                                        <i class="mdi mdi-phone-return me-1"></i> À recontacter
+                                                                                    </span>
+                                                                                    @break
+                                                                                @default
+                                                                                    <span class="badge bg-secondary">
+                                                                                        <i class="mdi mdi-checkbox-marked-circle-outline me-1"></i> Autre
+                                                                                    </span>
+                                                                            @endswitch
+
+                                                                            <h6 class="mb-1 mt-2">{{ $agenda->titre }}</h6>
+                                                                            <p class="text-muted mb-0">{{ $agenda->description }}</p>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            @if ($agenda->est_lie && $agenda->contact)
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="flex-shrink-0">
+                                                                                        <i class="mdi mdi-account-circle text-muted font-14"></i>
+                                                                                    </div>
+                                                                                    <div class="flex-grow-1 ms-2">
+                                                                                        <h6 class="mt-0 mb-1">
+                                                                                            @if ($agenda->contact->type == 'individu')
+                                                                                                {{ $agenda->contact->individu?->nom }}
+                                                                                                {{ $agenda->contact->individu?->prenom }}
+                                                                                            @else
+                                                                                                {{ $agenda->contact->entite?->raison_sociale }}
+                                                                                            @endif
+                                                                                        </h6>
+                                                                                        <p class="text-muted mb-0">
+                                                                                            <i class="mdi mdi-phone me-1"></i>
+                                                                                            {{ $agenda->contact->individu?->telephone_mobile ?? 'Non renseigné' }}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            @else
+                                                                                <span class="text-muted">Aucun contact lié</span>
+                                                                            @endif
+                                                                        </td>
+
+                                                                        <td>
+                                                                            @if ($agenda->user)
+                                                                                <div class="d-flex align-items-center">
+                                                                                   
+                                                                                    <div class="flex-grow-1 ms-2">
+                                                                                        <h6 class="mt-0 mb-1">
+                                                                                            {{ $agenda->user->contact?->individu?->prenom ?? '' }}
+                                                                                            {{ $agenda->user->contact?->individu?->nom ?? '' }}
+                                                                                        </h6>
+                                                                                        <p class="text-muted mb-0">
+                                                                                            {{ $agenda->user->role?->nom ?? 'Rôle non défini' }}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            @else
+                                                                                <span class="text-muted">Non assigné</span>
+                                                                            @endif
+                                                                        </td>
+
+                                                                        
+
+                                                                        <td class="table-action">
                                                                             @can('permission', 'modifier-agenda')
-                                                                                <a data-href="{{ route('agenda.update', $agenda->id) }}"
-                                                                                    href="javascript:void(0);"
-                                                                                    data-titre="{{ $agenda->titre }}"
-                                                                                    data-description="{{ $agenda->description }}"
-                                                                                    data-date_deb="{{ $agenda->date_deb }}"
-                                                                                    data-date_fin="{{ $agenda->date_fin }}"
-                                                                                    data-heure_deb="{{ $agenda->heure_deb }}"
-                                                                                    data-type="{{ $agenda->type_rappel }}"
-                                                                                    data-est_lie="{{ $agenda->est_lie }} "
-                                                                                    data-est_terminee="{{ $agenda->est_terminee }} "
-                                                                                    data-contact_id="{{ $agenda->contact_id }}"
-                                                                                    title="@lang('Modifier ')"
-                                                                                    title="@lang('modifier la tâche ') "
-                                                                                    class="modifier text-success"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#modifier-modal"><i
-                                                                                        class="mdi mdi-circle-edit-outline"></i>
+                                                                                <a href="javascript:void(0);" 
+                                                                                   class="action-icon modifier text-success" 
+                                                                                   data-bs-toggle="modal"
+                                                                                   data-bs-target="#modifier-modal"
+                                                                                   data-href="{{ route('agenda.update', $agenda->id) }}"
+                                                                                   data-titre="{{ $agenda->titre }}"
+                                                                                   data-description="{{ $agenda->description }}"
+                                                                                   data-date_deb="{{ $agenda->date_deb }}"
+                                                                                   data-date_fin="{{ $agenda->date_fin }}"
+                                                                                   data-heure_deb="{{ $agenda->heure_deb }}"
+                                                                                   data-type="{{ $agenda->type_rappel }}"
+                                                                                   data-est_lie="{{ $agenda->est_lie }}"
+                                                                                   data-est_terminee="{{ $agenda->est_terminee }}"
+                                                                                   data-contact_id="{{ $agenda->contact_id }}">
+                                                                                    <i class="mdi mdi-square-edit-outline" ></i>
                                                                                 </a>
                                                                             @endcan
+
                                                                             @can('permission', 'supprimer-agenda')
-                                                                                <a href="javascript:void(0);"
-                                                                                    data-href="{{ route('agenda.destroy', $agenda->id) }}"
-                                                                                    class="delete text-danger"
-                                                                                    data-toggle="tooltip"
-                                                                                    title="@lang('Supprimer la tâche') "><i
-                                                                                        class="mdi mdi-delete-circle-outline"></i>
+                                                                                <a href="javascript:void(0);" 
+                                                                                   class="action-icon delete text-danger" 
+                                                                                   data-href="{{ route('agenda.destroy', $agenda->id) }}">
+                                                                                    <i class="mdi mdi-delete"></i>
                                                                                 </a>
                                                                             @endcan
                                                                         </td>
-
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -970,19 +1034,23 @@
                     lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
                 },
                 pageLength: 100,
-
+                scrollX: true, // Activer le défilement horizontal
+                autoWidth: false, // Désactiver l'ajustement automatique de la largeur
+                responsive: false, // Désactiver le responsive pour éviter le bouton +
+                columnDefs: [
+                    { orderable: true, width: '100px', targets: 0 }, // Statut
+                    { orderable: true, width: '80px', targets: 1 },  // Priorité
+                    { orderable: true, width: '120px', targets: 2 }, // Type
+                    { orderable: true, width: '250px', targets: 3 }, // Titre
+                    { orderable: true, width: '200px', targets: 4 }, // Contact
+                    { orderable: true, width: '200px', targets: 5 }, // Assigné
+                    { orderable: true, width: '150px', targets: 6 }, // Date
+                    { orderable: false, width: '100px', targets: 7 } // Actions
+                ],
                 select: {
                     style: "multi"
-                },
-                drawCallback: function() {
-                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                        document.querySelector(".dataTables_wrapper .row").querySelectorAll(".col-md-6")
-                        .forEach(function(e) {
-                            e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
-                                .classList.remove("col-md-6")
-                        })
                 }
-            })
+            });
         });
     </script>
 @endsection

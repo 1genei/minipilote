@@ -79,7 +79,7 @@
                         </div>
 
 
-                        <livewire:utilisateur.edit-form :utilisateur="$user" />
+                        @livewire('utilisateur.edit-form', ['user' => $user])
 
 
 

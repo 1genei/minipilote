@@ -4,6 +4,15 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <style>
+        body {
+            font-size: 14px;
+        }
+        /* Style pour les tâches à faire */
+        .task-todo {
+            background-color: rgba(255, 193, 7, 0.05);
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -15,24 +24,17 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="">Tâches </a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('agenda.index') }}">Agenda</a></li>
+                            <li class="breadcrumb-item active">Tâches à faire</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Tâches </h4>
+                    <h4 class="page-title text-warning">
+                        <i class="mdi mdi-calendar-check me-1"></i> Tâches à faire
+                    </h4>
                 </div>
             </div>
         </div>
         <!-- end page title -->
-
-        <style>
-            body {
-
-                font-size: 14px;
-            }
-        </style>
-
-        <!-- end row-->
-
 
         <div class="row">
             <div class="col-lg-12">
@@ -977,6 +979,9 @@
                             e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
                                 .classList.remove("col-md-6")
                         })
+                },
+                createdRow: function(row, data, dataIndex) {
+                    $(row).addClass('task-todo'); // Ajoute une classe pour le style des tâches à faire
                 }
             })
         });

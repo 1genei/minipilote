@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'role_id',
+        'contact_id',
         'password',
         'archive'
     ];
@@ -43,9 +44,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'last_login_at' => 'datetime',
     ];
     
-     /**
+    /**
      * Retourne le role que possède un utilisateur
      */
     function role(){

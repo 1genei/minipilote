@@ -52,12 +52,17 @@ class AgendaController extends Controller
      */
     public function listing()
     {
-        
-        $agendas = Agenda::all();
-        
-        $contacts = Contact::where([['archive',false]])->get();
-        
-        return view('agenda.listing',compact('agendas', 'contacts'));
+        // Chargement des agendas avec leurs relations
+        $agendas = Agenda::with(['user.contact.individu', 'contact.individu', 'contact.entite'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Chargement des contacts non archivés pour les formulaires
+        $contacts = Contact::where('archive', false)
+            ->with(['individu', 'entite'])
+            ->get();
+
+        return view('agenda.listing', compact('agendas', 'contacts'));
     }
     
     
@@ -69,13 +74,19 @@ class AgendaController extends Controller
      */
     public function listing_en_retard()
     {
-        
-        $agendas = Agenda::where([['est_terminee', false], ['date_deb', '<', date('Y-m-d')]])->get();
-    
-        $contacts = Contact::where([['archive',false]])->get();
+        // Chargement eager des relations nécessaires
+        $agendas = Agenda::where([
+            ['est_terminee', false], 
+            ['date_deb', '<', date('Y-m-d')]
+        ])
+        ->with(['user.contact.individu', 'contact.individu', 'contact.entite'])
+        ->get();
 
-    
-        return view('agenda.taches_en_retard',compact('agendas','contacts'));
+        $contacts = Contact::where('archive', false)
+            ->with(['individu', 'entite'])
+            ->get();
+
+        return view('agenda.taches_en_retard', compact('agendas', 'contacts'));
     }
     
       /**
@@ -85,13 +96,18 @@ class AgendaController extends Controller
      */
     public function listing_a_faire()
     {
-        
-        $agendas = Agenda::where([['est_terminee', false], ['date_deb', '>=', date('Y-m-d')]])->get();
-       
-        
-        $contacts = Contact::where([['archive',false]])->get();
+        $agendas = Agenda::where([
+            ['est_terminee', false], 
+            ['date_deb', '>=', date('Y-m-d')]
+        ])
+        ->with(['user.contact.individu', 'contact.individu', 'contact.entite'])
+        ->get();
 
-        return view('agenda.taches_a_faire',compact('agendas','contacts'));
+        $contacts = Contact::where('archive', false)
+            ->with(['individu', 'entite'])
+            ->get();
+
+        return view('agenda.taches_a_faire', compact('agendas', 'contacts'));
     }
     
     

@@ -5,10 +5,13 @@ namespace App\Http\Livewire\Utilisateur;
 use Livewire\Component;
 use App\Models\Role;
 use App\Models\Individu;
+use App\Models\User;
+use Illuminate\Support\Facades\Crypt;
 
 class EditForm extends Component
 { 
-public $roles;
+    public $user;
+    public $roles;
     public $contact_existant;
     public $individus;
     public $individu;
@@ -41,46 +44,91 @@ public $roles;
     public $utilisateur;
     public $contactindividus;
     public $infosUser;
+    public $date_naissance;
+    public $lieu_naissance;
+    public $nationalite;
+    public $situation_matrimoniale;
+    public $nom_jeune_fille;
+    public $civilite1;
+    public $nom1;
+    public $prenom1;
+    public $telephone_fixe1;
+    public $telephone_mobile1;
+    public $email1;
+    public $civilite2;
+    public $nom2;
+    public $prenom2;
+    public $telephone_fixe2;
+    public $telephone_mobile2;
+    public $email2;
     
-    
-    public function render()
+    public function mount(User $user)
     {
-    
-    
+        $this->user = $user;
+        
+        // Informations de base
+        $this->email = $user->email;
+        $this->nom = $user->contact->individu->nom;
+        $this->prenom = $user->contact->individu->prenom;
+        
+        // Adresse
+        $this->numero_voie = $user->contact->individu->numero_voie;
+        $this->nom_voie = $user->contact->individu->nom_voie;
+        $this->complement_voie = $user->contact->individu->complement_voie;
+        $this->code_postal = $user->contact->individu->code_postal;
+        $this->ville = $user->contact->individu->ville;
+        $this->pays = $user->contact->individu->pays;
+        $this->code_insee = $user->contact->individu->code_insee;
+        $this->code_cedex = $user->contact->individu->code_cedex;
+        $this->numero_cedex = $user->contact->individu->numero_cedex;
+        $this->boite_postale = $user->contact->individu->boite_postale;
+        $this->residence = $user->contact->individu->residence;
+        $this->batiment = $user->contact->individu->batiment;
+        $this->escalier = $user->contact->individu->escalier;
+        $this->etage = $user->contact->individu->etage;
+        $this->porte = $user->contact->individu->porte;
+        
+        // Téléphones et indicatifs
+        $this->telephone_fixe = $user->contact->individu->telephone_fixe;
+        $this->telephone_mobile = $user->contact->individu->telephone_mobile;
+        $this->indicatif_fixe = $user->contact->individu->indicatif_fixe;
+        $this->indicatif_mobile = $user->contact->individu->indicatif_mobile;
+        
+        // Informations personnelles
+        $this->civilite = $user->contact->individu->civilite;
+        $this->date_naissance = $user->contact->individu->date_naissance;
+        $this->lieu_naissance = $user->contact->individu->lieu_naissance;
+        $this->nationalite = $user->contact->individu->nationalite;
+        $this->situation_matrimoniale = $user->contact->individu->situation_matrimoniale;
+        $this->nom_jeune_fille = $user->contact->individu->nom_jeune_fille;
+        
+        // Contacts supplémentaires 1
+        $this->civilite1 = $user->contact->individu->civilite1;
+        $this->nom1 = $user->contact->individu->nom1;
+        $this->prenom1 = $user->contact->individu->prenom1;
+        $this->telephone_fixe1 = $user->contact->individu->telephone_fixe1;
+        $this->telephone_mobile1 = $user->contact->individu->telephone_mobile1;
+        $this->email1 = $user->contact->individu->email1;
+        
+        // Contacts supplémentaires 2
+        $this->civilite2 = $user->contact->individu->civilite2;
+        $this->nom2 = $user->contact->individu->nom2;
+        $this->prenom2 = $user->contact->individu->prenom2;
+        $this->telephone_fixe2 = $user->contact->individu->telephone_fixe2;
+        $this->telephone_mobile2 = $user->contact->individu->telephone_mobile2;
+        $this->email2 = $user->contact->individu->email2;
+        
+        // Notes
+        $this->notes = $user->contact->individu->notes;
+        
+        // Autres informations
         $this->roles = Role::where('archive', false)->get();
         $this->individus = Individu::where('archive', false)->get();
-        $this->infosUser = $this->utilisateur?->infos();
+        $this->role = $user->role_id;
+    }
 
-        // $emails = $this->infosUser?->email != null ? json_decode($this->infosUser?->email) : [];
-  
-
-        $this->nom = $this->infosUser?->nom;   
-        $this->prenom = $this->infosUser?->prenom;    
-        $this->email = $this->utilisateur?->email;
-        // $this->emailx = $emails;
-        $this->numero_voie = $this->infosUser?->numero_voie;
-        $this->nom_voie = $this->infosUser?->nom_voie;
-        $this->complement_voie = $this->infosUser?->complement_voie;
-        $this->code_postal = $this->infosUser?->code_postal;
-        $this->ville = $this->infosUser?->ville;
-        $this->pays = $this->infosUser?->pays;
-        $this->code_insee = $this->infosUser?->code_insee;
-        $this->code_cedex = $this->infosUser?->code_cedex;
-        $this->numero_cedex = $this->infosUser?->numero_cedex;
-        $this->boite_postale = $this->infosUser?->boite_postale;
-        $this->residence = $this->infosUser?->residence;
-        $this->batiment = $this->infosUser?->batiment;
-        $this->escalier = $this->infosUser?->escalier;
-        $this->etage = $this->infosUser?->etage;
-        $this->porte = $this->infosUser?->porte;
-        $this->telephone_fixe = $this->infosUser?->telephone_fixe;
-        $this->indicatif_fixe = $this->infosUser?->indicatif_fixe;
-        $this->telephone_mobile = $this->infosUser?->telephone_mobile;
-        $this->indicatif_mobile = $this->infosUser?->indicatif_mobile;
-        $this->civilite = $this->infosUser?->civilite;
-        $this->notes = $this->infosUser?->notes;
-        $this->role = $this->infosUser?->role;
-
+    public function render()
+    {
         return view('livewire.utilisateur.edit-form');
     }
     

@@ -383,4 +383,7 @@ Route::controller(DepenseController::class)->group(function () {
     Route::put('/depenses/desarchiver/{depenseId}', 'unarchive')->name('depense.unarchive')->middleware(['auth']);
 });
 
+Route::post('/utilisateur/{user}/update-password', [UtilisateurController::class, 'updatePassword'])
+    ->name('utilisateur.update-password');
+
 require __DIR__ . '/auth.php';

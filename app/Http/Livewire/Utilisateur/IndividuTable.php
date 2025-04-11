@@ -62,8 +62,10 @@ final class IndividuTable extends PowerGridComponent
      */
     public function datasource()
     {
-        $users = User::where([['archive', false]])->get();
-        return $users;
+        // On récupère uniquement les utilisateurs non archivés avec leurs relations
+        return User::where('archive', false)
+            ->with(['contact.individu', 'role'])  // Ajout de la relation role
+            ->get();
     }
 
     /*
@@ -100,10 +102,20 @@ final class IndividuTable extends PowerGridComponent
     {
     
         return PowerGrid::columns()
-            ->addColumn('name')
+            ->addColumn('name', function (User $user) {
+                return $user->contact?->individu?->nom.' '.$user->contact?->individu?->prenom;
+            })
             ->addColumn('email')
-            ->addColumn('contact_id', function (User $user) {return $user->contact_id === null ? '<div class="badge bg-danger ">Non</div>' : '<div class="badge bg-success ">Oui</div>';})
-            ->addColumn('created_at_formatted', fn (User $user) => Carbon::parse($user->created_at)->format('d/m/Y'));
+            ->addColumn('role', function (User $user) {
+                return $user->role?->nom ?? 'Non défini';
+            })
+            ->addColumn('contact_id', function (User $user) {
+                return $user->contact_id === null ? 
+                    '<div class="badge bg-danger">Non</div>' : 
+                    '<div class="badge bg-success">Oui</div>';
+            })
+            ->addColumn('created_at_formatted', fn (User $user) => 
+                Carbon::parse($user->created_at)->format('d/m/Y'));
     }
 
     /*
@@ -125,6 +137,7 @@ final class IndividuTable extends PowerGridComponent
         return [           
             Column::make('Nom', 'name')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
+            Column::make('Rôle', 'role')->sortable()->searchable(),
             Column::make('Contact lié', 'contact_id')->sortable()->searchable(),
             Column::make('Date de création', 'created_at_formatted', 'created_at')->sortable(),
         ];
@@ -180,9 +193,10 @@ final class IndividuTable extends PowerGridComponent
                
             Button::add('Afficher')
                 ->bladeComponent('button-show', function(User $user) {
-                    return ['route' => route('utilisateur.show', Crypt::encrypt($user->contact_id)),
-                    'tooltip' => "Afficher",
-                    'permission' => Gate::allows('permission', 'afficher-utilisateur'),                    
+                    return [
+                        'route' => route('utilisateur.show', Crypt::encrypt($user->contact_id)),
+                        'tooltip' => "Afficher",
+                        'permission' => Gate::allows('permission', 'afficher-utilisateur'),                    
                     ];
                 }),
                 
@@ -199,14 +213,12 @@ final class IndividuTable extends PowerGridComponent
             
             Button::add('Archiver')
             ->bladeComponent('button-archive', function(User $user) {
-               
-                return ['route' => route('utilisateur.archive', Crypt::encrypt($user->id)),
+                return [
+                    'route' => route('utilisateur.archive', Crypt::encrypt($user->id)),
                     'tooltip' => "Archiver",
                     'classarchive' => "archive_user",
                     'permission' => Gate::allows('permission', 'archiver-utilisateur'),
-                    ];
-                
-              
+                ];
             }),
         ];
     }

@@ -1,4 +1,4 @@
-<form action="{{ route('utilisateur.update', Crypt::encrypt(1)) }}" method="post">
+<form action="{{ route('utilisateur.update', Crypt::encrypt($this->user->id)) }}" method="post">
     @csrf
 
 
@@ -22,8 +22,8 @@
                                     Email de connexion<span class="text-danger">*</span>
                                 </label>
 
-                                <input type="email" id="email" name="email" wire:model.defer="email" required
-                                    value="{{ old('email') ? old('email') : '' }}" class="form-control">
+                                <input type="email" id="email" name="email" wire:model="email" required
+                                    value="{{ old('email', $this->user->email) }}" class="form-control">
                                 @if ($errors->has('email'))
                                     <br>
                                     <div class="alert alert-warning text-secondary " role="alert">
@@ -146,8 +146,8 @@
                                         </div>
 
                                         <div class="item_input">
-                                            <input type="text" id="nom" name="nom" wire:model.defer="nom"
-                                                required value="{{ old('nom') ? old('nom') : '' }}"
+                                            <input type="text" id="nom" name="nom" wire:model="nom"
+                                                required value="{{ old('nom', $this->user->contact->individu->nom) }}"
                                                 class="form-control">
                                             @if ($errors->has('nom'))
                                                 <br>
@@ -221,8 +221,8 @@
                                         <div class="container_email_input">
                                             <div class="item_email">
                                                 <input type="email" id="email" name="email"
-                                                    wire:model.defer="email" required
-                                                    value="{{ old('email') ? old('email') : '' }}"
+                                                    wire:model="email" required
+                                                    value="{{ old('email', $this->user->email) }}"
                                                     class="form-control emails">
                                             </div>
                                             {{-- <div class="item_btn_remove">
@@ -265,8 +265,8 @@
                                         </div>
                                         <div class="item_input">
                                             <input type="text" id="telephone_fixe" name="telephone_fixe"
-                                                wire:model.defer="telephone_fixe"
-                                                value="{{ old('telephone_fixe') ? old('telephone_fixe') : '' }}"
+                                                wire:model="telephone_fixe"
+                                                value="{{ old('telephone_fixe', $this->user->contact->individu->telephone_fixe) }}"
                                                 class="form-control">
                                         </div>
 
@@ -292,8 +292,8 @@
                                     <label for="prenom" class="form-label">
                                         Prénom(s) <span class="text-danger">*</span>
                                     </label>
-                                    <input type="text" id="prenom" name="prenom" wire:model.defer="prenom"
-                                        required value="{{ old('prenom') ? old('prenom') : '' }}"
+                                    <input type="text" id="prenom" name="prenom" wire:model="prenom"
+                                        required value="{{ old('prenom', $this->user->contact->individu->prenom) }}"
                                         class="form-control">
 
                                     @if ($errors->has('prenom'))
@@ -323,8 +323,8 @@
                                         </div>
                                         <div class="item_input">
                                             <input type="text" id="telephone_mobile" name="telephone_mobile"
-                                                wire:model.defer="telephone_mobile"
-                                                value="{{ old('telephone_mobile') ? old('telephone_mobile') : '' }}"
+                                                wire:model="telephone_mobile"
+                                                value="{{ old('telephone_mobile', $this->user->contact->individu->telephone_mobile) }}"
                                                 class="form-control">
                                         </div>
 

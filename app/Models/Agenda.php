@@ -13,6 +13,10 @@ class Agenda extends Model
     protected $guarded =[];
     // protected $dates = ['date_deb','date_fin'];
     protected $casts  = ['date_deb' => 'date', 'date_fin' => 'date'];
+    protected $fillable = [
+        // ... autres champs
+        'priorite',
+    ];
     
     
     
