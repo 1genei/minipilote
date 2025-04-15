@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Agenda;
 use App\Models\User;
 use App\Models\Contact;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class AgendaController extends Controller
 {
 
@@ -50,19 +52,54 @@ class AgendaController extends Controller
      * en listing
      * @return \Illuminate\Http\Response
      */
-    public function listing()
+    public function listing(Request $request)
     {
-        // Chargement des agendas avec leurs relations
-        $agendas = Agenda::with(['user.contact.individu', 'contact.individu', 'contact.entite'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Agenda::with(['user.contact.individu', 'contact.individu', 'contact.entite']);
 
-        // Chargement des contacts non archivés pour les formulaires
-        $contacts = Contact::where('archive', false)
-            ->with(['individu', 'entite'])
-            ->get();
+        // Récupérer la liste unique des types de rappel existants
+        $types_rappel = Agenda::distinct()->pluck('type_rappel')->filter();
 
-        return view('agenda.listing', compact('agendas', 'contacts'));
+        // Filtre par type de rappel
+        if ($request->has('type_rappel') && $request->type_rappel != 'all') {
+            $query->where('type_rappel', $request->type_rappel);
+        }
+
+        // Filtre par priorité
+        if ($request->has('priorite') && $request->priorite != 'all') {
+            $query->where('priorite', $request->priorite);
+        }
+
+        // Tri par date
+        $validDirections = ['asc', 'desc'];
+        $direction = in_array($request->date_sort, $validDirections) ? $request->date_sort : 'desc';
+        
+        if ($request->has('date_sort') && in_array($request->date_sort, $validDirections)) {
+            $query->orderBy('date_deb', $direction);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        // Recherche existante
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('titre', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('type_rappel', 'like', "%{$search}%")
+                  ->orWhereHas('contact.individu', function($q) use ($search) {
+                      $q->where('nom', 'like', "%{$search}%")
+                        ->orWhere('prenom', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('contact.entite', function($q) use ($search) {
+                      $q->where('raison_sociale', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $agendas = $query->paginate(50)->appends($request->query());
+        $contacts = Contact::where('archive', false)->with(['individu', 'entite'])->get();
+
+        return view('agenda.listing', compact('agendas', 'contacts', 'types_rappel'));
     }
     
     
@@ -74,13 +111,12 @@ class AgendaController extends Controller
      */
     public function listing_en_retard()
     {
-        // Chargement eager des relations nécessaires
         $agendas = Agenda::where([
             ['est_terminee', false], 
             ['date_deb', '<', date('Y-m-d')]
         ])
         ->with(['user.contact.individu', 'contact.individu', 'contact.entite'])
-        ->get();
+        ->paginate(50);
 
         $contacts = Contact::where('archive', false)
             ->with(['individu', 'entite'])
@@ -101,7 +137,7 @@ class AgendaController extends Controller
             ['date_deb', '>=', date('Y-m-d')]
         ])
         ->with(['user.contact.individu', 'contact.individu', 'contact.entite'])
-        ->get();
+        ->paginate(50);
 
         $contacts = Contact::where('archive', false)
             ->with(['individu', 'entite'])
@@ -133,6 +169,7 @@ class AgendaController extends Controller
             'date_fin' => $request->date_fin, 
             'heure_deb' => $request->heure_deb, 
             'heure_fin' => $request->heure_fin, 
+            'priorite' => $request->priorite,
             'est_lie' => $request->est_lie == "Non" ? false : true, 
             'contact_id' => $request->contact_id, 
         
@@ -165,6 +202,7 @@ class AgendaController extends Controller
         $agenda->date_fin =  $request->date_fin; 
         $agenda->heure_deb =  $request->heure_deb; 
         $agenda->heure_fin =  $request->heure_fin; 
+        $agenda->priorite =  $request->priorite;
         $agenda->est_lie =  $request->est_lie == "Non" ? false : true ; 
         $agenda->est_terminee =  $request->est_terminee == "Non" ? false : true ; 
 

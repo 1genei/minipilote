@@ -877,4 +877,6 @@
 
         });
     </script>
+
+    @include('partials._sidebar_collapse')
 @endsection

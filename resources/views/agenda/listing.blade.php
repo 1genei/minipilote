@@ -20,12 +20,48 @@
         /* Largeurs spécifiques pour certaines colonnes */
         .table th.col-statut, .table td.col-statut { min-width: 100px; }
         .table th.col-priorite, .table td.col-priorite { min-width: 80px; }
-        .table th.col-type, .table td.col-type { min-width: 120px; }
         .table th.col-titre, .table td.col-titre { min-width: 250px; }
         .table th.col-contact, .table td.col-contact { min-width: 200px; }
         .table th.col-assigne, .table td.col-assigne { min-width: 200px; }
         .table th.col-date, .table td.col-date { min-width: 150px; }
         .table th.col-actions, .table td.col-actions { min-width: 100px; }
+
+        /* Styles pour les flèches de tri */
+        th.sortable {
+            cursor: pointer;
+            position: relative;
+            padding-right: 20px !important;
+        }
+
+        th.sortable:before,
+        th.sortable:after {
+            content: '';
+            position: absolute;
+            right: 8px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        th.sortable:before {
+            top: 40%;
+            border-width: 0 4px 4px;
+            border-color: transparent transparent #999 transparent;
+        }
+
+        th.sortable:after {
+            bottom: 40%;
+            border-width: 4px 4px 0;
+            border-color: #999 transparent transparent transparent;
+        }
+
+        th.sortable.asc:before {
+            border-color: transparent transparent #000 transparent;
+        }
+
+        th.sortable.desc:after {
+            border-color: #000 transparent transparent transparent;
+        }
     </style>
 @endsection
 
@@ -127,6 +163,74 @@
 
 
 
+                        <div class="row mb-3">
+                            <div class="col-sm-4">
+                                <form action="{{ route('agenda.listing') }}" method="GET" class="search-form">
+                                    <div class="input-group">
+                                        <input type="text" name="search" class="form-control" placeholder="Rechercher..." value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="mdi mdi-magnify"></i>
+                                        </button>
+                                        @if(request('search'))
+                                            <a href="{{ route('agenda.listing') }}" class="btn btn-danger">
+                                                <i class="mdi mdi-close"></i>
+                                            </a>
+                                        @endif
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-8">
+                                <form action="{{ route('agenda.listing') }}" method="GET" class="d-flex gap-2">
+                                    @if(request('search'))
+                                        <input type="hidden" name="search" value="{{ request('search') }}">
+                                    @endif
+                                    
+                                    <select name="type_rappel" class="form-select" style="width: auto" onchange="this.form.submit()">
+                                        <option value="all">Tous les types</option>
+                                        @foreach($types_rappel as $type)
+                                            <option value="{{ $type }}" {{ request('type_rappel') == $type ? 'selected' : '' }}>
+                                                {{ $type }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    <select name="priorite" class="form-select" style="width: auto" onchange="this.form.submit()">
+                                        <option value="all" {{ request('priorite') == 'all' ? 'selected' : '' }}>Toutes les priorités</option>
+                                        <option value="basse" {{ request('priorite') == 'basse' ? 'selected' : '' }}>Priorité basse</option>
+                                        <option value="moyenne" {{ request('priorite') == 'moyenne' ? 'selected' : '' }}>Priorité moyenne</option>
+                                        <option value="haute" {{ request('priorite') == 'haute' ? 'selected' : '' }}>Priorité haute</option>
+                                    </select>
+
+                                    <select name="date_sort" class="form-select" style="width: auto" onchange="this.form.submit()">
+                                        <option value="">Trier par date</option>
+                                        <option value="asc" {{ request('date_sort') == 'asc' ? 'selected' : '' }}>Date ↑</option>
+                                        <option value="desc" {{ request('date_sort') == 'desc' ? 'selected' : '' }}>Date ↓</option>
+                                    </select>
+
+                                    @if(request('priorite') || request('date_sort') || request('type_rappel'))
+                                        <a href="{{ route('agenda.listing', request('search') ? ['search' => request('search')] : []) }}" 
+                                           class="btn btn-danger">
+                                            Réinitialiser les filtres
+                                        </a>
+                                    @endif
+                                </form>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-sm-8 text-sm-end">
+                                <div class="text-muted">
+                                    Affichage de <span class="fw-semibold">{{ $agendas->firstItem() }}</span> 
+                                    à <span class="fw-semibold">{{ $agendas->lastItem() }}</span> 
+                                    sur <span class="fw-semibold">{{ $agendas->total() }}</span> tâches
+                                </div>
+                            </div>
+                        </div>
+
+
+
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
@@ -183,16 +287,16 @@
 
 
                                                     <div class="table-responsive">
-                                                        <table class="table table-centered table-hover w-100 dt-responsive no-wrap" id="tab1">
+                                                        <table class="table table-centered table-hover">
                                                             <thead class="table-light">
                                                                 <tr>
-                                                                    <th class="col-statut">Statut</th>
-                                                                    <th class="col-date">Date & Heure</th>
-                                                                    <th class="col-priorite">Priorité</th>
-                                                                    <th class="col-titre">Titre & Description</th>
-                                                                    <th class="col-contact">Contact lié</th>
+                                                                    <th class="col-statut sortable">Statut</th>
+                                                                    <th class="col-date sortable">Date & Heure</th>
+                                                                    <th class="col-priorite sortable">Priorité</th>
+                                                                    <th class="col-titre sortable">Titre & Description</th>
+                                                                    <th class="col-contact sortable">Contact lié</th>
                                                                     @if(in_array(Auth::user()?->role?->nom, ['Admin', 'SuperAdmin']))
-                                                                        <th class="col-assigne">Assigné à</th>
+                                                                        <th class="col-assigne sortable">Assigné à</th>
                                                                     @endif
                                                                     <th class="col-actions">Actions</th>
                                                                 </tr>
@@ -203,13 +307,13 @@
                                                                         <td>
                                                                             @if ($agenda->est_terminee)
                                                                                 <span class="badge bg-success-subtle text-success">Terminée</span>
-                                                                            @else
+                                                                                    @else
                                                                                 @if ($agenda->date_deb < date('Y-m-d'))
                                                                                     <span class="badge bg-danger-subtle text-danger">En retard</span>
                                                                                 @else
                                                                                     <span class="badge bg-warning-subtle text-warning">À faire</span>
+                                                                                    @endif
                                                                                 @endif
-                                                                            @endif
                                                                         </td>
                                                                         <td>
                                                                             <div class="d-flex align-items-center">
@@ -274,21 +378,21 @@
                                                                                             @if ($agenda->contact->type == 'individu')
                                                                                                 {{ $agenda->contact->individu?->nom }}
                                                                                                 {{ $agenda->contact->individu?->prenom }}
-                                                                                            @else
+                                                                                @else
                                                                                                 {{ $agenda->contact->entite?->raison_sociale }}
-                                                                                            @endif
+                                                                                @endif
                                                                                         </h6>
                                                                                         <p class="text-muted mb-0">
                                                                                             <i class="mdi mdi-phone me-1"></i>
                                                                                             {{ $agenda->contact->individu?->telephone_mobile ?? 'Non renseigné' }}
                                                                                         </p>
-                                                                                    </div>
+                                                                            </div>
                                                                                 </div>
                                                                             @else
                                                                                 <span class="text-muted">Aucun contact lié</span>
                                                                             @endif
                                                                         </td>
-
+                                                                        @if(in_array(Auth::user()?->role?->nom, ['Admin', 'SuperAdmin']))
                                                                         <td>
                                                                             @if ($agenda->user)
                                                                                 <div class="d-flex align-items-center">
@@ -308,30 +412,31 @@
                                                                             @endif
                                                                         </td>
 
-                                                                        
+                                                                        @endif
 
                                                                         <td class="table-action">
                                                                             @can('permission', 'modifier-agenda')
                                                                                 <a href="javascript:void(0);" 
-                                                                                   class="action-icon modifier text-success" 
+                                                                                   class="action-icon modifier" 
                                                                                    data-bs-toggle="modal"
                                                                                    data-bs-target="#modifier-modal"
                                                                                    data-href="{{ route('agenda.update', $agenda->id) }}"
-                                                                                   data-titre="{{ $agenda->titre }}"
-                                                                                   data-description="{{ $agenda->description }}"
-                                                                                   data-date_deb="{{ $agenda->date_deb }}"
-                                                                                   data-date_fin="{{ $agenda->date_fin }}"
-                                                                                   data-heure_deb="{{ $agenda->heure_deb }}"
-                                                                                   data-type="{{ $agenda->type_rappel }}"
+                                                                                    data-titre="{{ $agenda->titre }}"
+                                                                                    data-description="{{ $agenda->description }}"
+                                                                                   data-date_deb="{{ \Carbon\Carbon::parse($agenda->date_deb)->format('Y-m-d') }}"
+                                                                                   data-date_fin="{{ \Carbon\Carbon::parse($agenda->date_fin)->format('Y-m-d') }}"
+                                                                                    data-heure_deb="{{ $agenda->heure_deb }}"
+                                                                                    data-type="{{ $agenda->type_rappel }}"
+                                                                                   data-priorite="{{ $agenda->priorite }}"
                                                                                    data-est_lie="{{ $agenda->est_lie }}"
                                                                                    data-est_terminee="{{ $agenda->est_terminee }}"
                                                                                    data-contact_id="{{ $agenda->contact_id }}">
-                                                                                    <i class="mdi mdi-square-edit-outline" ></i>
+                                                                                    <i class="mdi mdi-square-edit-outline"></i>
                                                                                 </a>
                                                                             @endcan
 
                                                                             @can('permission', 'supprimer-agenda')
-                                                                                <a href="javascript:void(0);" 
+                                                                                <a href="javascript:void(0);"
                                                                                    class="action-icon delete text-danger" 
                                                                                    data-href="{{ route('agenda.destroy', $agenda->id) }}">
                                                                                     <i class="mdi mdi-delete"></i>
@@ -344,7 +449,10 @@
                                                         </table>
                                                     </div>
 
-
+                                                    <!-- Pagination Laravel -->
+                                                    <div class="d-flex justify-content-center">
+                                                        {{ $agendas->links('pagination::bootstrap-5') }}
+                                                    </div>
 
                                                 </div>
                                             </div>
@@ -444,25 +552,19 @@
                             </div>
                             <br>
 
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="time" name="heure_deb" min="06:00" max="23:00"
-                                            value="{{ old('heure_deb') ? old('heure_deb') : '' }}" class="form-control"
-                                            id="heure_deb" required>
-                                        <label for="heure_deb">Heure de début </label>
-                                        @if ($errors->has('heure_deb'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('heure_deb') }}</strong>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="heure_deb" class="form-label">Heure de début</label>
+                                    <input type="time" class="form-control" name="heure_deb" required>
                                             </div>
-                                        @endif
+                                <div class="col-md-6">
+                                    <label for="priorite" class="form-label">Priorité</label>
+                                    <select class="form-select" name="priorite" required>
+                                        <option value="basse">Basse</option>
+                                        <option value="moyenne" selected>Moyenne</option>
+                                        <option value="haute">Haute</option>
+                                    </select>
                                     </div>
-                                </div>
-
-
                             </div>
 
                             <hr>
@@ -667,25 +769,19 @@
                             </div>
                             <br>
 
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="time" name="heure_deb" min="06:00" max="23:00"
-                                            value="{{ old('heure_deb') ? old('heure_deb') : '' }}" class="form-control"
-                                            id="edit_heure_deb" required>
-                                        <label for="edit_heure_deb">Heure de début </label>
-                                        @if ($errors->has('heure_deb'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('heure_deb') }}</strong>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="heure_deb" class="form-label">Heure de début</label>
+                                    <input type="time" class="form-control" name="heure_deb" id="heure_deb_mod" required>
                                             </div>
-                                        @endif
+                                <div class="col-md-6">
+                                    <label for="priorite" class="form-label">Priorité</label>
+                                    <select class="form-select" name="priorite" id="priorite_mod" required>
+                                        <option value="basse">Basse</option>
+                                        <option value="moyenne">Moyenne</option>
+                                        <option value="haute">Haute</option>
+                                    </select>
                                     </div>
-                                </div>
-
-
                             </div>
 
                             <hr>
@@ -865,65 +961,24 @@
 
     {{-- Modification d'une tâche --}}
     <script>
-        $('.modifier').on('click', function(e) {
+        $(document).ready(function() {
+            // ... autres scripts ...
 
-            let that = $(this);
-
-            $('#edit_titre').val(that.data('titre'));
-            $('#edit_description').val(that.data('description'));
-
-
-            $('#edit_date_deb').val(that.data('date_deb'));
-            $('#edit_date_fin').val(that.data('date_fin'));
-            $('#edit_heure_deb').val(that.data('heure_deb'));
-
-
-
-            let currentFormAction = that.data('href');
-            $('#form-edit').attr('action', currentFormAction);
-
-
-
-
-            //    selection du type de tâche
-            let currentType = that.data('type');
-
-
-            let currentEstlie = that.data('est_lie') == true ? "Oui" : "Non";
-            let currentEstterminee = that.data('est_terminee') == true ? "Oui" : "Non";
-
-            $('#edit_est_terminee option[value=' + currentEstterminee + ']').attr('selected', 'selected');
-            $('#edit_type option[value=' + currentType + ']').attr('selected', 'selected');
-            $('#edit_est_lie option[value=' + currentEstlie + ']').attr('selected', 'selected');
-
-            if (currentEstlie == "Oui") {
-                let currentContactId = that.data('contact_id');
-                $('#edit_contact_id option[value=' + currentContactId + ']').attr('selected', 'selected');
-            }
-
-
-            if (currentEstlie == "Oui") {
-                $('.div_contact').show();
-                $('#est_lie').attr('required', 'required');
-
-            } else {
-                $('.div_contact').hide();
-
-            }
-
-        })
-
-        $('#edit_est_lie').change(function(e) {
-
-            if (e.currentTarget.value == "Oui") {
-                $('.div_contact').show();
-                $('#est_lie').attr('required', 'required');
-
-            } else {
-                $('.div_contact').hide();
-
-            }
-
+            // Gestion du modal de modification
+            $('.modifier').click(function() {
+                var that = $(this);
+                $('#titre_mod').val(that.attr('data-titre'));
+                $('#description_mod').val(that.attr('data-description'));
+                $('#date_deb_mod').val(that.attr('data-date_deb'));
+                $('#date_fin_mod').val(that.attr('data-date_fin'));
+                $('#heure_deb_mod').val(that.attr('data-heure_deb'));
+                $('#type_rappel_mod').val(that.attr('data-type'));
+                $('#priorite_mod').val(that.attr('data-priorite'));
+                $('#est_lie_mod').val(that.attr('data-est_lie') == '1' ? 'Oui' : 'Non');
+                $('#est_terminee_mod').val(that.attr('data-est_terminee') == '1' ? 'Oui' : 'Non');
+                $('#contact_id_mod').val(that.attr('data-contact_id'));
+                $('#form-edit').attr('action', that.attr('data-href'));
+            });
         });
     </script>
 
@@ -1021,36 +1076,45 @@
 
 
     <script>
-        $(document).ready(function() {
-            "use strict";
-            $("#tab1").
-            DataTable({
-                language: {
-                    paginate: {
-                        previous: "<i class='mdi mdi-chevron-left'>",
-                        next: "<i class='mdi mdi-chevron-right'>"
-                    },
-                    info: "Showing actions _START_ to _END_ of _TOTAL_",
-                    lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
-                },
-                pageLength: 100,
-                scrollX: true, // Activer le défilement horizontal
-                autoWidth: false, // Désactiver l'ajustement automatique de la largeur
-                responsive: false, // Désactiver le responsive pour éviter le bouton +
-                columnDefs: [
-                    { orderable: true, width: '100px', targets: 0 }, // Statut
-                    { orderable: true, width: '80px', targets: 1 },  // Priorité
-                    { orderable: true, width: '120px', targets: 2 }, // Type
-                    { orderable: true, width: '250px', targets: 3 }, // Titre
-                    { orderable: true, width: '200px', targets: 4 }, // Contact
-                    { orderable: true, width: '200px', targets: 5 }, // Assigné
-                    { orderable: true, width: '150px', targets: 6 }, // Date
-                    { orderable: false, width: '100px', targets: 7 } // Actions
-                ],
-                select: {
-                    style: "multi"
-                }
+        document.addEventListener('DOMContentLoaded', function() {
+            const getCellValue = (tr, idx) => {
+                const cell = tr.children[idx];
+                return cell ? cell.innerText || cell.textContent : '';
+            };
+
+            const comparer = (idx, asc) => (a, b) => {
+                const v1 = getCellValue(asc ? a : b, idx);
+                const v2 = getCellValue(asc ? b : a, idx);
+                return v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) 
+                    ? v1 - v2 
+                    : v1.toString().localeCompare(v2);
+            };
+
+            document.querySelectorAll('th.sortable').forEach(th => {
+                th.addEventListener('click', () => {
+                    const table = th.closest('table');
+                    const tbody = table.querySelector('tbody');
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    const index = Array.from(th.parentElement.children).indexOf(th);
+                    
+                    // Réinitialiser les autres colonnes
+                    th.parentElement.querySelectorAll('th').forEach(header => {
+                        if (header !== th) {
+                            header.classList.remove('asc', 'desc');
+                        }
+                    });
+                    
+                    // Changer la direction du tri
+                    const isAsc = th.classList.toggle('asc');
+                    th.classList.toggle('desc', !isAsc);
+                    
+                    // Trier les lignes
+                    rows.sort(comparer(index, isAsc));
+                    tbody.append(...rows);
+                });
             });
         });
     </script>
+
+    @include('partials._sidebar_collapse')
 @endsection
