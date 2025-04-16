@@ -14,8 +14,18 @@ class Agenda extends Model
     // protected $dates = ['date_deb','date_fin'];
     protected $casts  = ['date_deb' => 'date', 'date_fin' => 'date'];
     protected $fillable = [
-        // ... autres champs
+        'titre',
+        'user_id',
+        'type_rappel',
+        'description',
+        'date_deb',
+        'date_fin',
+        'heure_deb',
+        'heure_fin',
         'priorite',
+        'est_lie',
+        'contact_id',
+        'est_terminee'
     ];
     
     
