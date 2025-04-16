@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Agenda;
-use App\Models\User;
 use App\Models\Contact;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class AgendaController extends Controller
@@ -40,8 +38,16 @@ class AgendaController extends Controller
                 "contact" => $contact
             ];
         }
+        $tab_contacts  = json_encode($tab_contacts) ;
+
+        $contacts = Contact::where([['archive',false]])->get();
         
-        return $tab_contacts;
+        $agendas = Agenda::with(['user.contact.individu', 'contact.individu', 'contact.entite'])->get();
+        $agendas = $agendas->toJson();
+        
+        $agendas = str_replace('\n', '', $agendas);
+        // dd($agendas);
+        return view('agenda.index',compact('agendas','contacts','tab_contacts'));
     }
     
     

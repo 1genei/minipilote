@@ -617,8 +617,10 @@
 
     <script>
         var agendas = "{{ $agendas }}";
+       
         agendas = JSON.parse(agendas.replaceAll('&quot;', '"'));
         tab_contacts = "{{ $tab_contacts }}";
+        var test  = agendas;
 
         tab_contacts = JSON.parse(tab_contacts.replaceAll('&quot;', '"'));
 
@@ -790,7 +792,7 @@
                     noEventsText: 'Aucun évènement à afficher',
                     initialView: "dayGridMonth",
                     handleWindowResize: !0,
-                    height: e(window).height() - 200,
+                    height: e(window).height() ,
                     headerToolbar: {
                         left: "prev,next today",
                         center: "title",
