@@ -62,7 +62,7 @@
                                 <div class="d-grid">
                                     @can('permission', 'ajouter-agenda')
                                         <button class="btn btn-lg font-16 btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#new-event"><i class="mdi mdi-plus-circle-outline"></i>
+                                            data-bs-target="#add-modal"><i class="mdi mdi-plus-circle-outline"></i>
                                             Ajouter tâche
                                         </button>
                                     @endcan
@@ -91,487 +91,18 @@
 
                     }
 
-                    .btn-light:hover {
-                        background-color: #ffffff;
-                        border-color: #f0f3f8;
-                    }
-
-                    .btn-light {
-                        background-color: #ffffff;
-                        border-color: #f0f3f8;
-                        height: calc(3.5rem + 2px);
-
-                    }
                 </style>
 
-
+                <div class="loading-overlay">
+                    <div class="loading-content">
+                        <div class="spinner-border text-light" role="status"></div>
+                        <p class="mt-2">Enregistrement en cours...</p>
+                    </div>
+                </div>
                 {{-- Ajout d'une tâche --}}
-                <div id="new-event" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="standard-modalLabel">Ajouter une tâche </h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-
-                            <form action="{{ route('agenda.store') }}" method="post">
-                                <div class="modal-body">
-
-                                    @csrf
-
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="date" min="{{ date('Y-m-d') }}" name="date_deb"
-                                                    value="{{ old('date_deb') ? old('date_deb') : '' }}"
-                                                    class="form-control" id="date_deb" required>
-                                                <label for="date_deb">Date de début </label>
-                                                @if ($errors->has('date_deb'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('date_deb') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="date" min="{{ date('Y-m-d') }}" name="date_fin"
-                                                    value="{{ old('date_fin') ? old('date_fin') : '' }}"
-                                                    class="form-control" id="date_fin" required>
-                                                <label for="date_fin">Date de fin </label>
-                                                @if ($errors->has('date_fin'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('date_fin') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <br>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="time" name="heure_deb" min="06:00" max="23:00"
-                                                    value="{{ old('heure_deb') ? old('heure_deb') : '' }}"
-                                                    class="form-control" id="heure_deb" required>
-                                                <label for="heure_deb">Heure de début </label>
-                                                @if ($errors->has('heure_deb'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('heure_deb') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-                                    <hr>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <select name="type_rappel" id="type_rappel" class="form-select">
-                                                    <option value="contacter">contacter</option>
-                                                    <option value="recontacter">recontacter</option>
-                                                    <option value="rdv">rdv</option>
-                                                    <option value="autre">autre</option>
-                                                </select>
-                                                <label for="type_rappel">Type de tâche</label>
-                                                @if ($errors->has('type_rappel'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('type_rappel') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <hr>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <select name="est_lie" id="est_lie" class="form-select">
-                                                    <option value="Non">Non</option>
-                                                    <option value="Oui">Oui</option>
-
-                                                </select>
-                                                <label for="est_lie">Tâche liée à un contact</label>
-                                                @if ($errors->has('est_lie'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('est_lie') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-6 div_contact">
-                                            <div class="form-floating mb-3" style="width: 100%;">
-                                                <select name="contact_id" id="contact_id" class="selectpicker "
-                                                    data-live-search="true">
-                                                    <option value="">Choisir le contact</option>
-                                                    @foreach ($contacts as $contact)
-                                                        <option
-                                                            data-tokens="@if ($contact->type == 'individu') {{ $contact?->individu?->nom }} {{ $contact?->individu?->prenom }}  @else  {{ $contact?->entite?->nom }} @endif"
-                                                            value="{{ $contact->id }}">
-                                                            @if ($contact->type == 'individu')
-                                                                {{ $contact?->individu?->nom }}
-                                                                {{ $contact?->individu?->prenom }}
-                                                            @else
-                                                                {{ $contact?->entite?->nom }}
-                                                            @endif
-                                                        </option>
-                                                    @endforeach
-
-
-                                                </select>
-                                                {{-- <label for="edit-contact-id">Choisir le contact</label> --}}
-                                                @if ($errors->has('contact_id'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('contact_id') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-
-
-
-                                        </div>
-                                    </div>
-                                    <br>
-
-
-
-                                    <div class="row">
-
-                                        <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" name="titre"
-                                                    value="{{ old('titre') ? old('titre') : '' }}" class="form-control"
-                                                    id="titre">
-                                                <label for="titre">Titre</label>
-                                                @if ($errors->has('titre'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('titre') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
-
-                                    <div class="row">
-
-                                        <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <textarea name="description" id="description" style="height: 100px;" class="form-control">{{ old('description') ? old('description') : '' }}</textarea>
-                                                <label for="description">Description de la tâche</label>
-                                                @if ($errors->has('description'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('description') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-
-                                </div>
-                            </form>
-
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
-
-
-
-
-
+                @include('agenda.components.add-modal')
                 {{-- Modification d'une tâche --}}
-                <div id="event-modal" class="modal fade" tabindex="-1" role="dialog"
-                    aria-labelledby="standard-modalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="standard-modalLabel">Modifier la tâche </h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-
-                            <form action="" id="form-edit" method="post">
-                                <div class="modal-body">
-
-                                    @csrf
-
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="date" name="date_deb"
-                                                    value="{{ old('date_deb') ? old('date_deb') : '' }}"
-                                                    class="form-control" id="edit_date_deb" required>
-                                                <label for="date_deb">Date de début </label>
-                                                @if ($errors->has('date_deb'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('date_deb') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="date" name="date_fin"
-                                                    value="{{ old('date_fin') ? old('date_fin') : '' }}"
-                                                    class="form-control" id="edit_date_fin" required>
-                                                <label for="date_fin">Date de fin </label>
-                                                @if ($errors->has('date_fin'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('date_fin') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <br>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="time" name="heure_deb" min="06:00" max="23:00"
-                                                    value="{{ old('heure_deb') ? old('heure_deb') : '' }}"
-                                                    class="form-control" id="edit_heure_deb" required>
-                                                <label for="heure_deb">Heure de début </label>
-                                                @if ($errors->has('heure_deb'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('heure_deb') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-                                    <hr>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <select name="type_rappel" id="edit_type_rappel" class="form-select">
-                                                    <option value="contacter">contacter</option>
-                                                    <option value="recontacter">recontacter</option>
-                                                    <option value="rdv">rdv</option>
-                                                    <option value="autre">autre</option>
-                                                </select>
-                                                <label for="type_rappel">Type de tâche</label>
-                                                @if ($errors->has('type_rappel'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('type_rappel') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <select name="est_terminee" id="edit_est_terminee" class="form-select">
-                                                    <option value="oui">oui</option>
-                                                    <option value="nom">nom</option>
-                                                </select>
-                                                <label for="est_terminee">Tâche Terminée ?</label>
-                                                @if ($errors->has('est_terminee'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('est_terminee') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
-                                    <hr>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-floating mb-3">
-                                                <select name="est_lie" id="edit_est_lie" class="form-select">
-                                                    <option value="Non">Non</option>
-                                                    <option value="Oui">Oui</option>
-
-                                                </select>
-                                                <label for="edit_est_lie">Tâche liée à un contact</label>
-                                                @if ($errors->has('est_lie'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('est_lie') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-6 div_edit_contact">
-                                            <div class="form-floating mb-3" style="width: 100%;">
-                                                <select name="contact_id" id="edit_contact_id" class="form-select "
-                                                    data-live-search="true">
-                                                    <option value="">Choisir le contact</option>
-                                                    @foreach ($contacts as $contact)
-                                                        <option
-                                                            data-tokens="@if ($contact->type == 'individu') {{ $contact?->individu?->nom }} {{ $contact?->individu?->prenom }}  @else  {{ $contact?->entite?->nom }} @endif"
-                                                            value="{{ $contact->id }}">
-                                                            @if ($contact->type == 'individu')
-                                                                {{ $contact?->individu?->nom }}
-                                                                {{ $contact?->individu?->prenom }}
-                                                            @else
-                                                                {{ $contact?->entite?->nom }}
-                                                            @endif
-                                                        </option>
-                                                    @endforeach
-
-
-                                                </select>
-                                                {{-- <label for="edit-contact-id">Choisir le contact</label> --}}
-                                                @if ($errors->has('contact_id'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('contact_id') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-
-
-
-                                        </div>
-                                    </div>
-                                    <br>
-
-
-
-                                    <div class="row">
-
-                                        <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" name="titre"
-                                                    value="{{ old('titre') ? old('titre') : '' }}" class="form-control"
-                                                    id="edit_titre">
-                                                <label for="titre">Titre</label>
-                                                @if ($errors->has('titre'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('titre') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
-
-                                    <div class="row">
-
-                                        <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <textarea name="description" id="edit_description" style="height: 100px;" class="form-control">{{ old('description') ? old('description') : '' }}</textarea>
-                                                <label for="description">Description de la tâche</label>
-                                                @if ($errors->has('description'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('description') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-
-                                </div>
-                            </form>
-
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
-
+                @include('agenda.components.edit-modal')
 
 
 
@@ -630,7 +161,7 @@
 
             function t() {
                 (this.$body = e("body")),
-                (this.$modal = new bootstrap.Modal(document.getElementById("event-modal"), {
+                (this.$modal = new bootstrap.Modal(document.getElementById("modifier-modal"), {
                     backdrop: "static"
                 })),
                 (this.$calendar = e("#calendar")),
@@ -652,28 +183,32 @@
                     this.$modalTitle.text("Edit Event"),
                     this.$modal.show(),
                     (this.$selectedEvent = t.event),
-                    e("#edit_titre").val(this.$selectedEvent.extendedProps.titre),
-                    e("#edit_description").val(this.$selectedEvent.extendedProps.description),
-                    // e("#type_rappel").val(this.$selectedEvent.extendedProps.type_rappel),
-                    e("#edit_date_deb").val(this.$selectedEvent.extendedProps.date_deb),
-                    e("#edit_date_fin").val(this.$selectedEvent.extendedProps.date_fin),
-                    e("#edit_heure_deb").val(this.$selectedEvent.extendedProps.heure_deb),
-                    // e("#est_lie").val(this.$selectedEvent.extendedProps.est_lie),
-                    // e("#event-category").val(this.$selectedEvent.classNames[0]);
-                    e('#edit_type_rappel option[value=' + this.$selectedEvent.extendedProps.type_rappel + ']').attr(
+                    e("#titre_mod").val(this.$selectedEvent.extendedProps.titre),
+                    e("#description_mod").val(this.$selectedEvent.extendedProps.description),
+                    e("#date_deb_mod").val(this.$selectedEvent.extendedProps.date_deb),
+                    e("#date_fin_mod").val(this.$selectedEvent.extendedProps.date_fin),
+                    e("#heure_deb_mod").val(this.$selectedEvent.extendedProps.heure_deb),
+                    e("#heure_fin_mod").val(this.$selectedEvent.extendedProps.heure_fin),
+                    e("#agenda_id_mod").val(this.$selectedEvent.id),
+                    e("#contact_id_mod").val(this.$selectedEvent.extendedProps.contact_id),
+                    e("#est_terminee_mod").prop('checked', this.$selectedEvent.extendedProps.est_terminee == true),                   
+                    e("#priorite_mod option[value='"+this.$selectedEvent.extendedProps.priorite+"']").attr('selected', 'selected'),
+
+                    e('#type_rappel_mod option[value=' + this.$selectedEvent.extendedProps.type_rappel + ']').attr(
                         'selected', 'selected');
                 var est_lie = this.$selectedEvent.extendedProps.est_lie == true ? "Oui" : "Non";
-                e('#edit_est_lie option[value=' + est_lie + ']').attr('selected', 'selected');
+                e('#est_lie_mod option[value=' + est_lie + ']').attr('selected', 'selected');
 
                 if (est_lie == "Oui") {
                     let currentContactId = this.$selectedEvent.extendedProps.contact_id;
-                    e('#edit_contact_id option[value=' + currentContactId + ']').attr('selected', 'selected');
-                    $('.div_edit_contact').show();
+                    e('#contact_id_mod option[value=' + currentContactId + ']').attr('selected', 'selected');
+                    $('.contact-select-mod').show();
                     $('#edit_est_lie').attr('required', 'required');
                 } else {
-                    $('.div_edit_contact').hide();
+                    $('.contact-select-mod').hide();
                 }
-                $('#form-edit').attr('action', '/agenda/update/' + this.$selectedEvent.id);
+                
+                    $('#form-edit').attr('action', '/agendas/update/' + this.$selectedEvent.id);
 
 
             }),
@@ -822,13 +357,13 @@
                             l = a.$formEvent[0];
                         l.checkValidity() ?
                             (a.$selectedEvent ?
-                                (a.$selectedEvent.setProp("title", e("#edit_titre").val()), a.$selectedEvent
-                                    .setProp("classNames", [e("#edit_description").val()])) :
+                                (a.$selectedEvent.setProp("title", e("#titre_mod").val()), a.$selectedEvent
+                                    .setProp("classNames", [e("#description_mod").val()])) :
                                 ((n = {
-                                    title: e("#edit_titre").val(),
+                                    title: e("#titre_mod").val(),
                                     start: a.$newEventData.date,
                                     allDay: a.$newEventData.allDay,
-                                    className: e("#edit_description").val()
+                                    className: e("#description_mod").val()
                                 }), a.$calendarObj.addEvent(n)),
                                 a.$modal.hide()) :
                             (t.stopPropagation(), l.classList.add("was-validated"));
@@ -851,34 +386,8 @@
 
 
 
-    <script>
-        // Choix du contact lie
-        $('.div_contact').hide();
+    
 
-        $('#est_lie').change(function(e) {
-
-            if (e.currentTarget.value == "Oui") {
-                $('.div_contact').show();
-                $('#est_lie').attr('required', 'required');
-
-            } else {
-                $('.div_contact').hide();
-            }
-
-        });
-
-        $('#edit_est_lie').change(function(e) {
-
-            if (e.currentTarget.value == "Oui") {
-                $('.div_edit_contact').show();
-                $('#edit_est_lie').attr('required', 'required');
-
-            } else {
-                $('.div_edit_contact').hide();
-            }
-
-        });
-    </script>
-
+    @stack('scripts')
     @include('partials._sidebar_collapse')
 @endsection
