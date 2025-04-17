@@ -46,7 +46,7 @@ class AgendaController extends Controller
         $agendas = $agendas->toJson();
         
         $agendas = str_replace('\n', '', $agendas);
-         dd($agendas);
+        //  dd($agendas);
 
         return view('agenda.index',compact('agendas','contacts','tab_contacts'));
     }
