@@ -42,11 +42,11 @@ class AgendaController extends Controller
 
         $contacts = Contact::where([['archive',false]])->get();
         
-        $agendas = Agenda::with(['user.contact.individu', 'contact.individu', 'contact.entite'])->take(36)->get();
+        $agendas = Agenda::with(['user.contact.individu', 'contact.individu', 'contact.entite'])->take(30)->get();
         $agendas = $agendas->toJson();
         
         $agendas = str_replace('\n', '', $agendas);
-        //  dd($agendas);
+         dd($agendas);
 
         return view('agenda.index',compact('agendas','contacts','tab_contacts'));
     }
