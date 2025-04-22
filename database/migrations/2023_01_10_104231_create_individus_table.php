@@ -44,10 +44,27 @@ class CreateIndividusTable extends Migration
             $table->string("porte")->nullable();
             
             $table->string("profession")->nullable();
+
+            $table->string("fonction_entreprise")->nullable();
+            $table->string("entreprise")->nullable();
+            $table->string("site_web_entreprise")->nullable();
+
+            $table->string("adresse_entreprise")->nullable();
+            $table->string("code_postal_entreprise")->nullable();
+            $table->string("ville_entreprise")->nullable();
+            $table->string("pays_entreprise")->nullable();
+
             $table->date("date_naissance")->nullable();
             $table->string('lieu_naissance')->nullable();
             $table->string('nationalite')->nullable();
 
+            $table->string("linkedin")->nullable();
+            $table->string("twitter")->nullable();
+            $table->string("facebook")->nullable();
+            $table->string("instagram")->nullable();
+            $table->string("youtube")->nullable();
+            $table->string("tiktok")->nullable();
+            
             // couple
             $table->string('civilite1')->nullable();
             $table->string('nom1')->nullable();

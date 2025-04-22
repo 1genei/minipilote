@@ -76,4 +76,14 @@ class Contact extends Model
     {
         return $this->hasOne(Fournisseur::class);
     }
+
+    /**
+     * Retourne les tags liés au contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'contact_tag', 'contact_id', 'tag_id');
+    }
 }

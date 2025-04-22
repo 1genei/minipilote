@@ -1,6 +1,27 @@
 <form action="{{ route('contact.store') }}" method="post" id="add-contact">
     @csrf
 
+    {{-- Affichage des erreurs globales --}}
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong><i class="mdi mdi-alert-circle-outline me-2"></i>Erreur !</strong>
+        <ul class="mb-0 mt-2">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    {{-- Affichage du message de succès --}}
+    @if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong><i class="mdi mdi-check-circle-outline me-2"></i>Succès !</strong>
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
 
     <input type="hidden" name="typecontact" wire:model="typecontact">
     <div class="row">
@@ -10,10 +31,9 @@
 
         <div class="row">
 
-            <div class="col-md-12 col-lg-9">
+            <div class="col-md-12 col-lg-6">
                 <div class="card">
                     <div class="card-body">
-
                         @if ($displaytypecontact == true)
                             <div class="row">
                                 <div class="col-6">
@@ -28,13 +48,6 @@
                                                 <option value="{{ $type->type }}">{{ $type->type }}</option>
                                             @endforeach
                                         </select>
-                                        
-                                        {{-- <select class="select2 form-control select2-multiple"  id="typecontact" name="typecontact[]" wire:model="typecontact"  data-toggle="select2" multiple="multiple"
-                                        data-placeholder="Sélectionnez les types ...">
-                                            @foreach ($typecontacts as $type)
-                                                <option value="{{ $type->type }}">{{ $type->type }}</option>
-                                            @endforeach
-                                        </select> --}}
 
                                         @if ($errors->has('typecontact'))
                                             <br>
@@ -90,19 +103,6 @@
                                     </div>
 
                                 </div>
-                                {{-- <div class="col-sm-3">
-
-                                    <div class="form-check form-check-inline">
-                                        <input type="radio" id="nature3" name="nature" wire:model="nature"
-                                            value="Couple" @if (old('nature') == 'Couple') checked @endif required
-                                            class="form-check-input">
-                                        <label class="form-check-label" for="nature3">
-                                            Couple
-                                        </label>
-
-                                    </div>
-
-                                </div> --}}
                                 <div class="col-sm-3">
                                     <div class="form-check form-check-inline">
                                         <input type="radio" id="nature4" name="nature" wire:model="nature"
@@ -198,22 +198,23 @@
                                                         </div>
                                                     @endif
                                                 </div>
-                                            
+                                                
+                                                
                                             @else 
                                             
-                                            <div class="item_input">
-                                                <input type="text" id="nom" name="raison_sociale"
-                                                    wire:model.defer="raison_sociale" required
-                                                    value="{{ old('raison_sociale') ? old('raison_sociale') : '' }}" class="form-control">
-                                                @if ($errors->has('raison_sociale'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('raison_sociale') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
+                                                <div class="item_input">
+                                                    <input type="text" id="nom" name="raison_sociale"
+                                                        wire:model.defer="raison_sociale" required
+                                                        value="{{ old('raison_sociale') ? old('raison_sociale') : '' }}" class="form-control">
+                                                    @if ($errors->has('raison_sociale'))
+                                                        <br>
+                                                        <div class="alert alert-warning text-secondary " role="alert">
+                                                            <button type="button" class="btn-close btn-close-white"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                            <strong>{{ $errors->first('raison_sociale') }}</strong>
+                                                        </div>
+                                                    @endif
+                                                </div>
                                             
                                             @endif
                                             
@@ -222,113 +223,25 @@
 
                                     </div>
 
-                                @endif
-
-                                @if ($nature == 'Couple')
-
-
-                                    <div class="mb-3 div_couple">
-                                        <label for="nom1" class="form-label">
-                                            Nom <span class="text-danger">*</span>
-                                        </label>
-
-                                        <div class="container_indicatif">
-                                            <div class="item_indicatif">
-                                                <select class="form-select select2" id="civilite1" name="civilite1"
-                                                    wire:model.defer="civilite1">
-
-                                                    <option value="M.">M.</option>
-                                                    <option value="Mme">Mme</option>
-                                                </select>
-
-                                                @if ($errors->has('civilite1'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('civilite1') }}</strong>
-                                                    </div>
-                                                @endif
-
-
-                                            </div>
-
-                                            <div class="item_input">
-                                                <input type="text" id="nom1" name="nom1"
-                                                    wire:model.defer="nom1" required
-                                                    value="{{ old('nom1') ? old('nom1') : '' }}"
-                                                    class="form-control">
-                                                @if ($errors->has('nom1'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('nom1') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="mb-3 ">
-                                        <label for="prenom1" class="form-label">
-                                            Prénom(s) <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" id="prenom1" name="prenom1"
-                                            wire:model.defer="prenom1" required
-                                            value="{{ old('prenom1') ? old('prenom1') : '' }}" class="form-control">
-
-                                        @if ($errors->has('prenom1'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('prenom1') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="mb-3 ">
-                                        <label for="email1" class="form-label">
-                                            Email
-                                        </label>
-                                        <input type="email" id="email1" name="email1"
-                                            wire:model.defer="email1"
-                                            value="{{ old('email1') ? old('email1') : '' }}"
-                                            class="form-control emails">
-
-                                        @if ($errors->has('email1'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('email1') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                    @if ($typecontact == 'Prospect' || $typecontact == 'Client')
+                                    @if($nature == 'Personne physique')
                                         <div class="mb-3 div_personne_physique">
-                                            <label for="profession2" class="form-label">
-                                                Profession
+                                            <label for="prenom" class="form-label">
+                                                Prénom(s) <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text" id="profession2" name="profession2"
-                                                wire:model.defer="profession2"
-                                                value="{{ old('profession2') ? old('profession2') : '' }}"
-                                                class="form-control">
-
-                                            @if ($errors->has('profession2'))
+                                            <input type="text" id="prenom" name="prenom"
+                                                wire:model.defer="prenom" required
+                                                value="{{ old('prenom') ? old('prenom') : '' }}" class="form-control">
+    
+                                            @if ($errors->has('prenom'))
                                                 <br>
                                                 <div class="alert alert-warning text-secondary " role="alert">
                                                     <button type="button" class="btn-close btn-close-white"
                                                         data-bs-dismiss="alert" aria-label="Close"></button>
-                                                    <strong>{{ $errors->first('profession2') }}</strong>
+                                                    <strong>{{ $errors->first('prenom') }}</strong>
                                                 </div>
                                             @endif
                                         </div>
                                     @endif
-
                                 @endif
 
                                 <style>
@@ -349,13 +262,8 @@
                                         flex-grow: 11;
                                     }
 
-                                    .item_btn_remove {
-                                        flex-grow: 1;
-                                    }
-
                                     .container_indicatif {
                                         display: flex;
-                                        flex-flow: row wrap;
                                         gap: 5px;
 
                                     }
@@ -369,10 +277,6 @@
                                     }
                                 </style>
 
-                                {{-- <input type="text" name="emailx" wire:model.defer="emailx" id="emailx"
-                                value="" hidden> --}}
-
-                                @if ($nature != 'Couple')
                                     <div class="mb-3">
                                         <div class=" container_email_label">
                                             <div class="">
@@ -380,11 +284,6 @@
                                                     Email
                                                 </label>
                                             </div>
-                                            {{-- <div class="">
-                                            <a class="btn btn-warning add_field_button"
-                                                style=" margin-top:-10px; padding: 0.2rem 0.4rem;"><i
-                                                    class="mdi mdi-plus-thick "></i> </a>
-                                        </div> --}}
                                         </div>
                                         <div class="input_fields_wrap">
                                             <div class="container_email_input">
@@ -392,26 +291,19 @@
                                                     <input type="email" id="email" name="email"
                                                         wire:model.defer="email"
                                                         value="{{ old('email') ? old('email') : '' }}"
-                                                        class="form-control emails">
+                                                        class="form-control @error('email') is-invalid @enderror">
                                                 </div>
-                                                {{-- <div class="item_btn_remove">
-                                            <a class="btn btn-danger add_field_button"
-                                                style="padding: 0.55rem 0.9rem;"><i
-                                                    class="mdi mdi-close-thick "></i> </a>
-
-                                        </div> --}}
                                             </div>
                                         </div>
 
-                                        @if ($errors->has('email'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('email') }}</strong>
+                                        @error('email')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
                                             </div>
-                                        @endif
+                                        @enderror
                                     </div>
+
+                               
                                     <div class="mb-3">
                                         <label for="telephone_fixe" class="form-label">
                                             Téléphone Fixe
@@ -473,7 +365,6 @@
                                         </div>
 
 
-
                                         @if ($errors->has('telephone_mobile'))
                                             <br>
                                             <div class="alert alert-warning text-secondary " role="alert">
@@ -482,82 +373,8 @@
                                                 <strong>{{ $errors->first('telephone_mobile') }}</strong>
                                             </div>
                                         @endif
-                                    </div>
-                                @endif
-
-                                @if ($nature == 'Couple')
-
-                                    <div class="mb-3">
-                                        <label for="telephone_fixe1" class="form-label">
-                                            Téléphone Fixe
-                                        </label>
-
-                                        <div class="container_indicatif">
-                                            <div class="item_indicatif">
-                                                <select class="form-select select2" id="indicatif_fixe1"
-                                                    name="indicatif_fixe1" style="width:100%"
-                                                    wire:model.defer="indicatif_fixe1">
-                                                    @include('livewire.indicatifs-pays')
-
-                                                </select>
-
-                                                </select>
-                                            </div>
-                                            <div class="item_input">
-                                                <input type="text" id="telephone_fixe1" name="telephone_fixe1"
-                                                    wire:model.defer="telephone_fixe1"
-                                                    value="{{ old('telephone_fixe1') ? old('telephone_fixe1') : '' }}"
-                                                    class="form-control telephones">
-                                            </div>
-
-                                        </div>
-                                        @if ($errors->has('telephone_fixe1'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('telephone_fixe1') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="telephone_mobile1" class="form-label">
-                                            Téléphone Mobile
-                                        </label>
-
-                                        <div class="container_indicatif">
-                                            <div class="item_indicatif">
-                                                <select class="form-select select2" id="indicatif_mobile1"
-                                                    name="indicatif_mobile1" style="width:100%"
-                                                    wire:model.defer="indicatif_mobile1">
-                                                    @include('livewire.indicatifs-pays')
-
-                                                </select>
-
-                                                </select>
-                                            </div>
-                                            <div class="item_input">
-                                                <input type="text" id="telephone_mobile1" name="telephone_mobile1"
-                                                    wire:model.defer="telephone_mobile1"
-                                                    value="{{ old('telephone_mobile1') ? old('telephone_mobile1') : '' }}"
-                                                    class="form-control telephones">
-                                            </div>
-
-                                        </div>
-
-                                        @if ($errors->has('telephone_mobile1'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('telephone_mobile1') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endif
-
-                            </div>
+                                    </div>                                
+                                </div>
 
 
 
@@ -655,27 +472,11 @@
                                         @endif
                                     </div>
                                 @endif
+                                
+                               
 
                                 @if ($nature == 'Personne physique')
-
-                                    <div class="mb-3 div_personne_physique">
-                                        <label for="prenom" class="form-label">
-                                            Prénom(s) <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" id="prenom" name="prenom"
-                                            wire:model.defer="prenom" required
-                                            value="{{ old('prenom') ? old('prenom') : '' }}" class="form-control">
-
-                                        @if ($errors->has('prenom'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('prenom') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    @if ($typecontact == 'Prospect' || $typecontact == 'Client')
+                                    @if ($typecontact != 'Collaborateur')
                                         <div class="mb-3 div_personne_physique">
                                             <label for="profession" class="form-label">
                                                 Profession
@@ -694,6 +495,59 @@
                                                 </div>
                                             @endif
                                         </div>
+                                    
+                                        <div class="mb-3 div_personne_physique">
+                                            <label for="date_naissance" class="form-label">
+                                                Date de naissance
+                                            </label>
+                                            <input type="date" id="date_naissance" name="date_naissance"
+                                                wire:model.defer="date_naissance"
+                                                class="form-control">
+                                            @if ($errors->has('date_naissance'))
+                                                <div class="alert alert-warning text-secondary" role="alert">
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{{ $errors->first('date_naissance') }}</strong>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        <div class="mb-3 div_personne_physique">
+                                            <label for="entreprise" class="form-label">
+                                                Entreprise
+                                            </label>
+                                            <input type="text" id="entreprise" name="entreprise"
+                                                wire:model.defer="entreprise"
+                                                value="{{ old('entreprise') }}" 
+                                                class="form-control">
+
+                                                @if ($errors->has('entreprise'))
+                                                    <div class="alert alert-warning text-secondary" role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('entreprise') }}</strong>
+                                                    </div>
+                                                @endif
+                                        </div>
+
+                                        <div class="mb-3 div_personne_physique">
+                                            <label for="fonction_entreprise" class="form-label">
+                                                Fonction dans l'entreprise
+                                            </label>
+                                            <input type="text" id="fonction_entreprise" name="fonction_entreprise"
+                                                wire:model.defer="fonction_entreprise"
+                                                value="{{ old('fonction_entreprise') }}" 
+                                                class="form-control">
+
+                                                @if ($errors->has('fonction_entreprise'))
+                                                    <div class="alert alert-warning text-secondary" role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('fonction_entreprise') }}</strong>
+                                                    </div>
+                                                @endif
+                                        </div>
+
                                     @endif
                                 @endif
                                 @if ($nature == 'Personne morale')
@@ -737,113 +591,6 @@
 
                                 @endif
 
-                                @if ($nature == 'Couple')
-
-
-                                    <div class="mb-3 div_couple">
-                                        <label for="nom2" class="form-label">
-                                            Nom <span class="text-danger">*</span>
-                                        </label>
-
-                                        <div class="container_indicatif">
-                                            <div class="item_indicatif">
-                                                <select class="form-select select2" id="civilite2" name="civilite2"
-                                                    wire:model.defer="civilite2">
-
-                                                    <option value="M.">M.</option>
-                                                    <option value="Mme">Mme</option>
-                                                </select>
-
-                                                @if ($errors->has('civilite2'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('civilite2') }}</strong>
-                                                    </div>
-                                                @endif
-
-
-                                            </div>
-
-                                            <div class="item_input">
-                                                <input type="text" id="nom2" name="nom2"
-                                                    wire:model.defer="nom2" required
-                                                    value="{{ old('nom2') ? old('nom2') : '' }}"
-                                                    class="form-control">
-                                                @if ($errors->has('nom2'))
-                                                    <br>
-                                                    <div class="alert alert-warning text-secondary " role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('nom2') }}</strong>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-
-
-
-                                    <div class="mb-3 ">
-                                        <label for="prenom2" class="form-label">
-                                            Prénom(s) <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="text" id="prenom2" name="prenom2"
-                                            wire:model.defer="prenom2" required
-                                            value="{{ old('prenom2') ? old('prenom2') : '' }}" class="form-control">
-
-                                        @if ($errors->has('prenom2'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('prenom2') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="mb-3 ">
-                                        <label for="email2" class="form-label">
-                                            Email
-                                        </label>
-                                        <input type="email" id="email2" name="email2"
-                                            wire:model.defer="email2"
-                                            value="{{ old('email2') ? old('email2') : '' }}"
-                                            class="form-control emails">
-
-                                        @if ($errors->has('email2'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('email2') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    @if ($typecontact == 'Prospect' || $typecontact == 'Client')
-                                        <div class="mb-3 div_personne_physique">
-                                            <label for="profession1" class="form-label">
-                                                Profession
-                                            </label>
-                                            <input type="text" id="profession1" name="profession1"
-                                                wire:model.defer="profession1"
-                                                value="{{ old('profession1') ? old('profession1') : '' }}"
-                                                class="form-control">
-
-                                            @if ($errors->has('profession1'))
-                                                <br>
-                                                <div class="alert alert-warning text-secondary " role="alert">
-                                                    <button type="button" class="btn-close btn-close-white"
-                                                        data-bs-dismiss="alert" aria-label="Close"></button>
-                                                    <strong>{{ $errors->first('profession1') }}</strong>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endif
-                                @endif
 
                                 @if ($nature == 'Groupe')
 
@@ -873,78 +620,6 @@
                                         @endif
                                     </div>
                                 @endif
-
-                                @if ($nature == 'Couple')
-
-                                    <div class="mb-3">
-                                        <label for="telephone_fixe2" class="form-label">
-                                            Téléphone Fixe
-                                        </label>
-                                        <div class="container_indicatif">
-                                            <div class="item_indicatif">
-                                                <select class="form-select select2" id="indicatif_fixe2"
-                                                    name="indicatif_fixe2" style="width:100%"
-                                                    wire:model.defer="indicatif_fixe2">
-                                                    @include('livewire.indicatifs-pays')
-
-                                                </select>
-
-                                                </select>
-                                            </div>
-                                            <div class="item_input">
-                                                <input type="text" id="telephone_fixe2" name="telephone_fixe2"
-                                                    wire:model.defer="telephone_fixe2"
-                                                    value="{{ old('telephone_fixe2') ? old('telephone_fixe2') : '' }}"
-                                                    class="form-control telephones">
-                                            </div>
-
-                                        </div>
-
-                                        @if ($errors->has('telephone_fixe2'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('telephone_fixe2') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="telephone_mobile2" class="form-label">
-                                            Téléphone Mobile
-                                        </label>
-                                        <div class="container_indicatif">
-                                            <div class="item_indicatif">
-                                                <select class="form-select select2" id="indicatif_mobile2"
-                                                    name="indicatif_mobile2" style="width:100%"
-                                                    wire:model.defer="indicatif_mobile2">
-                                                    @include('livewire.indicatifs-pays')
-
-                                                </select>
-
-                                                </select>
-                                            </div>
-                                            <div class="item_input">
-                                                <input type="text" id="telephone_mobile2" name="telephone_mobile2"
-                                                    wire:model.defer="telephone_mobile2"
-                                                    value="{{ old('telephone_mobile2') ? old('telephone_mobile2') : '' }}"
-                                                    class="form-control telephones">
-                                            </div>
-
-                                        </div>
-
-                                        @if ($errors->has('telephone_mobile2'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('telephone_mobile2') }}</strong>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                @endif
                             </div>
 
 
@@ -971,7 +646,7 @@
                                         <div class="row mb-3">
                                             <div class="col-12">
                                                 <label for="numero_voie" class="form-label item_input">
-                                                    Numéro de voie
+                                                    Num voie
                                                 </label>
                                             </div>
                                             <div class="col-12">
@@ -1111,26 +786,7 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        {{-- 
-
-                    <div class="row div_associer" style="margin-top:30px;">
-                        <div class="col-12 mb-3" style="background:#7e7b7b; color:white!important; padding:10px ">
-                            <strong>Associer d'autres contacts
-                            </strong>
-                        </div>
-
-                    </div> --}}
-
-                        <div class="row mt-3">
-                            <div class="modal-footer">
-
-                                <button type="submit" id="enregistrer" wire:click="submit"
-                                    class="btn btn-primary">Enregistrer</button>
-
-                            </div>
-                        </div>
+                        
                         <!-- end row -->
 
                     </div> <!-- end card-body -->
@@ -1144,6 +800,22 @@
                         <div class="row">
 
                             <div class="col-12">
+
+                                <div class="mb-3">
+                                    <label for="tags" class="form-label">
+                                        Tags
+                                        <i class="mdi mdi-information-outline" data-bs-toggle="tooltip" 
+                                           title="Appuyez sur Entrée ou utilisez une virgule pour ajouter plusieurs tags"></i>
+                                    </label>
+                                    <select class="form-control" id="tags" name="tags[]" multiple>
+                                        @foreach($existingTags as $tag)
+                                            <option value="{{ $tag }}">{{ $tag }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+
+
                                 @if ($typecontact == 'Prospect' || $typecontact == 'Client')
                                     <div class="mb-3 ">
                                         <label for="commercial_id" class="form-label">
@@ -1204,8 +876,54 @@
                 </div>
             </div>
 
+            <div class="row ">
+                <div class="modal-footer">
+
+                    <button type="submit" id="enregistrer" wire:click="submit"
+                        class="btn btn-primary">Enregistrer</button>
+
+                </div>
+            </div>
+
         </div>
 
     </div>
     <!-- end row-->
 </form>
+
+@section('script')
+<script>
+    function initializeSelect2() {
+        $('#tags').select2({
+            tags: true,
+            tokenSeparators: [',', ' '],
+            placeholder: "Saisissez ou sélectionnez des tags...",
+            allowClear: true,
+            language: {
+                noResults: function() {
+                    return "Aucun résultat trouvé";
+                }
+            }
+        });
+    }
+
+    // Initialisation au chargement de la page
+    $(document).ready(function() {
+        initializeSelect2();
+    });
+
+    // Réinitialisation quand Livewire met à jour le DOM
+    document.addEventListener('livewire:load', function () {
+        Livewire.hook('message.processed', (message, component) => {
+            initializeSelect2();
+        });
+    });
+
+    // Réinitialisation lors du changement de nature
+    $('input[name="nature"]').on('change', function() {
+        setTimeout(function() {
+            initializeSelect2();
+        }, 100); // Petit délai pour laisser le DOM se mettre à jour
+    });
+</script>
+@endsection

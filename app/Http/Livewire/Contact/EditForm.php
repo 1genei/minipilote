@@ -6,6 +6,8 @@ use Livewire\Component;
 use App\Models\Contact;
 use App\Models\Societe;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Tag;
+use Illuminate\Support\Facades\DB;
 
 class EditForm extends Component
 {
@@ -74,9 +76,16 @@ class EditForm extends Component
     public $collaborateurs;
     public $societes;
     
+    public $existingTags = [];
+    public $selectedTags = [];
     
-    public function mount(){
-
+    public function mount(Contact $contact)
+    {
+        $this->contact = $contact;
+        // Récupérer tous les tags disponibles
+        $this->existingTags = Tag::orderBy('nom')->pluck('nom')->toArray();
+        // Récupérer les tags actuels du contact
+        $this->selectedTags = $contact->tags->pluck('nom')->toArray();
 
         $this->nature = old("nature") != null ? old("nature") : $this->contact->nature;
         $this->raison_sociale = old("raison_sociale") != null ? old("raison_sociale") : $this->cont->raison_sociale;

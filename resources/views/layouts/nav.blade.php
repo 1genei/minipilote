@@ -366,10 +366,16 @@
 
 
 
-    body[data-layout=detached][data-leftbar-compact-mode=condensed] .side-nav .side-nav-item:hover .side-nav-link {
+    body[data-layout=detached][data-leftbar-compact-mode=condensed] .side-nav .side-nav-item:hover .side-nav-link  {
         background: #263349;
 
     }
+
+    body[data-layout=detached][data-leftbar-compact-mode=condensed] .side-nav .side-nav-item:hover ul {
+        background: #263349 !important;
+        color: #fff !important;
+    }
+   
 
     @media (min-width: 992px) {
 

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Contact;
 use Livewire\Component;
 use App\Models\Contact;
 use App\Models\Societe;
+use App\Models\Tag;
 
 use Illuminate\Database\Eloquent\Builder;
 
@@ -57,6 +58,7 @@ class AddForm extends Component
     public $indicatif_mobile1;
     public $telephone_mobile2;
     public $indicatif_mobile2;
+    public $date_naissance;
     public $type;
     public $civilite;
     public $civilite1;
@@ -65,6 +67,9 @@ class AddForm extends Component
     public $contactindividus;
     public $commercial_id;
     public $societe_id;
+    public $tags;
+    public $entreprise;
+    public $fonction_entreprise;
     
     public $typecontact;
     public $typecontacts;
@@ -73,6 +78,13 @@ class AddForm extends Component
     public $collaborateurs;
     public $societes;
     
+    public $existingTags = [];
+
+    public function mount()
+    {
+        $this->existingTags = Tag::orderBy('nom')->pluck('nom')->toArray();
+    }
+
     public function rules()
     {
     

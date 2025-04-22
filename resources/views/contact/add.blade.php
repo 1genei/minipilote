@@ -108,8 +108,6 @@
 
 @section('script')
 
-
-
     @include('components.contact.add_script')
 
 @endsection

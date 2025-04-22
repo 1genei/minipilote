@@ -239,8 +239,8 @@
             <div class="loading-content">
                 <div class="spinner-border text-light" role="status"></div>
                 <p class="mt-2">Enregistrement en cours...</p>
-            </div>
-        </div>
+                                    </div>
+                                </div>
 
         <!-- Inclusion des modals -->
         @include('agenda.components.add-modal')

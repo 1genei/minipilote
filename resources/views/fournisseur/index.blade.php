@@ -41,7 +41,7 @@
                         <div class="row g-0">
 
                             <div class="col-sm-2 mr-14 ">
-                                {{-- <a href="{{route('permission.index')}}" type="button" class="btn btn-outline-primary"><i class="uil-arrow-left"></i> Permissions</a> --}}
+                                <a href="{{ url()->previous() }}" type="button" class="btn btn-outline-primary"><i class="uil-arrow-left"></i> Retour</a>
                             </div>
                             @if (session('ok'))
                                 <div class="col-6">

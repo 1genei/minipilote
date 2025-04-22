@@ -20,8 +20,8 @@ class AgendaController extends Controller
     {
         $liste_contacts = Contact::with(['individu', 'entite'])->get();
         $tab_contacts = [];
-        
-        foreach ($liste_contacts as $value) {
+       
+       foreach ($liste_contacts as $value) {
             if ($value->type == "individu" && $value->individu) {
                 $nom = $value->individu->nom . " " . $value->individu->prenom;
                 $contact = $value->individu->telephone_fixe . "/" . $value->individu->telephone_mobile;
@@ -38,8 +38,8 @@ class AgendaController extends Controller
                 "contact" => $contact
             ];
         }
-        $tab_contacts  = json_encode($tab_contacts) ;
-
+       $tab_contacts  = json_encode($tab_contacts) ;
+        
         $contacts = Contact::where([['archive',false]])->get();
         
         $agendas = Agenda::with(['user.contact.individu', 'contact.individu', 'contact.entite'])->get();
@@ -47,7 +47,7 @@ class AgendaController extends Controller
         
         $agendas = str_replace('\n', ' ', $agendas);
         //  dd($agendas);
-
+        
         return view('agenda.index',compact('agendas','contacts','tab_contacts'));
     }
     
@@ -285,18 +285,18 @@ class AgendaController extends Controller
                 'est_lie' => 'required|in:Oui,Non',
                 'contact_id' => 'required_if:est_lie,Oui|nullable|exists:contacts,id',
             ]);
-
-            $agenda = Agenda::create([
-                'titre' => $request->titre,
-                'user_id' => Auth::id(),
-                'type_rappel' => $request->type_rappel,
-                'description' => $request->description,
-                'date_deb' => $request->date_deb,
-                'date_fin' => $request->date_fin,
-                'heure_deb' => $request->heure_deb,
-                'heure_fin' => $request->heure_fin,
+        
+        $agenda = Agenda::create([
+            'titre' => $request->titre, 
+            'user_id' => Auth::id(), 
+            'type_rappel' => $request->type_rappel, 
+            'description' => $request->description, 
+            'date_deb' => $request->date_deb, 
+            'date_fin' => $request->date_fin, 
+            'heure_deb' => $request->heure_deb, 
+            'heure_fin' => $request->heure_fin, 
                 'priorite' => $request->priorite,
-                'est_lie' => $request->est_lie == "Non" ? false : true,
+            'est_lie' => $request->est_lie == "Non" ? false : true, 
                 'contact_id' => $request->est_lie == "Oui" ? $request->contact_id : null,
             ]);
 
