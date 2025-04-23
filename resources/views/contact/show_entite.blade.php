@@ -72,7 +72,7 @@
                     </h4>
 
                     <div class="mt-3">
-                        @foreach ($contact->typecontacts as $typecontact)
+                    @foreach ($contact->typecontacts as $typecontact)
                             @switch($typecontact->type)
                                 @case('Prospect')
                                     <span class="badge bg-secondary rounded-pill">{{$typecontact->type}}</span>
@@ -126,7 +126,7 @@
                             <span class="ms-2">{{ $contact->entite?->indicatif_mobile }} {{ $contact->entite?->telephone_mobile }}</span>
                         </p>
                         @endif
-
+                    
                         <h5 class="font-13 text-uppercase mt-4">Adresse :</h5>
                         <p class="text-muted mb-2">
                             <i class="mdi mdi-map-marker me-1"></i>
@@ -254,6 +254,8 @@
         </div> <!-- end col-->
 
         <div class="col-xl-8 col-lg-7">
+            <div class="row">
+                <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
@@ -262,9 +264,8 @@
                                 Interlocuteurs
                             </a>
                         </li>
-                      
                         <li class="nav-item">
-                            <a href="#activite" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
+                                    <a href="#activite" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
                                 Prestations
                             </a>
                         </li>
@@ -291,17 +292,102 @@
                         </div>
 
                     </div> <!-- end tab-content -->
-                </div> <!-- end card body -->
-            </div> <!-- end card -->
-        </div> <!-- end col -->
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Nouvelle section pour les notes --}}
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+                                <li class="nav-item">
+                                    <a href="#notes" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
+                                        Notes
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#taches" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+                                        Tâches
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="notes">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="mb-0">Notes</h5>
+                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addNoteModal">
+                                            <i class="mdi mdi-plus-circle me-1"></i> Nouvelle note
+                                        </button>
+                                    </div>
+
+                                    <livewire:notes.notes-list :contact_id="$contact->id" />
+                                       
+                                </div>
+
+                                <div class="tab-pane" id="taches">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="mb-0">Tâches</h5>                                        
+                                        @can('permission', 'ajouter-agenda')
+                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-modal">
+                                                <i class="mdi mdi-plus-circle me-1"></i> Nouvelle tâche
+                                            </button>                                       
+                                        @endcan
+                                    </div>
+                                    
+                                    <livewire:taches.tasks-list :contact_id="$contact->id" />
+                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+  
     <!-- end row-->
     @include('contact.add_interlocuteur')    
     @include('prestation.add_modal')    
     
+    <div class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner-border text-light" role="status"></div>
+            <p class="mt-2">Enregistrement en cours...</p>
+        </div>
+    </div>
+
+    <!-- Inclusion des modals -->
+    @include('agenda.components.add-modal')
+    @include('agenda.components.edit-modal')
+    
 </div> <!-- End Content -->
 
+<style>
+    .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+        }
+        .loading-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+        }
+    
+</style>
+
 @endsection
+
+
 
 @section('script')
     <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
@@ -446,4 +532,9 @@
         formater_tel("#telephone_fixe", "#indicatif_fixe");
         formater_tel("#telephone_mobile", "#indicatif_mobile");
     </script>
+
+   
+
+@stack('scripts')
+@include('partials._sidebar_collapse')
 @endsection

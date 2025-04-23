@@ -105,7 +105,7 @@
     </div>
 </div>
 
-@section('script')
+@push('scripts')
 <script>
     document.addEventListener('livewire:load', function () {
         // Gestion de l'ajout
@@ -162,4 +162,4 @@
         });
     });
 </script>
-@endsection 
+@endpush 

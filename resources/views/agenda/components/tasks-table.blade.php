@@ -144,7 +144,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($agendas as $agenda)
-                                            <tr>
+                                            <tr @if($agenda->est_terminee) style="background-color: #f0f0f0; text-decoration: line-through;" @endif>
                                                 <td>
                                                     @if ($agenda->est_terminee)
                                                         <span class="badge bg-success-subtle text-success">Terminée</span>

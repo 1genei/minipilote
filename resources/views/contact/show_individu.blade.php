@@ -272,19 +272,17 @@
                         <div class="card-body">
                             <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                                 <li class="nav-item">
-                                    <a href="#notes" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active ">
+                                    <a href="#notes" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
                                         Notes
                                     </a>
                                 </li>
-                              
                                 <li class="nav-item">
-                                    <a href="#taches" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 ">
+                                    <a href="#taches" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
                                         Tâches
                                     </a>
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                
                                 <div class="tab-pane show active" id="notes">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <h5 class="mb-0">Notes</h5>
@@ -295,18 +293,22 @@
 
                                     <livewire:notes.notes-list :contact_id="$contact->id" />
                                 </div>
-                             
-                                <div class="tab-pane show " id="taches">
-                                    <button type="button" class="btn btn-secondary btn-sm rounded-pill"
-                                    data-bs-toggle="modal" data-bs-target="#add-tache-modal"><i
-                                        class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter tâche</span>
-                                    </button> <hr>
-                                  
+
+                                <div class="tab-pane" id="taches">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="mb-0">Tâches</h5>                                        
+                                        @can('permission', 'ajouter-agenda')
+                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-modal">
+                                                <i class="mdi mdi-plus-circle me-1"></i> Nouvelle tâche
+                                            </button>                                       
+                                        @endcan
+                                    </div>
+                                    
+                                    <livewire:taches.tasks-list :contact_id="$contact->id" />
                                 </div>
-        
-                            </div> <!-- end tab-content -->
-                        </div> <!-- end card body -->
-                    </div> <!-- end card -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div> <!-- end col -->
@@ -315,6 +317,38 @@
     @include('prestation.add_modal')    
     
 </div> <!-- End Content -->
+
+<div class="loading-overlay">
+    <div class="loading-content">
+        <div class="spinner-border text-light" role="status"></div>
+        <p class="mt-2">Enregistrement en cours...</p>
+    </div>
+</div>
+
+<!-- Inclusion des modals -->
+@include('agenda.components.add-modal')
+@include('agenda.components.edit-modal')
+
+<style>
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+    }
+    .loading-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        text-align: center;
+    }
+</style>
 
 @endsection
 
@@ -391,4 +425,7 @@
         formater_tel("#telephone_fixe", "#indicatif_fixe");
         formater_tel("#telephone_mobile", "#indicatif_mobile");
     </script>
+
+    @stack('scripts')
+    @include('partials._sidebar_collapse')
 @endsection
