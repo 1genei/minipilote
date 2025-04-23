@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 class EditForm extends Component
 { 
     public $user;
-    public $roles;
+public $roles;
     public $contact_existant;
     public $individus;
     public $individu;

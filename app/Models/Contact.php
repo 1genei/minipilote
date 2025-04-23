@@ -86,4 +86,9 @@ class Contact extends Model
     {
         return $this->belongsToMany(Tag::class, 'contact_tag', 'contact_id', 'tag_id');
     }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
 }

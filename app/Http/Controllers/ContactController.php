@@ -97,121 +97,121 @@ class ContactController extends Controller
                 'forme_juridique.required_if' => 'La forme juridique est obligatoire pour une personne morale',
             ]);
 
-            if ($request->nature == "Personne morale" || $request->nature == "Groupe") {
-                $type_contact = "entité";
-            } else {
-                $type_contact = "individu";
-            }
+        if ($request->nature == "Personne morale" || $request->nature == "Groupe") {
+            $type_contact = "entité";
+        } else {
+            $type_contact = "individu";
+        }
 
-            $contact = Contact::create([
-                "user_id" => Auth::user()->id,
-                "type" => $type_contact,
-                "nature" => $request->nature,
-                "commercial_id" => $request->commercial_id,
-                "societe_id" => $request->societe_id,
-            ]);
-            $typecontact = Typecontact::where('type', $request->typecontact)->first();
-            $contact->typeContacts()->attach($typecontact->id);
-            
-            if ($type_contact == "individu") {
-                Individu::create([
-                    "email" => $request->email,
-                    "contact_id" => $contact->id,
-                    "nom" => $request->nom,
-                    "prenom" => $request->prenom,
-                    "profession" => $request->profession,
-                    "profession1" => $request->profession1,
-                    "profession2" => $request->profession2,
+        $contact = Contact::create([
+            "user_id" => Auth::user()->id,
+            "type" => $type_contact,
+            "nature" => $request->nature,
+            "commercial_id" => $request->commercial_id,
+            "societe_id" => $request->societe_id,
+        ]);
+        $typecontact = Typecontact::where('type', $request->typecontact)->first();
+        $contact->typeContacts()->attach($typecontact->id);
+        
+        if ($type_contact == "individu") {
+            Individu::create([
+                "email" => $request->email,
+                "contact_id" => $contact->id,
+                "nom" => $request->nom,
+                "prenom" => $request->prenom,
+                "profession" => $request->profession,
+                "profession1" => $request->profession1,
+                "profession2" => $request->profession2,
                     "entreprise" => $request->entreprise,
                     "fonction_entreprise" => $request->fonction_entreprise,
-                    "numero_voie" => $request->numero_voie,
-                    "nom_voie" => $request->nom_voie,
-                    "complement_voie" => $request->complement_voie,
-                    "code_postal" => $request->code_postal,
-                    "ville" => $request->ville,
-                    "pays" => $request->pays,
-                    "code_insee" => $request->code_insee,
-                    "code_cedex" => $request->code_cedex,
-                    "numero_cedex" => $request->numero_cedex,
-                    "boite_postale" => $request->boite_postale,
-                    "residence" => $request->residence,
-                    "batiment" => $request->batiment,
-                    "escalier" => $request->escalier,
-                    "etage" => $request->etage,
-                    "porte" => $request->porte, 
+                "numero_voie" => $request->numero_voie,
+                "nom_voie" => $request->nom_voie,
+                "complement_voie" => $request->complement_voie,
+                "code_postal" => $request->code_postal,
+                "ville" => $request->ville,
+                "pays" => $request->pays,
+                "code_insee" => $request->code_insee,
+                "code_cedex" => $request->code_cedex,
+                "numero_cedex" => $request->numero_cedex,
+                "boite_postale" => $request->boite_postale,
+                "residence" => $request->residence,
+                "batiment" => $request->batiment,
+                "escalier" => $request->escalier,
+                "etage" => $request->etage,
+                "porte" => $request->porte, 
 
-                    "civilite" => $request->civilite,
-                    "date_naissance" => $request->date_naissance,
-                    "lieu_naissance" => $request->lieu_naissance,
-                    "nationalite" => $request->nationalite,
-                    "situation_matrimoniale" => $request->situation_matrimoniale,
-                    "nom_jeune_fille" => $request->nom_jeune_fille,
-                    "indicatif_fixe" => $request->indicatif_fixe,
-                    "telephone_fixe" => $request->telephone_fixe,
-                    "indicatif_mobile" => $request->indicatif_mobile,
-                    "telephone_mobile" => $request->telephone_mobile,
+                "civilite" => $request->civilite,
+                "date_naissance" => $request->date_naissance,
+                "lieu_naissance" => $request->lieu_naissance,
+                "nationalite" => $request->nationalite,
+                "situation_matrimoniale" => $request->situation_matrimoniale,
+                "nom_jeune_fille" => $request->nom_jeune_fille,
+                "indicatif_fixe" => $request->indicatif_fixe,
+                "telephone_fixe" => $request->telephone_fixe,
+                "indicatif_mobile" => $request->indicatif_mobile,
+                "telephone_mobile" => $request->telephone_mobile,
 
-                    "civilite1" => $request->civilite1,
-                    "nom1" => $request->nom1,
-                    "prenom1" => $request->prenom1,
-                    "indicatif_fixe1" => $request->indicatif_fixe1,
-                    "telephone_fixe1" => $request->telephone_fixe1,
-                    "indicatif_mobile1" => $request->indicatif_mobile1,
-                    "telephone_mobile1" => $request->telephone_mobile1,
-                    "email1" => $request->email1,
+                "civilite1" => $request->civilite1,
+                "nom1" => $request->nom1,
+                "prenom1" => $request->prenom1,
+                "indicatif_fixe1" => $request->indicatif_fixe1,
+                "telephone_fixe1" => $request->telephone_fixe1,
+                "indicatif_mobile1" => $request->indicatif_mobile1,
+                "telephone_mobile1" => $request->telephone_mobile1,
+                "email1" => $request->email1,
 
-                    "civilite2" => $request->civilite2,
-                    "nom2" => $request->nom2,
-                    "prenom2" => $request->prenom2,
-                    "indicatif_fixe2" => $request->indicatif_fixe2,
-                    "telephone_fixe2" => $request->telephone_fixe2,
-                    "indicatif_mobile2" => $request->indicatif_mobile2,
-                    "telephone_mobile2" => $request->telephone_mobile2,
-                    "email2" => $request->email2,
+                "civilite2" => $request->civilite2,
+                "nom2" => $request->nom2,
+                "prenom2" => $request->prenom2,
+                "indicatif_fixe2" => $request->indicatif_fixe2,
+                "telephone_fixe2" => $request->telephone_fixe2,
+                "indicatif_mobile2" => $request->indicatif_mobile2,
+                "telephone_mobile2" => $request->telephone_mobile2,
+                "email2" => $request->email2,
 
-                    "notes" => $request->notes,
-                ]);
+                "notes" => $request->notes,
+            ]);
+
+        } else {
+            Entite::create([
+                "type" => $request->type,
+                "email" => $request->email,
+                "nom" => $request->nom,
+                "indicatif_fixe" => $request->indicatif_fixe,
+                "telephone_fixe" => $request->telephone_fixe,
+                "indicatif_mobile" => $request->indicatif_mobile,
+                "telephone_mobile" => $request->telephone_mobile,
+                "numero_voie" => $request->numero_voie,
+                "nom_voie" => $request->nom_voie,
+                "complement_voie" => $request->complement_voie,
+                "code_postal" => $request->code_postal,
+                "ville" => $request->ville,
+                "pays" => $request->pays,
+                "code_insee" => $request->code_insee,
+                "code_cedex" => $request->code_cedex,
+                "numero_cedex" => $request->numero_cedex,
+                "boite_postale" => $request->boite_postale,
+                "residence" => $request->residence,
+                "batiment" => $request->batiment,
+                "escalier" => $request->escalier,
+                "etage" => $request->etage,
+                "porte" => $request->porte, 
                 
-            } else {
-                Entite::create([
-                    "type" => $request->type,
-                    "email" => $request->email,
-                    "nom" => $request->nom,
-                    "indicatif_fixe" => $request->indicatif_fixe,
-                    "telephone_fixe" => $request->telephone_fixe,
-                    "indicatif_mobile" => $request->indicatif_mobile,
-                    "telephone_mobile" => $request->telephone_mobile,
-                    "numero_voie" => $request->numero_voie,
-                    "nom_voie" => $request->nom_voie,
-                    "complement_voie" => $request->complement_voie,
-                    "code_postal" => $request->code_postal,
-                    "ville" => $request->ville,
-                    "pays" => $request->pays,
-                    "code_insee" => $request->code_insee,
-                    "code_cedex" => $request->code_cedex,
-                    "numero_cedex" => $request->numero_cedex,
-                    "boite_postale" => $request->boite_postale,
-                    "residence" => $request->residence,
-                    "batiment" => $request->batiment,
-                    "escalier" => $request->escalier,
-                    "etage" => $request->etage,
-                    "porte" => $request->porte, 
-                    
-                    "forme_juridique" => $request->forme_juridique,
-                    "raison_sociale" => $request->raison_sociale,
-                    "numero_siret" => $request->numero_siret,
-                    "code_naf" => $request->code_naf,
-                    "date_immatriculation" => $request->date_immatriculation,
-                    "numero_rsac" => $request->numero_rsac,
-                    "numero_assurance" => $request->numero_assurance,
-                    "numero_tva" => $request->numero_tva,
-                    "numero_rcs" => $request->numero_rcs,
-                    "rib_bancaire" => $request->rib_bancaire,
-                    "iban" => $request->iban,
-                    "bic" => $request->bic,
-                    "site_web" => $request->site_web,
-                    "contact_id" => $contact->id,
-                    "notes" => $request->notes,
+                "forme_juridique" => $request->forme_juridique,
+                "raison_sociale" => $request->raison_sociale,
+                "numero_siret" => $request->numero_siret,
+                "code_naf" => $request->code_naf,
+                "date_immatriculation" => $request->date_immatriculation,
+                "numero_rsac" => $request->numero_rsac,
+                "numero_assurance" => $request->numero_assurance,
+                "numero_tva" => $request->numero_tva,
+                "numero_rcs" => $request->numero_rcs,
+                "rib_bancaire" => $request->rib_bancaire,
+                "iban" => $request->iban,
+                "bic" => $request->bic,
+                "site_web" => $request->site_web,
+                "contact_id" => $contact->id,
+                "notes" => $request->notes,
                 ]);
             }
             
@@ -234,14 +234,14 @@ class ContactController extends Controller
                     \Log::error('Erreur lors de la synchronisation des tags : ' . $e->getMessage());
                     // Continue l'exécution même si les tags échouent
                 }
-                
-            }
-            
-            if($returnContact == true) return $contact;
-            
+
+        }
+        
+        if($returnContact == true) return $contact;
+        
             DB::commit();
-            return redirect()->route('contact.show', Crypt::encrypt($contact->id))->with('ok', 'Contact ajouté');
-            
+        return redirect()->route('contact.show', Crypt::encrypt($contact->id))->with('ok', 'Contact ajouté');
+        
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollback();
             return redirect()
@@ -338,7 +338,7 @@ class ContactController extends Controller
     {
         try {
             DB::beginTransaction();
-
+        
             // Validation des données
             $validated = $request->validate([
                 'nature' => 'required',
@@ -397,7 +397,7 @@ class ContactController extends Controller
                     "notes" => $request->notes,
                     // ... autres champs
                 ]);
-            } else {
+        } else {
                 $entite = $contact->entite;
                 $entite->update([
                     "type" => $request->type,

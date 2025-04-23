@@ -62,6 +62,9 @@ class EditForm extends Component
     public $civilite1;
     public $civilite2;
     public $notes;
+    public $entreprise;
+    public $fonction_entreprise;
+    public $date_naissance;
 
     public $contact;
     public $cont;

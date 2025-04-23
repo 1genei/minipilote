@@ -64,52 +64,156 @@
                 <div class="card-body">
                     
                     <p class="text-muted font-14">{{ $contact->entite?->forme_juridique }}</p>
-                    <h4 class="mb-0 mt-2">{{ $contact->entite?->raison_sociale }} <a href="{{ route('contact.edit', Crypt::encrypt($contact->id)) }}" class="text-muted"><i class="mdi mdi-square-edit-outline ms-2"></i></a></h4>
+                    <h4 class="mb-0 mt-2">
+                        {{ $contact->entite?->raison_sociale }}
+                        <a href="{{ route('contact.edit', Crypt::encrypt($contact->id)) }}" class="text-muted">
+                            <i class="mdi mdi-square-edit-outline ms-2"></i>
+                        </a>
+                    </h4>
 
-                    @foreach ($contact->typecontacts as $typecontact)
-                    
-                    
-                        @if($typecontact->type == "Prospect")
-                            <div class="badge bg-secondary btn-sm font-12 mt-2">{{$typecontact->type}}</div>
-                        @elseif($typecontact->type == "Client")
-                            <div class="badge bg-info btn-sm font-12 mt-2">{{$typecontact->type}}</div>
-                        @elseif($typecontact->type == "Fournisseur")
-                            <div class="badge bg-warning btn-sm font-12 mt-2">{{$typecontact->type}}</div>
-                        
-                        @elseif($typecontact->type == "Collaborateur")
-                            <div class="badge bg-danger btn-sm font-12 mt-2">{{$typecontact->type}}</div>
-                        
-                        @elseif($typecontact->type == "Bénéficiaire")                        
-                            <div class="badge bg-primary btn-sm font-12 mt-2">{{$typecontact->type}}</div>                
-                        @else 
-                            <div class="badge bg-light btn-sm font-12 mt-2">{{$typecontact->type}}</div>                    
+                    <div class="mt-3">
+                        @foreach ($contact->typecontacts as $typecontact)
+                            @switch($typecontact->type)
+                                @case('Prospect')
+                                    <span class="badge bg-secondary rounded-pill">{{$typecontact->type}}</span>
+                                    @break
+                                @case('Client')
+                                    <span class="badge bg-info rounded-pill">{{$typecontact->type}}</span>
+                                    @break
+                                @case('Fournisseur')
+                                    <span class="badge bg-warning rounded-pill">{{$typecontact->type}}</span>
+                                    @break
+                                @case('Collaborateur')
+                                    <span class="badge bg-danger rounded-pill">{{$typecontact->type}}</span>
+                                    @break
+                                @case('Bénéficiaire')
+                                    <span class="badge bg-primary rounded-pill">{{$typecontact->type}}</span>
+                                    @break
+                                @default
+                                    <span class="badge bg-light rounded-pill">{{$typecontact->type}}</span>
+                            @endswitch
+                        @endforeach
+                    </div>
+
+                    {{-- Tags --}}
+                    @if($contact->tags->count() > 0)
+                    <div class="mt-2">
+                        @foreach($contact->tags as $tag)
+                            <span class="badge bg-primary-lighten text-primary rounded-pill">
+                                <i class="mdi mdi-tag-outline"></i> {{ $tag->nom }}
+                            </span>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    <div class="text-start mt-4">
+                        <h5 class="font-13 text-uppercase">Informations de contact :</h5>
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-email me-1"></i> Email :</strong>
+                            <span class="ms-2">{{ $contact->entite?->email }}</span>
+                        </p>
+
+                        @if($contact->entite?->telephone_fixe)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-phone me-1"></i> Téléphone Fixe :</strong>
+                            <span class="ms-2">{{ $contact->entite?->indicatif_fixe }} {{ $contact->entite?->telephone_fixe }}</span>
+                        </p>
                         @endif
-                    
-                        
-                    @endforeach
-                
 
-                    <div class="text-start mt-3">
-                        
-                        <p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ms-2 ">{{ $contact->entite?->email }}</span></p>
-                        <p class="text-muted mb-2 font-13"><strong>Téléphone Fixe :</strong> 
-                            <span class="ms-2 "> @if($contact->entite?->telephone_fixe!= null) {{ $contact->entite?->indicatif_fixe }} {{ $contact->entite?->telephone_fixe }} @endif</span>
+                        @if($contact->entite?->telephone_mobile)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-cellphone me-1"></i> Téléphone Mobile :</strong>
+                            <span class="ms-2">{{ $contact->entite?->indicatif_mobile }} {{ $contact->entite?->telephone_mobile }}</span>
                         </p>
-                        <p class="text-muted mb-2 font-13"><strong>Téléphone Mobile :</strong> 
-                            <span class="ms-2 "> @if($contact->entite?->telephone_mobile!= null) {{ $contact->entite?->indicatif_mobile }} {{ $contact->entite?->telephone_mobile }} @endif</span>
-                        </p>
-                        <p class="text-muted mb-2 font-13"><strong> Adresse :</strong> 
-                            <span class="ms-2 "> {{$contact->entite?->numero_voie}} {{$contact->entite?->nom_voie }} {{$contact->entite?->complement_voie }}, {{$contact->entite?->code_postal }}, {{$contact->entite?->ville }} </span>
-                        </p>
-                        
-                        <h4 class="text-muted mb-2 font-13">Notes :</h4>
-                        <p class="text-muted font-13 mb-3">
-                           {{$contact->entite?->notes }}
-                        </p>
-                       
-                        <p class="text-muted mb-2 font-13"><strong>Numéro siret :</strong> <span class="ms-2 ">{{ $contact->entite?->numero_siret }}</span></p>
-                        <p class="text-muted mb-2 font-13"><strong>Numéro TVA :</strong> <span class="ms-2 ">{{ $contact->entite?->numero_tva }}</span></p>
+                        @endif
 
+                        <h5 class="font-13 text-uppercase mt-4">Adresse :</h5>
+                        <p class="text-muted mb-2">
+                            <i class="mdi mdi-map-marker me-1"></i>
+                            {{ $contact->entite?->numero_voie }} {{ $contact->entite?->nom_voie }}
+                            @if($contact->entite?->complement_voie)
+                                <br><span class="ms-4">{{ $contact->entite?->complement_voie }}</span>
+                            @endif
+                            @if($contact->entite?->residence || $contact->entite?->batiment || $contact->entite?->escalier || $contact->entite?->etage || $contact->entite?->porte)
+                                <br><span class="ms-4">
+                                    {{ $contact->entite?->residence }}
+                                    {{ $contact->entite?->batiment ? 'Bât. '.$contact->entite?->batiment : '' }}
+                                    {{ $contact->entite?->escalier ? 'Esc. '.$contact->entite?->escalier : '' }}
+                                    {{ $contact->entite?->etage ? 'Étage '.$contact->entite?->etage : '' }}
+                                    {{ $contact->entite?->porte ? 'Porte '.$contact->entite?->porte : '' }}
+                                </span>
+                            @endif
+                            <br><span class="ms-4">{{ $contact->entite?->code_postal }} {{ $contact->entite?->ville }}</span>
+                            @if($contact->entite?->pays && $contact->entite?->pays != 'France')
+                                <br><span class="ms-4">{{ $contact->entite?->pays }}</span>
+                            @endif
+                        </p>
+
+                        @if($contact->entite?->notes)
+                        <h5 class="font-13 text-uppercase mt-4">Notes :</h5>
+                        <p class="text-muted mb-2">
+                            {{ $contact->entite?->notes }}
+                        </p>
+                        @endif
+
+                        <h5 class="font-13 text-uppercase mt-4">Informations légales :</h5>
+                        @if($contact->entite?->numero_siret)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-identifier me-1"></i> SIRET :</strong>
+                            <span class="ms-2">{{ $contact->entite?->numero_siret }}</span>
+                        </p>
+                        @endif
+                        @if($contact->entite?->numero_tva)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-card-account-details-outline me-1"></i> TVA :</strong>
+                            <span class="ms-2">{{ $contact->entite?->numero_tva }}</span>
+                        </p>
+                        @endif
+                        @if($contact->entite?->code_naf)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-office-building-outline me-1"></i> Code NAF :</strong>
+                            <span class="ms-2">{{ $contact->entite?->code_naf }}</span>
+                        </p>
+                        @endif
+                        @if($contact->entite?->numero_rcs)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-file-document-outline me-1"></i> RCS :</strong>
+                            <span class="ms-2">{{ $contact->entite?->numero_rcs }}</span>
+                        </p>
+                        @endif
+
+                        @if($contact->entite?->site_web)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-web me-1"></i> Site web :</strong>
+                            <span class="ms-2">
+                                <a href="{{ $contact->entite?->site_web }}" target="_blank" class="text-primary">
+                                    {{ $contact->entite?->site_web }}
+                                </a>
+                            </span>
+                        </p>
+                        @endif
+
+                        @if($contact->entite?->rib_bancaire || $contact->entite?->iban || $contact->entite?->bic)
+                        <h5 class="font-13 text-uppercase mt-4">Informations bancaires :</h5>
+                        @if($contact->entite?->rib_bancaire)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-bank me-1"></i> RIB :</strong>
+                            <span class="ms-2">{{ $contact->entite?->rib_bancaire }}</span>
+                        </p>
+                        @endif
+                        @if($contact->entite?->iban)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-bank-transfer me-1"></i> IBAN :</strong>
+                            <span class="ms-2">{{ $contact->entite?->iban }}</span>
+                        </p>
+                        @endif
+                        @if($contact->entite?->bic)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-bank-outline me-1"></i> BIC :</strong>
+                            <span class="ms-2">{{ $contact->entite?->bic }}</span>
+                        </p>
+                        @endif
+                        @endif
                     </div>
 
             
