@@ -495,6 +495,20 @@
                                         </div>
 
                                         <div class="mb-3 div_personne_physique">
+                                            <label for="secteur_activite" class="form-label">
+                                                Secteur d'activité
+                                                <i class="mdi mdi-information-outline" data-bs-toggle="tooltip" 
+                                                   title="Sélectionnez un secteur existant ou créez-en un nouveau"></i>
+                                            </label>
+                                            <select class="form-control" id="secteur_activite" name="secteur_activite">
+                                                <option value=""></option>
+                                                @foreach($secteurActivites as $secteur)
+                                                    <option value="{{ $secteur }}">{{ $secteur }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3 div_personne_physique">
                                             <label for="fonction_entreprise" class="form-label">
                                                 Fonction dans l'entreprise
                                             </label>
@@ -543,6 +557,23 @@
                                                     {{ $message }}
                                                 </div>
                                             @enderror
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="secteur_activite" class="form-label">
+                                            Secteur d'activité
+                                            <i class="mdi mdi-information-outline" data-bs-toggle="tooltip" 
+                                               title="Sélectionnez un secteur existant ou créez-en un nouveau"></i>
+                                        </label>
+                                        <select class="form-control" id="secteur_activite" name="secteur_activite">
+                                            <option value=""></option>
+                                            @foreach($secteurActivites as $secteur)
+                                                <option value="{{ $secteur }}" 
+                                                    {{ $contact->secteurActivite && $contact->secteurActivite->nom === $secteur ? 'selected' : '' }}>
+                                                    {{ $secteur }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                 @endif
@@ -820,67 +851,9 @@
 </form>
 
 @section('script')
-{{-- <script>
-    $(document).ready(function() {
-        // Initialisation de Select2 avec options avancées
-        $('#tags').select2({
-            theme: 'bootstrap',
-            tags: true,
-            tokenSeparators: [',', ' ', ';'],
-            placeholder: "Saisissez ou sélectionnez des tags...",
-            allowClear: true,
-            createTag: function(params) {
-                var term = $.trim(params.term);
-                
-                if (term === '') {
-                    return null;
-                }
-                
-                return {
-                    id: term,
-                    text: term + ' (Nouveau)',
-                    newTag: true
-                };
-            },
-            templateResult: function(data) {
-                var $result = $("<span></span>");
-                
-                if (data.newTag) {
-                    $result.html('<i class="mdi mdi-plus-circle text-success me-1"></i>' + data.text);
-                } else {
-                    $result.html('<i class="mdi mdi-tag me-1"></i>' + data.text);
-                }
-                
-                return $result;
-            },
-            templateSelection: function(data) {
-                var icon = data.newTag ? 'mdi mdi-plus-circle' : 'mdi mdi-tag';
-                var text = data.newTag ? data.text.replace(' (Nouveau)', '') : data.text;
-                return $('<span><i class="' + icon + ' me-1"></i>' + text + '</span>');
-            }
-        }).on('change', function(e) {
-            @this.set('selectedTags', $(this).val());
-        });
-        
-
-    });
-
-    // Réinitialisation quand Livewire met à jour le DOM
-    document.addEventListener('livewire:load', function () {
-        Livewire.hook('message.processed', (message, component) => {
-            // $('#tags').select2('destroy');
-            $('#tags').select2({
-                tags: true,
-                tokenSeparators: [',', ' ', ';'],
-                placeholder: "Saisissez ou sélectionnez des tags...",
-                allowClear: true,
-            });
-        });
-    });
-</script> --}}
-
 <script>
-    function initializeSelect2() {
+    function initializeSelects() {
+        // Initialisation existante pour les tags
         $('#tags').select2({
             tags: true,
             tokenSeparators: [',', ';'],
@@ -892,25 +865,37 @@
                 }
             }
         });
+
+        // Nouvelle initialisation pour le secteur d'activité
+        $('#secteur_activite').select2({
+            tags: true,
+            placeholder: "Sélectionnez ou créez un secteur d'activité...",
+            allowClear: true,
+            language: {
+                noResults: function() {
+                    return "Aucun résultat trouvé";
+                }
+            }
+        });
     }
 
     // Initialisation au chargement de la page
     $(document).ready(function() {
-        initializeSelect2();
+        initializeSelects();
     });
 
     // Réinitialisation quand Livewire met à jour le DOM
     document.addEventListener('livewire:load', function () {
         Livewire.hook('message.processed', (message, component) => {
-            initializeSelect2();
+            initializeSelects();
         });
     });
 
     // Réinitialisation lors du changement de nature
     $('input[name="nature"]').on('change', function() {
         setTimeout(function() {
-            initializeSelect2();
-        }, 100); // Petit délai pour laisser le DOM se mettre à jour
+            initializeSelects();
+        }, 100);
     });
 </script>
 @endsection

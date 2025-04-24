@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Contact;
 use App\Models\Societe;
 use App\Models\Tag;
+use App\Models\SecteurActivite;
 
 use Illuminate\Database\Eloquent\Builder;
 
@@ -80,9 +81,14 @@ class AddForm extends Component
     
     public $existingTags = [];
 
+    public $secteurActivites = [];
+
     public function mount()
     {
         $this->existingTags = Tag::orderBy('nom')->pluck('nom')->toArray();
+        $this->secteurActivites = SecteurActivite::where('archive', false)
+            ->pluck('nom')
+            ->toArray();
     }
 
     public function rules()

@@ -104,6 +104,14 @@
 
                     <div class="text-start mt-4">
                         <h5 class="font-13 text-uppercase">Informations de contact :</h5>
+                        
+                        @if($contact->secteurActivite)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-domain me-1"></i> Secteur d'activité :</strong>
+                            <span class="ms-2">{{ $contact->secteurActivite->nom }}</span>
+                        </p>
+                        @endif
+
                         <p class="text-muted mb-2">
                             <strong><i class="mdi mdi-email me-1"></i> Email :</strong>
                             <span class="ms-2">{{ $contact->individu?->email }}</span>

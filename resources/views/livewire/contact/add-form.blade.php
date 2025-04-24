@@ -519,15 +519,26 @@
                                             <input type="text" id="entreprise" name="entreprise"
                                                 wire:model.defer="entreprise"
                                                 value="{{ old('entreprise') }}" 
-                                                class="form-control">
+                                                class="form-control @error('entreprise') is-invalid @enderror">
 
-                                                @if ($errors->has('entreprise'))
-                                                    <div class="alert alert-warning text-secondary" role="alert">
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        <strong>{{ $errors->first('entreprise') }}</strong>
+                                                @error('entreprise')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
                                                     </div>
-                                                @endif
+                                                @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="secteur_activite" class="form-label">
+                                                Secteur d'activité
+                                                <i class="mdi mdi-information-outline" data-bs-toggle="tooltip" 
+                                                   title="Sélectionnez un secteur existant ou créez-en un nouveau"></i>
+                                            </label>
+                                            <select class="form-control" id="secteur_activite" name="secteur_activite">
+                                                <option value=""></option>
+                                                @foreach($secteurActivites as $secteur)
+                                                    <option value="{{ $secteur }}">{{ $secteur }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
 
                                         <div class="mb-3 div_personne_physique">
@@ -577,16 +588,27 @@
                                         <input type="text" id="numero_tva" name="numero_tva"
                                             wire:model.defer="numero_tva"
                                             value="{{ old('numero_tva') ? old('numero_tva') : '' }}"
-                                            class="form-control">
+                                            class="form-control @error('numero_tva') is-invalid @enderror">
 
-                                        @if ($errors->has('numero_tva'))
-                                            <br>
-                                            <div class="alert alert-warning text-secondary " role="alert">
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="alert" aria-label="Close"></button>
-                                                <strong>{{ $errors->first('numero_tva') }}</strong>
-                                            </div>
-                                        @endif
+                                            @error('numero_tva')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="secteur_activite" class="form-label">
+                                            Secteur d'activité
+                                            <i class="mdi mdi-information-outline" data-bs-toggle="tooltip" 
+                                               title="Sélectionnez un secteur existant ou créez-en un nouveau"></i>
+                                        </label>
+                                        <select class="form-control" id="secteur_activite" name="secteur_activite">
+                                            <option value=""></option>
+                                            @foreach($secteurActivites as $secteur)
+                                                <option value="{{ $secteur }}">{{ $secteur }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                 @endif
@@ -893,7 +915,8 @@
 
 @section('script')
 <script>
-    function initializeSelect2() {
+    function initializeSelects() {
+        // Initialisation existante pour les tags
         $('#tags').select2({
             tags: true,
             tokenSeparators: [',', ';'],
@@ -905,25 +928,37 @@
                 }
             }
         });
+
+        // Nouvelle initialisation pour le secteur d'activité
+        $('#secteur_activite').select2({
+            tags: true,
+            placeholder: "Sélectionnez ou créez un secteur d'activité...",
+            allowClear: true,
+            language: {
+                noResults: function() {
+                    return "Aucun résultat trouvé";
+                }
+            }
+        });
     }
 
     // Initialisation au chargement de la page
     $(document).ready(function() {
-        initializeSelect2();
+        initializeSelects();
     });
 
     // Réinitialisation quand Livewire met à jour le DOM
     document.addEventListener('livewire:load', function () {
         Livewire.hook('message.processed', (message, component) => {
-            initializeSelect2();
+            initializeSelects();
         });
     });
 
     // Réinitialisation lors du changement de nature
     $('input[name="nature"]').on('change', function() {
         setTimeout(function() {
-            initializeSelect2();
-        }, 100); // Petit délai pour laisser le DOM se mettre à jour
+            initializeSelects();
+        }, 100);
     });
 </script>
 @endsection

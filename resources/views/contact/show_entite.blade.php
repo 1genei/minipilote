@@ -107,7 +107,30 @@
                     @endif
 
                     <div class="text-start mt-4">
-                        <h5 class="font-13 text-uppercase">Informations de contact :</h5>
+                        <h5 class="font-13 text-uppercase">Informations de l'entreprise :</h5>
+                        
+                        @if($contact->secteurActivite)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-domain me-1"></i> Secteur d'activité :</strong>
+                            <span class="ms-2">{{ $contact->secteurActivite->nom }}</span>
+                        </p>
+                        @endif
+
+                        @if($contact->entite?->numero_siret)
+                        <p class="text-muted mb-2">
+                            <strong>SIRET :</strong>
+                            <span class="ms-2">{{ $contact->entite?->numero_siret }}</span>
+                        </p>
+                        @endif
+
+                        @if($contact->entite?->numero_tva)
+                        <p class="text-muted mb-2">
+                            <strong>TVA :</strong>
+                            <span class="ms-2">{{ $contact->entite?->numero_tva }}</span>
+                        </p>
+                        @endif
+
+                        <h5 class="font-13 text-uppercase mt-4">Informations de contact :</h5>
                         <p class="text-muted mb-2">
                             <strong><i class="mdi mdi-email me-1"></i> Email :</strong>
                             <span class="ms-2">{{ $contact->entite?->email }}</span>
@@ -157,18 +180,6 @@
                         @endif
 
                         <h5 class="font-13 text-uppercase mt-4">Informations légales :</h5>
-                        @if($contact->entite?->numero_siret)
-                        <p class="text-muted mb-2">
-                            <strong><i class="mdi mdi-identifier me-1"></i> SIRET :</strong>
-                            <span class="ms-2">{{ $contact->entite?->numero_siret }}</span>
-                        </p>
-                        @endif
-                        @if($contact->entite?->numero_tva)
-                        <p class="text-muted mb-2">
-                            <strong><i class="mdi mdi-card-account-details-outline me-1"></i> TVA :</strong>
-                            <span class="ms-2">{{ $contact->entite?->numero_tva }}</span>
-                        </p>
-                        @endif
                         @if($contact->entite?->code_naf)
                         <p class="text-muted mb-2">
                             <strong><i class="mdi mdi-office-building-outline me-1"></i> Code NAF :</strong>

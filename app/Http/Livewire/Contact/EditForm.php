@@ -8,6 +8,7 @@ use App\Models\Societe;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
+use App\Models\SecteurActivite;
 
 class EditForm extends Component
 {
@@ -82,9 +83,14 @@ class EditForm extends Component
     public $existingTags = [];
     public $selectedTags = [];
     
+    public $secteurActivites = [];
+    
     public function mount(Contact $contact)
     {
         $this->contact = $contact;
+        $this->secteurActivites = SecteurActivite::where('archive', false)
+            ->pluck('nom')
+            ->toArray();
         // Récupérer tous les tags disponibles
         $this->existingTags = Tag::orderBy('nom')->pluck('nom')->toArray();
         // Récupérer les tags actuels du contact

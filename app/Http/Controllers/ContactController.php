@@ -11,13 +11,14 @@ use App\Models\Client;
 use App\Models\Fournisseur;
 use App\Models\EntiteIndividu;
 use App\Models\Prestation;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
+use App\Models\SecteurActivite;
 
 
 class ContactController extends Controller
@@ -80,7 +81,7 @@ class ContactController extends Controller
             $validated = $request->validate([
                 'nature' => 'required',
                 'typecontact' => 'required',
-                'email' => 'required|email',
+                'email' => 'email',
                 'nom' => 'required_if:nature,Personne physique',
                 'prenom' => 'required_if:nature,Personne physique',
                 'raison_sociale' => 'required_if:nature,Personne morale',
@@ -89,7 +90,6 @@ class ContactController extends Controller
             ], [
                 'nature.required' => 'Le type de contact est obligatoire',
                 'typecontact.required' => 'Le type de contact est obligatoire',
-                'email.required' => 'L\'email est obligatoire',
                 'email.email' => 'L\'email n\'est pas valide',
                 'nom.required_if' => 'Le nom est obligatoire pour une personne physique',
                 'prenom.required_if' => 'Le prénom est obligatoire pour une personne physique',
@@ -103,12 +103,23 @@ class ContactController extends Controller
             $type_contact = "individu";
         }
 
+        // Créer ou récupérer le secteur d'activité s'il est fourni
+        $secteurActiviteId = null;
+        if ($request->secteur_activite) {
+            $secteurActivite = SecteurActivite::firstOrCreate(
+                ['nom' => $request->secteur_activite],
+                ['archive' => false]
+            );
+            $secteurActiviteId = $secteurActivite->id;
+        }
+
         $contact = Contact::create([
             "user_id" => Auth::user()->id,
             "type" => $type_contact,
             "nature" => $request->nature,
             "commercial_id" => $request->commercial_id,
             "societe_id" => $request->societe_id,
+            "secteur_activite_id" => $secteurActiviteId
         ]);
         $typecontact = Typecontact::where('type', $request->typecontact)->first();
         $contact->typeContacts()->attach($typecontact->id);
@@ -339,11 +350,13 @@ class ContactController extends Controller
         try {
             DB::beginTransaction();
         
+            $contact = Contact::findOrFail($contact_id);
+
+
             // Validation des données
             $validated = $request->validate([
                 'nature' => 'required',
                 'typecontact' => 'required',
-                'email' => 'required|email',
                 'nom' => 'required_if:nature,Personne physique',
                 'prenom' => 'required_if:nature,Personne physique',
                 'raison_sociale' => 'required_if:nature,Personne morale',
@@ -352,18 +365,26 @@ class ContactController extends Controller
             ], [
                 'nature.required' => 'Le type de contact est obligatoire',
                 'typecontact.required' => 'Le type de contact est obligatoire',
-                'email.required' => 'L\'email est obligatoire',
-                'email.email' => 'L\'email n\'est pas valide',
                 'nom.required_if' => 'Le nom est obligatoire pour une personne physique',
                 'prenom.required_if' => 'Le prénom est obligatoire pour une personne physique',
                 'raison_sociale.required_if' => 'La raison sociale est obligatoire pour une personne morale',
                 'forme_juridique.required_if' => 'La forme juridique est obligatoire pour une personne morale',
             ]);
 
-            $contact = Contact::findOrFail($contact_id);
+            // Créer ou récupérer le secteur d'activité s'il est fourni
+            $secteurActiviteId = null;
+            if ($request->secteur_activite) {
+                $secteurActivite = SecteurActivite::firstOrCreate(
+                    ['nom' => $request->secteur_activite],
+                    ['archive' => false]
+                );
+                $secteurActiviteId = $secteurActivite->id;
+            }
+
             $contact->update([
                 "commercial_id" => $request->commercial_id,
                 "societe_id" => $request->societe_id,
+                "secteur_activite_id" => $secteurActiviteId
             ]);
 
             if ($contact->type == "individu") {
@@ -471,12 +492,6 @@ class ContactController extends Controller
                 ->route('contact.show', Crypt::encrypt($contact->id))
                 ->with('ok', 'Contact modifié avec succès');
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            DB::rollback();
-            return redirect()
-                ->back()
-                ->withErrors($e->errors())
-                ->withInput();
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()
