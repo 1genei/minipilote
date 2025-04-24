@@ -39,25 +39,38 @@
                 <div class="card widget-inline">
                     <div class="card-body p-0">
                         <div class="row g-0">
-
-                            <div class="col-sm-2 mr-14 ">
-                                <a href="{{ url()->previous() }}" type="button" class="btn btn-outline-primary"><i class="uil-arrow-left"></i> Retour</a>
+                            <div class="col-sm-2 mr-14">
+                                <a href="{{ url()->previous() }}" type="button" class="btn btn-outline-primary">
+                                    <i class="uil-arrow-left"></i> Retour
+                                </a>
                             </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="d-flex">
+                                    @can('permission', 'ajouter-contact')
+                                        <a href="{{ route('contact.create') }}" type="button" class="btn btn-primary me-2">
+                                            <i class="mdi mdi-plus-circle me-1"></i> Nouveau contact
+                                        </a>
+                                        
+                                        <a href="{{ route('contact.import') }}" type="button" class="btn btn-success">
+                                            <i class="mdi mdi-file-upload me-1"></i> Importer contacts
+                                        </a>
+                                    @endcan
+                                </div>
+                            </div>
+
                             @if (session('ok'))
                                 <div class="col-6">
-                                    <div class="alert alert-success alert-dismissible bg-success text-white text-center border-0 fade show"
-                                        role="alert">
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
-                                            aria-label="Close"></button>
-                                        <strong> {{ session('ok') }}</strong>
+                                    <div class="alert alert-success alert-dismissible bg-success text-white text-center border-0 fade show" role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <strong>{{ session('ok') }}</strong>
                                     </div>
                                 </div>
                             @endif
-
-                        </div> <!-- end row -->
+                        </div>
                     </div>
-                </div> <!-- end card-box-->
-            </div> <!-- end col-->
+                </div>
+            </div>
         </div>
         <!-- end row-->
 
@@ -67,13 +80,6 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div class="d-flex justify-content-start">
-                                @can('permission', 'ajouter-tous-les-contacts')
-                                    <a href="{{ route('contact.create') }}" class="btn btn-primary mb-2">
-                                        <i class="mdi mdi-plus-circle me-2"></i> Ajouter contact
-                                    </a>
-                                @endcan
-                            </div>
-                            <div class="d-flex justify-content-end">
                                 @can('permission', 'archiver-tous-les-contacts')
                                     <a href="{{ route('contact.archives') }}" class="btn btn-warning mb-2">
                                         <i class="mdi mdi-archive me-2"></i> Contacts archivés

@@ -5,8 +5,8 @@ namespace App\Http\Livewire\Contact;
 
 use App\Models\Contact;
 use App\Models\Entite;
-use Crypt;
-use Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
@@ -67,15 +67,20 @@ final class EntiteTable extends PowerGridComponent
 
         // if ($user->is_admin) {
 
-            // On réccupère tous les contacts de type entité
-            $contactentites = Entite::select('entites.*','contacts.*')
-                ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'entité'],['contacts.archive', false]])
-                // ->where('typecontacts.type', 'Fournisseur')
-                ->get();
+      
+
+            $contactentites = Entite::query()
+            ->select('entites.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
+            ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
+            ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+            ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+            ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+            ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
+            ->where([['contacts.type', 'entité'],['contacts.archive', false]])
+            ->distinct(); // Éviter les doublons
+         
                 
+                // dd($contactentites->get());
 
         // } else {
         //     //   On réccupère uniquement les contacts de l'utilisateur connecté
@@ -113,7 +118,10 @@ final class EntiteTable extends PowerGridComponent
     public function relationSearch(): array
     {
     
-        return [];
+        return [
+            'contact.tags' => ['nom'],
+            'contact.typeContacts' => ['type']
+        ];
     }
 
     /*
@@ -137,25 +145,32 @@ final class EntiteTable extends PowerGridComponent
                 foreach($model->contact?->typeContacts as $typecontact){
                     $type = $typecontact->type;
                     if($type == "Prospect"){
-                        $color = "btn-secondary ";
+                        $color = "bg-secondary ";
                     }elseif($type == "Client"){
-                        $color = "btn-info";                
+                        $color = "bg-info";                
                     }elseif($type == "Fournisseur"){
-                        $color = "btn-warning";                
+                        $color = "bg-warning";                
                     }
                     elseif($type == "Collaborateur"){
-                        $color = "btn-danger";                
+                        $color = "bg-danger";                
                     }
                     else{
-                        $color = "btn-primary ";                
+                        $color = "bg-primary ";                
                     }
                     
-                    $btn.='<div class="badge btn '.$color.' btn-sm font-11 mt-2">'.$type.'</div> ';
-                    
+                    $btn .= '<div class="badge  '.$color.' font-10  mt-2 me-1">'.$type.'</div> ';
                 }
-                
                 return $btn;
-            } )
+            })
+            ->addColumn('tag_nom', function (Entite $model) {
+                $tags = "";
+                if($model->contact && $model->contact->tags) {
+                    foreach($model->contact->tags as $tag) {
+                        $tags .= '<div class="badge bg-primary font-10  mt-2 me-1">'.$tag->nom.'</div> ';
+                    }
+                }
+                return $tags;
+            })
             ->addColumn('raison_sociale')
             ->addColumn('forme_juridique')
             ->addColumn('email',fn (Entite $model) => $model->email)
@@ -197,6 +212,7 @@ final class EntiteTable extends PowerGridComponent
         $colums = [
             // Column::make('Id', 'id'),
             Column::make('Type', 'type')->sortable()->searchable(),
+            Column::make('Tags', 'tag_nom')->sortable()->searchable(),
             Column::make('Raison sociale', 'raison_sociale')->sortable()->searchable(),
             Column::make('Forme juridique', 'forme_juridique')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
@@ -205,8 +221,7 @@ final class EntiteTable extends PowerGridComponent
             Column::make('Adresse', 'adresse')->sortable()->searchable(),
             Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
             Column::make('Ville', 'ville')->sortable()->searchable(),
-            Column::make('Date de création', 'created_at_formatted', 'created_at')
-                ->sortable(),
+            Column::make('Date de création', 'created_at_formatted', 'created_at')->sortable()->searchable(),
 
         ];
         

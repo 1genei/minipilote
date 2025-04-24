@@ -68,7 +68,7 @@
                     </h4>
 
                     <div class="mt-3">
-                        @foreach ($contact->typecontacts as $typecontact)
+                    @foreach ($contact->typecontacts as $typecontact)
                             @switch($typecontact->type)
                                 @case('Prospect')
                                     <span class="badge bg-secondary rounded-pill">{{$typecontact->type}}</span>
@@ -122,7 +122,7 @@
                             <span class="ms-2">{{ $contact->individu?->indicatif_mobile }} {{ $contact->individu?->telephone_mobile }}</span>
                         </p>
                         @endif
-
+                    
                         @if($contact->individu?->entreprise)
                         <p class="text-muted mb-2">
                             <strong><i class="mdi mdi-office-building me-1"></i> Entreprise :</strong>
@@ -236,36 +236,36 @@
         <div class="col-xl-8 col-lg-7">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                                {{-- <li class="nav-item">
-                                    <a href="#interlocuteur" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 ">
-                                        Interlocuteurs
-                                    </a>
-                                </li> --}}
-                              
-                                <li class="nav-item">
-                                    <a href="#activite" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
-                                        Prestations
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                
-                             
-                                <div class="tab-pane show active" id="activite">
-                                    <button type="button" class="btn btn-secondary btn-sm rounded-pill"
-                                    data-bs-toggle="modal" data-bs-target="#prestation-modal"><i
-                                        class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter prestation</span>
-                                    </button> <hr>
-                                    
-                                    <livewire:prestation.prestation-table client_id="{{ $contact->id }}" />
-                                </div>
-        
-                            </div> <!-- end tab-content -->
-                        </div> <!-- end card body -->
-                    </div> <!-- end card -->
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+                        {{-- <li class="nav-item">
+                            <a href="#interlocuteur" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 ">
+                                Interlocuteurs
+                            </a>
+                        </li> --}}
+                      
+                        <li class="nav-item">
+                            <a href="#activite" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
+                                Prestations
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        
+                     
+                        <div class="tab-pane show active" id="activite">
+                            <button type="button" class="btn btn-secondary btn-sm rounded-pill"
+                            data-bs-toggle="modal" data-bs-target="#prestation-modal"><i
+                                class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter prestation</span>
+                            </button> <hr>
+                            
+                            <livewire:prestation.prestation-table client_id="{{ $contact->id }}" />
+                        </div>
+
+                    </div> <!-- end tab-content -->
+                </div> <!-- end card body -->
+            </div> <!-- end card -->
                 </div>
                 <div class="col-12">
                     <div class="card">

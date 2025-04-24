@@ -44,10 +44,12 @@ class CreateIndividusTable extends Migration
             $table->string("porte")->nullable();
             
             $table->string("profession")->nullable();
+            $table->string("region")->nullable();
 
             $table->string("fonction_entreprise")->nullable();
             $table->string("entreprise")->nullable();
             $table->string("site_web_entreprise")->nullable();
+            $table->string("effectif_entreprise")->nullable();
 
             $table->string("adresse_entreprise")->nullable();
             $table->string("code_postal_entreprise")->nullable();

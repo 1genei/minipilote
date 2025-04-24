@@ -91,4 +91,9 @@ class Contact extends Model
     {
         return $this->hasMany(Note::class);
     }
+
+    public function secteurActivite()
+    {
+        return $this->belongsTo(SecteurActivite::class);
+    }
 }

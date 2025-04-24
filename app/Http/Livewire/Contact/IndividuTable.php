@@ -4,8 +4,8 @@ namespace App\Http\Livewire\Contact;
 
 use App\Models\Contact;
 use App\Models\Individu;
-use Crypt;
-use Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -68,13 +68,13 @@ final class IndividuTable extends PowerGridComponent
 
             // On réccupère tous les contacts de type individu
                 
-            $contactindividus = Individu::select('individus.*','contacts.*')
+            $contactindividus = Individu::query()
+                ->select('individus.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
                 ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                // ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                // ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+                ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+                ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
                 ->where([['contacts.type', 'individu'],['contacts.archive', false]])
-                // ->where('typecontacts.type', 'Fournisseur')
-                ->get();
+                ->distinct();
 
         // } else {
         //     //   On réccupère uniquement les contacts de l'utilisateur connecté
@@ -110,7 +110,10 @@ final class IndividuTable extends PowerGridComponent
     public function relationSearch(): array
     {
     
-        return [];
+        return [
+            'contact.tags' => ['nom'],
+            'contact.typeContacts' => ['type']
+        ];
     }
 
     /*
@@ -154,6 +157,15 @@ final class IndividuTable extends PowerGridComponent
                 
                 return $btn;
             } )
+            ->addColumn('tag_nom', function (Individu $model) {
+                $tags = "";
+                if($model->contact && $model->contact->tags) {
+                    foreach($model->contact->tags as $tag) {
+                        $tags .= '<div class="badge bg-secondary btn-sm font-11 mt-2 me-1">'.$tag->nom.'</div> ';
+                    }
+                }
+                return $tags;
+            })
             ->addColumn('nom')
             ->addColumn('prenom')
             ->addColumn('email',fn (Individu $model) => $model->email)
@@ -194,7 +206,8 @@ final class IndividuTable extends PowerGridComponent
     {
         $colums = [
             // Column::make('Id', 'id'),
-            Column::make('Type', 'type')->sortable()->searchable(),            
+            Column::make('Type', 'type')->sortable()->searchable(),
+            Column::make('Tags', 'tag_nom')->sortable()->searchable(),
             Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Prénom', 'prenom')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),

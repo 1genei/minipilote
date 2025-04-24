@@ -27,12 +27,14 @@ class CreateEntitesTable extends Migration
             $table->string('telephone_fixe')->nullable();
             $table->string('telephone_mobile')->nullable();           
             $table->string("site_web")->nullable();
+            $table->integer("effectif")->nullable();
             
             $table->string("numero_voie")->nullable();
             $table->string("nom_voie")->nullable();
             $table->string("complement_voie")->nullable();
             $table->string("code_postal")->nullable();
             $table->string("ville")->nullable();
+            $table->string("region")->nullable();
             $table->string("pays")->nullable();
             $table->string("code_insee")->nullable();
             $table->string("code_cedex")->nullable();
@@ -43,6 +45,13 @@ class CreateEntitesTable extends Migration
             $table->string("escalier")->nullable();
             $table->string("etage")->nullable();
             $table->string("porte")->nullable();
+
+            $table->string("linkedin")->nullable();
+            $table->string("twitter")->nullable();
+            $table->string("facebook")->nullable();
+            $table->string("instagram")->nullable();
+            $table->string("youtube")->nullable();
+            $table->string("tiktok")->nullable();
             
             $table->string('numero_siret')->nullable();
             $table->string('numero_siren')->nullable();

@@ -5,8 +5,8 @@ namespace App\Http\Livewire\Client;
 
 use App\Models\Contact;
 use App\Models\Individu;
-use Crypt;
-use Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
@@ -64,32 +64,17 @@ final class IndividuTable extends PowerGridComponent
     
         $user = Auth::user();
 
-        if ($user->is_admin) {
+        $contactindividus = Individu::query()
+            ->select('individus.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
+            ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+            ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+            ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+            ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+            ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
+            ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+            ->where('typecontacts.type', 'Client')
+            ->distinct();
 
-            // On réccupère tous les contacts de type individu
-                
-            $contactindividus = Individu::select('individus.*','contacts.*')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
-                ->where('typecontacts.type', 'Client')
-                ->get();
-
-        } else {
-            //   On réccupère uniquement les contacts de l'utilisateur connecté
-                
-            $contactindividus = Individu::select('individus.*','contacts.*')
-                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
-                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
-                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
-                ->where([['contacts.type', 'individu'],['contacts.archive', false], ["contacts.user_id", $user->id]])
-                ->where('typecontacts.type', 'Client')
-                ->get();
-        }
-    
-       
-        
         return $contactindividus;
 
     }
@@ -110,7 +95,9 @@ final class IndividuTable extends PowerGridComponent
     public function relationSearch(): array
     {
     
-        return [];
+        return [
+            'contact.tags' => ['nom']
+        ];
     }
 
     /*
@@ -129,6 +116,11 @@ final class IndividuTable extends PowerGridComponent
     
         return PowerGrid::columns()
             // ->addColumn('id')
+            ->addColumn('tag_nom', function (Individu $model) {
+                return $model->contact->tags->map(function ($tag) {
+                    return '<span class="badge bg-primary">'.$tag->nom.'</span>';
+                })->implode(' ');
+            })
             ->addColumn('nom')
             ->addColumn('prenom')
             ->addColumn('email',fn (Individu $model) => $model->email)
@@ -163,6 +155,7 @@ final class IndividuTable extends PowerGridComponent
     {
         $colums =  [
             // Column::make('Id', 'id'),
+            Column::make('Tags', 'tag_nom')->sortable()->searchable(),
             Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Prénom', 'prenom')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),

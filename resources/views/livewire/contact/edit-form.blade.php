@@ -883,7 +883,7 @@
     function initializeSelect2() {
         $('#tags').select2({
             tags: true,
-            tokenSeparators: [',', ' '],
+            tokenSeparators: [',', ';'],
             placeholder: "Saisissez ou sélectionnez des tags...",
             allowClear: true,
             language: {

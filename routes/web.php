@@ -28,6 +28,7 @@ use App\Http\Controllers\VoitureController;
 use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\DepenseController;
+use App\Http\Controllers\ContactImportController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -385,5 +386,10 @@ Route::controller(DepenseController::class)->group(function () {
 
 Route::post('/utilisateur/{user}/update-password', [UtilisateurController::class, 'updatePassword'])
     ->name('utilisateur.update-password');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/contacts/import', [ContactImportController::class, 'showImportForm'])->name('contact.import');
+    Route::post('/contacts/import', [ContactImportController::class, 'processImport'])->name('contact.import.process');
+});
 
 require __DIR__ . '/auth.php';
