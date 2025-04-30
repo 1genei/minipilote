@@ -71,7 +71,8 @@ class AddForm extends Component
     public $tags;
     public $entreprise;
     public $fonction_entreprise;
-    
+    public $source_contact;
+
     public $typecontact;
     public $typecontacts;
     public $displaytypecontact;
@@ -83,12 +84,15 @@ class AddForm extends Component
 
     public $secteurActivites = [];
 
+    public $sources = [];
+
     public function mount()
     {
         $this->existingTags = Tag::orderBy('nom')->pluck('nom')->toArray();
         $this->secteurActivites = SecteurActivite::where('archive', false)
             ->pluck('nom')
             ->toArray();
+        $this->sources = Contact::where('source_contact', '!=', null)->groupBy('source_contact')->pluck('source_contact')->toArray();
     }
 
     public function rules()

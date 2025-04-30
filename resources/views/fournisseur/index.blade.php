@@ -124,13 +124,13 @@
                         <div class="tab-content">
                             <div class="tab-pane show active" id="entite">
                                 <div class="table-responsive">
-                                    <livewire:fournisseur.entite-table />
+                                    <livewire:contact.entite-table typecontact="fournisseur" />
                                 </div>
 
                             </div>
                             <div class="tab-pane " id="individu">
                                 <div class="table-responsive">
-                                    <livewire:fournisseur.individu-table />
+                                    <livewire:contact.individu-table typecontact="fournisseur" />
                                 </div>
 
 

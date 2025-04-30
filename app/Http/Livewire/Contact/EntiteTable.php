@@ -3,11 +3,9 @@
 namespace App\Http\Livewire\Contact;
 
 
-use App\Models\Contact;
 use App\Models\Entite;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
@@ -22,6 +20,7 @@ final class EntiteTable extends PowerGridComponent
     public $contactentites;   
     public string $sortField = 'created_at';    
     public string $sortDirection = 'desc';
+    public $typecontact;
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
@@ -68,6 +67,7 @@ final class EntiteTable extends PowerGridComponent
         // if ($user->is_admin) {
 
       
+        if($this->typecontact == "prospect"){   
 
             $contactentites = Entite::query()
             ->select('entites.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
@@ -77,7 +77,44 @@ final class EntiteTable extends PowerGridComponent
             ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
             ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
             ->where([['contacts.type', 'entité'],['contacts.archive', false]])
+            ->where('typecontacts.type', 'Prospect')
+            ->distinct();
+
+        }elseif($this->typecontact == "fournisseur"){
+            $contactentites = Entite::query()
+                ->select('entites.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
+                ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
+                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+                ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+                ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
+                ->where([['contacts.type', 'entité'],['contacts.archive', false]])
+                ->where('typecontacts.type', 'Fournisseur')
+                ->distinct();
+        }elseif($this->typecontact == "client"){
+
+            $contactentites = Entite::query()
+            ->select('entites.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
+            ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
+            ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+            ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+            ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+            ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
+            ->where([['contacts.type', 'entité'],['contacts.archive', false]])
+            ->where('typecontacts.type', 'Client')
+            ->distinct();
+        }else{
+            $contactentites = Entite::query()
+            ->select('entites.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
+            ->join('contacts', 'entites.contact_id', '=', 'contacts.id')
+            ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+            ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+            ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+            ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
+            ->where([['contacts.type', 'entité'],['contacts.archive', false]])
             ->distinct(); // Éviter les doublons
+        }
+            
          
                 
                 // dd($contactentites->get());
@@ -171,26 +208,34 @@ final class EntiteTable extends PowerGridComponent
                 }
                 return $tags;
             })
-            ->addColumn('raison_sociale')
-            ->addColumn('forme_juridique')
-            ->addColumn('email',fn (Entite $model) => $model->email)
-            ->addColumn('telephone_fixe', function(Entite $model) {
-                if($model->telephone_fixe)
-                return  '<span >'.$model->indicatif_fixe.' '.$model->telephone_fixe.'</span>';
+            ->addColumn('raison_sociale', function (Entite $model) {
+                return  '<a href="'.route('contact.show', Crypt::encrypt($model->contact_id)).'" class="text-dark">
+                <span class="fw-bold">'.$model->forme_juridique.'</span> <br> <span>'.$model->raison_sociale.'</span>
+                <i class="mdi mdi-link-variant"></i>
+                </a>';
             })
-            ->addColumn('telephone_mobile', function(Entite $model) {
+            ->addColumn('source_contact', function (Entite $model) {
+                return  '<span class="fw-bold">'.$model->contact?->source_contact.'</span>';
+            })
+            // ->addColumn('forme_juridique')
+            ->addColumn('email',fn (Entite $model) => $model->email)
+            // ->addColumn('telephone_fixe', function(Entite $model) {
+            //     if($model->telephone_fixe)
+            //     return  '<span >'.$model->indicatif_fixe.' '.$model->telephone_fixe.'</span>';
+            // })
+            ->addColumn('telephone', function(Entite $model) {
                 if($model->telephone_mobile)
-                return  '<span >'.$model->indicatif_mobile.' '.$model->telephone_mobile.'</span>';
+                return  '<span >'.$model->indicatif_mobile.' '.$model->telephone_mobile.'</span> <br> <span >'.$model->indicatif_fixe.' '.$model->telephone_fixe.'</span>';
             })
             ->addColumn('adresse', function (Entite $model) {          
-                return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
+                return  '<span >'.$model->numero_voie.' '.$model->nom_voie.', <br> '.$model->code_postal.' - '.$model->ville.'</span>';
             } )
-            ->addColumn('code_postal')
-            ->addColumn('ville')
+            // ->addColumn('code_postal')
+            // ->addColumn('ville')
             ->addColumn('user', function (Entite $model) {          
                 return  '<span >'.$model->user()?->infos()?->nom.' '.$model->user()?->infos()?->prenom.'</span>';
-            })
-            ->addColumn('created_at_formatted', fn (Entite $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
+            });
+            // ->addColumn('created_at_formatted', fn (Entite $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
     }
 
     /*
@@ -208,22 +253,27 @@ final class EntiteTable extends PowerGridComponent
       * @return array<int, Column>
       */
     public function columns(): array
-    {
-        $colums = [
-            // Column::make('Id', 'id'),
-            Column::make('Type', 'type')->sortable()->searchable(),
-            Column::make('Tags', 'tag_nom')->sortable()->searchable(),
-            Column::make('Raison sociale', 'raison_sociale')->sortable()->searchable(),
-            Column::make('Forme juridique', 'forme_juridique')->sortable()->searchable(),
-            Column::make('Email', 'email')->sortable()->searchable(),
-            Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
-            Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
-            Column::make('Adresse', 'adresse')->sortable()->searchable(),
-            Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
-            Column::make('Ville', 'ville')->sortable()->searchable(),
-            Column::make('Date de création', 'created_at_formatted', 'created_at')->sortable()->searchable(),
-
-        ];
+    {   
+        if($this->typecontact == "tous"){
+            $colums = [
+                Column::make('Type', 'type')->sortable()->searchable(),
+                Column::make('Tags', 'tag_nom')->sortable()->searchable(),
+                Column::make('Raison sociale', 'raison_sociale')->sortable()->searchable(),
+                Column::make('Source du contact', 'source_contact')->sortable()->searchable(),
+                Column::make('Email', 'email')->sortable()->searchable(),
+                Column::make('Téléphone ', 'telephone')->sortable()->searchable(),
+                Column::make('Adresse', 'adresse')->sortable()->searchable(),
+            ];
+        }else{
+            $colums = [
+                Column::make('Tags', 'tag_nom')->sortable()->searchable(),
+                Column::make('Raison sociale', 'raison_sociale')->sortable()->searchable(),
+                Column::make('Source du contact', 'source_contact')->sortable()->searchable(),
+                Column::make('Email', 'email')->sortable()->searchable(),
+                Column::make('Téléphone ', 'telephone')->sortable()->searchable(),
+                Column::make('Adresse', 'adresse')->sortable()->searchable(),
+            ];
+        }
         
         if(Auth::user()->is_admin ){
              $colums[] = Column::make('Saisi par', 'user')->sortable();

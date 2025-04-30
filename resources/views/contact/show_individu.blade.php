@@ -105,6 +105,13 @@
                     <div class="text-start mt-4">
                         <h5 class="font-13 text-uppercase">Informations de contact :</h5>
                         
+                        @if($contact->source_contact)
+                        <p class="text-muted mb-2">
+                            <strong><i class="mdi mdi-source-branch me-1"></i> Source du contact :</strong>
+                            <span class="ms-2">{{ $contact->source_contact }}</span>
+                        </p>
+                        @endif
+
                         @if($contact->secteurActivite)
                         <p class="text-muted mb-2">
                             <strong><i class="mdi mdi-domain me-1"></i> Secteur d'activité :</strong>

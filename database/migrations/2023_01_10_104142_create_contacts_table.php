@@ -25,6 +25,7 @@ class CreateContactsTable extends Migration
             $table->integer('societe_id')->unsigned()->nullable();
             // 'Personne physique', 'couple', 'Personne morale', 'groupe', 'autre'
             $table->string("nature")->nullable();
+            $table->string("source_contact")->nullable();
             $table->boolean("archive")->default(false);
             $table->timestamps();
         });

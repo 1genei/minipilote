@@ -66,7 +66,7 @@ class EditForm extends Component
     public $entreprise;
     public $fonction_entreprise;
     public $date_naissance;
-
+    public $source_contact;
     public $contact;
     public $cont;
     public $emails;
@@ -76,10 +76,10 @@ class EditForm extends Component
     public $displaytypecontact;
     public $commercial_id;
     public $societe_id;
-    
+    public $secteur_activite;
     public $collaborateurs;
     public $societes;
-    
+    public $sources;
     public $existingTags = [];
     public $selectedTags = [];
     
@@ -91,6 +91,7 @@ class EditForm extends Component
         $this->secteurActivites = SecteurActivite::where('archive', false)
             ->pluck('nom')
             ->toArray();
+        $this->sources = Contact::where('source_contact', '!=', null)->groupBy('source_contact')->pluck('source_contact')->toArray();
         // Récupérer tous les tags disponibles
         $this->existingTags = Tag::orderBy('nom')->pluck('nom')->toArray();
         // Récupérer les tags actuels du contact
@@ -150,7 +151,9 @@ class EditForm extends Component
         $this->civilite1 = old("civilite1") != null ? old("civilite1") :  $this->cont->civilite1;
         $this->civilite2 = old("civilite2") != null ? old("civilite2") :  $this->cont->civilite2;
         $this->notes = old("notes") != null ? old("notes") :  $this->cont->notes;
-        
+        $this->source_contact = old("source_contact") != null ? old("source_contact") : $this->contact->source_contact;
+        $this->secteur_activite = old("secteur_activite") != null ? old("secteur_activite") : $this->contact->secteurActivite?->nom;
+       
     }
     
     public function rules()

@@ -2,12 +2,9 @@
 
 namespace App\Http\Livewire\Contact;
 
-use App\Models\Contact;
 use App\Models\Individu;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
-
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\{ActionButton, WithExport};
@@ -22,6 +19,8 @@ final class IndividuTable extends PowerGridComponent
     public $contactindividus;
     public string $sortField = 'created_at';    
     public string $sortDirection = 'desc';
+    public $typecontact;
+
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
@@ -63,18 +62,76 @@ final class IndividuTable extends PowerGridComponent
     {
     
         $user = Auth::user();
-
+        
         // if ($user->is_admin) {
 
             // On réccupère tous les contacts de type individu
-                
-            $contactindividus = Individu::query()
+            // Ajout de la concaténation nom et prénom pour le tri
+            
+            if($this->typecontact == "prospect"){
+               
+                $contactindividus = Individu::query()
                 ->select('individus.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
+                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+                ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+                ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
+                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+                ->where('typecontacts.type', 'Prospect')
+                ->distinct();
+            }
+            elseif($this->typecontact == "fournisseur"){
+                $contactindividus = Individu::query()
+                ->select('individus.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
+                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+                ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+                ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
+                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+                ->where('typecontacts.type', 'Fournisseur')
+                ->distinct();       
+            }elseif($this->typecontact == "client"){
+                $contactindividus = Individu::query()
+                ->select('individus.*','contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
+                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+                ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+                ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
+                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+                ->where('typecontacts.type', 'Client')
+                ->distinct();
+            }elseif($this->typecontact == "collaborateur"){
+                $contactindividus = Individu::select('individus.*','contacts.*')
+                ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+                ->join('contact_typecontact', 'contacts.id', '=', 'contact_typecontact.contact_id')
+                ->join('typecontacts', 'contact_typecontact.typecontact_id', '=', 'typecontacts.id')
+                ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+                ->where('typecontacts.type', 'Collaborateur')
+                ->get();
+            }else{
+                $contactindividus = Individu::query()
+                ->select('individus.*', 
+                        'contacts.id as contact_id', 
+                        'tags.nom as tag_nom',
+                        'contacts.created_at as contact_created_at')
                 ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
                 ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
                 ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
                 ->where([['contacts.type', 'individu'],['contacts.archive', false]])
                 ->distinct();
+            }
+
+
+            // $contactindividus = Individu::query()
+            //     ->select('individus.*', 'contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
+            //     ->join('contacts', 'individus.contact_id', '=', 'contacts.id')
+            //     ->leftJoin('contact_tag', 'contacts.id', '=', 'contact_tag.contact_id')
+            //     ->leftJoin('tags', 'contact_tag.tag_id', '=', 'tags.id')
+            //     ->where([['contacts.type', 'individu'],['contacts.archive', false]])
+            //     ->distinct();
 
         // } else {
         //     //   On réccupère uniquement les contacts de l'utilisateur connecté
@@ -91,7 +148,6 @@ final class IndividuTable extends PowerGridComponent
        
         
         return $contactindividus;
-
     }
 
     /*
@@ -129,11 +185,8 @@ final class IndividuTable extends PowerGridComponent
     */
     public function addColumns(): PowerGridColumns
     {
-    
         return PowerGrid::columns()
-            // ->addColumn('id')
             ->addColumn('type', function (Individu $model) {
-                
                 $btn = "";
                 foreach($model->contact?->typeContacts as $typecontact){
                     $type = $typecontact->type;
@@ -152,40 +205,49 @@ final class IndividuTable extends PowerGridComponent
                     }
                     
                     $btn.='<div class="badge btn '.$color.' btn-sm font-11 mt-2">'.$type.'</div>';
-                    
                 }
-                
                 return $btn;
-            } )
+            })
             ->addColumn('tag_nom', function (Individu $model) {
                 $tags = "";
                 if($model->contact && $model->contact->tags) {
                     foreach($model->contact->tags as $tag) {
-                        $tags .= '<div class="badge bg-secondary btn-sm font-11 mt-2 me-1">'.$tag->nom.'</div> ';
+                        $tags .= '<div class="badge bg-primary btn-sm font-11 mt-2 me-1">'.$tag->nom.'</div> ';
                     }
                 }
                 return $tags;
             })
-            ->addColumn('nom')
-            ->addColumn('prenom')
-            ->addColumn('email',fn (Individu $model) => $model->email)
-            ->addColumn('telephone_fixe', function(Individu $model) {
-                if($model->telephone_fixe)
-                return  '<span >'.$model->indicatif_fixe.' '.$model->telephone_fixe.'</span>';
+            ->addColumn('nom', function (Individu $model) {
+                return '<a href="'.route('contact.show', Crypt::encrypt($model->contact_id)).'" class="text-dark"> 
+                <span class="fw-bold">'.$model->civilite.'</span>  <span>'.$model->nom.'</span> 
+                <i class="mdi mdi-link-variant"></i>
+                </a>';
             })
-            ->addColumn('telephone_mobile', function(Individu $model) {
-                if($model->telephone_mobile)
-                return  '<span >'.$model->indicatif_mobile.' '.$model->telephone_mobile.'</span>';
+            ->addColumn('prenom', function (Individu $model) {
+                return '<a href="'.route('contact.show', Crypt::encrypt($model->contact_id)).'" class="text-dark"> 
+                 '.$model->prenom.'
+                </a>';
+            })
+            ->addColumn('source_contact', function (Individu $model) {
+                return '<span class="fw-bold">'.$model->contact?->source_contact.'</span>';
+            })
+            ->addColumn('email', fn (Individu $model) => $model->email)
+            ->addColumn('telephone', function(Individu $model) {
+                $tel = '';
+                if($model->telephone_mobile) {
+                    $tel .= '<span>'.$model->indicatif_mobile.' '.$model->telephone_mobile.'</span>';
+                }
+                if($model->telephone_fixe) {
+                    $tel .= '<br><span>'.$model->indicatif_fixe.' '.$model->telephone_fixe.'</span>';
+                }
+                return $tel;
             })
             ->addColumn('adresse', function (Individu $model) {          
-                return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
-            } )
-            ->addColumn('code_postal')
-            ->addColumn('ville')
-            ->addColumn('user', function (Individu $model) {          
-                return  '<span >'.$model->user()?->infos()?->nom.' '.$model->user()?->infos()?->prenom.'</span>';
+                return '<span>'.$model->numero_voie.' '.$model->nom_voie.', <br> '.$model->code_postal.' - '.$model->ville.'</span>';
             })
-            ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
+            ->addColumn('user', function (Individu $model) {          
+                return '<span>'.$model->user()?->infos()?->nom.' '.$model->user()?->infos()?->prenom.'</span>';
+            });
     }
 
     /*
@@ -204,29 +266,33 @@ final class IndividuTable extends PowerGridComponent
       */
     public function columns(): array
     {
-        $colums = [
-            // Column::make('Id', 'id'),
-            Column::make('Type', 'type')->sortable()->searchable(),
-            Column::make('Tags', 'tag_nom')->sortable()->searchable(),
-            Column::make('Nom', 'nom')->sortable()->searchable(),
-            Column::make('Prénom', 'prenom')->sortable()->searchable(),
-            Column::make('Email', 'email')->sortable()->searchable(),
-            Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
-            Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
-            Column::make('Adresse', 'adresse')->sortable()->searchable(),
-            Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
-            Column::make('Ville', 'ville')->sortable()->searchable(),
-            Column::make('Date de création', 'created_at_formatted', 'created_at')
-                ->sortable(),
-
-        ];
-        
+        if($this->typecontact == "tous"){
+            $colums = [
+                Column::make('Type', 'type')->sortable()->searchable(),
+                Column::make('Tags', 'tag_nom')->sortable()->searchable(),
+                Column::make('Nom', 'nom')->sortable()->searchable(),
+                Column::make('Prénom', 'prenom')->sortable()->searchable(),
+                Column::make('Source du contact', 'source_contact')->sortable()->searchable(),
+                Column::make('Email', 'email')->sortable()->searchable(),
+                Column::make('Téléphone', 'telephone')->sortable()->searchable(),
+                Column::make('Adresse', 'adresse')->sortable()->searchable(),
+            ];
+        }else{
+            $colums = [
+                Column::make('Tags', 'tag_nom')->sortable()->searchable(),
+                Column::make('Nom', 'nom')->sortable()->searchable(),
+                Column::make('Prénom', 'prenom')->sortable()->searchable(),
+                Column::make('Source du contact', 'source_contact')->sortable()->searchable(),
+                Column::make('Email', 'email')->sortable()->searchable(),
+                Column::make('Téléphone', 'telephone')->sortable()->searchable(),
+                Column::make('Adresse', 'adresse')->sortable()->searchable(),
+            ];
+        }
         if(Auth::user()->is_admin ){
             $colums[] = Column::make('Saisi par', 'user')->sortable();
         }
         
         return $colums;
-        
     }
 
     /**

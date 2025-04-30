@@ -836,6 +836,21 @@
                                     </select>
                                 </div>
 
+                                <div class="mb-3">
+                                    <label for="source_contact" class="form-label">
+                                        Source du contact
+                                        <i class="mdi mdi-information-outline" data-bs-toggle="tooltip" 
+                                           title="Sélectionnez une source existante ou créez-en une nouvelle"></i>
+                                    </label>
+                                    <select class="form-control" id="source_contact" name="source_contact">
+                                        <option value=""></option>
+                                        @foreach($sources as $source)
+                                            <option value="{{ $source }}">{{ $source }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+
 
 
                                 @if ($typecontact == 'Prospect' || $typecontact == 'Client')
@@ -939,6 +954,12 @@
                     return "Aucun résultat trouvé";
                 }
             }
+        });
+
+        $('#source_contact').select2({
+            tags: true,
+            placeholder: "Sélectionnez ou créez une source de contact...",
+            allowClear: true,
         });
     }
 

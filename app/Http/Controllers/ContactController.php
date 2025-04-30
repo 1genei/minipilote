@@ -7,13 +7,9 @@ use App\Models\Contact;
 use App\Models\Individu;
 use App\Models\Entite;
 use App\Models\Typecontact;
-use App\Models\Client;
-use App\Models\Fournisseur;
 use App\Models\EntiteIndividu;
 use App\Models\Prestation;
 use Illuminate\Support\Facades\Auth;
-
-use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Tag;
@@ -119,7 +115,8 @@ class ContactController extends Controller
             "nature" => $request->nature,
             "commercial_id" => $request->commercial_id,
             "societe_id" => $request->societe_id,
-            "secteur_activite_id" => $secteurActiviteId
+            "secteur_activite_id" => $secteurActiviteId,
+            "source_contact" => $request->source_contact
         ]);
         $typecontact = Typecontact::where('type', $request->typecontact)->first();
         $contact->typeContacts()->attach($typecontact->id);
@@ -352,7 +349,7 @@ class ContactController extends Controller
         
             $contact = Contact::findOrFail($contact_id);
 
-
+         
             // Validation des données
             $validated = $request->validate([
                 'nature' => 'required',
@@ -384,7 +381,8 @@ class ContactController extends Controller
             $contact->update([
                 "commercial_id" => $request->commercial_id,
                 "societe_id" => $request->societe_id,
-                "secteur_activite_id" => $secteurActiviteId
+                "secteur_activite_id" => $secteurActiviteId,
+                "source_contact" => $request->source_contact
             ]);
 
             if ($contact->type == "individu") {

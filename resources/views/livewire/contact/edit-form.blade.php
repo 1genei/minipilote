@@ -500,7 +500,7 @@
                                                 <i class="mdi mdi-information-outline" data-bs-toggle="tooltip" 
                                                    title="Sélectionnez un secteur existant ou créez-en un nouveau"></i>
                                             </label>
-                                            <select class="form-control" id="secteur_activite" name="secteur_activite">
+                                            <select class="form-control" id="secteur_activite" name="secteur_activite" wire:model.defer="secteur_activite">
                                                 <option value=""></option>
                                                 @foreach($secteurActivites as $secteur)
                                                     <option value="{{ $secteur }}">{{ $secteur }}</option>
@@ -565,7 +565,7 @@
                                             <i class="mdi mdi-information-outline" data-bs-toggle="tooltip" 
                                                title="Sélectionnez un secteur existant ou créez-en un nouveau"></i>
                                         </label>
-                                        <select class="form-control" id="secteur_activite" name="secteur_activite">
+                                        <select class="form-control" id="secteur_activite" name="secteur_activite" wire:model.defer="secteur_activite">
                                             <option value=""></option>
                                             @foreach($secteurActivites as $secteur)
                                                 <option value="{{ $secteur }}" 
@@ -790,6 +790,21 @@
                                     </select>
                                 </div>
 
+                                <div class="mb-3">
+                                    <label for="source_contact" class="form-label">Source du contact</label>
+                                    <select class="form-select select2" id="source_contact" name="source_contact" 
+                                        wire:model.defer="source_contact">
+                                        <option value=""></option>
+                                        @foreach($sources as $source)
+                                            <option value="{{ $source }}" 
+                                                {{ $source_contact == $source ? 'selected' : '' }}>
+                                                {{ $source }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+
                                 @if ($typecontact == 'Prospect' || $typecontact == 'Client')
                                     <div class="mb-3 ">
                                         <label for="commercial_id" class="form-label">
@@ -876,6 +891,12 @@
                     return "Aucun résultat trouvé";
                 }
             }
+        });
+
+        $('#source_contact').select2({
+            tags: true,
+            placeholder: "Sélectionnez ou créez une source...",
+            allowClear: true
         });
     }
 

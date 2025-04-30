@@ -2,10 +2,9 @@
 
 namespace App\Http\Livewire\Collaborateur;
 
-use App\Models\Contact;
 use App\Models\Individu;
-use Crypt;
-use Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;

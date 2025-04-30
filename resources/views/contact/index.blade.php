@@ -36,16 +36,17 @@
 
         <div class="row">
             <div class="col-lg-12">
+                
                 <div class="card widget-inline">
                     <div class="card-body p-0">
-                        <div class="row g-0">
-                            <div class="col-sm-2 mr-14">
+                        <div class="" style="display: flex; justify-content: space-between;">
+                            <div class="" >
                                 <a href="{{ url()->previous() }}" type="button" class="btn btn-outline-primary">
                                     <i class="uil-arrow-left"></i> Retour
                                 </a>
                             </div>
                             
-                            <div class="col-sm-6">
+                            <div class="">
                                 <div class="d-flex">
                                     @can('permission', 'ajouter-contact')
                                         <a href="{{ route('contact.create') }}" type="button" class="btn btn-primary me-2">
@@ -69,9 +70,12 @@
                             @endif
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
+
+
         <!-- end row-->
 
         <div class="row">
@@ -132,13 +136,13 @@
 
                             <div class="tab-pane show active" id="entite">
                                 <div class="table-responsive">
-                                    <livewire:contact.entite-table />
+                                    <livewire:contact.entite-table :typecontact="'tous'" />
                                 </div>
                             </div>
 
                             <div class="tab-pane " id="individu">
                                 <div class="table-responsive">
-                                    <livewire:contact.individu-table />
+                                    <livewire:contact.individu-table :typecontact="'tous'" />
                                 </div>
                             </div>
 
@@ -387,4 +391,6 @@
             })
         });
     </script>
+    @include('partials._sidebar_collapse')
+
 @endsection

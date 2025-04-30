@@ -123,13 +123,13 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="entite">
                                 <div class="table-responsive">
-                                    <livewire:prospect.entite-table />
+                                    <livewire:contact.entite-table typecontact="prospect" />
                                 </div>
 
                             </div>
                             <div class="tab-pane show " id="individu">
                                 <div class="table-responsive">
-                                    <livewire:prospect.individu-table />
+                                    <livewire:contact.individu-table typecontact="prospect" />
                                 </div>
                             </div>
 

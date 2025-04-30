@@ -332,6 +332,13 @@
 
     }
 
+    .text-muted {
+        color: #252121 !important;
+    }
+    .table{
+        color: #252121 !important;
+    }
+
     body[data-layout=detached] .leftside-menu .side-nav .menuitem-active>a {
         color: #f9c851 !important;
     }

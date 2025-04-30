@@ -125,12 +125,12 @@
 
                             <div class="tab-pane show active" id="entite">
                                 <div class="table-responsive">
-                                    <livewire:client.entite-table />
+                                    <livewire:contact.entite-table typecontact="client" />
                                 </div>
                             </div>
                             <div class="tab-pane " id="individu">
                                 <div class="table-responsive">
-                                    <livewire:client.individu-table />
+                                    <livewire:contact.individu-table typecontact="client" />
                                 </div>
 
                             </div>

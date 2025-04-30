@@ -128,28 +128,47 @@ final class IndividuTable extends PowerGridComponent
     */
     public function addColumns(): PowerGridColumns
     {
-    
         return PowerGrid::columns()
-            // ->addColumn('id')
             ->addColumn('tag_nom', function (Individu $model) {
-                return $model->contact->tags->map(function ($tag) {
-                    return '<span class="badge bg-primary">'.$tag->nom.'</span>';
-                })->implode(' ');
+                $tags = "";
+                if($model->contact && $model->contact->tags) {
+                    foreach($model->contact->tags as $tag) {
+                        $tags .= '<div class="badge bg-primary btn-sm font-11 mt-2 me-1">'.$tag->nom.'</div> ';
+                    }
+                }
+                return $tags;
             })
-            ->addColumn('nom')
-            ->addColumn('prenom')
-            ->addColumn('email',fn (Individu $model) => $model->email)
-            ->addColumn('telephone_fixe')
-            ->addColumn('telephone_mobile')
+            ->addColumn('nom', function (Individu $model) {
+                return '<a href="'.route('contact.show', Crypt::encrypt($model->contact_id)).'" class="text-dark">
+                <span class="fw-bold">'.$model->civilite.'</span> <span>'.$model->nom.' </span>
+                <i class="mdi mdi-link-variant"></i>
+                </a>';
+            })
+            ->addColumn('prenom', function (Individu $model) {
+                return '<a href="'.route('contact.show', Crypt::encrypt($model->contact_id)).'" class="text-dark">
+                '.$model->prenom.'
+                </a>';
+            })
+            ->addColumn('source_contact', function (Individu $model) {
+                return '<span class="fw-bold">'.$model->contact?->source_contact.'</span>';
+            })
+            ->addColumn('email', fn (Individu $model) => $model->email)
+            ->addColumn('telephone', function(Individu $model) {
+                $tel = '';
+                if($model->telephone_mobile) {
+                    $tel .= '<span>'.$model->indicatif_mobile.' '.$model->telephone_mobile.'</span>';
+                }
+                if($model->telephone_fixe) {
+                    $tel .= '<br><span>'.$model->indicatif_fixe.' '.$model->telephone_fixe.'</span>';
+                }
+                return $tel;
+            })
             ->addColumn('adresse', function (Individu $model) {          
-                return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
-            } )
-            ->addColumn('code_postal')
-            ->addColumn('ville')
-            ->addColumn('user', function (Individu $model) {          
-                return  '<span >'.$model->user()?->infos()?->nom.' '.$model->user()?->infos()?->prenom.'</span>';
+                return '<span>'.$model->numero_voie.' '.$model->nom_voie.', <br> '.$model->code_postal.' - '.$model->ville.'</span>';
             })
-            ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
+            ->addColumn('user', function (Individu $model) {          
+                return '<span>'.$model->user()?->infos()?->nom.' '.$model->user()?->infos()?->prenom.'</span>';
+            });
     }
 
     /*
@@ -169,22 +188,17 @@ final class IndividuTable extends PowerGridComponent
     public function columns(): array
     {
         $colums = [
-            // Column::make('Id', 'id'),
             Column::make('Tags', 'tag_nom')->sortable()->searchable(),
             Column::make('Nom', 'nom')->sortable()->searchable(),
             Column::make('Prénom', 'prenom')->sortable()->searchable(),
+            Column::make('Source du contact', 'source_contact')->sortable()->searchable(),
             Column::make('Email', 'email')->sortable()->searchable(),
-            Column::make('Téléphone Fixe', 'telephone_fixe')->sortable()->searchable(),
-            Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
+            Column::make('Téléphone', 'telephone')->sortable()->searchable(),
             Column::make('Adresse', 'adresse')->sortable()->searchable(),
-            Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
-            Column::make('Ville', 'ville')->sortable()->searchable(),
-            Column::make('Date de création', 'created_at_formatted', 'created_at')
-                ->sortable(),
-
         ];
+        
         if(Auth::user()->is_admin ){
-             $colums[] = Column::make('Saisi par', 'user')->sortable();
+            $colums[] = Column::make('Saisi par', 'user')->sortable();
         }
         
         return $colums;
