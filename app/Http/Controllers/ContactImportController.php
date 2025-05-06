@@ -34,7 +34,7 @@ class ContactImportController extends Controller
                 ['archive' => false]
             );
 
-            dd($request->file('csv_file')->getPathname());
+            dd($request->file('csv_file')->getPathname(), $request->file('csv_file'));
 
             $handle = fopen($request->file('csv_file')->getPathname(), 'r');
             // Définir le séparateur comme point-virgule
