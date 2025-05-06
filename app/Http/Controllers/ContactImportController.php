@@ -21,9 +21,9 @@ class ContactImportController extends Controller
 
     public function processImport(Request $request)
     {
-        $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt'
-        ]);
+        // $request->validate([
+        //     'csv_file' => 'required|file|mimes:csv,txt'
+        // ]);
 
         try {
             DB::beginTransaction();
