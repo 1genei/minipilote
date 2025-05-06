@@ -44,6 +44,10 @@ class ContactImportController extends Controller
                 $record = str_getcsv($line, ';');
                 $data = array_combine($header, $record);
                 // dd($data);
+                // vérifier si le nom et le prénom est vide
+                if (empty($data['nom']) && empty($data['prenom'])) {
+                    continue;
+                }
                 // Créer ou récupérer le secteur d'activité
                 $secteurActivite = SecteurActivite::firstOrCreate(
                     ['nom' => $data['secteur dactivite']],
