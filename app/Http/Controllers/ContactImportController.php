@@ -21,14 +21,9 @@ class ContactImportController extends Controller
 
     public function processImport(Request $request)
     {
-        $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt|max:10240' // limite à 10MB
-        ]);
-
-        if ($request->file('csv_file')->getError() !== UPLOAD_ERR_OK) {
-            return redirect()->route('contact.import')
-                ->withErrors(['error' => 'Erreur lors de l\'upload du fichier. Vérifiez que la taille ne dépasse pas la limite autorisée.']);
-        }
+        // $request->validate([
+        //     'csv_file' => 'required|file|mimes:csv,txt'
+        // ]);
 
         try {
             DB::beginTransaction();
@@ -39,16 +34,9 @@ class ContactImportController extends Controller
                 ['archive' => false]
             );
 
-            $file = $request->file('csv_file');
-            if (!$file->isValid()) {
-                throw new \Exception('Fichier invalide');
-            }
+            dd($request->file('csv_file')->getPathname(), $request->file('csv_file'));
 
-            $handle = fopen($file->getRealPath(), 'r');
-            if ($handle === false) {
-                throw new \Exception('Impossible d\'ouvrir le fichier');
-            }
-
+            $handle = fopen($request->file('csv_file')->getPathname(), 'r');
             // Définir le séparateur comme point-virgule
             $header = str_getcsv(fgets($handle), ';'); 
             $importCount = 0;
