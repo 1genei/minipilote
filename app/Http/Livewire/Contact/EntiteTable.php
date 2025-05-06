@@ -41,8 +41,8 @@ final class EntiteTable extends PowerGridComponent
             ->showToggleColumns(),
             
             Footer::make()
-                ->showPerPage()
-                ->showRecordCount(),
+                ->showPerPage(25)
+                ->showRecordCount()
         ];
     }
 

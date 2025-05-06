@@ -40,8 +40,8 @@ final class IndividuTable extends PowerGridComponent
             ->showSearchInput()
             ->showToggleColumns(),
             Footer::make()
-                ->showPerPage()
-                ->showRecordCount(),
+                ->showPerPage(25)
+                ->showRecordCount()
         ];
     }
 

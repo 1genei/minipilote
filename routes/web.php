@@ -29,7 +29,7 @@ use App\Http\Controllers\CircuitController;
 use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\ContactImportController;
-
+use App\Http\Controllers\CommandeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -343,6 +343,19 @@ Route::controller(DeviController::class)->group(function () {
     Route::post('/devis/modifier-statut/{devis}/{statut}', 'modifierStatut')->name('devis.updateStatut')->middleware(['auth']);
     Route::post('/devis/archiver/{deviId}', 'archiver')->name('devis.archiver')->middleware(['auth']);
     Route::post('/devis/desarchiver/{deviId}', 'desarchiver')->name('devis.desarchiver')->middleware(['auth']);
+});
+
+// Commandes
+Route::controller(CommandeController::class)->group(function () {
+    Route::get('/commandes', 'index')->name('commande.index')->middleware(['auth']);
+    Route::get('/commandes/archives', 'archives')->name('commande.archives')->middleware(['auth']);
+    Route::get('/commandes/ajouter', 'create')->name('commande.create')->middleware(['auth']);
+    Route::post('/commandes/ajouter', 'store')->name('commande.store')->middleware(['auth']);
+    Route::get('/commandes/detail/{commandeId}', 'show')->name('commande.show')->middleware(['auth']);
+    Route::get('/commandes/modifier/{commandeId}', 'edit')->name('commande.edit')->middleware(['auth']);
+    Route::post('/commandes/modifier/{commandeId}', 'update')->name('commande.update')->middleware(['auth']);
+    Route::post('/commandes/archiver/{commandeId}', 'archiver')->name('commande.archiver')->middleware(['auth']);
+    Route::post('/commandes/desarchiver/{commandeId}', 'desarchiver')->name('commande.desarchiver')->middleware(['auth']);
 });
 
 

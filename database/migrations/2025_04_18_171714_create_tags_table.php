@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom')->nullable();
             $table->string('couleur')->nullable();
+            $table->boolean('archive')->default(false);
             $table->timestamps();
         });
     }

@@ -56,7 +56,7 @@ class ContactImportController extends Controller
                     'commercial_id' => Auth::id(),
                     'secteur_activite_id' => $secteurActivite->id
                 ]);
-
+                
                 // Ajouter le tag digisolus
                 $contact->tags()->attach($tagDigisolus->id);
 
@@ -76,7 +76,7 @@ class ContactImportController extends Controller
                     'ville' => $data['ville'],
                     'pays' => $data['pays']
                 ]);
-
+                
                 $importCount++;
             }
 
@@ -88,6 +88,7 @@ class ContactImportController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e);
             return redirect()->route('contact.import')
                 ->withErrors(['error' => 'Une erreur est survenue lors de l\'import : ' . $e->getMessage()]);
         }
