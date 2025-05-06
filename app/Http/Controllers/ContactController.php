@@ -26,12 +26,13 @@ class ContactController extends Controller
      */
     public function index()
     {
-        
-        $contactentites = Contact::where([["type","entite"], ['archive', false]])->get();
-        $contactindividus = Contact::where([["type","individu"], ['archive', false]])->get();
+        // Utiliser la pagination avec 50 éléments par page
+        $contacts = Contact::with(['individu', 'entite', 'typecontacts'])
+            ->where('archive', false)
+            ->orderBy('created_at', 'desc')
+            ->paginate(50);
 
-
-        return view('contact.index', compact('contactentites', 'contactindividus'));
+        return view('contact.index', compact('contacts'));
     }
 
     /**

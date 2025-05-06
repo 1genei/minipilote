@@ -124,7 +124,7 @@ final class IndividuTable extends PowerGridComponent
                 ->distinct();
             }
 
-            dd($contactindividus->get());
+            // dd($contactindividus->get());
 
             // $contactindividus = Individu::query()
             //     ->select('individus.*', 'contacts.id as contact_id', 'tags.nom as tag_nom','contacts.created_at as contact_created_at')
