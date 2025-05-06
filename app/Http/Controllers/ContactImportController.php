@@ -34,7 +34,6 @@ class ContactImportController extends Controller
                 ['archive' => false]
             );
 
-            dd($tagDigisolus);
 
             $handle = fopen($request->file('csv_file')->getPathname(), 'r');
             // Définir le séparateur comme point-virgule
@@ -50,7 +49,7 @@ class ContactImportController extends Controller
                     ['nom' => $data['secteur dactivite']],
                     ['archive' => false]
                 );
-
+                dd($data);
                 // Créer le contact
                 $contact = Contact::create([
                     'user_id' => Auth::id(),
