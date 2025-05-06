@@ -34,6 +34,8 @@ class ContactImportController extends Controller
                 ['archive' => false]
             );
 
+            dd($tagDigisolus);
+
             $handle = fopen($request->file('csv_file')->getPathname(), 'r');
             // Définir le séparateur comme point-virgule
             $header = str_getcsv(fgets($handle), ';'); 
