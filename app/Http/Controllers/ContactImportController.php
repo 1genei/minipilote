@@ -82,7 +82,7 @@ class ContactImportController extends Controller
                     'pays' => $data['pays']
                 ]);
                 
-                dd($individu, $contact);
+                // dd($individu, $contact);
                 $importCount++;
             }
 
