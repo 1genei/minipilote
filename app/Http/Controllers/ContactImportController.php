@@ -8,6 +8,7 @@ use App\Models\Entite;
 use App\Models\Individu;
 use App\Models\SecteurActivite;
 use App\Models\Tag;
+use App\Models\Typecontact;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,10 +53,14 @@ class ContactImportController extends Controller
                 $contact = Contact::create([
                     'user_id' => Auth::id(),
                     'type' => 'individu',
-                    'nature' => 'Prospect',
+                    'nature' => 'Personne physique',
                     'commercial_id' => Auth::id(),
+                    "source_contact" => 'digisolus',
                     'secteur_activite_id' => $secteurActivite->id
                 ]);
+
+                $typecontact = Typecontact::where('type', "Prospect")->first();
+                $contact->typeContacts()->attach($typecontact->id);
                 
                 // Ajouter le tag digisolus
                 $contact->tags()->attach($tagDigisolus->id);
@@ -88,7 +93,6 @@ class ContactImportController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
             return redirect()->route('contact.import')
                 ->withErrors(['error' => 'Une erreur est survenue lors de l\'import : ' . $e->getMessage()]);
         }
