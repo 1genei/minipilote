@@ -49,7 +49,6 @@ class ContactImportController extends Controller
                     ['nom' => $data['secteur dactivite']],
                     ['archive' => false]
                 );
-                dd($data);
                 // Créer le contact
                 $contact = Contact::create([
                     'user_id' => Auth::id(),
@@ -83,6 +82,7 @@ class ContactImportController extends Controller
                     'pays' => $data['pays']
                 ]);
                 
+                dd($individu, $contact);
                 $importCount++;
             }
 
