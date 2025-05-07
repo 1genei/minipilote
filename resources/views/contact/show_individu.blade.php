@@ -274,8 +274,7 @@
                                 class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter prestation</span>
                             </button> <hr>
                             
-                            <livewire:prestation.prestation-table client_id="{{ $contact->id }}" />
-            {{dd($contact)}}
+                            {{-- <livewire:prestation.prestation-table client_id="{{ $contact->id }}" /> --}}
 
                         </div>
 
