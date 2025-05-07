@@ -110,8 +110,8 @@
                         </div>                    
 
                     </div>
-                    {{dd($prochain_numero_prestation)}}
-                    
+
+
                     <div class="row">
 
                         <div class="col-6 ">
@@ -175,11 +175,11 @@
                                     <select name="newcontact" id="newcontact" class=" form-control select2"
                                         data-toggle="select2" >
                                         <option value=""></option>
-                                        @foreach ($beneficiaires as $beneficiaire)
+                                        {{-- @foreach ($beneficiaires as $beneficiaire)
                                             <option value="{{ $beneficiaire->id }}">
                                                 {{ $beneficiaire->individu->nom }} {{ $beneficiaire->individu->prenom }}
                                             </option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                     @if ($errors->has('newcontact'))
                                         <br>
