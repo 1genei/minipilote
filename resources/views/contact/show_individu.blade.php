@@ -273,9 +273,10 @@
                             data-bs-toggle="modal" data-bs-target="#prestation-modal"><i
                                 class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter prestation</span>
                             </button> <hr>
-            {{dd($contact)}}
                             
                             <livewire:prestation.prestation-table client_id="{{ $contact->id }}" />
+            {{dd($contact)}}
+
                         </div>
 
                     </div> <!-- end tab-content -->
