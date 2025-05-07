@@ -569,12 +569,12 @@
                                                 <select name="newcontact" id="newcontact" class=" form-control select2"
                                                     required data-toggle="select2">
                                                     <option value=""></option>
-                                                    @foreach ($beneficiaires as $beneficiaire)
+                                                    {{-- @foreach ($beneficiaires as $beneficiaire)
                                                         <option value="{{ $beneficiaire->id }}">
                                                             {{ $beneficiaire->individu->nom }}
                                                             {{ $beneficiaire->individu->prenom }}
                                                         </option>
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
                                                 @if ($errors->has('newcontact'))
                                                     <br>
