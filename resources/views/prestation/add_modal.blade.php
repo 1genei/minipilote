@@ -169,9 +169,12 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="mb-3">
-                                    <label for="beneficiaire_search" class="form-label">Rechercher un bénéficiaire</label>
-                                    <input type="text" class="form-control" id="beneficiaire_search" placeholder="Commencez à taper un nom...">
-                                    <input type="hidden" name="beneficiaire_id" id="beneficiaire_id">
+                                    <label for="newcontact" class="form-label">
+                                        Sélectionnez le Bénéficiaire <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="newcontact" id="newcontact" class="form-control">
+                                        <option value="">Rechercher un bénéficiaire...</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -413,33 +416,59 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    $('#beneficiaire_search').select2({
-        placeholder: 'Rechercher un bénéficiaire...',
-        minimumInputLength: 2,
-        ajax: {
-            url: '{{ route('contact.search.beneficiaires') }}',
-            dataType: 'json',
-            delay: 250,
-            data: function(params) {
-                return {
-                    q: params.term,
-                    page: params.page || 1
-                };
+    // Empêcher la fermeture du modal lors du clic sur select2
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-container--open .select2-search__field').focus();
+    });
+
+    // Empêcher la propagation du clic sur le dropdown de select2
+    $(document).on('click', '.select2-container--open .select2-dropdown', function (e) {
+        e.stopPropagation();
+    });
+
+    // Initialisation de Select2 lors de l'ouverture du modal
+    $('#prestation-modal').on('shown.bs.modal', function () {
+        $('#newcontact').select2({
+            dropdownParent: $('#prestation-modal'),
+            placeholder: 'Rechercher un bénéficiaire...',
+            minimumInputLength: 2,
+            width: '100%',
+            ajax: {
+                url: '{{ route('contact.search.beneficiaires') }}',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term,
+                        page: params.page || 1
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: data.pagination.more
+                        }
+                    };
+                },
+                cache: true
             },
-            processResults: function(data, params) {
-                params.page = params.page || 1;
-                
-                return {
-                    results: data.items,
-                    pagination: {
-                        more: data.pagination.more
-                    }
-                };
-            },
-            cache: true
-        },
-        templateResult: formatBeneficiaire,
-        templateSelection: formatBeneficiaire
+            templateResult: formatBeneficiaire,
+            templateSelection: formatBeneficiaire
+        }).on('select2:open', function(e) {
+            // Empêcher la propagation quand le select2 s'ouvre
+            $('.select2-dropdown').on('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    });
+
+    // Détruire Select2 quand le modal se ferme
+    $('#prestation-modal').on('hidden.bs.modal', function () {
+        if ($('#newcontact').data('select2')) {
+            $('#newcontact').select2('destroy');
+        }
     });
 });
 

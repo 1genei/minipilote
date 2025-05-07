@@ -7,7 +7,7 @@ use  App\Models\Evenement;
 use  App\Models\Circuit;
 use  App\Models\Prestation;
 use  App\Models\Contact; 
-use Crypt;
+use Illuminate\Support\Facades\Crypt;
 
 
 class EvenementController extends Controller
