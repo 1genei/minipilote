@@ -306,7 +306,7 @@
                                         </button>
                                     </div>
 
-                                    {{-- <livewire:notes.notes-list :contact_id="$contact->id" /> --}}
+                                    <livewire:notes.notes-list :contact_id="$contact->id" />
                                 </div>
 
                                 <div class="tab-pane" id="taches">
@@ -318,9 +318,8 @@
                                             </button>                                       
                                         @endcan
                                     </div>
-            {{dd($contact)}}
                                     
-                                    {{-- <livewire:taches.tasks-list :contact_id="$contact->id" /> --}}
+                                    <livewire:taches.tasks-list :contact_id="$contact->id" />
                                 </div>
                             </div>
                         </div>
@@ -331,6 +330,7 @@
     </div>
     <!-- end row-->
     @include('prestation.add_modal')    
+    {{dd($contact)}}
     
 </div> <!-- End Content -->
 
