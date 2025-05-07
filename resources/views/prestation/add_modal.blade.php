@@ -110,6 +110,7 @@
                         </div>                    
 
                     </div>
+                    {{dd($prochain_numero_prestation)}}
                     
                     <div class="row">
 
@@ -197,7 +198,6 @@
                         </div>
 
                     </div>
-                    {{dd($prochain_numero_prestation)}}
 
                     <div class="nouveau_contact">
                         <div class="row">
@@ -298,7 +298,6 @@
 
                         </div>
 
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
                         <div class="row">
 
                             <div class="col-6">
