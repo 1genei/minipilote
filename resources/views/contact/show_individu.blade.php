@@ -274,7 +274,7 @@
                                 class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter prestation</span>
                             </button> <hr>
                             
-                            {{-- <livewire:prestation.prestation-table client_id="{{ $contact->id }}" /> --}}
+                            <livewire:prestation.prestation-table client_id="{{ $contact->id }}" />
 
                         </div>
 
@@ -306,7 +306,7 @@
                                         </button>
                                     </div>
 
-                                    <livewire:notes.notes-list :contact_id="$contact->id" />
+                                    {{-- <livewire:notes.notes-list :contact_id="$contact->id" /> --}}
                                 </div>
 
                                 <div class="tab-pane" id="taches">
@@ -319,7 +319,7 @@
                                         @endcan
                                     </div>
                                     
-                                    <livewire:taches.tasks-list :contact_id="$contact->id" />
+                                    {{-- <livewire:taches.tasks-list :contact_id="$contact->id" /> --}}
                                 </div>
                             </div>
                         </div>
