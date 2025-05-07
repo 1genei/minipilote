@@ -285,6 +285,7 @@ class ContactController extends Controller
             $prochain_numero_prestation = 45264;
         }
     
+        dd($contact);
         $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
     
         if($contact->type == "individu"){
