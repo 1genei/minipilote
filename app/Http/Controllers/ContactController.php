@@ -286,7 +286,6 @@ class ContactController extends Controller
         }
     
         $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
-        dd($contact);
     
         if($contact->type == "individu"){
             return view('contact.show_individu', compact('contact', 'prochain_numero_prestation','beneficiaires'));

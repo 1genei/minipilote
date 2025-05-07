@@ -26,7 +26,7 @@
             <div class="card widget-inline">
                 <div class="card-body p-0">
                     <div class="row g-0">
-
+{{dd($contact)}}
                         <div class="col-sm-6">
 
                             <div class="col-sm-4 ">
