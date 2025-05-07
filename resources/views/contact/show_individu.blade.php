@@ -26,7 +26,6 @@
             <div class="card widget-inline">
                 <div class="card-body p-0">
                     <div class="row g-0">
-{{dd($contact)}}
                         <div class="col-sm-6">
 
                             <div class="col-sm-4 ">
@@ -90,6 +89,7 @@
                             @endswitch
                         @endforeach
                     </div>
+                    {{dd($contact)}}
 
                     {{-- Tags --}}
                     @if($contact->tags->count() > 0)
