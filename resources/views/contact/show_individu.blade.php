@@ -318,6 +318,7 @@
                                             </button>                                       
                                         @endcan
                                     </div>
+            {{dd($contact)}}
                                     
                                     {{-- <livewire:taches.tasks-list :contact_id="$contact->id" /> --}}
                                 </div>
