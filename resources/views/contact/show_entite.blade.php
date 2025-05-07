@@ -366,7 +366,7 @@
   
     <!-- end row-->
     @include('contact.add_interlocuteur')    
-    @include('prestation.add_modal')    
+    {{-- @include('prestation.add_modal')     --}}
     
     <div class="loading-overlay">
         <div class="loading-content">
