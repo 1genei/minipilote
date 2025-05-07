@@ -89,7 +89,6 @@
                             @endswitch
                         @endforeach
                     </div>
-                    {{dd($contact)}}
 
                     {{-- Tags --}}
                     @if($contact->tags->count() > 0)
@@ -210,6 +209,7 @@
                   
                 </div> <!-- end card-body -->
             </div> <!-- end card -->
+            {{dd($contact)}}
 
             <!-- Messages-->
             <div class="card">
