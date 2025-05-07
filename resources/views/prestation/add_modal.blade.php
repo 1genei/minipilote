@@ -168,35 +168,13 @@
                     <div class="col-lg-12 contact_existant">
                         <div class="row">
                             <div class="col-6">
-                                <div class=" mb-3">
-                                    <label for="newcontact" class="form-label">
-                                        Sélectionnez le Bénéficiaire <span class="text-danger">*</span>
-                                    </label>
-                                    <select name="newcontact" id="newcontact" class=" form-control select2"
-                                        data-toggle="select2" >
-                                        <option value=""></option>
-                                        @foreach ($beneficiaires as $beneficiaire)
-                                            <option value="{{ $beneficiaire->id }}">
-                                                {{ $beneficiaire->individu->nom }} {{ $beneficiaire->individu->prenom }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('newcontact'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('newcontact') }}</strong>
-                                        </div>
-                                    @endif
+                                <div class="mb-3">
+                                    <label for="beneficiaire_search" class="form-label">Rechercher un bénéficiaire</label>
+                                    <input type="text" class="form-control" id="beneficiaire_search" placeholder="Commencez à taper un nom...">
+                                    <input type="hidden" name="beneficiaire_id" id="beneficiaire_id">
                                 </div>
-
-
                             </div>
-                            
-
                         </div>
-
                     </div>
 
                     <div class="nouveau_contact">
@@ -431,3 +409,43 @@
         flex-grow: 10;
     }
 </style>
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    $('#beneficiaire_search').select2({
+        placeholder: 'Rechercher un bénéficiaire...',
+        minimumInputLength: 2,
+        ajax: {
+            url: '{{ route('contact.search.beneficiaires') }}',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    q: params.term,
+                    page: params.page || 1
+                };
+            },
+            processResults: function(data, params) {
+                params.page = params.page || 1;
+                
+                return {
+                    results: data.items,
+                    pagination: {
+                        more: data.pagination.more
+                    }
+                };
+            },
+            cache: true
+        },
+        templateResult: formatBeneficiaire,
+        templateSelection: formatBeneficiaire
+    });
+});
+
+function formatBeneficiaire(beneficiaire) {
+    if (!beneficiaire.id) return beneficiaire.text;
+    return $(`<span>${beneficiaire.nom} ${beneficiaire.prenom}</span>`);
+}
+</script>
+@endpush

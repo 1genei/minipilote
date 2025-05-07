@@ -596,4 +596,39 @@ class ContactController extends Controller
         
         return "200";
     }
+
+    public function searchBeneficiaires(Request $request)
+    {
+        $search = $request->get('q');
+        $page = $request->get('page', 1);
+        $perPage = 10;
+
+        $beneficiaires = Contact::with('individu')
+            ->whereHas('typecontacts', function($query) {
+                $query->where('type', 'Bénéficiaire');
+            })
+            ->whereHas('individu', function($query) use ($search) {
+                $query->where('nom', 'LIKE', "%{$search}%")
+                      ->orWhere('prenom', 'LIKE', "%{$search}%");
+            })
+            ->where('archive', false)
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
+        $formattedBeneficiaires = $beneficiaires->map(function($contact) {
+            return [
+                'id' => $contact->id,
+                'nom' => $contact->individu->nom,
+                'prenom' => $contact->individu->prenom,
+                'text' => $contact->individu->nom . ' ' . $contact->individu->prenom
+            ];
+        });
+
+        return response()->json([
+            'items' => $formattedBeneficiaires,
+            'pagination' => [
+                'more' => $beneficiaires->hasMorePages()
+            ]
+        ]);
+    }
 }

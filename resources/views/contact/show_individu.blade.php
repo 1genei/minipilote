@@ -26,6 +26,7 @@
             <div class="card widget-inline">
                 <div class="card-body p-0">
                     <div class="row g-0">
+
                         <div class="col-sm-6">
 
                             <div class="col-sm-4 ">
@@ -275,7 +276,6 @@
                             </button> <hr>
                             
                             <livewire:prestation.prestation-table client_id="{{ $contact->id }}" />
-
                         </div>
 
                     </div> <!-- end tab-content -->
@@ -328,7 +328,6 @@
             </div>
         </div> <!-- end col -->
     </div>
-
     <!-- end row-->
     @include('prestation.add_modal')    
     
