@@ -286,6 +286,7 @@ class ContactController extends Controller
         }
     
         $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
+        dd($contact);
     
         if($contact->type == "individu"){
             return view('contact.show_individu', compact('contact', 'prochain_numero_prestation','beneficiaires'));
@@ -303,7 +304,6 @@ class ContactController extends Controller
             }
             
             $newcontacts = Contact::where([['archive', false], ['type', 'individu']])->whereNotIn('id', $ids_existant)->get();
-            dd($contact);
 
             return view('contact.show_entite', compact('contact', 'newcontacts', 'entite_id','prochain_numero_prestation','beneficiaires'));
         }
