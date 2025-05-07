@@ -328,10 +328,10 @@
             </div>
         </div> <!-- end col -->
     </div>
-    {{dd($contact)}}
+    {{-- {{dd($contact)}} --}}
 
     <!-- end row-->
-    @include('prestation.add_modal')    
+    {{-- @include('prestation.add_modal')     --}}
     
 </div> <!-- End Content -->
 
