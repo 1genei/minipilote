@@ -816,7 +816,7 @@
             </div> <!-- end col-->
 
 
-            <div class="col-md-12 col-lg-3">
+            <div class="col-md-12 col-lg-4">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -850,9 +850,133 @@
                                     </select>
                                 </div>
 
+                                <div class="row mb-3" @if($nature != 'Groupe' && $nature != 'Personne morale') style="display: none;" @endif>
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-info" id="toggle-interlocuteur">
+                                            <i class="mdi mdi-plus-circle me-1"></i> Ajouter un interlocuteur
+                                        </button>
+                                    </div>
+                                </div>
+                                @if($nature == 'Groupe' || $nature == 'Personne morale')
+                                <div id="interlocuteur-section" style="display: none;">
+                                    <div class="row mb-3">
+                                        <div class="col-12" style="background:#7e7b7b; color:white!important; padding:10px">
+                                            <strong>Informations de l'interlocuteur</strong>
+                                        </div>
+                                    </div>
 
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="interlocuteur_nom" class="form-label">Nom</label>
+                                                <input type="text" class="form-control" wire:model.defer="interlocuteur_nom" name="interlocuteur_nom" id="interlocuteur_nom">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="interlocuteur_prenom" class="form-label">Prénom</label>
+                                                <input type="text" class="form-control" wire:model.defer="interlocuteur_prenom" name="interlocuteur_prenom" id="interlocuteur_prenom">
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="interlocuteur_poste" class="form-label">Poste occupé</label>
+                                                <input type="text" class="form-control" wire:model.defer="interlocuteur_poste" name="interlocuteur_poste" id="interlocuteur_poste">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="interlocuteur_email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" wire:model.defer="interlocuteur_email" name="interlocuteur_email" id="interlocuteur_email">
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            
+                                            <div class="mb-3">
+                                                <label for="interlocuteur_telephone_mobile" class="form-label">
+                                                    Téléphone Mobile
+                                                </label>
+        
+                                                <div class="container_indicatif">
+                                                    <div class="item_indicatif">
+                                                        <select class="form-select select2" id="interlocuteur_indicatif_mobile"
+                                                            name="interlocuteur_indicatif_mobile" style="width:100%"
+                                                            wire:model.defer="interlocuteur_indicatif_mobile">
+        
+                                                            @include('livewire.indicatifs-pays')
+        
+                                                        </select>
+        
+        
+                                                    </div>
+                                                    <div class="item_input">
+                                                        <input type="text" id="interlocuteur_telephone_mobile" name="interlocuteur_telephone_mobile"
+                                                            wire:model.defer="interlocuteur_telephone_mobile"
+                                                            value="{{ old('interlocuteur_telephone_mobile') ? old('interlocuteur_telephone_mobile') : '' }}"
+                                                            class="form-control telephones">
+                                                    </div>
+        
+                                                </div>
+        
+                                                @if ($errors->has('interlocuteur_telephone_mobile'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('interlocuteur_telephone_mobile') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-md-12">
+                                            
+                                            <div class="mb-3">
+                                                <label for="interlocuteur_indicatif_fixe" class="form-label">
+                                                    Téléphone Fixe
+                                                </label>
+        
+                                                <div class="container_indicatif">
+                                                    <div class="item_indicatif">
+                                                        <select class="form-select select2" id="interlocuteur_indicatif_fixe"
+                                                            name="interlocuteur_indicatif_fixe" style="width:100%"
+                                                            wire:model.defer="interlocuteur_indicatif_fixe">
+        
+                                                            @include('livewire.indicatifs-pays')
+        
+                                                        </select>
+        
+        
+                                                    </div>
+                                                    <div class="item_input">
+                                                        <input type="text" id="interlocuteur_telephone_fixe" name="interlocuteur_telephone_fixe"
+                                                            wire:model.defer="interlocuteur_telephone_fixe"
+                                                            value="{{ old('interlocuteur_telephone_fixe') ? old('interlocuteur_telephone_fixe') : '' }}"
+                                                            class="form-control interlocuteur_telephone_fixe">
+                                                    </div>
+        
+                                                </div>
+        
+                                                @if ($errors->has('interlocuteur_telephone_fixe'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary " role="alert">
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('interlocuteur_telephone_fixe') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                                 @if ($typecontact == 'Prospect' || $typecontact == 'Client')
                                     <div class="mb-3 ">
                                         <label for="commercial_id" class="form-label">
@@ -980,6 +1104,19 @@
         setTimeout(function() {
             initializeSelects();
         }, 100);
+    });
+
+    document.getElementById('toggle-interlocuteur').addEventListener('click', function() {
+        const section = document.getElementById('interlocuteur-section');
+        if (section.style.display === 'none') {
+            section.style.display = 'block';
+            this.innerHTML = '<i class="mdi mdi-minus-circle me-1"></i> Retirer l\'interlocuteur';
+            this.classList.replace('btn-info', 'btn-danger');
+        } else {
+            section.style.display = 'none';
+            this.innerHTML = '<i class="mdi mdi-plus-circle me-1"></i> Ajouter un interlocuteur';
+            this.classList.replace('btn-danger', 'btn-info');
+        }
     });
 </script>
 @endsection

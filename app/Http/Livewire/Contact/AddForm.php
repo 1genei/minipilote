@@ -86,6 +86,17 @@ class AddForm extends Component
 
     public $sources = [];
 
+    public $interlocuteur_nom;
+    public $interlocuteur_prenom;
+    public $interlocuteur_poste;
+    public $interlocuteur_email;
+    public $interlocuteur_telephone_fixe;
+    public $interlocuteur_telephone_mobile;
+
+    // Ajout des propriétés pour les indicatifs
+    public $interlocuteur_indicatif_fixe;
+    public $interlocuteur_indicatif_mobile;
+
     public function mount()
     {
         $this->existingTags = Tag::orderBy('nom')->pluck('nom')->toArray();
@@ -134,6 +145,13 @@ class AddForm extends Component
                 // 'email1' => 'required|email|unique:entites',
                 // 'email2' => 'required|email|unique:entites',
 
+            ];
+
+        }
+        elseif ($this->nature == "Groupe") {
+            return [
+                'nature' => 'required',
+                'raison_sociale' => 'required|string',
             ];
 
         } else {

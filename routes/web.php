@@ -405,8 +405,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/contacts/import', [ContactImportController::class, 'processImport'])->name('contact.import.process');
 });
 
-Route::get('/contacts/search/beneficiaires', [ContactController::class, 'searchBeneficiaires'])
-    ->name('contact.search.beneficiaires')
+Route::get('/contacts/search/individu', [ContactController::class, 'searchIndividu'])
+    ->name('contact.search.individu')
     ->middleware('auth');
 
 require __DIR__ . '/auth.php';

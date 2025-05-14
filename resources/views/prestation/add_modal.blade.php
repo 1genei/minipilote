@@ -434,7 +434,7 @@ $(document).ready(function() {
             minimumInputLength: 2,
             width: '100%',
             ajax: {
-                url: '{{ route('contact.search.beneficiaires') }}',
+                url: '{{ route('contact.search.individu') }}',
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {

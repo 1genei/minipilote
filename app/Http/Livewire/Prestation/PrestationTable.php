@@ -113,7 +113,8 @@ final class PrestationTable extends PowerGridComponent
             } )
             ->addColumn('notes')
             ->addColumn('date_prestation', function (Prestation $model){
-               return Carbon::parse($model->date_prestation)->format('d/m/Y'); 
+                
+               return Carbon::parse($model->date_prestation); 
             }  );
             
             // ->addColumn('user', function (Prestation $model) {          

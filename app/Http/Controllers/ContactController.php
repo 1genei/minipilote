@@ -245,8 +245,39 @@ class ContactController extends Controller
                 }
 
         }
+       
+        // Associer un individu comme interlocuteur
+        if($request->interlocuteur_nom && $request->interlocuteur_prenom) {
+            $contactInterlocuteur = Contact::create([
+                "user_id" => Auth::user()->id,
+                "type" => "individu",
+                "nature" => "Personne physique",
+                "commercial_id" => $request->commercial_id,
+            ]);
+            
+            $interlocuteur = Individu::create([
+                "contact_id" => $contactInterlocuteur->id,
+                "nom" => $request->interlocuteur_nom,
+                "prenom" => $request->interlocuteur_prenom,
+                "email" => $request->interlocuteur_email,
+                "telephone_fixe" => $request->interlocuteur_telephone_fixe,
+                "indicatif_fixe" => $request->interlocuteur_indicatif_fixe,
+                "telephone_mobile" => $request->interlocuteur_telephone_mobile,
+                "indicatif_mobile" => $request->interlocuteur_indicatif_mobile,
+            ]);
+
+            // Ajouter le type de contact "Interlocuteur"
+            $typeInterlocuteur = Typecontact::where('type', 'Interlocuteur')->first();
+            if ($typeInterlocuteur) {
+                $contactInterlocuteur->typecontacts()->attach($typeInterlocuteur->id);
+            }
+
+            $entite = $contact->entite;
+            $entite->individus()->attach($interlocuteur->id, ['poste' => $request->interlocuteur_poste]);
+        }
         
         if($returnContact == true) return $contact;
+        
         
             DB::commit();
         return redirect()->route('contact.show', Crypt::encrypt($contact->id))->with('ok', 'Contact ajouté');
@@ -259,6 +290,7 @@ class ContactController extends Controller
                 ->withInput();
             
         } catch (\Exception $e) {
+          
             DB::rollback();
             return redirect()
                 ->back()
@@ -481,9 +513,63 @@ class ContactController extends Controller
                     \Log::error('Erreur lors de la synchronisation des tags : ' . $e->getMessage());
                     // Continue l'exécution même si les tags échouent
                 }
-            } else {
+        } else {
                 // Si aucun tag n'est envoyé, on supprime tous les tags
                 $contact->tags()->sync([]);
+            }
+
+            // Gestion de l'interlocuteur
+            if($request->interlocuteur_nom && $request->interlocuteur_prenom) {
+                if($request->interlocuteur_id) {
+                    // Mise à jour d'un interlocuteur existant
+                    $interlocuteur = Individu::find($request->interlocuteur_id);
+                    if($interlocuteur) {
+                        $interlocuteur->update([
+                            "nom" => $request->interlocuteur_nom,
+                            "prenom" => $request->interlocuteur_prenom,
+                            "email" => $request->interlocuteur_email,
+                            "telephone_fixe" => $request->interlocuteur_telephone_fixe,
+                            "indicatif_fixe" => $request->interlocuteur_indicatif_fixe,
+                            "telephone_mobile" => $request->interlocuteur_telephone_mobile,
+                            "indicatif_mobile" => $request->interlocuteur_indicatif_mobile,
+                        ]);
+
+                        // Mise à jour du poste dans la table pivot
+                        DB::table('entite_individu')
+                            ->where('entite_id', $contact->entite->id)
+                            ->where('individu_id', $interlocuteur->id)
+                            ->update(['poste' => $request->interlocuteur_poste]);
+                    }
+                } else {
+                    // Création d'un nouvel interlocuteur
+                    $contactInterlocuteur = Contact::create([
+                        "user_id" => Auth::user()->id,
+                        "type" => "individu",
+                        "nature" => "Personne physique",
+                        "commercial_id" => $request->commercial_id,
+                    ]);
+                    
+                    $interlocuteur = Individu::create([
+                        "contact_id" => $contactInterlocuteur->id,
+                        "nom" => $request->interlocuteur_nom,
+                        "prenom" => $request->interlocuteur_prenom,
+                        "email" => $request->interlocuteur_email,
+                        "telephone_fixe" => $request->interlocuteur_telephone_fixe,
+                        "indicatif_fixe" => $request->interlocuteur_indicatif_fixe,
+                        "telephone_mobile" => $request->interlocuteur_telephone_mobile,
+                        "indicatif_mobile" => $request->interlocuteur_indicatif_mobile,
+                    ]);
+
+                    // Ajouter le type de contact "Interlocuteur"
+                    $typeInterlocuteur = Typecontact::where('type', 'Interlocuteur')->first();
+                    if ($typeInterlocuteur) {
+                        $contactInterlocuteur->typecontacts()->attach($typeInterlocuteur->id);
+                    }
+
+                    $contact->entite->individus()->attach($interlocuteur->id, [
+                        'poste' => $request->interlocuteur_poste
+                    ]);
+                }
             }
 
             DB::commit();
@@ -597,37 +683,35 @@ class ContactController extends Controller
         return "200";
     }
 
-    public function searchBeneficiaires(Request $request)
+    public function searchIndividu(Request $request)
     {
         $search = $request->get('q');
         $page = $request->get('page', 1);
         $perPage = 10;
 
-        $beneficiaires = Contact::with('individu')
-            ->whereHas('typecontacts', function($query) {
-                $query->where('type', 'Bénéficiaire');
-            })
+        $individus = Contact::with('individu')   
             ->whereHas('individu', function($query) use ($search) {
                 $query->where('nom', 'LIKE', "%{$search}%")
                       ->orWhere('prenom', 'LIKE', "%{$search}%");
             })
             ->where('archive', false)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('nom', 'asc')
             ->paginate($perPage);
 
-        $formattedBeneficiaires = $beneficiaires->map(function($contact) {
+        $formattedIndividus = $individus->map(function($contact) {
             return [
                 'id' => $contact->id,
                 'nom' => $contact->individu->nom,
                 'prenom' => $contact->individu->prenom,
-                'text' => $contact->individu->nom . ' ' . $contact->individu->prenom
+                'text' => "$contact->individu->nom . ' ' . $contact->individu->prenom"
             ];
         });
 
+
         return response()->json([
-            'items' => $formattedBeneficiaires,
+            'items' => $formattedIndividus,
             'pagination' => [
-                'more' => $beneficiaires->hasMorePages()
+                'more' => $individus->hasMorePages()
             ]
         ]);
     }

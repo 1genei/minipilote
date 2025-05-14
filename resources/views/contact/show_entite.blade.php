@@ -234,6 +234,14 @@
                         @endif
                     </div>
 
+
+                    <button type="button" class="btn btn-warning btn-sm rounded-pill mt-4"
+                    data-bs-toggle="modal" data-bs-target="#standard-modal"><i
+                        class="mdi mdi-account-plus me-1"></i> <span>Ajouter interlocuteur</span>
+                    </button> <hr>
+                    
+                    <livewire:contact.associes-table entite_id="{{ $entite_id }}" />
+
             
                   
                 </div> <!-- end card-body -->
@@ -243,19 +251,13 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h4 class="header-title"></h4>
-                        <div class="dropdown">
-                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="mdi mdi-dots-vertical"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                            </div>
-                        </div>
+                        <h4 class="header-title">Notes</h4>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addNoteModal">
+                                <i class="mdi mdi-plus-circle me-1"></i> Nouvelle note
+                            </button>
+
                     </div>
+                    <livewire:notes.notes-list :contact_id="$contact->id" />
 
                     <div class="inbox-widget">
                         <div class="inbox-item">
@@ -274,93 +276,54 @@
         <div class="col-xl-8 col-lg-7">
             <div class="row">
                 <div class="col-12">
+                    
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Tâches</h5>                                        
+                                @can('permission', 'ajouter-agenda')
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-modal">
+                                        <i class="mdi mdi-plus-circle me-1"></i> Nouvelle tâche
+                                    </button>                                       
+                                @endcan
+                            </div>
+                            <livewire:taches.tasks-list :contact_id="$contact->id" />
+                        </div>
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+                    {{-- Nouvelle section pour les notes --}}
+                    <div class="col-12">
             <div class="card">
                 <div class="card-body">
+                                
                     <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+                      
                         <li class="nav-item">
-                            <a href="#interlocuteur" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
-                                Interlocuteurs
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                                    <a href="#activite" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
-                                Prestations
+                                                <a href="#activite" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
+                                            Commandes
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane show active" id="interlocuteur">
-
-                            <button type="button" class="btn btn-warning btn-sm rounded-pill"
-                            data-bs-toggle="modal" data-bs-target="#standard-modal"><i
-                                class="mdi mdi-account-plus me-1"></i> <span>Ajouter interlocuteur</span>
-                            </button> <hr>
-                            
-                            <livewire:contact.associes-table entite_id="{{ $entite_id }}" />
-
-                        </div> <!-- end tab-pane -->
-                     
-                        <div class="tab-pane" id="activite">
-                            <button type="button" class="btn btn-secondary btn-sm rounded-pill"
-                            data-bs-toggle="modal" data-bs-target="#prestation-modal"><i
-                                class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter prestation</span>
-                            </button> <hr>
-                            
-                            <livewire:prestation.prestation-table client_id="{{ $contact->id }}" />
+                                    
+                                    <div class="tab-pane show active" id="activite">
+                                        <a href="{{ route('commande.create', Crypt::encrypt($contact->id)) }}" class="btn btn-secondary btn-sm rounded-pill"><i
+                                            class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter commande</span>
+                                        </a> <hr>
+                                        
+                                        <livewire:commande.commande-table client_id="{{ $contact->id }}" />
                         </div>
 
                     </div> <!-- end tab-content -->
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Nouvelle section pour les notes --}}
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                                <li class="nav-item">
-                                    <a href="#notes" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
-                                        Notes
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#taches" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
-                                        Tâches
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane show active" id="notes">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 class="mb-0">Notes</h5>
-                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addNoteModal">
-                                            <i class="mdi mdi-plus-circle me-1"></i> Nouvelle note
-                                        </button>
-                                    </div>
-
-                                    <livewire:notes.notes-list :contact_id="$contact->id" />
-                                       
-                                </div>
-
-                                <div class="tab-pane" id="taches">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 class="mb-0">Tâches</h5>                                        
-                                        @can('permission', 'ajouter-agenda')
-                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-modal">
-                                                <i class="mdi mdi-plus-circle me-1"></i> Nouvelle tâche
-                                            </button>                                       
-                                        @endcan
-                                    </div>
-                                    
-                                    <livewire:taches.tasks-list :contact_id="$contact->id" />
-                                        
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
   
