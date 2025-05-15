@@ -266,22 +266,22 @@
                     </div>
                 </div>
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                                {{-- <li class="nav-item">
-                                    <a href="#interlocuteur" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 ">
-                                        Interlocuteurs
-                                    </a>
-                                </li> --}}
-                            
-                                <li class="nav-item">
-                                    <a href="#activite" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+                        {{-- <li class="nav-item">
+                            <a href="#interlocuteur" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 ">
+                                Interlocuteurs
+                            </a>
+                        </li> --}}
+                      
+                        <li class="nav-item">
+                            <a href="#activite" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
                                         Commandes
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">    
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
                                 <div class="tab-pane show active" id="activite">
                                     <a href="{{ route('commande.create', Crypt::encrypt($contact->id)) }}" class="btn btn-secondary btn-sm rounded-pill"><i class="mdi mdi-file-plus-outline me-1"></i> <span>Ajouter commande</span>
                                     </a> <hr>
@@ -290,8 +290,8 @@
                                 </div>
                             </div> <!-- end tab-content -->
                             
-                        </div> <!-- end card body -->
-                    </div> <!-- end card -->
+                </div> <!-- end card body -->
+            </div> <!-- end card -->
                 </div>
             </div>
         </div> <!-- end col -->

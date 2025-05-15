@@ -403,6 +403,10 @@ Route::post('/utilisateur/{user}/update-password', [UtilisateurController::class
 Route::middleware(['auth'])->group(function () {
     Route::get('/contacts/import', [ContactImportController::class, 'showImportForm'])->name('contact.import');
     Route::post('/contacts/import', [ContactImportController::class, 'processImport'])->name('contact.import.process');
+    Route::get('/contacts/search/entite', [ContactController::class, 'searchEntite'])
+        ->name('contact.search.entite');
+    Route::get('/contacts/search/all', [ContactController::class, 'searchAllContacts'])
+        ->name('contact.search.all');
 });
 
 Route::get('/contacts/search/individu', [ContactController::class, 'searchIndividu'])

@@ -143,18 +143,7 @@
                                                         <select name="client_prospect_id" id="client_prospect_id" class=" form-control select2" required
                                                             data-toggle="select2" >
                                                             <option value=""></option>
-                                                            @foreach ($contactclients as $contact)
-                                                            
-                                                                @if ($contact->type =="individu")
-                                                                    <option value="{{ $contact->id }}">
-                                                                        {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}
-                                                                    </option>
-                                                                @else
-                                                                    <option value="{{ $contact->id }}">
-                                                                        {{ $contact->entite?->raison_sociale }}
-                                                                    </option>
-                                                                @endif
-                                                            @endforeach
+                                                           
                                                         </select>
                                                         @if ($errors->has('client_prospect_id'))
                                                             <br>
@@ -391,10 +380,15 @@
 
 
     </div> <!-- End Content -->
+    @include('components.contact.add_select2_script');
+   
+
 @endsection
 
 @section('script')
-
+    <script>
+        initContactsSelect2('#client_prospect_id');
+    </script>
     {{-- Filtrer les produits --}}
     <script>
         var produits = @json($produits);
@@ -450,7 +444,7 @@
     
        
         var tvas = @json($tvas);
-        var tab_tvas = [];
+        var tab_tvas = {};
         var resume_devis = [];
         
         var nb_produit = produits.length;

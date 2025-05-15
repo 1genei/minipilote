@@ -11,8 +11,8 @@ use App\Models\Categorieproduit;
 use App\Models\Voiture;
 use App\Models\Circuit;
 
-use Auth;
-use Crypt;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 use Illuminate\Support\Facades\File ;
 use Illuminate\Support\Facades\Storage;
@@ -284,7 +284,7 @@ class DeviController extends Controller
         
         $devis = Devi::where('id', Crypt::decrypt($devis_id))->first();
         $params = $request->all();
-        
+        dd($request->all());
         unset($params["numero_devis"]);
         unset($params["nom_devis"]);
         unset($params["type_reduction_globale"]) ;

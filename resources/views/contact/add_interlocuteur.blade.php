@@ -278,70 +278,12 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+@include('components.contact.add_select2_script');
 @push('scripts')
 <script>
-$(document).ready(function() {
-    // Initialisation de Select2 avec recherche Ajax
-    $('#newcontact').select2({
-        dropdownParent: $('#standard-modal'),
-        placeholder: 'Rechercher un contact...',
-        allowClear: true,
-        minimumInputLength: 2,
-        language: {
-            inputTooShort: function() {
-                return 'Veuillez saisir au moins 2 caractères';
-            },
-            noResults: function() {
-                return 'Aucun résultat trouvé';
-            },
-            searching: function() {
-                return 'Recherche en cours...';
-            }
-        },
-        ajax: {
-            url: '{{ route('contact.search.individu') }}',
-            dataType: 'json',
-            delay: 250,
-            data: function(params) {
-                return {
-                    q: params.term,
-                    page: params.page
-                };
-            },
-            processResults: function(data) {
-                return {
-                    results: data.results
-                };
-            },
-            cache: true
-        },
-        templateResult: formatContact,
-        templateSelection: formatContactSelection
-    });
-
-    // Fonction pour formater l'affichage des résultats de recherche
-    function formatContact(contact) {
-        if (!contact.id) return contact.text;
-        
-        return $(`
-            <div class="d-flex align-items-center" >
-                <div>
-                    <div class="font-weight-bold">${contact.nom} ${contact.prenom}</div>
-                    <div class="small text-muted">
-                        ${contact.email ? `<i class="mdi mdi-email text-danger"></i> ${contact.email}<br>` : ''}
-                    </div>
-                </div>
-            </div>
-        `);
-    }
-
-    // Fonction pour formater l'affichage de la sélection
-    function formatContactSelection(contact) {
-        if (!contact.id) return contact.text;
-        return `${contact.nom} ${contact.prenom}`;
-    }
-});
+    initIndividusSelect2('#newcontact');
 </script>
+
 @endpush
 
 <style>

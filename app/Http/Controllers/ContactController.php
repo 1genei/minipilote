@@ -719,4 +719,102 @@ class ContactController extends Controller
 
         return response()->json(['results' => $results]);
     }
+
+    public function searchEntite(Request $request)
+    {
+        $search = $request->get('q');
+        $results = [];
+
+        if ($search) {
+            $contacts = Contact::with('entite')
+                ->where('type', 'entite')
+                ->where('archive', false)
+                ->whereHas('entite', function($query) use ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->where('raison_sociale', 'LIKE', "%{$search}%")
+                          ->orWhere('email', 'LIKE', "%{$search}%");
+                    });
+                })
+                ->limit(50)
+                ->get();
+
+            foreach ($contacts as $contact) {
+                if ($contact->entite) {
+                    $results[] = [
+                        'id' => $contact->entite->id,
+                        'text' => $contact->entite->raison_sociale,
+                        'raison_sociale' => $contact->entite->raison_sociale,
+                        'email' => $contact->entite->email,
+                        'telephone' => $contact->entite->telephone_mobile ?: $contact->entite->telephone_fixe,
+                        'type' => 'entite'
+                    ];
+                }
+            }
+        }
+
+        return response()->json(['results' => $results]);
+    }
+
+    public function searchAllContacts(Request $request)
+    {
+        $search = $request->get('q');
+        $results = [];
+
+        if ($search) {
+            // Recherche des individus
+            $individus = Contact::with('individu')
+                ->where('type', 'individu')
+                ->where('archive', false)
+                ->whereHas('individu', function($query) use ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->where('nom', 'LIKE', "%{$search}%")
+                          ->orWhere('prenom', 'LIKE', "%{$search}%")
+                          ->orWhere(DB::raw("CONCAT(nom, ' ', prenom)"), 'LIKE', "%{$search}%");
+                    });
+                })
+                ->limit(25)
+                ->get();
+
+            // Recherche des entités
+            $entites = Contact::with('entite')
+                ->where('type', 'entite')
+                ->where('archive', false)
+                ->whereHas('entite', function($query) use ($search) {
+                    $query->where('raison_sociale', 'LIKE', "%{$search}%");
+                })
+                ->limit(25)
+                ->get();
+
+            // Formater les résultats des individus
+            foreach ($individus as $contact) {
+                if ($contact->individu) {
+                    $results[] = [
+                        'id' => $contact->id,
+                        'text' => $contact->individu->nom . ' ' . $contact->individu->prenom,
+                        'nom' => $contact->individu->nom,
+                        'prenom' => $contact->individu->prenom,
+                        'email' => $contact->individu->email,
+                        'telephone' => $contact->individu->telephone_mobile ?: $contact->individu->telephone_fixe,
+                        'type' => 'individu'
+                    ];
+                }
+            }
+
+            // Formater les résultats des entités
+            foreach ($entites as $contact) {
+                if ($contact->entite) {
+                    $results[] = [
+                        'id' => $contact->id,
+                        'text' => $contact->entite->raison_sociale,
+                        'raison_sociale' => $contact->entite->raison_sociale,
+                        'email' => $contact->entite->email,
+                        'telephone' => $contact->entite->telephone_mobile ?: $contact->entite->telephone_fixe,
+                        'type' => 'entite'
+                    ];
+                }
+            }
+        }
+
+        return response()->json(['results' => $results]);
+    }
 }

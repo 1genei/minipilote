@@ -138,34 +138,29 @@
                                                 <div class="col-auto ">
                                                     <div class=" mb-3">
                                                         <label for="client_prospect_id" class="form-label">
-                                                            Sélectionnez le Client/Prospect <span class="text-danger">*</span>
+                                                            Modifiez le Client/Prospect <span class="text-danger">*</span>
+                                                            @if($devis->client_prospect_id != null)
+                                                            <span id="current_contact" class="ms-2 badge bg-info">
+                                                                @if($devis->client_prospect()->type == "individu")
+                                                                    {{ $devis->client_prospect()->individu->nom }} {{ $devis->client_prospect()->individu->prenom }}
+                                                                @else
+                                                                    {{ $devis->client_prospect()->entite->raison_sociale }}
+                                                                @endif
+                                                            </span>
+                                                        @endif
                                                         </label>
-                                                        <select name="client_prospect_id" id="client_prospect_id" class=" form-control select2" required
-                                                            data-toggle="select2" >
-                                                            
+                                                        <select name="client_prospect_id" id="client_prospect_id" class="form-control" required>
                                                             @if($devis->client_prospect_id != null)
                                                                 @if($devis->client_prospect()->type == "individu")
-                                                                    <option value="{{ $devis->client_prospect_id }}">
+                                                                    <option value="{{ $devis->client_prospect_id }}" selected>
                                                                         {{ $devis->client_prospect()->individu->nom }} {{ $devis->client_prospect()->individu->prenom }}
                                                                     </option>
                                                                 @else
-                                                                    <option value="{{ $devis->client_prospect_id }}">
+                                                                    <option value="{{ $devis->client_prospect_id }}" selected>
                                                                         {{ $devis->client_prospect()->entite->raison_sociale }}
                                                                     </option>
                                                                 @endif
                                                             @endif
-                                                            @foreach ($contactclients as $contact)
-                                                            
-                                                                @if ($contact->type =="individu")
-                                                                    <option value="{{ $contact->id }}">
-                                                                        {{ $contact->individu?->nom }} {{ $contact->individu?->prenom }}
-                                                                    </option>
-                                                                @else
-                                                                    <option value="{{ $contact->id }}">
-                                                                        {{ $contact->entite?->raison_sociale }}
-                                                                    </option>
-                                                                @endif
-                                                            @endforeach
                                                         </select>
                                                         @if ($errors->has('client_prospect_id'))
                                                             <br>
@@ -485,10 +480,13 @@
 
 
     </div> <!-- End Content -->
+    @include('components.contact.add_select2_script');
 @endsection
 
 @section('script')
-
+    <script>
+        initContactsSelect2('#client_prospect_id');
+    </script>
     {{-- Filtrer les produits --}}
     <script>
         var produits = @json($produits);
