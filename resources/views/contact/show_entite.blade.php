@@ -399,8 +399,16 @@
             }
 
         });
+
+
     </script>
 
+{{-- Prendre en compte la recherche dans le modal --}}
+<script>
+    $('.select2').select2({
+        dropdownParent: $('#standard-modal')
+    });
+</script>
 
     <script>
         // Retirer

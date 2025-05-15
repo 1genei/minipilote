@@ -28,31 +28,14 @@
                     <div class="col-lg-12 contact_existant">
                         <div class="row">
                             <div class="col-6">
-                                <div class=" mb-3">
+                                <div class="mb-3">
                                     <label for="newcontact" class="form-label">
                                         Sélectionnez le contact <span class="text-danger">*</span>
                                     </label>
-                                    <select name="newcontact" id="newcontact" class=" form-control select2"
-                                        data-toggle="select2" required>
+                                    <select name="newcontact" id="newcontact" class="form-control" required>
                                         <option value=""></option>
-                                        @foreach ($newcontacts as $newcontact)
-                                            <option value="{{ $newcontact->individu->id }}">
-                                                {{ $newcontact->individu->nom }} {{ $newcontact->individu->prenom }}
-                                            </option>
-                                        @endforeach
                                     </select>
-                                    @if ($errors->has('newcontact'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " role="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('newcontact') }}</strong>
-                                        </div>
-                                    @endif
                                 </div>
-
-
-
                             </div>
                             <div class="col-6">
                                 <div class="mb-3 ">
@@ -295,6 +278,71 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+@push('scripts')
+<script>
+$(document).ready(function() {
+    // Initialisation de Select2 avec recherche Ajax
+    $('#newcontact').select2({
+        dropdownParent: $('#standard-modal'),
+        placeholder: 'Rechercher un contact...',
+        allowClear: true,
+        minimumInputLength: 2,
+        language: {
+            inputTooShort: function() {
+                return 'Veuillez saisir au moins 2 caractères';
+            },
+            noResults: function() {
+                return 'Aucun résultat trouvé';
+            },
+            searching: function() {
+                return 'Recherche en cours...';
+            }
+        },
+        ajax: {
+            url: '{{ route('contact.search.individu') }}',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    q: params.term,
+                    page: params.page
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: data.results
+                };
+            },
+            cache: true
+        },
+        templateResult: formatContact,
+        templateSelection: formatContactSelection
+    });
+
+    // Fonction pour formater l'affichage des résultats de recherche
+    function formatContact(contact) {
+        if (!contact.id) return contact.text;
+        
+        return $(`
+            <div class="d-flex align-items-center" >
+                <div>
+                    <div class="font-weight-bold">${contact.nom} ${contact.prenom}</div>
+                    <div class="small text-muted">
+                        ${contact.email ? `<i class="mdi mdi-email text-danger"></i> ${contact.email}<br>` : ''}
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+
+    // Fonction pour formater l'affichage de la sélection
+    function formatContactSelection(contact) {
+        if (!contact.id) return contact.text;
+        return `${contact.nom} ${contact.prenom}`;
+    }
+});
+</script>
+@endpush
 
 <style>
     .container_email_label {
@@ -331,5 +379,22 @@
 
     .item_input {
         flex-grow: 10;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #727cf5;
+    }
+
+    .select2-results__option {
+        padding: 8px;
+    }
+
+    .select2-container--default .select2-results__option[aria-selected=true] {
+        background-color: #e3e6f0;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #e3e6f0;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     }
 </style>

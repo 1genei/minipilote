@@ -5,8 +5,7 @@ namespace App\Http\Livewire\Contact;
 use App\Models\Contact;
 use App\Models\Individu;
 use App\Models\EntiteIndividu;
-use Crypt;
-use Auth;
+use Illuminate\Support\Facades\Crypt;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -61,7 +60,6 @@ final class AssociesTable extends PowerGridComponent
      */
     public function datasource()
     {
-        $user = Auth::user();
     
         $individus_existants = EntiteIndividu::where([['entite_id', intval($this->entite_id)]])->get();
         $ids_existant = array();
@@ -127,7 +125,7 @@ final class AssociesTable extends PowerGridComponent
                 return  '<span >'.$model->numero_voie.' '.$model->nom_voie.'</span>';
             } )
             ->addColumn('code_postal')
-            ->addColumn('ville')
+            // ->addColumn('ville')
             ->addColumn('created_at_formatted', fn (Individu $model) => Carbon::parse($model->created_at)->format('d/m/Y'));
     }
 
@@ -157,7 +155,7 @@ final class AssociesTable extends PowerGridComponent
             Column::make('Téléphone Mobile', 'telephone_mobile')->sortable()->searchable(),
             //Column::make('Adresse', 'adresse')->sortable()->searchable(),
             //Column::make('Code Postal', 'code_postal')->sortable()->searchable(),
-            Column::make('Ville', 'ville')->sortable()->searchable(),
+            // Column::make('Ville', 'ville')->sortable()->searchable(),
             //Column::make('Date de création', 'created_at_formatted', 'created_at')->sortable(),
 
         ];

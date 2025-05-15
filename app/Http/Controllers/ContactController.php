@@ -686,33 +686,37 @@ class ContactController extends Controller
     public function searchIndividu(Request $request)
     {
         $search = $request->get('q');
-        $page = $request->get('page', 1);
-        $perPage = 10;
+        $results = [];
 
-        $individus = Contact::with('individu')   
-            ->whereHas('individu', function($query) use ($search) {
-                $query->where('nom', 'LIKE', "%{$search}%")
-                      ->orWhere('prenom', 'LIKE', "%{$search}%");
-            })
-            ->where('archive', false)
-            ->orderBy('nom', 'asc')
-            ->paginate($perPage);
+        if ($search) {
+            $individus = Contact::with('individu')
+                ->where('type', 'individu')
+                ->where('archive', false)
+                ->whereHas('individu', function($query) use ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->where('nom', 'LIKE', "%{$search}%")
+                          ->orWhere('prenom', 'LIKE', "%{$search}%")
+                          ->orWhere(DB::raw("CONCAT(nom, ' ', prenom)"), 'LIKE', "%{$search}%")
+                          ->orWhere(DB::raw("CONCAT(prenom, ' ', nom)"), 'LIKE', "%{$search}%");
+                    });
+                })
+                ->limit(50)
+                ->get();
 
-        $formattedIndividus = $individus->map(function($contact) {
-            return [
-                'id' => $contact->id,
-                'nom' => $contact->individu->nom,
-                'prenom' => $contact->individu->prenom,
-                'text' => "$contact->individu->nom . ' ' . $contact->individu->prenom"
-            ];
-        });
+            foreach ($individus as $contact) {
+                if ($contact->individu) {
+                    $results[] = [
+                        'id' => $contact->individu->id,
+                        'text' => $contact->individu->nom . ' ' . $contact->individu->prenom,
+                        'nom' => $contact->individu->nom,
+                        'prenom' => $contact->individu->prenom,
+                        'email' => $contact->individu->email,
+                        'telephone' => $contact->individu->telephone_mobile ?: $contact->individu->telephone_fixe
+                    ];
+                }
+            }
+        }
 
-
-        return response()->json([
-            'items' => $formattedIndividus,
-            'pagination' => [
-                'more' => $individus->hasMorePages()
-            ]
-        ]);
+        return response()->json(['results' => $results]);
     }
 }
