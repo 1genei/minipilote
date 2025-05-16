@@ -47,6 +47,7 @@ class AgendaController extends Controller
         
         $agendas = str_replace('\n', ' ', $agendas);
         //  dd($agendas);
+        dd($contacts);
         
         return view('agenda.index',compact('agendas','contacts','tab_contacts'));
     }
