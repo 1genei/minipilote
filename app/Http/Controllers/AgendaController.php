@@ -47,7 +47,6 @@ class AgendaController extends Controller
         
         $agendas = str_replace('\n', ' ', $agendas);
         //  dd($agendas);
-        dd($contacts);
         
         return view('agenda.index',compact('agendas','contacts','tab_contacts'));
     }
@@ -104,6 +103,7 @@ class AgendaController extends Controller
 
         $agendas = $query->paginate(50)->appends($request->query());
         
+        dd($agendas);
         // Charger les contacts avec leurs relations
         $contacts = Contact::where('archive', false)
             ->with(['individu', 'entite'])
