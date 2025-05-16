@@ -48,9 +48,7 @@ class UtilisateurController extends Controller
     public function create()
     {
         
-        $contactindividus = Contact::where([["type","individu"], ['archive', false]])->get();     
-
-        return view('utilisateur.add', compact('contactindividus'));
+        return view('utilisateur.add' );
     }
     
     /**
