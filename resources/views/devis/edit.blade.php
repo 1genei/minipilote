@@ -140,14 +140,14 @@
                                                         <label for="client_prospect_id" class="form-label">
                                                             Modifiez le Client/Prospect <span class="text-danger">*</span>
                                                             @if($devis->client_prospect_id != null)
-                                                            <span id="current_contact" class="ms-2 badge bg-info">
-                                                                @if($devis->client_prospect()->type == "individu")
-                                                                    {{ $devis->client_prospect()->individu->nom }} {{ $devis->client_prospect()->individu->prenom }}
-                                                                @else
-                                                                    {{ $devis->client_prospect()->entite->raison_sociale }}
-                                                                @endif
-                                                            </span>
-                                                        @endif
+                                                                <span id="current_contact" class="ms-2 badge bg-info">
+                                                                    @if($devis->client_prospect()->type == "individu")
+                                                                        {{ $devis->client_prospect()->individu->nom }} {{ $devis->client_prospect()->individu->prenom }}
+                                                                    @else
+                                                                        {{ $devis->client_prospect()->entite->raison_sociale }}
+                                                                    @endif
+                                                                </span>
+                                                            @endif
                                                         </label>
                                                         <select name="client_prospect_id" id="client_prospect_id" class="form-control" required>
                                                             @if($devis->client_prospect_id != null)

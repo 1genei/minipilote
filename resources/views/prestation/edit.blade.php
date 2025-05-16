@@ -311,7 +311,17 @@
                                         <div class="col-6">
                                             <div class=" mb-3">
                                                 <label for="client_id" class="form-label">
-                                                    Sélectionnez le Client <span class="text-danger">*</span>
+                                                    Modifiez le Client <span class="text-danger">*</span>
+                                                    @if($prestation->client_id != null)
+                                                        <span id="current_contact" class="ms-2 badge bg-info">
+                                                            @if($prestation->client()->type == "individu")
+                                                                {{ $prestation->client()->individu->nom }} {{ $prestation->client()->individu->prenom }}
+                                                            @else
+                                                                {{ $prestation->client()->entite->raison_sociale }}
+                                                            @endif
+                                                        </span>
+                                                    @endif
+
                                                 </label>
                                                 <select name="client_id" id="client_id" class=" form-control select2"
                                                     data-toggle="select2">
@@ -324,7 +334,7 @@
                                                         @endif
                                                     </option>
 
-                                                    @foreach ($contactclients as $contact)
+                                                    {{-- @foreach ($contactclients as $contact)
                                                         @if ($contact->type == 'individu')
                                                             <option value="{{ $contact->id }}">
                                                                 {{ $contact->individu?->nom }}
@@ -335,7 +345,7 @@
                                                                 {{ $contact->entite?->raison_sociale }}
                                                             </option>
                                                         @endif
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
                                                 @if ($errors->has('client_id'))
                                                     <br>
@@ -565,19 +575,25 @@
                                         <div class="col-6">
                                             <div class=" mb-3">
                                                 <label for="beneficiaire_id" class="form-label">
-                                                    Sélectionnez le Bénéficiaire <span class="text-danger">*</span>
+                                                    Modifiez le Bénéficiaire <span class="text-danger">*</span>
+                                                    @if($prestation->beneficiaire_id != null)
+                                                        <span id="current_contact" class="ms-2 badge bg-info">
+                                                            {{ $prestation->beneficiaire()?->individu->nom }}
+                                                            {{ $prestation->beneficiaire()?->individu->prenom }}
+                                                        </span>
+                                                    @endif
                                                 </label>
                                                 <select name="beneficiaire_id" id="beneficiaire_id"
                                                     class=" form-control select2" data-toggle="select2">
-                                                    <option value="{{ $prestation->beneficiaire()?->id }}">
+                                                    <option value="{{$prestation->beneficiaire()?->id }}">
                                                         {{ $prestation->beneficiaire()?->individu->nom }}
                                                         {{ $prestation->beneficiaire()?->individu->prenom }}</option>
-                                                    @foreach ($contactbeneficiaires as $contactbeneficiaire)
+                                                    {{-- @foreach ($contactbeneficiaires as $contactbeneficiaire)
                                                         <option value="{{ $contactbeneficiaire->id }}">
                                                             {{ $contactbeneficiaire->individu->nom }}
                                                             {{ $contactbeneficiaire->individu->prenom }}
                                                         </option>
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
                                                 @if ($errors->has('beneficiaire_id'))
                                                     <br>
@@ -941,10 +957,14 @@
 
 
     </div> <!-- End Content -->
+    @include('components.contact.add_select2_script')
 @endsection
 
 @section('script')
-
+    <script>
+        initIndividusSelect2('#beneficiaire_id');
+        initContactsSelect2('#client_id');
+    </script>
     <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
 
 

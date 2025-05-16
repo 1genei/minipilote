@@ -322,7 +322,7 @@
                                                 <select name="client_id" id="client_id" class=" form-control select2"
                                                     data-toggle="select2" required>
                                                     <option value=""></option>
-                                                    @foreach ($contactclients as $contact)
+                                                    {{-- @foreach ($contactclients as $contact)
                                                         @if ($contact->type == 'individu')
                                                             <option value="{{ $contact->id }}">
                                                                 {{ $contact->individu?->nom }}
@@ -333,7 +333,7 @@
                                                                 {{ $contact->entite?->raison_sociale }}
                                                             </option>
                                                         @endif
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
                                                 @if ($errors->has('client_id'))
                                                     <br>
@@ -569,12 +569,12 @@
                                                 <select name="newcontact" id="newcontact" class=" form-control select2"
                                                     required data-toggle="select2">
                                                     <option value=""></option>
-                                                    @foreach ($beneficiaires as $beneficiaire)
+                                                    {{-- @foreach ($beneficiaires as $beneficiaire)
                                                         <option value="{{ $beneficiaire->id }}">
                                                             {{ $beneficiaire->individu->nom }}
                                                             {{ $beneficiaire->individu->prenom }}
                                                         </option>
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
                                                 @if ($errors->has('newcontact'))
                                                     <br>
@@ -893,10 +893,14 @@
             flex-grow: 10;
         }
     </style>
+    @include('components.contact.add_select2_script')
 @endsection
 
 @section('script')
-
+    <script>
+        initContactsSelect2('#client_id');
+        initIndividusSelect2('#newcontact');
+    </script>
     <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
 
 

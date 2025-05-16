@@ -100,20 +100,11 @@
                     @if(isset($contacts) && $contacts->count() > 0)
                     <div class="row mb-2 contact-select-mod" style="display: none;">
                         <div class="col-md-12">
-                            <label for="contact_id_mod" class="form-label">Contact <span class="text-danger">*</span></label>
+                            <label for="contact_id_mod" class="form-label">Modifier le Contact <span class="text-danger">*</span>
+                                    <span id="current_contact" class=" badge bg-info"></span>
+                                    <span id="current_contact_info" class=" badge bg-info"></span>
+                            </label>
                             <select class="form-select" name="contact_id" id="contact_id_mod">
-                                <option value="">Sélectionner un contact</option>
-                                @foreach($contacts as $contact)
-                                    <option value="{{ $contact->id }}">
-                                        @if($contact->type == 'individu' && $contact->individu)
-                                            {{ $contact->individu->nom }} {{ $contact->individu->prenom }}
-                                        @elseif($contact->type == 'entite' && $contact->entite)
-                                            {{ $contact->entite->raison_sociale }}
-                                        @else
-                                            Contact #{{ $contact->id }}
-                                        @endif
-                                    </option>
-                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -135,7 +126,7 @@
         </div>
     </div>
 </div>
-
+@include('components.contact.add_select2_script')
 <!-- Ajout des styles -->
 <style>
     .task-status-switch {
@@ -180,6 +171,12 @@
 </style>
 
 @push('scripts')
+{{-- S'assurer que jQuery est chargé avant Select2 --}}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script>
+    initContactsSelect2('#contact_id_mod', '#modifier-modal');
+  
+</script>
 <script>
 $(document).ready(function() {
     // Gestion de l'affichage du select contact
@@ -206,6 +203,8 @@ $(document).ready(function() {
         $('#est_lie_mod').val(that.attr('data-est_lie') == '1' ? 'Oui' : 'Non').trigger('change');
         $('#contact_id_mod').val(that.attr('data-contact_id'));
         $('#agenda_id_mod').val(that.attr('data-agenda_id'));
+        $('#current_contact').text(that.attr('data-contact_name'));
+        $('#current_contact_info').text(that.attr('data-contact_info'));
     });
 
     // Gestion du formulaire de modification
@@ -230,6 +229,7 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
+                
                 if(response.success) {
                     $('.loading-overlay').fadeOut();
                     $('#modifier-modal').modal('hide');

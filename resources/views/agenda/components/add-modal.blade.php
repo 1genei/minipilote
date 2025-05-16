@@ -1,3 +1,7 @@
+@push('css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
 <!-- Modal d'ajout de tâche -->
 <div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="add-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -79,20 +83,9 @@
                     @if(isset($contacts) && $contacts->count() > 0)
                     <div class="row mb-2 contact-select" style="display: none;">
                         <div class="col-md-12">
-                            <label for="contact_id" class="form-label">Contact <span class="text-danger">*</span></label>
-                            <select class="form-select" name="contact_id">
+                            <label for="contact_id" class="form-label ">Contact <span class="text-danger">*</span></label>
+                            <select class="form-select" name="contact_id" id="contact_id">
                                 <option value="">Sélectionner un contact</option>
-                                @foreach($contacts as $contact)
-                                    <option value="{{ $contact->id }}">
-                                        @if($contact->type == 'individu' && $contact->individu)
-                                            {{ $contact->individu->nom }} {{ $contact->individu->prenom }}
-                                        @elseif($contact->type == 'entite' && $contact->entite)
-                                            {{ $contact->entite->raison_sociale }}
-                                        @else
-                                            Contact #{{ $contact->id }}
-                                        @endif
-                                    </option>
-                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -112,85 +105,104 @@
         </div>
     </div>
 </div>
-
+@include('components.contact.add_select2_script')
 @push('scripts')
-<script>
-$(document).ready(function() {
-    // Gestion de l'affichage du select contact
-    $('select[name="est_lie"]').change(function() {
-        if($(this).val() == 'Oui') {
-            $('.contact-select').show();
-            $('select[name="contact_id"]').prop('required', true);
-        } else {
-            $('.contact-select').hide();
-            $('select[name="contact_id"]').prop('required', false);
-        }
-    });
-
-    // Gestion du formulaire d'ajout
-    $('#form-add').on('submit', function(e) {
-        e.preventDefault();
-        
-        $('.invalid-feedback').remove();
-        $('.is-invalid').removeClass('is-invalid');
-        $('.loading-overlay').fadeIn();
-        
-        let submitBtn = $(this).find('button[type="submit"]');
-        let originalText = submitBtn.text();
-        submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...');
-        
-        $.ajax({
-            url: $(this).attr('action'),
-            method: 'POST',
-            data: $(this).serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                if(response.success) {
-                    $('.loading-overlay').fadeOut();
-                    $('#add-modal').modal('hide');
-                    
-                    Swal.fire({
-                        title: 'Succès!',
-                        text: response.message,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        window.location.reload();
-                    });
-                }
-            },
-            error: function(xhr) {
-                $('.loading-overlay').fadeOut();
-                submitBtn.prop('disabled', false).text(originalText);
-                
-                if(xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    
-                    $.each(errors, function(key, value) {
-                        let input = $('[name="'+key+'"]');
-                        input.addClass('is-invalid');
-                        input.after('<div class="invalid-feedback">'+value[0]+'</div>');
-                    });
-                    
-                    Swal.fire({
-                        title: 'Erreur de validation',
-                        text: 'Veuillez vérifier les champs du formulaire',
-                        icon: 'warning',
-                        confirmButtonText: 'OK'
-                    });
+    {{-- S'assurer que jQuery est chargé avant Select2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            initContactsSelect2('#contact_id', '#add-modal');
+            
+            // Gestion de l'affichage du select contact
+            $('select[name="est_lie"]').change(function() {
+                if($(this).val() == 'Oui') {
+                    $('.contact-select').show();
+                    $('select[name="contact_id"]').prop('required', true);
                 } else {
-                    Swal.fire({
-                        title: 'Erreur!',
-                        text: 'Une erreur est survenue lors de l\'enregistrement',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
+                    $('.contact-select').hide();
+                    $('select[name="contact_id"]').prop('required', false);
                 }
-            }
+            });
+
+            // Gestion du formulaire d'ajout
+            $('#form-add').on('submit', function(e) {
+                e.preventDefault();
+                
+                $('.invalid-feedback').remove();
+                $('.is-invalid').removeClass('is-invalid');
+                $('.loading-overlay').fadeIn();
+                
+                let submitBtn = $(this).find('button[type="submit"]');
+                let originalText = submitBtn.text();
+                submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...');
+                
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            $('.loading-overlay').fadeOut();
+                            $('#add-modal').modal('hide');                            
+                            Swal.fire({
+                                title: 'Succès!',
+                                text: response.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                window.location.reload();
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        $('.loading-overlay').fadeOut();
+                        submitBtn.prop('disabled', false).text(originalText);
+                        
+                        if(xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            
+                            $.each(errors, function(key, value) {
+                                let input = $('[name="'+key+'"]');
+                                input.addClass('is-invalid');
+                                input.after('<div class="invalid-feedback">'+value[0]+'</div>');
+                            });
+                            
+                            Swal.fire({
+                                title: 'Erreur de validation',
+                                text: 'Veuillez vérifier les champs du formulaire',
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Erreur!',
+                                text: 'Une erreur est survenue lors de l\'enregistrement',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
+
+    <style>
+        /* Styles pour Select2 dans la modal */
+        .select2-container {
+            z-index: 100000;
+        }
+        
+        .modal {
+            z-index: 99999;
+        }
+        
+        .select2-dropdown {
+            z-index: 100001;
+        }
+    </style>
 @endpush 

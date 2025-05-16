@@ -33,23 +33,15 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Client/Prospect</label>
-                                    <select class="form-select" name="client_prospect_id" required>
-                                        <option value="">Sélectionner un client</option>
-                                        @foreach($clients as $client)
-                                            <option value="{{ $client->id }}">
-                                                @if($client->type == 'individu')
-                                                    {{ $client->individu->nom }} {{ $client->individu->prenom }}
-                                                @else
-                                                    {{ $client->entite->raison_sociale }}
-                                                @endif
-                                            </option>
-                                        @endforeach
+                                    <select class="form-control select2" data-toggle="select2" name="client_prospect_id" id="client_prospect_id" required>
+                                        
                                     </select>
+
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="form-label">Commercial</label>
-                                    <select class="form-select" name="collaborateur_id">
+                                    <select class="form-select select2" data-toggle="select2" name="collaborateur_id">
                                         <option value="">Sélectionner un commercial</option>
                                         @foreach($collaborateurs as $collaborateur)
                                             <option value="{{ $collaborateur->id }}">
@@ -139,9 +131,13 @@
             </div>
         </div>
     </div>
+    @include('components.contact.add_select2_script')
 @endsection
 
 @section('script')
+    <script>
+        initContactsSelect2('#client_prospect_id');
+    </script>
     <script>
         // Script pour la gestion dynamique des produits
         let produits = @json($produits);

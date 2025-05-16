@@ -1,31 +1,32 @@
 <script>
     // Fonction utilitaire pour initialiser Select2 en préservant les options existantes
-    function initSelect2WithDefault(select2_id, options = {}) {
-        const $select = $(select2_id);
+    // function initSelect2WithDefault(select2_id, options = {}) {
+    //     const $select = $(select2_id);
         
-        // Récupérer toutes les options existantes
-        const existingOptions = [];
-        $select.find('option').each(function() {
-            if ($(this).val()) { // Ignorer les options vides
-                existingOptions.push({
-                    id: $(this).val(),
-                    text: $(this).text(),
-                    selected: $(this).is(':selected')
-                });
-            }
-        });
+    //     // Récupérer toutes les options existantes
+    //     const existingOptions = [];
+    //     $select.find('option').each(function() {
+    //         if ($(this).val()) { // Ignorer les options vides
+    //             existingOptions.push({
+    //                 id: $(this).val(),
+    //                 text: $(this).text(),
+    //                 selected: $(this).is(':selected')
+    //             });
+    //         }
+    //     });
 
-        // Si des options existent, les ajouter à la configuration
-        if (existingOptions.length > 0) {
-            options.data = existingOptions;
-        }
+    //     // Si des options existent, les ajouter à la configuration
+    //     if (existingOptions.length > 0) {
+    //         options.data = existingOptions;
+    //     }
 
-        return options;
-    }
+    //     return options;
+    // }
 
-    function initIndividusSelect2(select2_id) {
+    function initIndividusSelect2(select2_id, modal_id = null) {
         $(document).ready(function() {
             $(select2_id).select2({
+                dropdownParent: modal_id ? $(modal_id) : $('body'),
                 placeholder: 'Rechercher un contact...',
                 allowClear: true,
                 minimumInputLength: 2,
@@ -39,11 +40,11 @@
                     dataType: 'json',
                     delay: 250,
                     data: (params) => ({
-                        q: params.term,
-                        page: params.page
+                            q: params.term,
+                            page: params.page
                     }),
                     processResults: (data) => ({
-                        results: data.results
+                            results: data.results
                     }),
                     cache: true
                 },
@@ -53,9 +54,10 @@
         });
     }
 
-    function initEntitesSelect2(select2_id) {
+    function initEntitesSelect2(select2_id, modal_id = null) {
         $(document).ready(function() {
             $(select2_id).select2({
+                dropdownParent: modal_id ? $(modal_id) : $('body'),
                 placeholder: 'Rechercher une entreprise...',
                 allowClear: true,
                 minimumInputLength: 2,
@@ -83,12 +85,13 @@
         });
     }
 
-    function initContactsSelect2(select2_id) {
+    function initContactsSelect2(select2_id, modal_id = null) {
+        console.log($(select2_id));
+
         $(document).ready(function() {
             const $select = $(select2_id);
-            
-            // Configuration de base de Select2
-            const select2Config = {
+            $select.select2({
+                dropdownParent: modal_id ? $(modal_id) : $('body'),
                 placeholder: 'Rechercher un contact...',
                 allowClear: true,
                 minimumInputLength: 2,
@@ -112,10 +115,7 @@
                 },
                 templateResult: formatAllContact,
                 templateSelection: formatAllContactSelection
-            };
-
-            // Initialiser Select2
-            $select.select2(select2Config);
+            });
 
             // Gérer le changement de sélection
             $select.on('select2:select', function(e) {
@@ -129,38 +129,41 @@
         });
     }
 
-    // Fonction pour formater l'affichage des résultats de recherche
-    function formatContact(contact) {
-        if (!contact.id) return contact.text;
-        
-        return $(`
-            <div class="d-flex align-items-center" >
-                <div>
-                    <div class="font-weight-bold">${contact.nom} ${contact.prenom}</div>
-                    <div class="small text-muted">
-                        ${contact.email ? `<i class="mdi mdi-email text-danger"></i> ${contact.email}<br>` : ''}
-                    </div>
+    // Fonctions de formatage
+            function formatContact(contact) {
+                if (!contact.id) return contact.text;
+                return $(`
+            <div class="d-flex align-items-center">
+                <div class="me-2">
+                    <i class="mdi mdi-account-circle text-primary h4 mb-0"></i>
                 </div>
-            </div>
-        `);
-    }
+                        <div>
+                            <div class="font-weight-bold">${contact.nom} ${contact.prenom}</div>
+                            <div class="small text-muted">
+                        ${contact.email ? `<i class="mdi mdi-email text-danger"></i> ${contact.email}` : ''}
+                        ${contact.telephone ? `<i class="mdi mdi-phone text-success"></i> ${contact.telephone}` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `);
+            }
 
-    // Fonction pour formater l'affichage de la sélection
-    function formatContactSelection(contact) {
-        if (!contact.id) return contact.text;
-        return `${contact.nom} ${contact.prenom}`;
-    }
+            function formatContactSelection(contact) {
+                if (!contact.id) return contact.text;
+                return `${contact.nom} ${contact.prenom}`;
+            }
 
-    // Fonctions de formatage pour les entités
     function formatEntite(entite) {
         if (!entite.id) return entite.text;
-        
         return $(`
             <div class="d-flex align-items-center">
+                <div class="me-2">
+                    <i class="mdi mdi-domain text-info h4 mb-0"></i>
+                </div>
                 <div>
                     <div class="font-weight-bold">${entite.raison_sociale}</div>
                     <div class="small text-muted">
-                        ${entite.email ? `<i class="mdi mdi-email text-danger"></i> ${entite.email}<br>` : ''}
+                        ${entite.email ? `<i class="mdi mdi-email text-danger"></i> ${entite.email}` : ''}
                         ${entite.telephone ? `<i class="mdi mdi-phone text-success"></i> ${entite.telephone}` : ''}
                     </div>
                 </div>
@@ -173,47 +176,13 @@
         return entite.raison_sociale;
     }
 
-    // Fonctions de formatage pour tous les contacts
     function formatAllContact(contact) {
         if (!contact.id) return contact.text;
-        
-        if (contact.type === 'individu') {
-            return $(`
-                <div class="d-flex align-items-center">
-                    <div class="me-2">
-                        <i class="mdi mdi-account-circle text-primary h4 mb-0"></i>
-                    </div>
-                    <div>
-                        <div class="font-weight-bold">${contact.nom} ${contact.prenom}</div>
-                        <div class="small text-muted">
-                            ${contact.email ? `<i class="mdi mdi-email text-danger"></i> ${contact.email}<br>` : ''}
-                            ${contact.telephone ? `<i class="mdi mdi-phone text-success"></i> ${contact.telephone}` : ''}
-                        </div>
-                    </div>
-                </div>
-            `);
-        } else {
-            return $(`
-                <div class="d-flex align-items-center">
-                    <div class="me-2">
-                        <i class="mdi mdi-domain text-info h4 mb-0"></i>
-                    </div>
-                    <div>
-                        <div class="font-weight-bold">${contact.raison_sociale}</div>
-                        <div class="small text-muted">
-                            ${contact.email ? `<i class="mdi mdi-email text-danger"></i> ${contact.email}<br>` : ''}
-                            ${contact.telephone ? `<i class="mdi mdi-phone text-success"></i> ${contact.telephone}` : ''}
-                        </div>
-                    </div>
-                </div>
-            `);
-        }
+        return contact.type === 'individu' ? formatContact(contact) : formatEntite(contact);
     }
 
     function formatAllContactSelection(contact) {
         if (!contact.id) return contact.text;
-        return contact.type === 'individu' 
-            ? `${contact.nom} ${contact.prenom}`
-            : contact.raison_sociale;
+        return contact.type === 'individu' ? formatContactSelection(contact) : formatEntiteSelection(contact);
     }
 </script>

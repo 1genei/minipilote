@@ -32,7 +32,7 @@
                                     <label for="newcontact" class="form-label">
                                         Sélectionnez le contact <span class="text-danger">*</span>
                                     </label>
-                                    <select name="newcontact" id="newcontact" class="form-control" required>
+                                    <select name="newcontact" id="newcontact" class="form-select select2" required>
                                         <option value=""></option>
                                     </select>
                                 </div>
@@ -281,7 +281,7 @@
 @include('components.contact.add_select2_script');
 @push('scripts')
 <script>
-    initIndividusSelect2('#newcontact');
+    initIndividusSelect2('#newcontact', '#standard-modal');
 </script>
 
 @endpush

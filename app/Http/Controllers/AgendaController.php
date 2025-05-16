@@ -278,13 +278,14 @@ class AgendaController extends Controller
                 'description' => 'nullable|string',
                 'type_rappel' => 'required|string|max:50',
                 'date_deb' => 'required|date',
-                'date_fin' => 'nullable|date|after_or_equal:date_deb',
+                'date_fin' => 'nullable|date',
                 'heure_deb' => 'nullable',
                 'heure_fin' => 'nullable',
                 'priorite' => 'required|in:basse,moyenne,haute',
                 'est_lie' => 'required|in:Oui,Non',
                 'contact_id' => 'required_if:est_lie,Oui|nullable|exists:contacts,id',
             ]);
+        
         
         $agenda = Agenda::create([
             'titre' => $request->titre, 
@@ -295,9 +296,9 @@ class AgendaController extends Controller
             'date_fin' => $request->date_fin, 
             'heure_deb' => $request->heure_deb, 
             'heure_fin' => $request->heure_fin, 
-                'priorite' => $request->priorite,
+            'priorite' => $request->priorite,
             'est_lie' => $request->est_lie == "Non" ? false : true, 
-                'contact_id' => $request->est_lie == "Oui" ? $request->contact_id : null,
+            'contact_id' => $request->est_lie == "Oui" ? $request->contact_id : null,
             ]);
 
             return response()->json([
@@ -330,13 +331,14 @@ class AgendaController extends Controller
      */
     public function update(Request $request, $agenda_id)
     {
+     
         try {
             $validated = $request->validate([
                 'titre' => 'required|string|max:255',
                 'description' => 'nullable|string',
                 'type_rappel' => 'required|string|max:50',
                 'date_deb' => 'required|date',
-                'date_fin' => 'nullable|date|after_or_equal:date_deb',
+                'date_fin' => 'nullable|date',
                 'heure_deb' => 'nullable',
                 'heure_fin' => 'nullable',
                 'priorite' => 'required|in:basse,moyenne,haute',

@@ -272,14 +272,19 @@
                                                            data-href="{{ route('agenda.update', $agenda->id) }}"
                                                             data-titre="{{ $agenda->titre }}"
                                                             data-description="{{ $agenda->description }}"
-                                                           data-date_deb="{{ \Carbon\Carbon::parse($agenda->date_deb)->format('Y-m-d') }}"
-                                                           data-date_fin="{{ \Carbon\Carbon::parse($agenda->date_fin)->format('Y-m-d') }}"
+                                                           data-date_deb="{{ $agenda->date_deb ? \Carbon\Carbon::parse($agenda->date_deb)->format('Y-m-d') : '' }}"
+                                                           data-date_fin="{{ $agenda->date_fin ? \Carbon\Carbon::parse($agenda->date_fin)->format('Y-m-d') : '' }}"
                                                             data-heure_deb="{{ $agenda->heure_deb }}"
                                                             data-type="{{ $agenda->type_rappel }}"
                                                            data-priorite="{{ $agenda->priorite }}"
                                                            data-est_lie="{{ $agenda->est_lie }}"
                                                            data-est_terminee="{{ $agenda->est_terminee }}"
                                                            data-agenda_id="{{ $agenda->id }}"
+                                                           data-contact_name="{{ $agenda->contact?->individu?->nom.' '.$agenda->contact?->individu?->prenom ?? $agenda->contact?->entite?->raison_sociale ?? '' }}"
+
+                                                           data-contact_info="{{$agenda->contact?->individu ?
+                                                            $agenda->contact?->individu?->indicatif_mobile.' '.$agenda->contact?->individu?->telephone_mobile.' / '.$agenda->contact?->individu?->indicatif_fixe.' '.$agenda->contact?->individu?->telephone_fixe.' / '.$agenda->contact?->individu?->email :
+                                                            $agenda->contact?->entite?->indicatif_mobile.' '.$agenda->contact?->entite?->telephone_mobile.' / '.$agenda->contact?->entite?->indicatif_fixe.' '.$agenda->contact?->entite?->telephone_fixe.' / '.$agenda->contact?->entite?->email }}"
                                                            data-contact_id="{{ $agenda->contact_id }}">
                                                             <i class="mdi mdi-square-edit-outline"></i>
                                                         </a>
