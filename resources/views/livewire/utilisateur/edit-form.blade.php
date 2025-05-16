@@ -79,15 +79,16 @@
                             <div class="mb-3 ancien_contact" wire:ignore>
                                 <label for="pays" class="form-label">
                                     Contact
+
+                                    <span class="badge bg-primary">
+                                     {{$nom}} {{$prenom}}
+                                    </span>
+
                                 </label>
 
                                 <select class="form-control select2" data-toggle="select2" id="individu"
                                     style="width:100%" wire:model.defer="individu">
-                                    @foreach ($individus as $individu)
-                                        <option value="{{ $individu->id }}">{{ $individu->prenom }}
-                                            {{ $individu->nom }}
-                                        </option>
-                                    @endforeach
+                                   
                                 </select>
 
                                 @if ($errors->has('pays'))
@@ -527,3 +528,6 @@
 
 
 </form>
+
+@include('components.contact.add_select2_script');
+

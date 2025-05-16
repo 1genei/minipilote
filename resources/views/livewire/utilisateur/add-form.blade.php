@@ -525,8 +525,3 @@
 
 @include('components.contact.add_select2_script');
 
-@push('scripts')
-<script>
-    initIndividusSelect2('#individu');
-</script>
-@endpush

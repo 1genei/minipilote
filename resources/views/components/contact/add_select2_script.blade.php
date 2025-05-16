@@ -1,27 +1,5 @@
 <script>
-    // Fonction utilitaire pour initialiser Select2 en préservant les options existantes
-    // function initSelect2WithDefault(select2_id, options = {}) {
-    //     const $select = $(select2_id);
-        
-    //     // Récupérer toutes les options existantes
-    //     const existingOptions = [];
-    //     $select.find('option').each(function() {
-    //         if ($(this).val()) { // Ignorer les options vides
-    //             existingOptions.push({
-    //                 id: $(this).val(),
-    //                 text: $(this).text(),
-    //                 selected: $(this).is(':selected')
-    //             });
-    //         }
-    //     });
 
-    //     // Si des options existent, les ajouter à la configuration
-    //     if (existingOptions.length > 0) {
-    //         options.data = existingOptions;
-    //     }
-
-    //     return options;
-    // }
 
     function initIndividusSelect2(select2_id, modal_id = null) {
         $(document).ready(function() {

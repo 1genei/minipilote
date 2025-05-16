@@ -121,6 +121,9 @@
         })
     </script>
 
+    <script>
+        initIndividusSelect2('#individu');
+    </script>
 
 
     @include('components.contact.edit_script')
