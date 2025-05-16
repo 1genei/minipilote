@@ -40,15 +40,14 @@ class AgendaController extends Controller
         }
        $tab_contacts  = json_encode($tab_contacts) ;
         
-        $contacts = Contact::where([['archive',false]])->get();
-        
+       
         $agendas = Agenda::with(['user.contact.individu', 'contact.individu', 'contact.entite'])->get();
         $agendas = $agendas->toJson();
         
         $agendas = str_replace('\n', ' ', $agendas);
         //  dd($agendas);
         
-        return view('agenda.index',compact('agendas','contacts','tab_contacts'));
+        return view('agenda.index',compact('agendas','tab_contacts'));
     }
     
     
@@ -104,17 +103,7 @@ class AgendaController extends Controller
         $agendas = $query->paginate(50)->appends($request->query());
         
        
-        // Charger les contacts avec leurs relations
-        // $contacts = Contact::where('archive', false)
-        //     ->with(['individu', 'entite'])
-        //     ->whereHas('individu', function($query) {
-        //         $query->whereNotNull('nom');
-        //     })
-        //     ->orWhereHas('entite', function($query) {
-        //         $query->whereNotNull('raison_sociale');
-        //     })
-        //     ->get();
-
+ 
         return view('agenda.listing', compact('agendas',  'types_rappel'));
     }
     
@@ -175,18 +164,9 @@ class AgendaController extends Controller
 
         $agendas = $query->paginate(50)->appends($request->query());
         
-        // Charger les contacts avec leurs relations
-        $contacts = Contact::where('archive', false)
-            ->with(['individu', 'entite'])
-            ->whereHas('individu', function($query) {
-                $query->whereNotNull('nom');
-            })
-            ->orWhereHas('entite', function($query) {
-                $query->whereNotNull('raison_sociale');
-            })
-            ->get();
+    
             
-        return view('agenda.taches_en_retard', compact('agendas', 'types_rappel', 'contacts'));
+        return view('agenda.taches_en_retard', compact('agendas', 'types_rappel'));
     }
     
       /**
@@ -197,9 +177,7 @@ class AgendaController extends Controller
     public function listing_a_faire(Request $request)
     {
         
-        $contacts = Contact::where('archive', false)
-            ->with(['individu', 'entite'])
-            ->get();
+      
 
             $query =  Agenda::where([
                 ['est_terminee', false], 
@@ -249,18 +227,10 @@ class AgendaController extends Controller
     
             $agendas = $query->paginate(50)->appends($request->query());
             
-            // Charger les contacts avec leurs relations
-            $contacts = Contact::where('archive', false)
-                ->with(['individu', 'entite'])
-                ->whereHas('individu', function($query) {
-                    $query->whereNotNull('nom');
-                })
-                ->orWhereHas('entite', function($query) {
-                    $query->whereNotNull('raison_sociale');
-                })
-                ->get();
+     
+        
     
-            return view('agenda.taches_a_faire', compact('agendas', 'contacts', 'types_rappel'));
+            return view('agenda.taches_a_faire', compact('agendas', 'types_rappel'));
     }
     
     
