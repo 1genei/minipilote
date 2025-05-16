@@ -10,7 +10,6 @@ class AddForm extends Component
 {
     public $roles;
     public $contact_existant;
-    public $individus;
     public $individu;
     public $nom;   
     public $prenom;    
@@ -43,7 +42,6 @@ class AddForm extends Component
     public function render()
     {
         $this->roles = Role::where('archive', false)->get();
-        $this->individus = Individu::where('archive', false)->get();
 
         return view('livewire.utilisateur.add-form');
     }
