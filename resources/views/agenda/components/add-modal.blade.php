@@ -67,7 +67,7 @@
                                 <option value="haute">Haute</option>
                             </select>
                         </div>
-                        @if(isset($contacts) && $contacts->count() > 0)
+                       
                         <div class="col-md-6">
                             <label for="est_lie" class="form-label">Lier à un contact <span class="text-danger">*</span></label>
                             <select class="form-select" name="est_lie" required>
@@ -75,12 +75,9 @@
                                 <option value="Oui">Oui</option>
                             </select>
                         </div>
-                        @else
-                        <input type="hidden" name="contact_id" value="{{ $contact->id }}">
-                        <input type="hidden" name="est_lie" value="Oui">
-                        @endif
+                     
                     </div>
-                    @if(isset($contacts) && $contacts->count() > 0)
+                    
                     <div class="row mb-2 contact-select" style="display: none;">
                         <div class="col-md-12">
                             <label for="contact_id" class="form-label ">Contact <span class="text-danger">*</span></label>
@@ -89,7 +86,7 @@
                             </select>
                         </div>
                     </div>
-                    @endif
+              
                     <div class="row mb-2">
                         <div class="col-md-12">
                             <label for="description" class="form-label">Description</label>

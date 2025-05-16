@@ -82,7 +82,7 @@
                                 <label for="priorite_mod">Priorité <span class="text-danger">*</span></label>
                             </div>
                         </div>
-                        @if(isset($contacts) && $contacts->count() > 0)
+                       
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <select name="est_lie" id="est_lie_mod" class="form-select" required>
@@ -92,12 +92,9 @@
                                 <label for="est_lie_mod">Lier à un contact <span class="text-danger">*</span></label>
                             </div>
                         </div>
-                        @else
-                        <input type="hidden" name="contact_id" value="{{ $contact->id }}">
-                        <input type="hidden" name="est_lie" value="Oui">
-                        @endif
+                 
                     </div>
-                    @if(isset($contacts) && $contacts->count() > 0)
+                   
                     <div class="row mb-2 contact-select-mod" style="display: none;">
                         <div class="col-md-12">
                             <label for="contact_id_mod" class="form-label">Modifier le Contact <span class="text-danger">*</span>
@@ -108,7 +105,7 @@
                             </select>
                         </div>
                     </div>
-                    @endif
+                    
                     <div class="row mb-2">
                         <div class="col-md-12">
                             <label for="description_mod" class="form-label">Description</label>

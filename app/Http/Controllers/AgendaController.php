@@ -103,19 +103,19 @@ class AgendaController extends Controller
 
         $agendas = $query->paginate(50)->appends($request->query());
         
-        dd($agendas);
+       
         // Charger les contacts avec leurs relations
-        $contacts = Contact::where('archive', false)
-            ->with(['individu', 'entite'])
-            ->whereHas('individu', function($query) {
-                $query->whereNotNull('nom');
-            })
-            ->orWhereHas('entite', function($query) {
-                $query->whereNotNull('raison_sociale');
-            })
-            ->get();
+        // $contacts = Contact::where('archive', false)
+        //     ->with(['individu', 'entite'])
+        //     ->whereHas('individu', function($query) {
+        //         $query->whereNotNull('nom');
+        //     })
+        //     ->orWhereHas('entite', function($query) {
+        //         $query->whereNotNull('raison_sociale');
+        //     })
+        //     ->get();
 
-        return view('agenda.listing', compact('agendas', 'contacts', 'types_rappel'));
+        return view('agenda.listing', compact('agendas',  'types_rappel'));
     }
     
     
