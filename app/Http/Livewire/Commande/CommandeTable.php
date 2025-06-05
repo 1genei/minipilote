@@ -30,7 +30,6 @@ final class CommandeTable extends PowerGridComponent
     */
     public function setUp(): array
     {
-        $this->showCheckBox();
 
         return [
             Exportable::make('export')
@@ -61,8 +60,8 @@ final class CommandeTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return Commande::query()
-            ->where('archive', false);
-            // ->with(['client', 'collaborateur']);
+            ->where('archive', false)
+            ->with(['client', 'collaborateur', 'produits']);
     }
 
     /*
@@ -100,25 +99,56 @@ final class CommandeTable extends PowerGridComponent
     public function addColumns(): PowerGridColumns
     {
         return PowerGrid::columns()
-            ->addColumn('numero_commande')
-            ->addColumn('nom_commande')
-            ->addColumn('date_commande_formatted', function(Commande $model) {
+            ->addColumn('numero_commande', function(Commande $model) {
+                return '<a href="'.route('commande.show', Crypt::encrypt($model->id)).'">'.$model->numero_commande.'</a>';
+            })
+            ->addColumn('date_commande', function(Commande $model) {
                 return Carbon::parse($model->date_commande)->format('d/m/Y');
             })
-            ->addColumn('client_name', function(Commande $model) {
+            ->addColumn('client', function(Commande $model) {
                 if($model->client->type == 'individu') {
                     return $model->client->individu->nom . ' ' . $model->client->individu->prenom;
                 } else {
                     return $model->client->entite->raison_sociale;
                 }
             })
-            ->addColumn('collaborateur_name', function(Commande $model) {
-                return $model->collaborateur ? $model->collaborateur->individu->nom . ' ' . $model->collaborateur->individu->prenom : '';
+           
+            ->addColumn('montant_ht', function(Commande $model) {
+                return number_format($model->montant_ht, 2, ',', ' ') . ' €';
             })
             ->addColumn('montant_ttc', function(Commande $model) {
-                return number_format($model->montant_ttc, 2) ;
+                return number_format($model->montant_ttc, 2, ',', ' ') . ' €';
             })
-            ->addColumn('statut')
+        
+            ->addColumn('statut_commande', function(Commande $model) {
+                $badges = [
+                    'en_cours' => 'warning',
+                    'validee' => 'success',
+                    'livree' => 'info',
+                    'annulee' => 'danger'
+                ];
+                $badge = $badges[$model->statut_commande] ?? 'secondary';
+                return '<span class="badge bg-'.$badge.'">' . ucfirst(str_replace('_', ' ', $model->statut_commande)) . '</span>';
+            })
+            ->addColumn('statut_paiement', function(Commande $model) {
+                $badges = [
+                    'non_paye' => 'danger',
+                    'partiel' => 'warning',
+                    'paye' => 'success'
+                ];
+                $badge = $badges[$model->statut_paiement] ?? 'secondary';
+                return '<span class="badge bg-'.$badge.'">' . ucfirst(str_replace('_', ' ', $model->statut_paiement)) . '</span>';
+            })
+            // ->addColumn('mode_paiement')
+            ->addColumn('date_realisation_prevue', function(Commande $model) {
+                return $model->date_realisation_prevue ? Carbon::parse($model->date_realisation_prevue)->format('d/m/Y') : '';
+            })
+            // ->addColumn('nb_produits', function(Commande $model) {
+            //     return $model->produits->count();
+            // })
+            // ->addColumn('collaborateur_name', function(Commande $model) {
+            //     return $model->collaborateur ? $model->collaborateur->individu->nom . ' ' . $model->collaborateur->individu->prenom : '';
+            // })
             ->addColumn('action', function(Commande $model) {
                 $actions = '';
                 
@@ -155,13 +185,48 @@ final class CommandeTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('N° Commande', 'numero_commande')->sortable()->searchable(),
-            Column::make('Nom', 'nom_commande')->sortable()->searchable(),
-            Column::make('Date', 'date_commande_formatted')->sortable(),
-            Column::make('Client', 'client_name')->sortable()->searchable(),
-            Column::make('Commercial', 'collaborateur_name')->sortable()->searchable(),
-            Column::make('Montant TTC', 'montant_ttc')->sortable(),
-            Column::make('Statut', 'statut')->sortable()->searchable(),
+            Column::make('N° Commande', 'numero_commande')
+                ->sortable()
+                ->searchable(),
+
+                
+            Column::make('Date', 'date_commande')
+                ->sortable(),
+                
+            Column::make('Client', 'client')
+                ->sortable()
+                ->searchable(),
+                
+            // Column::make('Commercial', 'collaborateur_name')
+            //     ->sortable()
+            //     ->searchable(),
+                
+            // Column::make('Nb Produits', 'nb_produits')
+            //     ->sortable(),
+                
+            Column::make('Montant HT', 'montant_ht')
+                ->sortable(),
+                
+            Column::make('Montant TTC', 'montant_ttc')
+                ->sortable(),
+                
+ 
+                
+            Column::make('Statut', 'statut_commande')
+                ->sortable()
+                ->searchable(),
+                
+            Column::make('Paiement', 'statut_paiement')
+                ->sortable()
+                ->searchable(),
+                
+            // Column::make('Mode', 'mode_paiement')
+            //     ->sortable()
+            //     ->searchable(),
+                
+            Column::make('Date prévue', 'date_realisation_prevue')
+                ->sortable(),
+                
             Column::make('Actions', 'action')
         ];
     }
@@ -177,12 +242,33 @@ final class CommandeTable extends PowerGridComponent
             Filter::inputText('numero_commande')->operators(['contains']),
             Filter::inputText('nom_commande')->operators(['contains']),
             Filter::datepicker('date_commande'),
-            Filter::select('statut', 'statut')
+            Filter::datepicker('date_realisation_prevue'),
+            Filter::select('statut_commande', 'statut_commande')
                 ->dataSource([
-                    ['value' => 'en_cours', 'label' => 'En cours'],
-                    ['value' => 'validee', 'label' => 'Validée'],
-                    ['value' => 'livree', 'label' => 'Livrée'],
-                    ['value' => 'annulee', 'label' => 'Annulée'],
+                    ['value' => 'A planifier', 'label' => 'A planifier'],
+                    ['value' => 'Planifiée', 'label' => 'Planifiée'],
+                    ['value' => 'Exécutée', 'label' => 'Exécutée'],
+                    ['value' => 'Annulée', 'label' => 'Annulée'],
+                ])
+                ->optionValue('value')
+                ->optionLabel('label'),
+            Filter::select('statut_paiement', 'statut_paiement')
+                ->dataSource([
+                    ['value' => 'A payer', 'label' => 'A payer'],
+                    ['value' => 'Payée', 'label' => 'Payée'],
+                    ['value' => 'Partiellement payée', 'label' => 'Partiellement payée'],
+                    ['value' => 'Annulée', 'label' => 'Annulée'],
+                    ['value' => 'Sans suite', 'label' => 'Sans suite'],
+                ])
+       
+                ->optionValue('value')
+                ->optionLabel('label'),
+            Filter::select('mode_paiement', 'mode_paiement')
+                ->dataSource([
+                    ['value' => 'especes', 'label' => 'Espèces'],
+                    ['value' => 'carte', 'label' => 'Carte bancaire'],
+                    ['value' => 'virement', 'label' => 'Virement'],
+                    ['value' => 'cheque', 'label' => 'Chèque'],
                 ])
                 ->optionValue('value')
                 ->optionLabel('label'),

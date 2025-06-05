@@ -4,11 +4,10 @@
     <link href="{{ asset('assets/css/vendor/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
-@section('title', 'Commande')
+@section('title', 'Commandes')
 
 @section('content')
     <div class="content">
-
         <!-- start page title -->
         <div class="row">
             <div class="col-12">
@@ -19,478 +18,166 @@
                             <li class="breadcrumb-item active">Liste</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Commandes</h4>
+                    <h4 class="page-title">Gestion des Commandes</h4>
                 </div>
             </div>
         </div>
         <!-- end page title -->
 
-        <style>
-            body {
-
-                font-size: 13px;
-            }
-        </style>
-    
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card widget-inline">
-                <div class="card-body p-0">
-                    <div class="row g-0">
-
-                        <div class="col-sm-2 mr-14 ">
-                            {{-- <a href="{{route('permission.index')}}" type="button" class="btn btn-outline-primary"><i class="uil-arrow-left"></i> Permissions</a> --}}
+        <!-- Stats -->
+        {{-- <div class="row">
+            <div class="col-xl-3 col-lg-6">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-cart-plus widget-icon bg-success-lighten text-success"></i>
                         </div>
-                        @if (session('ok'))
-                            <div class="col-6">
-                                <div class="alert alert-success alert-dismissible bg-success text-white text-center border-0 fade show"
-                                    role="alert">
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                    <strong> {{ session('ok') }}</strong>
-                                </div>
-                            </div>
-                        @endif
-
-                    </div> <!-- end row -->
+                        <h6 class="text-muted text-uppercase mt-0">Commandes du mois</h6>
+                        <h3 class="text-success mt-3 mb-3">{{ $commandes_mois_count ?? 0 }}</h3>
+                        <p class="mb-0">
+                            <span class="text-nowrap">Total : {{ number_format($commandes_mois_total ?? 0, 2, ',', ' ') }} €</span>
+                        </p>
+                    </div>
                 </div>
-            </div> <!-- end card-box-->
-        </div> <!-- end col-->
-    </div>
-    <!-- end row-->
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        @can('permission', 'ajouter-devis')
-                            <div class="d-flex justify-content-start">
-                                <a href="{{ route('commande.create') }}" class="btn btn-primary mb-2">
-                                    <i class="mdi mdi-plus-circle me-2"></i> Ajouter commande
-                                </a>
-                            @endcan
+            </div>
+            <div class="col-xl-3 col-lg-6">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-clock-alert widget-icon bg-warning-lighten text-warning"></i>
                         </div>
-                        <div class="d-flex justify-content-end">
-                            @can('permission', 'archiver-devis')
-                                <a href="{{ route('commande.archives') }}" class="btn btn-warning mb-2">
-                                    <i class="mdi mdi-archive me-2"></i> commandes archivées
-                                </a>
-                            @endcan
-                        </div>
+                        <h6 class="text-muted text-uppercase mt-0">En attente</h6>
+                        <h3 class="text-warning mt-3 mb-3">{{ $commandes_en_cours ?? 0 }}</h3>
+                        <p class="mb-0">
+                            <span class="text-nowrap">À traiter rapidement</span>
+                        </p>
                     </div>
-                    <div class="row">
-
-                        <div class="col-6">
-                            @if (session('message'))
-                                <div class="alert alert-success text-secondary alert-dismissible ">
-                                    <i class="dripicons-checkmark me-2"></i>
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <a href="#" class="alert-link"><strong> {{ session('message') }}</strong></a>
-                                </div>
-                            @endif
-                            @if ($errors->has('role'))
-                                <br>
-                                <div class="alert alert-warning text-secondary " role="alert">
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                    <strong>{{ $errors->first('role') }}</strong>
-                                </div>
-                            @endif
-
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-currency-eur widget-icon bg-info-lighten text-info"></i>
                         </div>
+                        <h6 class="text-muted text-uppercase mt-0">Non payées</h6>
+                        <h3 class="text-info mt-3 mb-3">{{ $commandes_non_payees ?? 0 }}</h3>
+                        <p class="mb-0">
+                            <span class="text-nowrap">Total : {{ number_format($montant_non_paye ?? 0, 2, ',', ' ') }} €</span>
+                        </p>
                     </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-archive widget-icon bg-danger-lighten text-danger"></i>
+                        </div>
+                        <h6 class="text-muted text-uppercase mt-0">Archivées</h6>
+                        <h3 class="text-danger mt-3 mb-3">{{ $commandes_archivees ?? 0 }}</h3>
+                        <p class="mb-0">
+                            <span class="text-nowrap">Sur les 12 derniers mois</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
 
+        <!-- Alerts -->
+        @if (session('ok'))
+            <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong>Succès ! </strong> {{ session('ok') }}
+            </div>
+        @endif
 
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                                <livewire:commande.commande-table />
+        <!-- Main card -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-5">
+                                @can('permission', 'ajouter-commande')
+                                    <a href="{{ route('commande.create') }}" class="btn btn-primary mb-2">
+                                        <i class="mdi mdi-plus-circle me-2"></i> Nouvelle commande
+                                    </a>
+                                @endcan
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="text-sm-end">
+                                    @can('permission', 'archiver-commande')
+                                        <a href="{{ route('commande.archives') }}" class="btn btn-warning mb-2">
+                                            <i class="mdi mdi-archive me-2"></i> Commandes archivées
+                                        </a>
+                                    @endcan
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-
-
-
-
-
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-        </div> <!-- end col -->
-    </div>
-    <!-- end row -->
-
-
-
-
-</div> <!-- End Content -->
+                        <div class="table-responsive">
+                            <livewire:commande.commande-table />
+                        </div>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div> <!-- End Content -->
 @endsection
 
 @section('script')
-<script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
+    <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
 
-{{-- selection des statuts du devis --}}
-
-<script>
-    $('#client').click(function(e) {
-        if (e.currentTarget.checked == true) {
-            $('#prospect').prop('checked', false);
-        }
-
-    });
-
-    $('#prospect').click(function(e) {
-        if (e.currentTarget.checked == true) {
-            $('#client').prop('checked', false);
-        }
-
-    });
-</script>
-
-{{-- selection du type de devis --}}
-
-<script>
-    $('.div-entite').hide();
-
-    $('#type').change(function(e) {
-
-        if (e.currentTarget.value == "entité") {
-            $('.div-entite').show();
-            $('.div-individu').hide();
-
-        } else {
-            $('.div-entite').hide();
-            $('.div-individu').show();
-        }
-
-    });
-</script>
-
-
-{{-- Modification d'un devis --}}
-<script>
-    $('.edit-devis').click(function(e) {
-
-        let that = $(this);
-
-        $('#edit-nom').val(that.data('nom'));
-        $('#edit-prenom').val(that.data('prenom'));
-
-        $('#edit-prospect').prop('checked', that.data('est-prospect'));
-        $('#edit-client').prop('checked', that.data('est-client'));
-        $('#edit-fournisseur').prop('checked', that.data('est-fournisseur'));
-
-        $('#edit-email').val(that.data('email'));
-        $('#edit-devis1').val(that.data('devis1'));
-        $('#edit-devis2').val(that.data('devis2'));
-        $('#edit-adresse').val(that.data('adresse'));
-        $('#edit-code_postal').val(that.data('code-postal'));
-        $('#edit-ville').val(that.data('ville'));
-
-
-        let currentFormAction = that.data('href');
-        $('#form-edit').attr('action', currentFormAction);
-
-
-
-
-        //    selection du type de devis
-
-
-        let currentType = that.data('type-devis');
-        let currentTypeentite = that.data('typeentite');
-        $('#edit-type option[value=' + currentType + ']').attr('selected', 'selected');
-
-
-        if (currentType == "entité") {
-            $('.div-edit-individu').hide();
-
-        } else {
-            $('.div-edit-entite').hide();
-
-        }
-
-        $('#edit-type').change(function(e) {
-
-            if (e.currentTarget.value == "entité") {
-                $('.div-edit-entite').show();
-                $('.div-edit-individu').hide();
-
-            } else {
-                $('.div-edit-entite').hide();
-                $('.div-edit-individu').show();
-            }
-
-        });
-
-        $('#edit-type_entite option[value=' + currentTypeentite + ']').attr('selected', 'selected');
-
-
-
-
-    })
-
-
-
-    // selection des statuts du devis  Modal modifier
-    $('#edit-client').click(function(e) {
-        if (e.currentTarget.checked == true) {
-            $('#edit-prospect').prop('checked', false);
-        }
-
-    });
-
-    $('#edit-prospect').click(function(e) {
-        if (e.currentTarget.checked == true) {
-            $('#edit-client').prop('checked', false);
-        }
-
-    });
-</script>
-
-<script>
-    // Archiver
-    $(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-        $('[data-toggle="tooltip"]').tooltip()
-        $('body').on('click', 'a.archive_devis', function(event) {
-            let that = $(this)
-            event.preventDefault();
-
-            const swalWithBootstrapButtons = swal.mixin({
-                confirmButtonClass: 'btn btn-success',
-                cancelButtonClass: 'btn btn-danger',
-                buttonsStyling: false,
-            });
-
-            swalWithBootstrapButtons.fire({
-                title: 'Archiver le devis',
-                text: "Confirmer ?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Oui',
-                cancelButtonText: 'Non',
-                reverseButtons: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $('[data-toggle="tooltip"]').tooltip('hide')
-                    $.ajax({
-                            url: that.attr('data-href'),
+    <script>
+        // Archiver une commande
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+            
+            $('body').on('click', 'button.archive_commande', function(event) {
+                event.preventDefault()
+                
+                const button = $(this)
+                
+                Swal.fire({
+                    title: 'Archiver la commande',
+                    text: "Êtes-vous sûr de vouloir archiver cette commande ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, archiver',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: button.data('href'),
                             type: 'POST',
-                            success: function(data) {
-                                // document.location.reload();
+                            success: function() {
+                                Swal.fire(
+                                    'Archivée !',
+                                    'La commande a été archivée avec succès.',
+                                    'success'
+                                )
+                                button.closest('tr').remove()
                             },
-                            error: function(data) {
-                                console.log(data);
+                            error: function() {
+                                Swal.fire(
+                                    'Erreur !',
+                                    'Une erreur est survenue lors de l\'archivage.',
+                                    'error'
+                                )
                             }
                         })
-                        .done(function() {
-
-                            swalWithBootstrapButtons.fire(
-                                'Confirmation',
-                                'devis archivé avec succès',
-                                'success'
-                            )
-                            // document.location.reload();
-
-                            that.parents('tr').remove();
-                        })
-
-
-                } else if (
-                    /* Read more about handling dismissals below */
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons.fire(
-                        'Annulation',
-                        'devis non archivé',
-                        'error'
-                    )
-                }
-            });
+                    }
+                })
+            })
         })
-
-    });
-</script>
-
-<script src="{{ asset('assets/js/vendor/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/js/vendor/dataTables.bootstrap5.js') }}"></script>
-<script src="{{ asset('assets/js/vendor/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('assets/js/vendor/responsive.bootstrap5.min.js') }}"></script>
-<script>
-    $(document).ready(function() {
-        "use strict";
-        $("#tab1").
-        DataTable({
-            language: {
-                paginate: {
-                    previous: "<i class='mdi mdi-chevron-left'>",
-                    next: "<i class='mdi mdi-chevron-right'>"
-                },
-                info: "Showing actions _START_ to _END_ of _TOTAL_",
-                lengthMenu: 'Afficher <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> '
-            },
-            pageLength: 100,
-
-            select: {
-                style: "multi"
-            },
-            drawCallback: function() {
-                $(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                    document.querySelector(".dataTables_wrapper .row").querySelectorAll(".col-md-6")
-                    .forEach(function(e) {
-                        e.classList.add("col-sm-6"), e.classList.remove("col-sm-12"), e
-                            .classList.remove("col-md-6")
-                    })
-            }
-        })
-    });
-</script>
-
-
-
-<script>
-//   Accepter le devis 
-    $(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-        $('[data-toggle="tooltip"]').tooltip()
-        $('body').on('click', 'a.accepter_devis', function(event) {
-            let that = $(this)
-            event.preventDefault();
-
-            const swalWithBootstrapButtons = swal.mixin({
-                confirmButtonClass: 'btn btn-success',
-                cancelButtonClass: 'btn btn-danger',
-                buttonsStyling: false,
-            });
-
-            swalWithBootstrapButtons.fire({
-                title: 'Accepter le devis',
-                text: "Confirmer ?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Oui',
-                cancelButtonText: 'Non',
-                reverseButtons: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $('[data-toggle="tooltip"]').tooltip('hide')
-                    $.ajax({
-                            url: that.attr('data-href'),
-                            type: 'POST',
-                            success: function(data) {
-                                // document.location.reload();
-                            },
-                            error: function(data) {
-                                console.log(data);
-                            }
-                        })
-                        .done(function() {
-
-                            swalWithBootstrapButtons.fire(
-                                'Confirmation',
-                                'devis accepté',
-                                'success'
-                            )
-                            document.location.reload();
-
-                        })
-
-
-                } else if (
-                    /* Read more about handling dismissals below */
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons.fire(
-                        'Annulation',
-                        'devis non accepté',
-                        'error'
-                    )
-                }
-            });
-        })
-
-    });
-    
-    // Refuser le devis
-    $(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-        $('[data-toggle="tooltip"]').tooltip()
-        $('body').on('click', 'a.refuser_devis', function(event) {
-            let that = $(this)
-            event.preventDefault();
-
-            const swalWithBootstrapButtons = swal.mixin({
-                confirmButtonClass: 'btn btn-success',
-                cancelButtonClass: 'btn btn-danger',
-                buttonsStyling: false,
-            });
-
-            swalWithBootstrapButtons.fire({
-                title: 'Refuser le devis',
-                text: "Confirmer ?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Oui',
-                cancelButtonText: 'Non',
-                reverseButtons: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $('[data-toggle="tooltip"]').tooltip('hide')
-                    $.ajax({
-                            url: that.attr('data-href'),
-                            type: 'POST',
-                            success: function(data) {
-                                // document.location.reload();
-                            },
-                            error: function(data) {
-                                console.log(data);
-                            }
-                        })
-                        .done(function() {
-
-                            swalWithBootstrapButtons.fire(
-                                'Confirmation',
-                                'devis refusé',
-                                'success'
-                            )
-                            document.location.reload();
-
-                        })
-
-
-                } else if (
-                    /* Read more about handling dismissals below */
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons.fire(
-                        'Annulation',
-                        'devis non refusé',
-                        'error'
-                    )
-                }
-            });
-        })
-
-    });
-    
-</script>
-
+    </script>
 @endsection
 

@@ -27,7 +27,45 @@ class CommandeController extends Controller
      */
     public function index()
     {
-        return view('commande.index');
+        // Statistiques pour les widgets
+        $now = now();
+        $debut_mois = $now->startOfMonth();
+        $fin_mois = $now->copy()->endOfMonth();
+        
+        // Commandes du mois
+        $commandes_mois = Commande::whereBetween('date_commande', [$debut_mois, $fin_mois])
+            ->where('archive', false)
+            ->get();
+            
+        $commandes_mois_count = $commandes_mois->count();
+        $commandes_mois_total = $commandes_mois->sum('montant_ttc');
+        
+        // Commandes en cours
+        $commandes_en_cours = Commande::where('statut_commande', 'en_cours')
+            ->where('archive', false)
+            ->count();
+            
+        // Commandes non payées
+        $commandes_non_payees = Commande::whereIn('statut_paiement', ['non_paye', 'partiel'])
+            ->where('archive', false)
+            ->get();
+            
+        $commandes_non_payees_count = $commandes_non_payees->count();
+        $montant_non_paye = $commandes_non_payees->sum('net_a_payer');
+        
+        // Commandes archivées sur 12 mois
+        $commandes_archivees = Commande::where('archive', true)
+            ->where('date_commande', '>=', now()->subMonths(12))
+            ->count();
+
+        return view('commande.index', compact(
+            'commandes_mois_count',
+            'commandes_mois_total',
+            'commandes_en_cours',
+            'commandes_non_payees',
+            'montant_non_paye',
+            'commandes_archivees'
+        ));
     }
     /**
      * Affichage des commandes archivées

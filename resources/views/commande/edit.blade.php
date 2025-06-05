@@ -371,7 +371,7 @@ use Illuminate\Support\Facades\Crypt;
                                                                         @if($produit->pivot->beneficiaire_id)
                                                                             <input type="hidden" name="exist_beneficiaire_id{{$y}}" value="{{$produit->pivot->beneficiaire_id}}">
                                                                         @endif
-                                                                    </div>
+                                                        </div>
                                                                     <div class="col-auto">
                                                                         <a href="#" class="remove_field btn btn-danger btn-sm">
                                                                             <i class="mdi mdi-delete"></i>
