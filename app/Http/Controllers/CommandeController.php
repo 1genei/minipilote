@@ -13,6 +13,12 @@ use App\Models\Categorieproduit;
 use App\Models\Voiture;
 use App\Models\Circuit;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Mail\EnvoyerCommande;
+use Illuminate\Support\Facades\Mail;
+
 class CommandeController extends Controller
 {
     /**
@@ -170,6 +176,9 @@ class CommandeController extends Controller
                 'montant_remise' => $montant_remise_total + $montant_remise_globale,
                 'net_a_payer' => $montant_ttc_total
             ]);
+
+            // génerer le PDF
+            $this->generer_pdf_commande($commande->id);
 
             DB::commit();
             return redirect()->route('commande.index')->with('ok', 'Commande créée avec succès');
@@ -372,6 +381,8 @@ class CommandeController extends Controller
                 'net_a_payer' => $montant_ttc_total
             ]);
 
+            // régénerer le PDF
+            $this->generer_pdf_commande($commande->id);
             DB::commit();
             return redirect()->route('commande.index')->with('ok', 'Commande modifiée avec succès');
 
@@ -396,5 +407,88 @@ class CommandeController extends Controller
         $commande = Commande::findOrFail(Crypt::decrypt($commandeId));
         $commande->update(['archive' => false]);
         return redirect()->route('commande.archives')->with('ok', 'Commande désarchivée avec succès');
+    }
+
+    /**
+     * Générer le PDF de la commande
+     */
+    public function generer_pdf_commande($commande_id)
+    {
+        
+        try {
+            $commande = Commande::findOrFail($commande_id);
+            
+            $path = storage_path('app/public/commandes');
+            
+            if(!File::exists($path)) {
+                File::makeDirectory($path, 0755, true);
+            }
+                
+            $pdf = PDF::loadView('commande.commande_pdf', compact('commande'));
+            $filename = 'commande_'.$commande->numero_commande.'.pdf';
+            $fullPath = $path.'/'.$filename;
+            
+            $pdf->save($fullPath);
+            
+            $commande->url_pdf = $fullPath;
+            $commande->save();
+            
+            return $fullPath;
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la génération du PDF : ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Télécharger le PDF de la commande
+     */
+    public function telecharger($commande_id)
+    {
+        try {
+            $commande = Commande::findOrFail(Crypt::decrypt($commande_id));
+            // $this->generer_pdf_commande($commande->id);
+            // Générer le PDF s'il n'existe pas ou si le fichier n'existe plus
+            if (!$commande->url_pdf || !File::exists($commande->url_pdf)) {
+                $pdfPath = $this->generer_pdf_commande($commande->id);
+                if (!$pdfPath) {
+                    return redirect()->back()->with('error', 'Impossible de générer le PDF de la commande.');
+                }
+            }
+            
+            if (!File::exists($commande->url_pdf)) {
+                return redirect()->back()->with('error', 'Le fichier PDF est introuvable.');
+            }
+            
+            return response()->download(
+                $commande->url_pdf, 
+                'commande_'.$commande->numero_commande.'.pdf',
+                ['Content-Type: application/pdf']
+            );
+            
+        } catch (\Exception $e) {
+            Log::error('Erreur lors du téléchargement du PDF : ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Une erreur est survenue lors du téléchargement du PDF.');
+        }
+    }
+
+    /**
+     * Envoyer la commande par email
+     */
+    public function envoyer_mail(Request $request, $commande_id)
+    {
+        $commande = Commande::findOrFail(Crypt::decrypt($commande_id));
+        
+        // Générer le PDF s'il n'existe pas
+        if (!$commande->url_pdf || !File::exists($commande->url_pdf)) {
+            $this->generer_pdf_commande($commande->id);
+        }
+        
+        $contact = $commande->client;
+        
+        Mail::to($request->email)
+            ->send(new EnvoyerCommande($commande, $contact, $request->message));
+        
+        return redirect()->back()->with('ok', 'Commande envoyée avec succès');
     }
 }

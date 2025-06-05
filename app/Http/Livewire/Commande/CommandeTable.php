@@ -122,7 +122,7 @@ final class CommandeTable extends PowerGridComponent
             ->addColumn('action', function(Commande $model) {
                 $actions = '';
                 
-                if(Gate::allows('permission', 'voir-commande')) {
+                if(Gate::allows('permission', 'afficher-commande')) {
                     $actions .= '<a href="'.route('commande.show', Crypt::encrypt($model->id)).'" class="btn btn-sm btn-primary me-1" title="Voir"><i class="mdi mdi-eye"></i></a>';
                 }
                 

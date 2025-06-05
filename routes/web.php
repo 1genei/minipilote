@@ -356,6 +356,8 @@ Route::controller(CommandeController::class)->group(function () {
     Route::post('/commandes/modifier/{commandeId}', 'update')->name('commande.update')->middleware(['auth']);
     Route::post('/commandes/archiver/{commandeId}', 'archiver')->name('commande.archiver')->middleware(['auth']);
     Route::post('/commandes/desarchiver/{commandeId}', 'desarchiver')->name('commande.desarchiver')->middleware(['auth']);
+    Route::get('/commande/telecharger/{commande_id}', 'telecharger')->name('commande.telecharger');
+    Route::post('/commande/envoyer-mail/{commande_id}', 'envoyer_mail')->name('commande.envoyer_mail');
 });
 
 

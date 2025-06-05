@@ -20,6 +20,32 @@ use Illuminate\Support\Facades\Crypt;
                     <h4 class="page-title">Modifier la commande {{ $commande->numero_commande }}</h4>
                 </div>
             </div>
+            <div class="col-12">
+                <div class="card widget-inline">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+
+                            <div class="col-sm-2 ">
+                                <a href="{{ URL::previous() }}" type="button" class="btn btn-outline-primary">
+                                    <i class="uil-arrow-left"></i>
+                                    Retour
+                                </a>
+                            </div>
+                            @if (session('ok'))
+                                <div class="col-6">
+                                    <div class="alert alert-success alert-dismissible bg-success text-white text-center border-0 fade show"
+                                        role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                        <strong> {{ session('ok') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+
+                        </div> <!-- end row -->
+                    </div>
+                </div> <!-- end card-box-->
+            </div>
         </div>
 
         <div class="row">
