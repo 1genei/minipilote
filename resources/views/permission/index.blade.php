@@ -67,9 +67,13 @@
                         <div class="row mb-2">
                             <div class="col-sm-5">
                                 @can('permission', 'ajouter-permission')
-                                    <a href="javascript:void(0);" class="btn btn-primary mb-2" data-bs-toggle="modal"
+                                    <a href="javascript:void(0);" class="btn btn-primary mb-2 mr-2" data-bs-toggle="modal"
                                         data-bs-target="#standard-modal"><i class="mdi mdi-plus-circle me-2"></i>
                                         Ajouter permission
+                                    </a>
+                                    <a href="javascript:void(0);" class="btn btn-warning mb-2" data-bs-toggle="modal"
+                                        data-bs-target="#groupe-modal"><i class="mdi mdi-plus-circle me-2"></i>
+                                        Ajouter un groupe de permission
                                     </a>
                                 @endcan
                             </div>
@@ -93,13 +97,16 @@
                                         <strong>{{ $errors->first('role') }}</strong>
                                     </div>
                                 @endif
-                                <div id="div-role-message"
-                                    class="alert alert-success text-secondary alert-dismissible fade in">
-                                    <i class="dripicons-checkmark me-2"></i>
+                                @if(session('error'))
+                                    <br>
+                                    <div id="div-role-message"
+                                        class="alert alert-danger text-secondary alert-dismissible fade in">
+                                        <i class="dripicons-checkmark me-2"></i>
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                     <a href="#" class="alert-link"><strong> <span
                                                 id="role-message"></span></strong></a>
-                                </div>
+                                    </div>
+                                @endif
 
                             </div>
                         </div>
@@ -333,6 +340,35 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
+        <!-- Modal d'ajout de groupe -->
+        <div id="groupe-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="groupe-modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('permission.store_auto') }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="groupe-modalLabel">Ajouter un groupe de permissions</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-floating mb-3">
+                                <input type="text" name="nom" value="{{ old('nom') }}" class="form-control" id="groupe-nom" required>
+                                <label for="groupe-nom">Nom du groupe</label>
+                                @if ($errors->has('nom'))
+                                    <div class="alert alert-warning text-secondary" role="alert">
+                                        <strong>{{ $errors->first('nom') }}</strong>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary">Créer le groupe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
     </div> <!-- End Content -->
 @endsection

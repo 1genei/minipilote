@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('commande_id')->nullable();
             $table->integer('produit_id')->nullable();
+            $table->integer('beneficiaire_id')->nullable(); // l'id du contact qui beneficie de la commande
             $table->integer('quantite')->nullable();
             $table->double('prix_unitaire')->nullable();
             $table->double('montant_tva')->nullable();

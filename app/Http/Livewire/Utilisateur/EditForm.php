@@ -124,7 +124,7 @@ public $roles;
         $this->roles = Role::where('archive', false)->get();
         $this->role = $user->role_id;
     }
-
+    
     public function render()
     {
         return view('livewire.utilisateur.edit-form');

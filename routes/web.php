@@ -178,7 +178,7 @@ Route::controller(RoleController::class)->group(function () {
 Route::controller(PermissionController::class)->group(function () {
     Route::get('/permissions', 'index')->name('permission.index')->middleware(['auth']);
     Route::post('/permissions/ajouter/', 'store')->name('permission.store')->middleware(['auth']);
-    Route::get('/permissions/ajouter-auto/{groupeid}/{groupName}', 'storeAuto')->name('permission.store_auto')->middleware(['auth']);
+    Route::post('/permissions/ajouter-auto', 'storeAuto')->name('permission.store_auto')->middleware(['auth']);
     Route::post('/permissions/desarchiver/{roleId}', 'unarchive')->name('permission.unarchive')->middleware(['auth']);
     Route::post('/permissions/modifier/{permission_id}', 'update')->name('permission.update')->middleware(['auth']);
     Route::post('/permissions/modifier', 'updateRolePermission')->name('permission_role.update')->middleware(['auth']);
@@ -411,6 +411,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/contacts/search/individu', [ContactController::class, 'searchIndividu'])
     ->name('contact.search.individu')
+    ->middleware('auth');
+
+Route::post('/contacts/quick-add', [ContactController::class, 'quickAdd'])
+    ->name('contact.quick-add')
     ->middleware('auth');
 
 require __DIR__ . '/auth.php';

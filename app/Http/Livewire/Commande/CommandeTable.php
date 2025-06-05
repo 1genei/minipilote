@@ -61,8 +61,8 @@ final class CommandeTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return Commande::query()
-            // ->where('archive', false)
-            ->with(['client', 'collaborateur']);
+            ->where('archive', false);
+            // ->with(['client', 'collaborateur']);
     }
 
     /*
@@ -116,7 +116,7 @@ final class CommandeTable extends PowerGridComponent
                 return $model->collaborateur ? $model->collaborateur->individu->nom . ' ' . $model->collaborateur->individu->prenom : '';
             })
             ->addColumn('montant_ttc', function(Commande $model) {
-                return number_format($model->montant_ttc, 2, ',', ' ') . ' €';
+                return number_format($model->montant_ttc, 2) ;
             })
             ->addColumn('statut')
             ->addColumn('action', function(Commande $model) {

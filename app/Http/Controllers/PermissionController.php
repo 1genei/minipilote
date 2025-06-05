@@ -7,6 +7,8 @@ use App\Models\Permission;
 use App\Models\Permissiongroup;
 use App\Models\PermissionRole;
 use App\Models\Role;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 
 class PermissionController extends Controller
@@ -63,48 +65,72 @@ class PermissionController extends Controller
     
     
     /**
-     * Générer de nouvelles permissions
+     * Créer un groupe de permission et Générer de nouvelles permissions
     */
 
-    public function storeAuto($groupId, $nomGroup, ){
+    public function storeAuto(Request $request)
+    {
+        try {
+            
+            // Validation avec règle d'unicité sur le nom
+            $request->validate([
+                'nom' => 'required|string|unique:permissiongroups,nom',
+                'description' => 'nullable|string'
+            ]);
+            DB::beginTransaction();
+
+            // Création du groupe
+            $rang = Permissiongroup::max('rang') + 10;
+            $groupe = PermissionGroup::create([
+                'nom' => $request->nom,
+                'rang' => $rang
+            ]);
+
+            $groupId = $groupe->id;
+            $nomGroup = strtolower($request->nom);
+
+            Permission::insert([
+                [
+                    "nom"=>"ajouter-$nomGroup",
+                    "description"=>"Ajouter",
+                    "permissiongroup_id"=> $groupId,
+                ],
+                [
+                    "nom"=>"modifier-$nomGroup",
+                    "description"=>"Modifier",
+                    "permissiongroup_id"=> $groupId,
+                ],
+                [
+                    "nom"=>"afficher-$nomGroup",
+                    "description"=>"Afficher",
+                    "permissiongroup_id"=> $groupId,
+                ],
+                [
+                    "nom"=>"supprimer-$nomGroup",
+                    "description"=>"Supprimer",
+                    "permissiongroup_id"=> $groupId,
+                ],
+                [
+                    "nom"=>"archiver-$nomGroup",
+                    "description"=>"Archiver",
+                    "permissiongroup_id"=> $groupId,
+                ],
         
+            ]);
 
-
-        Permission::insert([
-            [
-                "nom"=>"ajouter-$nomGroup",
-                "description"=>"Ajouter",
-                "permissiongroup_id"=> $groupId,
-            ],
-            [
-                "nom"=>"modifier-$nomGroup",
-                "description"=>"Modifier",
-                "permissiongroup_id"=> $groupId,
-            ],
-            [
-                "nom"=>"afficher-$nomGroup",
-                "description"=>"Afficher",
-                "permissiongroup_id"=> $groupId,
-            ],
-            [
-                "nom"=>"supprimer-$nomGroup",
-                "description"=>"Supprimer",
-                "permissiongroup_id"=> $groupId,
-            ],
-            [
-                "nom"=>"archiver-$nomGroup",
-                "description"=>"Archiver",
-                "permissiongroup_id"=> $groupId,
-            ],
-    
-        ]);
+            DB::commit();
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
         
   
-        // return redirect()->back()->with('ok','Permissions modifiées');
+        return redirect()->back()->with('ok','Groupe de permission créé avec succès');
     }
     
     
-     /**
+    /**
      * Modifier une  permission
     */
 

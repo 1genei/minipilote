@@ -13,16 +13,16 @@ class CommandeProduit extends Model
     
     protected $guarded = [];
     
-    protected $casts = [
-        'quantite' => 'integer',
-        'prix_unitaire' => 'decimal:2',
-        'montant_tva' => 'decimal:2',
-        'montant_ht' => 'decimal:2',
-        'montant_ttc' => 'decimal:2',
-        'taux_tva' => 'decimal:2',
-        'remise' => 'decimal:2',
-        'taux_remise' => 'decimal:2'
-    ];
+    // protected $casts = [
+    //     'quantite' => 'integer',
+    //     'prix_unitaire' => 'decimal:2',
+    //     'montant_tva' => 'decimal:2',
+    //     'montant_ht' => 'decimal:2',
+    //     'montant_ttc' => 'decimal:2',
+    //     'taux_tva' => 'decimal:2',
+    //     'remise' => 'decimal:2',
+    //     'taux_remise' => 'decimal:2'
+    // ];
 
     public function commande()
     {
@@ -32,5 +32,10 @@ class CommandeProduit extends Model
     public function produit()
     {
         return $this->belongsTo(Produit::class);
+    }
+
+    public function beneficiaire()
+    {
+        return $this->belongsTo(Contact::class, 'beneficiaire_id');
     }
 }

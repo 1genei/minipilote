@@ -11,19 +11,19 @@ class Commande extends Model
     
     protected $guarded = [];
     
-    protected $casts = [
-        'date_commande' => 'date',
-        'date_realisation_prevue' => 'date',
-        'date_realisation_reelle' => 'date',
-        'montant_ht' => 'decimal:2',
-        'montant_ttc' => 'decimal:2',
-        'montant_tva' => 'decimal:2',
-        'net_a_payer' => 'decimal:2',
-        'remise' => 'decimal:2',
-        'montant_remise' => 'decimal:2',
-        'montant_remise_total' => 'decimal:2',
-        'archive' => 'boolean'
-    ];
+    // protected $casts = [
+    //     'date_commande' => 'date',
+    //     'date_realisation_prevue' => 'date',
+    //     'date_realisation_reelle' => 'date',
+    //     'montant_ht' => 'decimal:2',
+    //     'montant_ttc' => 'decimal:2',
+    //     'montant_tva' => 'decimal:2',
+    //     'net_a_payer' => 'decimal:2',
+    //     'remise' => 'decimal:2',
+    //     'montant_remise' => 'decimal:2',
+    //     'montant_remise_total' => 'decimal:2',
+    //     'archive' => 'boolean'
+    // ];
 
     public function evenement()
     {
@@ -51,7 +51,8 @@ class Commande extends Model
                 'montant_ttc',
                 'taux_tva',
                 'remise',
-                'taux_remise'
+                'taux_remise',
+                'beneficiaire_id'
             ])
             ->withTimestamps();
     }

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->double('montant_ht')->nullable();
             $table->double('montant_ttc')->nullable();
             $table->double('montant_tva')->nullable();
+            $table->boolean('sans_tva')->default(false);
             $table->double('net_a_payer')->nullable();
             $table->string('type_remise')->nullable();
             $table->double('remise')->nullable();

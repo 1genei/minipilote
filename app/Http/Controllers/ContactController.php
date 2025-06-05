@@ -817,4 +817,73 @@ class ContactController extends Controller
 
         return response()->json(['results' => $results]);
     }
+
+    public function quickAdd(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            
+            // Validation
+            $validated = $request->validate([
+                'type' => 'required|in:individu,entite',
+                'email' => 'required|email|unique:individus,email',
+                'telephone_fixe' => 'nullable',
+                'telephone_mobile' => 'nullable',
+                'indicatif_fixe' => 'nullable|string',
+                'indicatif_mobile' => 'nullable|string',
+                'nom' => 'required_if:type,individu',
+                'prenom' => 'required_if:type,individu',
+                'raison_sociale' => 'required_if:type,entite',
+            ]);
+
+            // Créer le contact
+            $contact = Contact::create([
+                'type' => $request->type,
+                'nature' => $request->type === 'individu' ? 'Personne physique' : 'Personne morale',
+                'user_id' => Auth::id()
+            ]);
+
+            // Créer l'individu ou l'entité
+            if ($request->type === 'individu') {
+                $individu = Individu::create([
+                    'contact_id' => $contact->id,
+                    'civilite' => $request->civilite,
+                    'nom' => $request->nom,
+                    'prenom' => $request->prenom,
+                    'email' => $request->email,
+                    'telephone_fixe' => $request->telephone_fixe,
+                    'telephone_mobile' => $request->telephone_mobile,
+                    'indicatif_fixe' => $request->indicatif_fixe,
+                    'indicatif_mobile' => $request->indicatif_mobile
+                ]);
+                $contact_name = $individu->nom . ' ' . $individu->prenom;
+            } else {
+                $entite = Entite::create([
+                    'contact_id' => $contact->id,
+                    'raison_sociale' => $request->raison_sociale,
+                    'email' => $request->email,
+                    'telephone_fixe' => $request->telephone_fixe,
+                    'telephone_mobile' => $request->telephone_mobile,
+                    'indicatif_fixe' => $request->indicatif_fixe,
+                    'indicatif_mobile' => $request->indicatif_mobile
+                ]);
+                $contact_name = $entite->raison_sociale;
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'contact_id' => $contact->id,
+                'contact_name' => $contact_name
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'errors' => ['general' => [$e->getMessage()]]
+            ], 422);
+        }
+    }
 }
