@@ -57,15 +57,17 @@
             <a href="{{ route('commande.edit', Crypt::encrypt($commande->id)) }}" class="btn btn-primary me-2">
                 <i class="mdi mdi-pencil me-1"></i> Modifier
             </a>
-            @if(!$commande->archive)
-                <a href="{{ route('commande.archiver', Crypt::encrypt($commande->id)) }}" class="btn btn-warning me-2">
-                    <i class="mdi mdi-archive me-1"></i> Archiver
-                </a>
-            @else
-                <a href="{{ route('commande.desarchiver', Crypt::encrypt($commande->id)) }}" class="btn btn-info me-2">
-                    <i class="mdi mdi-archive-restore me-1"></i> Désarchiver
-                </a>
-            @endif
+            @can('permission', 'archiver-commande')
+                @if(!$commande->archive)
+                    <button class="btn btn-danger archive_commande"  data-href="{{ route('commande.archiver', Crypt::encrypt($commande->id)) }}">
+                        <i class="mdi mdi-archive-arrow-down me-1"></i> Archiver la commande
+                    </button>
+                @else
+                    <button class="btn btn-success desarchiver_commande" data-href="{{ route('commande.desarchiver', Crypt::encrypt($commande->id)) }}">
+                        <i class="mdi mdi-archive-arrow-up me-1"></i> Désarchiver la commande
+                    </button>
+                @endif
+            @endcan
             <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#envoiEmailModal">
                 <i class="mdi mdi-email-send me-1"></i> Envoyer par email
             </button>
@@ -322,4 +324,86 @@
 
 @section('script')
     @include('partials._sidebar_collapse')
+   
+    <script>
+        // Archiver/Désarchiver une commande
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+            
+            // Archiver
+            $('body').on('click', 'button.archive_commande', function(event) {
+                event.preventDefault()
+                
+                const button = $(this)
+                
+                Swal.fire({
+                    title: 'Archiver la commande',
+                    text: "Êtes-vous sûr de vouloir archiver cette commande ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, archiver',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: button.data('href'),
+                            type: 'POST',
+                            success: function() {
+                                window.location.href = "{{ route('commande.index') }}";
+                            },
+                            error: function() {
+                                Swal.fire(
+                                    'Erreur !',
+                                    'Une erreur est survenue lors de l\'archivage.',
+                                    'error'
+                                )
+                            }
+                        })
+                    }
+                })
+            })
+            
+            // Désarchiver
+            $('body').on('click', 'button.desarchiver_commande', function(event) {
+                event.preventDefault()
+                
+                const button = $(this)
+                
+                Swal.fire({
+                    title: 'Désarchiver la commande',
+                    text: "Êtes-vous sûr de vouloir désarchiver cette commande ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, désarchiver',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: button.data('href'),
+                            type: 'POST',
+                            success: function() {
+                                window.location.href = "{{ route('commande.index') }}";
+                            },
+                            error: function() {
+                                Swal.fire(
+                                    'Erreur !',
+                                    'Une erreur est survenue lors du désarchivage.',
+                                    'error'
+                                )
+                            }
+                        })
+                    }
+                })
+            })
+        })
+    </script>
+    
 @endsection

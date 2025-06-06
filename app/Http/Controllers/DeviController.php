@@ -13,6 +13,7 @@ use App\Models\Circuit;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\File ;
 use Illuminate\Support\Facades\Storage;
@@ -68,154 +69,120 @@ class DeviController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $request->validate([
-            'numero_devis' => 'required|unique:devis',
-        ]);
-    // dd($request->all());
-        $params = $request->all();
-        unset($params["numero_devis"]);
-        unset($params["nom_devis"]);
-        unset($params["type_reduction_globale"]) ;
-        unset($params["reduction_globale"]) ;
-        unset($params["client_prospect_id"]) ;
-        unset($params["voiture"]) ;
-        unset($params["categorie"]) ;
-        unset($params["circuit"]) ;
-        unset($params["produit"]) ;
-        unset($params["_token"]) ;
-      
-        $palier = array_chunk($params, 6);
+        try {
+            DB::beginTransaction();
 
-        $type_reduction_globale = $request->input('type_reduction_globale');
-        $reduction_globale = $request->input('reduction_globale');
-        
-        // Calcul du montant HT, TTC, TVA et net à payer
-        $montant_ht = 0;
-        $montant_ttc = 0;
-        $montant_tva = 0;
-        $net_a_payer = 0;
-        $montant_remise = 0;
-        $montant_remise_total = 0;
-        $tab_produits = [];
-        $tab = [];
-        // 0 = id_produit, 1 = quantité, 2 = prix_unitaire ht, 3 = id_tva, 4 = type_remise, 5 = remise
-        
-        foreach($palier as $ligne){
-            
-            $quantite = $ligne[1];
-            $prix_unitaire_ht = $ligne[2];
-            $tva_id = $ligne[3];
-            $type_remise = $ligne[4];
-            $remise = $ligne[5];
-            $montant_remise = 0;
-            $prix_unitaire_ht_total = 0;
-            
-       
-            $tva = 0 ;
-            if($tva_id != null){
-                $tva = Tva::where('id', $tva_id)->first();
-                $tva = $tva->taux;
+            // Validation des données
+            $request->validate([
+                'numero_devis' => 'required|unique:devis,numero_devis',
+                'client_prospect_id' => 'required',
+            ]);
+
+            // Initialisation des totaux
+            $montant_ht_total = 0;
+            $montant_ttc_total = 0;
+            $montant_tva_total = 0;
+            $montant_remise_total = 0;
+
+            // Création du devis
+            $devis = Devi::create([
+                'numero_devis' => $request->numero_devis,
+                'nom_devis' => $request->nom_devis,
+                'date_devis' => date('Y-m-d'),
+                'duree_validite' => 30,
+                'client_prospect_id' => $request->client_prospect_id,
+                'collaborateur_id' => Auth::user()->id,
+                'sans_tva' => $request->has('no_tva'),
+                'type_remise' => $request->type_reduction_globale,
+                'remise' => $request->reduction_globale,
+            ]);
+
+            // Traitement des produits
+            $i = 1;
+            $tab_produits = [];
+            while($i <= 30) {
+                if($request->{"produit$i"} != null) {
+                    $quantite = $request->{"quantite$i"};
+                    $prix_unitaire = $request->{"prix_ht$i"};
+                    $taux_tva = Tva::where('id', $request->{"tva$i"})->first()->taux;
+                    
+                    // Calcul montant HT avant remise
+                    $montant_ht = $quantite * $prix_unitaire;
+                    
+                    // Calcul remise produit si applicable
+                    $remise = 0;
+                    $taux_remise = 0;
+                    if($request->{"type_reduction$i"} && $request->{"reduction$i"}) {
+                        $taux_remise = $request->{"type_reduction$i"} === 'pourcentage' 
+                            ? $request->{"reduction$i"} 
+                            : ($request->{"reduction$i"} * 100 / $montant_ht);
+                        $remise = $request->{"type_reduction$i"} === 'pourcentage'
+                            ? $montant_ht * $request->{"reduction$i"} / 100
+                            : $request->{"reduction$i"};
+                    }
+
+                    // Montant HT après remise
+                    $montant_ht_final = $montant_ht - $remise;
+                    
+                    // Calcul TVA si applicable
+                    $montant_tva = !$request->has('no_tva') ? $montant_ht_final * ($taux_tva / 100) : 0;
+                    $montant_ttc = $montant_ht_final + $montant_tva;
+
+                    // Préparation des données pour le PDF
+                    $tab["produit"] = Produit::where('id', $request->{"produit$i"})->first();
+                    $tab["quantite"] = $quantite;
+                    $tab["prix_unitaire_ht"] = $prix_unitaire;
+                    $tab["prix_unitaire_ht_total"] = $montant_ht_final;
+                    $tab["tva"] = $taux_tva;
+                    $tab["type_remise"] = $request->{"type_reduction$i"};
+                    $tab["remise"] = $remise;
+                    $tab_produits[] = $tab;
+
+                    // Mise à jour des totaux
+                    $montant_ht_total += $montant_ht_final;
+                    $montant_ttc_total += $montant_ttc;
+                    $montant_tva_total += $montant_tva;
+                    $montant_remise_total += $remise;
+                }
+                $i++;
             }
-            
-            $montant_ht += $quantite * $prix_unitaire_ht;
-    
-            
-            if($type_remise == 'montant'){
-                $montant_remise = $remise;
-                
-                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht - $montant_remise;
-                $prix_unitaire_ht = $prix_unitaire_ht  - $montant_remise;
-                
-                $montant_remise_total += $montant_remise;
-                
-                
+
+            // Application de la remise globale si applicable
+            $montant_remise_globale = 0;
+            if($request->type_reduction_globale && $request->reduction_globale) {
+                $montant_remise_globale = $request->type_reduction_globale === 'pourcentage'
+                    ? $montant_ht_total * $request->reduction_globale / 100
+                    : $request->reduction_globale;
+                    
+                $montant_ht_total -= $montant_remise_globale;
+                $montant_tva_total = !$request->has('no_tva') 
+                    ? $montant_ht_total * ($taux_tva / 100) 
+                    : 0;
+                $montant_ttc_total = $montant_ht_total + $montant_tva_total;
             }
-            else if($type_remise == 'pourcentage'){
-                $montant_remise = ($prix_unitaire_ht ) * $remise/100;
-                
-                $prix_unitaire_ht = $prix_unitaire_ht  - $montant_remise;
-                
-                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht;
-                
-                $montant_remise = $quantite * $montant_remise;
-                $montant_remise_total += $montant_remise ;
-                
-            }
-            else{                
-                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht;            
-            }
-            
-            
-            
-            
-            $tab["produit"] = Produit::where('id', $ligne[0])->first();
-            $tab["quantite"] = $quantite;
-            $tab["prix_unitaire_ht"] = $prix_unitaire_ht;
-            $tab["prix_unitaire_ht_total"] = $prix_unitaire_ht_total;
-            $tab["tva"] = $tva;
-            $tab["type_remise"] = $type_remise;
-            $tab["remise"] = $montant_remise;
-            
-            
-            $tab_produits[] = $tab;
-            
+
+            // Mise à jour des totaux du devis
+            $devis->update([
+                'montant_ht' => $montant_ht_total,
+                'montant_ttc' => $montant_ttc_total,
+                'montant_tva' => $montant_tva_total,
+                'montant_remise' => $montant_remise_total,
+                'montant_remise_total' => $montant_remise_total + $montant_remise_globale,
+                'net_a_payer' => $montant_ttc_total
+            ]);
+
+            // Génération du PDF
+            $this->generer_pdf_devis($devis->id, $tab_produits);
+
+            DB::commit();
+            return redirect()->route('devis.show', Crypt::encrypt($devis->id))->with('success', 'Devis ajouté avec succès');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Erreur lors de la création du devis : ' . $e->getMessage());
         }
-        
-
-        if($type_reduction_globale == 'montant'){
-            $montant_remise_total += $reduction_globale;
-        }
-        else if($type_reduction_globale == 'pourcentage'){
-            $montant_remise_total += ($montant_ttc) * $reduction_globale/100;
-        }
-        
-        $montant_ht = $montant_ht - $montant_remise_total;
-        
-        $montant_ttc = $montant_ht * (1 + $tva/100);
-        $montant_tva = $montant_ht * $tva/100;       
-        
-        $montant_remise_total += $montant_remise;
-        $net_a_payer = $montant_ttc;
-        
-        
-    
-        // $net_a_payer = $montant_ttc - $montant_remise_total;
-        
-        // dd($montant_ht." ".$montant_ttc." ".$montant_tva." ".$montant_remise." ".$net_a_payer);        
-
-        
-        $palier = json_encode($palier);
-
-        $devis = new Devi();
-        
-        
-        $devis->numero_devis = $request->numero_devis;
-        $devis->nom_devis = $request->nom_devis;
-        $devis->date_devis = date('Y-m-d');
-        $devis->duree_validite = 30;
-        $devis->montant_ht = $montant_ht;
-        $devis->montant_ttc = $montant_ttc;
-        $devis->montant_tva = $montant_tva;
-        $devis->net_a_payer = $net_a_payer;
-        $devis->montant_remise = $montant_remise;
-        $devis->montant_remise_total = $montant_remise_total;
-        $devis->type_remise = $request->type_reduction_globale;
-        $devis->remise = $request->reduction_globale;
-        $devis->collaborateur_id = Auth::user()->id;
-        $devis->client_prospect_id = $request->client_prospect_id;
-
-        $devis->palier = $palier;
-        $devis->save();
-        
-        $this->generer_pdf_devis($devis->id, $tab_produits);
-
-        
-        return redirect()->route('devis.show',Crypt::encrypt($devis->id))->with('success', 'Devis ajouté avec succès');
-        
-        
-        
-        
     }
 
     /**
@@ -281,146 +248,144 @@ class DeviController extends Controller
      */
     public function update(Request $request, string $devis_id)
     {
-        
-        $devis = Devi::where('id', Crypt::decrypt($devis_id))->first();
-        $params = $request->all();
-        dd($request->all());
-        unset($params["numero_devis"]);
-        unset($params["nom_devis"]);
-        unset($params["type_reduction_globale"]) ;
-        unset($params["reduction_globale"]) ;
-        unset($params["client_prospect_id"]) ;
-        unset($params["voiture"]) ;
-        unset($params["categorie"]) ;
-        unset($params["circuit"]) ;
-        unset($params["produit"]) ;
-        unset($params["_token"]) ;
-      
-        
-        $palier = array_chunk($params, 6);
-        
-        $type_reduction_globale = $request->input('type_reduction_globale');
-        $reduction_globale = $request->input('reduction_globale');
-        
-        // Calcul du montant HT, TTC, TVA et net à payer
-        $montant_ht = 0;
-        $montant_ttc = 0;
-        $montant_tva = 0;
-        $net_a_payer = 0;
-        $montant_remise = 0;
-        // 0 = id_produit, 1 = quantité, 2 = prix_unitaire ht, 3 = id_tva, 4 = type_remise, 5 = remise
-        
-        $tab_produits = [];
-        $tab = [];
-        $montant_remise_total = 0;
-        
-        foreach($palier as $ligne){
+        try {
+            DB::beginTransaction();
+
+            $devis = Devi::where('id', Crypt::decrypt($devis_id))->first();
             
-            $quantite = $ligne[1];
-            $prix_unitaire_ht = $ligne[2];
-            $tva_id = $ligne[3];
-            $type_remise = $ligne[4];
-            $remise = $ligne[5];
-            $montant_remise = 0;
-            $prix_unitaire_ht_total = 0;
-            
+            // Validation des données
+            $request->validate([
+                'numero_devis' => 'required|unique:devis,numero_devis,'.$devis->id,
+                'client_prospect_id' => 'required',
+            ]);
+
+            // Initialisation des totaux
+            $montant_ht_total = 0;
+            $montant_ttc_total = 0;
+            $montant_tva_total = 0;
+            $montant_remise_total = 0;
+
+            // Mise à jour des informations de base du devis
+            $devis->update([
+                'numero_devis' => $request->numero_devis,
+                'nom_devis' => $request->nom_devis,
+                'client_prospect_id' => $request->client_prospect_id,
+                'collaborateur_id' => Auth::user()->id,
+                'sans_tva' => $request->has('no_tva'),
+                'type_remise' => $request->type_reduction_globale,
+                'remise' => $request->reduction_globale,
+            ]);
        
-            $tva = 0 ;
-            if($tva_id != null){
-                $tva = Tva::where('id', $tva_id)->first();
-                $tva = $tva->taux;
+            // Suppression des anciens produits
+            $devis->produits()->detach();
+
+            // Traitement des produits
+            $i = 1;
+            $tab_produits = [];
+
+            // dd($request->all());
+
+            while($i <= 30) {
+                if($request->{"produit$i"} != null) {
+                    $quantite = $request->{"quantite$i"};
+                    $prix_unitaire = $request->{"prix_ht$i"};
+                    $taux_tva = Tva::where('id', $request->{"tva$i"})->first()->taux;
+                    
+                    // Calcul montant HT avant remise
+                    $montant_ht = $quantite * $prix_unitaire;
+                    
+                    // Calcul remise produit si applicable
+                    $remise = 0;
+                    $taux_remise = 0;
+                    if($request->{"type_reduction$i"} && $request->{"reduction$i"}) {
+                        $taux_remise = $request->{"type_reduction$i"} === 'pourcentage' 
+                            ? $request->{"reduction$i"} 
+                            : ($request->{"reduction$i"} * 100 / $montant_ht);
+                        $remise = $request->{"type_reduction$i"} === 'pourcentage'
+                            ? $montant_ht * $request->{"reduction$i"} / 100
+                            : $request->{"reduction$i"};
+                    }
+
+                    // Montant HT après remise
+                    $montant_ht_final = $montant_ht - $remise;
+                    
+                    // Calcul TVA si applicable
+                    $montant_tva = !$request->has('no_tva') ? $montant_ht_final * ($taux_tva / 100) : 0;
+                    $montant_ttc = $montant_ht_final + $montant_tva;
+
+                    
+                    // Préparation des données pour le PDF
+                    $tab["produit"] = Produit::where('id', $request->{"produit$i"})->first();
+                    $tab["quantite"] = $quantite;
+                    $tab["prix_unitaire_ht"] = $prix_unitaire;
+                    $tab["prix_unitaire_ht_total"] = $montant_ht_final;
+                    $tab["tva"] = $taux_tva;
+                    $tab["type_remise"] = $request->{"type_reduction$i"};
+                    $tab["remise"] = $remise;
+                    $tab_produits[] = $tab;
+
+                    // ajout des produits au devis
+                    $devis->produits()->attach($request->{"produit$i"}, [
+                        'quantite' => $quantite,
+                        'prix_unitaire' => $prix_unitaire,
+                        'montant_ht' => $montant_ht_final,
+                        'montant_ttc' => $montant_ttc,
+                        'montant_tva' => $montant_tva,
+                        'taux_tva' => $taux_tva,
+                        'remise' => $remise,
+                        'taux_remise' => $taux_remise,
+                    ]);
+
+                 
+                    // dd($devis->produits, $tab_produits);
+
+                    // Mise à jour des totaux
+                    $montant_ht_total += $montant_ht_final;
+                    $montant_ttc_total += $montant_ttc;
+                    $montant_tva_total += $montant_tva;
+                    $montant_remise_total += $remise;
+               
+
+                }
+                $i++;
             }
-            
-            $montant_ht += $quantite * $prix_unitaire_ht;
-    
-            
-            if($type_remise == 'montant'){
-                $montant_remise = $remise;
-                
-                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht - $montant_remise;
-                $prix_unitaire_ht = $prix_unitaire_ht  - $montant_remise;
-                
-                $montant_remise_total += $montant_remise;
-                
-                
+
+            // Application de la remise globale si applicable
+            $montant_remise_globale = 0;
+            if($request->type_reduction_globale && $request->reduction_globale) {
+                $montant_remise_globale = $request->type_reduction_globale === 'pourcentage'
+                    ? $montant_ht_total * $request->reduction_globale / 100
+                    : $request->reduction_globale;
+                    
+                $montant_ht_total -= $montant_remise_globale;
+                $montant_tva_total = !$request->has('no_tva') 
+                    ? $montant_ht_total * ($taux_tva / 100) 
+                    : 0;
+                $montant_ttc_total = $montant_ht_total + $montant_tva_total;
             }
-            else if($type_remise == 'pourcentage'){
-                $montant_remise = ($prix_unitaire_ht ) * $remise/100;
-                
-                $prix_unitaire_ht = $prix_unitaire_ht  - $montant_remise;
-                
-                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht;
-                
-                $montant_remise = $quantite * $montant_remise;
-                $montant_remise_total += $montant_remise ;
-                
-            }
-            else{                
-                $prix_unitaire_ht_total = $quantite * $prix_unitaire_ht;            
-            }
-            
-            
-            
-            
-            $tab["produit"] = Produit::where('id', $ligne[0])->first();
-            $tab["quantite"] = $quantite;
-            $tab["prix_unitaire_ht"] = $prix_unitaire_ht;
-            $tab["prix_unitaire_ht_total"] = $prix_unitaire_ht_total;
-            $tab["tva"] = $tva;
-            $tab["type_remise"] = $type_remise;
-            $tab["remise"] = $montant_remise;
-            
-            
-            $tab_produits[] = $tab;
-            
+
+            // Mise à jour des totaux du devis
+            $devis->update([
+                'montant_ht' => $montant_ht_total,
+                'montant_ttc' => $montant_ttc_total,
+                'montant_tva' => $montant_tva_total,
+                'montant_remise' => $montant_remise_total,
+                'montant_remise_total' => $montant_remise_total + $montant_remise_globale,
+                'net_a_payer' => $montant_ttc_total
+            ]);
+
+            // Génération du PDF
+            $this->generer_pdf_devis($devis->id, $tab_produits);
+
+            DB::commit();
+            return redirect()->route('devis.index')->with('success', 'Devis modifié avec succès');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Erreur lors de la modification du devis : ' . $e->getMessage());
         }
-        
-// dd($tab_produits);
-       
-        if($type_reduction_globale == 'montant'){
-            $montant_remise_total += $reduction_globale;
-        }
-        else if($type_reduction_globale == 'pourcentage'){
-            $montant_remise_total += ($montant_ttc) * $reduction_globale/100;
-        }
-        
-        $montant_ht = $montant_ht - $montant_remise_total;
-        
-        $montant_ttc = $montant_ht * (1 + $tva/100);
-        $montant_tva = $montant_ht * $tva/100;
-        
-        
-        $montant_remise_total += $montant_remise;
-        $net_a_payer = $montant_ttc;
-        
-        // dd($montant_ht." ".$montant_ttc." ".$montant_tva." ".$montant_remise." ".$net_a_payer);
-        
-        
-        $palier = json_encode($palier);
-        
-        $devis->numero_devis = $request->numero_devis;
-        $devis->nom_devis = $request->nom_devis;
-        $devis->date_devis = date('Y-m-d');
-        $devis->duree_validite = 30;
-        $devis->montant_ht = $montant_ht;
-        $devis->montant_ttc = $montant_ttc;
-        $devis->montant_tva = $montant_tva;
-        $devis->net_a_payer = $net_a_payer;
-        $devis->montant_remise = $montant_remise;
-        $devis->montant_remise_total = $montant_remise_total;
-        $devis->type_remise = $request->type_reduction_globale;
-        $devis->remise = $request->reduction_globale;
-        $devis->collaborateur_id = Auth::user()->id;
-        $devis->client_prospect_id = $request->client_prospect_id;
-        
-        $devis->palier = $palier;
-        $devis->save();
-        
-        $this->generer_pdf_devis($devis->id, $tab_produits);
-        
-        return redirect()->route('devis.index')->with('success', 'Devis modifié avec succès');
-        
-        
     }
 
     /**

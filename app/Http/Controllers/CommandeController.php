@@ -433,18 +433,64 @@ class CommandeController extends Controller
         }
     }
 
-    public function archiver($commandeId)
+    /**
+     * Archiver une commande
+     * @param string $commande_id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function archiver($commande_id)
     {
-        $commande = Commande::findOrFail(Crypt::decrypt($commandeId));
-        $commande->update(['archive' => true]);
-        return redirect()->route('commande.index')->with('ok', 'Commande archivée avec succès');
+        try {
+            $commande = Commande::findOrFail(Crypt::decrypt($commande_id));
+            $commande->update(['archive' => true]);
+            
+            if(request()->ajax()) {
+                return response()->json(['success' => true]);
+            }
+            
+            return redirect()->route('commande.index')
+                ->with('ok', 'La commande a été archivée avec succès');
+                
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de l\'archivage de la commande : ' . $e->getMessage());
+            
+            if(request()->ajax()) {
+                return response()->json(['error' => 'Une erreur est survenue lors de l\'archivage.'], 500);
+            }
+            
+            return redirect()->back()
+                ->with('error', 'Une erreur est survenue lors de l\'archivage de la commande.');
+        }
     }
 
-    public function desarchiver($commandeId)
+    /**
+     * Désarchiver une commande
+     * @param string $commande_id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function desarchiver($commande_id)
     {
-        $commande = Commande::findOrFail(Crypt::decrypt($commandeId));
-        $commande->update(['archive' => false]);
-        return redirect()->route('commande.archives')->with('ok', 'Commande désarchivée avec succès');
+        try {
+            $commande = Commande::findOrFail(Crypt::decrypt($commande_id));
+            $commande->update(['archive' => false]);
+            
+            if(request()->ajax()) {
+                return response()->json(['success' => true]);
+            }
+            
+            return redirect()->route('commande.archives')
+                ->with('ok', 'La commande a été désarchivée avec succès');
+                
+        } catch (\Exception $e) {
+            Log::error('Erreur lors du désarchivage de la commande : ' . $e->getMessage());
+            
+            if(request()->ajax()) {
+                return response()->json(['error' => 'Une erreur est survenue lors du désarchivage.'], 500);
+            }
+            
+            return redirect()->back()
+                ->with('error', 'Une erreur est survenue lors du désarchivage de la commande.');
+        }
     }
 
     /**

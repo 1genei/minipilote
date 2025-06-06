@@ -14,7 +14,17 @@ class Devi extends Model
     *   retourne tous les produits liés au devis
     */
     public function produits(){
-        return $this->belongsToMany(Produit::class, 'devi_produit', 'devi_id', 'produit_id');
+        return $this->belongsToMany(Produit::class, 'devi_produit', 'devi_id', 'produit_id')
+        ->withPivot([
+            'quantite',
+            'prix_unitaire',
+            'montant_tva',
+            'montant_ht',
+            'montant_ttc',
+            'taux_tva',
+            'remise',
+            'taux_remise',
+        ]);
     }
     
     /**

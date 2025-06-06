@@ -1,369 +1,176 @@
-<table border="0" cellpadding="0" cellspacing="0" style="width:748px;" width="734">
-	<colgroup>
-		<col />
-		<col span="12" />
-		<col span="2" />
-		<col />
-		<col span="2" />
-		<col span="9" />
-		<col />
-		<col />
-	</colgroup>
-	<tbody>
-	
-		<tr height="31">
-			<td height="31" style="height:31px;">&nbsp;</td>
-			<td colspan="26" height="90" rowspan="4" style="height:124px;width:656px;">
-			<table cellpadding="0" cellspacing="0">
-				<tbody>
-					<tr>
-						<td height="10">&nbsp;</td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-						<td><img height="75" src="https://www.stylandgrip.com/wp-content/uploads/2021/08/SG_LOGO_CARTOUCHE_SEUL-1-2048x200.png" width="618" /></td>
-						<td>&nbsp;</td>
-					</tr>
-					<tr>
-						<td height="25">&nbsp;</td>
-					</tr>
-				</tbody>
-			</table>
-			</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="31">
-			<td height="31" style="height:31px;">&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="31">
-			<td height="31" style="height:31px;">&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="31">
-			<td height="31" style="height:31px;">&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="25">
-			<td height="25" style="height:25px;">&nbsp;</td>
-			<td colspan="4" style="font-weight:bold" >Sarl VENZINI</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		
-			
-			<td colspan="3">Date :</td>
-			<td colspan="5">@if($devis->date_devis != null) {{$devis->date_devis->format('d/m/Y')}} @endif</td>
-			
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="20">
-			<td height="20" style="height:20px;">&nbsp;</td>
-			<td colspan="10">115 Avenue de la roquette, ZA de berret</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			
-			
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="20">
-			<td height="20" style="height:20px;">&nbsp;</td>
-			<td colspan="7">30200 BAGNOLS-SUR-CEZE</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Devis {{ $devis->numero_devis }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            margin-bottom: 30px;
+        }
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        .company-info {
+            float: left;
+            width: 50%;
+            font-size: 14px;
+        }
+        .document-info {
+            float: right;
+            width: 50%;
+            text-align: right;
+            font-size: 14px;
+        }
+        .client-info {
+            clear: both;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+        .devis-details {
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+        th {
+            background-color: #35b8e0;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            font-size: 12px;
+        }
+        .totals {
+            float: right;
+            width: 300px;
+        }
+        .total-row {
+            font-weight: bold;
+        }
+        .reduction {
+            color: #dc3545;
+        }
+        .net-a-payer {
+            font-size: 18px;
+            font-weight: bold;
+            color: #35b8e0;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 12px;
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img class="logo" width="200px" src="https://www.stylandgrip.com/wp-content/uploads/2021/08/SG_LOGO_CARTOUCHE_SEUL-1-2048x200.png">
+        <div class="company-info">
+            <strong>Sarl VENZINI</strong><br>
+            115 Avenue de la roquette, ZA de berret<br>
+            30200 BAGNOLS-SUR-CEZE<br>
+            Tél : 06 80 42 85 48<br>
+            Email : contact@venzini.fr<br>
+            Site : www.stylandgrip.com
+        </div>
+        <div class="document-info">
+            <h2>DEVIS N° {{ $devis->numero_devis }}</h2>
+            @if($devis->nom_devis)
+                <strong>{{ $devis->nom_devis }}</strong><br>
+            @endif
+            Date : {{ \Carbon\Carbon::parse($devis->date_devis)->format('d/m/Y') }}<br>
+            Validité : {{ $devis->duree_validite }} jours
+        </div>
+    </div>
 
-		<tr height="20">
-			<td height="20" style="height:20px;">&nbsp;</td>
-			<td colspan="10">115 Avenue de la roquette, ZA de berret</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td colspan="3"></td>
-			
-			<td colspan="" > </td>
-			<td colspan="10">@if($devis->client_prospect()?->type == "individu")
-								{{$devis->client_prospect()?->infos()?->civilite}} {{$devis->client_prospect()?->infos()?->nom }} {{$devis->client_prospect()?->infos()?->prenom }}
-							@else 			
-							{{$devis->client_prospect()?->infos()?->forme_juridique}} {{$devis->client_prospect()?->infos()?->raison_sociale}}
-							@endif
-							
-							<br>
-							@if($devis->client_prospect()) 
-								{{$devis->client_prospect()?->infos()?->nom_voie}} <br>
-								{{$devis->client_prospect()?->infos()?->code_postal}} {{$devis->client_prospect()?->infos()?->ville}}
-							@endif
-			</td>
-		
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="21">
-			<td height="21" style="height:21px;">&nbsp;</td>
-			<td colspan="5">T&eacute;l : 06 80 42 85 48</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-	
-			<td colspan="2">&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="21">
-			<td height="21" style="height:21px;">&nbsp;</td>
-			<td colspan="7">E-Mail : contact@venzini.fr</td>
-			<td colspan="7">&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="21">
-			<td height="21" style="height:21px;">&nbsp;</td>
-			<td colspan="9">Site Internet : www.stylandgrip.com</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			
-			<td colspan="2">&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="21">
-			<td height="21" style="height:21px;">&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
+    <div class="client-info">
+        <strong>CLIENT :</strong><br>
+        @if($devis->client_prospect()?->type == "individu")
+            {{ $devis->client_prospect()?->infos()?->civilite }} {{ $devis->client_prospect()?->infos()?->nom }} {{ $devis->client_prospect()?->infos()?->prenom }}<br>
+            {{ $devis->client_prospect()?->infos()?->numero_voie }} {{ $devis->client_prospect()?->infos()?->nom_voie }}<br>
+            {{ $devis->client_prospect()?->infos()?->code_postal }} {{ $devis->client_prospect()?->infos()?->ville }}
+        @else
+            {{ $devis->client_prospect()?->infos()?->forme_juridique }} {{ $devis->client_prospect()?->infos()?->raison_sociale }}<br>
+            {{ $devis->client_prospect()?->infos()?->numero_voie }} {{ $devis->client_prospect()?->infos()?->nom_voie }}<br>
+            {{ $devis->client_prospect()?->infos()?->code_postal }} {{ $devis->client_prospect()?->infos()?->ville }}
+        @endif
+    </div>
 
-			<td colspan="2">&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
+    <div class="devis-details">
+        <table>
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Qté</th>
+                    <th>Px unit. HT</th>
+                    <th>Remise</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($tab_produits as $produit)
+                    <tr>
+                        <td width="50%">{{ $produit["produit"]->nom }}</td>
+                        <td>{{ number_format($produit["quantite"], 2, ',', ' ') }}</td>
+                        <td>{{ number_format($produit["prix_unitaire_ht"], 2, ',', ' ') }} €</td>
+                        <td class="reduction">
+                            @if($produit["remise"] > 0)
+                                - {{ number_format($produit["remise"], 2, ',', ' ') }} €
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
-		<tr height="42"  style="font-weight: bold; font-size:20px">
-			<td height="42" style="height:42px;">&nbsp;</td>
-			<td colspan="9"></td>
-			<td>&nbsp;</td>			
+    <div class="totals">
+        <table>
+            <tr>
+                <td>Total HT :</td>
+                <td>{{ number_format($devis->montant_ht, 2, ',', ' ') }} €</td>
+            </tr>
+            @if($devis->montant_remise_total > 0)
+            <tr class="reduction">
+                <td>Total remises :</td>
+                <td>- {{ number_format($devis->montant_remise_total, 2, ',', ' ') }} €</td>
+            </tr>
+            @endif
+            <tr>
+                <td>Total TVA :</td>
+                <td>{{ number_format($devis->montant_tva, 2, ',', ' ') }} €</td>
+            </tr>
+            <tr class="total-row">
+                <td>Total TTC :</td>
+                <td>{{ number_format($devis->montant_ttc, 2, ',', ' ') }} €</td>
+            </tr>
+        </table>
+    </div>
 
-			<td colspan="2"></td>
-			<td colspan="4">Devis&nbsp;</td>
-			<td>N&deg;&nbsp;</td>
-			<td colspan="4">{{$devis->numero_devis}}</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-	<br>
-		<tr height="42"  style="font-weight: bold; background-color:#35b8e0; color:#fff">
-			<td height="42" style="height:42px;">&nbsp;</td>
-			<td colspan="9">Description</td>
-			<td>&nbsp;</td>
-			<td colspan="2">Qt.</td>
-			<td colspan="4">Px Unit. HT</td>
-			<td colspan="4">Rem.</td>
-			<td colspan="4">Total HT&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		
-		
-		
-	@foreach($tab_produits as $tab)
-	
-		<tr height="21">
-			<td height="21" style="height:21px;">&nbsp;</td>
-			<td colspan="9">{{$tab["produit"]->nom}}</td>
-			<td>&nbsp;</td>
-		
-			<td colspan="2">{{number_format($tab["quantite"],2,',',' ')}}</td>
-			<td colspan="4">{{number_format($tab["prix_unitaire_ht"],2,',',' ')}}</td>
-			<td colspan="4" style="color: brown">@if($tab["remise"] > 0) -{{number_format($tab["remise"],2,',',' ')}} @endif  </td>
-			<td colspan="4">{{number_format($tab["prix_unitaire_ht_total"],2,',',' ')}}</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-	@endforeach
-	{{-- @if($devis->montant_remise_total != null)
-		<tr height="21">
-			<td height="21" style="height:21px;">&nbsp;</td>
-			<td colspan="9">Remise globale</td>
-			<td>&nbsp;</td>
-		
-			<td colspan="2">&nbsp;</td>
-			<td colspan="4">&nbsp;</td>
-			<td colspan="4" style="color: brown"> -{{number_format($montant_remise,2,',',' ')}} </td>
-			<td colspan="4">&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-	@endif --}}
-		<br>
-		
-		<tr height="42">
-			<td height="42" style="height:25px;">&nbsp;</td>
-			<td colspan="4"></td>
-			<td>&nbsp;</td>
-			<td colspan="2"></td>
-			<td colspan="4"></td>
-			<td colspan="9" >Total H.T :</td>
-			<td colspan="4" >{{number_format($devis->montant_ht,2,',',' ')}} &euro;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr height="42">
-			<td height="42" style="height:25px;">&nbsp;</td>
-			<td colspan="4"></td>
-			<td>&nbsp;</td>
-			<td colspan="2"></td>
-			<td colspan="4"></td>
-			<td colspan="9" >Total T.V.A</td>
-			<td colspan="4" >{{number_format($devis->montant_tva,2,',',' ')}} &euro;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		@if($devis->remise > 0)
-		<tr height="42">
-			<td height="42" style="height:25px;">&nbsp;</td>
-			<td colspan="4"></td>
-			<td>&nbsp;</td>
-			<td colspan="2"></td>
-			<td colspan="4"></td>
-			<td colspan="9" >Remise</td>
-			<td colspan="4" style="color: brown" >-{{number_format($devis->montant_remise_total,2,',',' ')}} &euro;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		@endif
-		<tr height="42">
-			<td height="42" style="height:25px;">&nbsp;</td>
-			<td colspan="4"></td>
-			<td>&nbsp;</td>
-			<td colspan="2"></td>
-			<td colspan="4"></td>
-			<td colspan="9" >Total T.T.C:</td>
-			<td colspan="4" >{{number_format($devis->montant_ttc,2,',',' ')}} &euro;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		
-		<br><br> <br>
-		
-		<tr height="31">
-			<td height="31" style="height:31px;">&nbsp;</td>
-			<td colspan="5" style="font-weight: bold;"> NET À PAYER:  </td>
-			<td>&nbsp;</td>
-			<td colspan="4" style="font-weight: bold;"> {{$devis->net_a_payer}} &euro; </td>
-			<td colspan="4"> </td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>		
-	
-		</tr>
+    <div class="net-a-payer">
+        NET À PAYER : {{ number_format($devis->net_a_payer, 2, ',', ' ') }} €
+    </div>
 
-
-	</tbody>
-</table>
+    <div class="footer">
+        Sarl VENZINI - SIRET : XXXXXXXX - TVA : FRXXXXXXXXX<br>
+        115 Avenue de la roquette, ZA de berret, 30200 BAGNOLS-SUR-CEZE
+    </div>
+</body>
+</html>

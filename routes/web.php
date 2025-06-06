@@ -336,8 +336,8 @@ Route::controller(DeviController::class)->group(function () {
     Route::get('/devis/create', 'create')->name('devis.create')->middleware(['auth']);
     Route::get('/devis/detail/{deviId}', 'show')->name('devis.show')->middleware(['auth']);
     Route::get('/devis/modifier/{deviId}', 'edit')->name('devis.edit')->middleware(['auth']);
-    Route::get('/devis/telecharger/{deviId}', 'telecharger')->name('devis.telecharger')->middleware(['auth']);    
-    Route::get('/devis/envoyer_mail/{deviId}', 'envoyer_mail')->name('devis.envoyer_mail')->middleware(['auth']);    
+    Route::get('/devis/telecharger/{deviId}', 'telecharger')->name('devis.telecharger');    
+    Route::post('/devis/envoyer_mail/{deviId}', 'envoyer_mail')->name('devis.envoyer_mail')->middleware(['auth']);    
     Route::post('/devis/ajouter', 'store')->name('devis.store')->middleware(['auth']);
     Route::post('/devis/modifier/{deviId}', 'update')->name('devis.update')->middleware(['auth']);
     Route::post('/devis/modifier-statut/{devis}/{statut}', 'modifierStatut')->name('devis.updateStatut')->middleware(['auth']);
@@ -345,20 +345,22 @@ Route::controller(DeviController::class)->group(function () {
     Route::post('/devis/desarchiver/{deviId}', 'desarchiver')->name('devis.desarchiver')->middleware(['auth']);
 });
 
-// Commandes
-Route::controller(CommandeController::class)->group(function () {
-    Route::get('/commandes', 'index')->name('commande.index')->middleware(['auth']);
-    Route::get('/commandes/archives', 'archives')->name('commande.archives')->middleware(['auth']);
-    Route::get('/commandes/ajouter', 'create')->name('commande.create')->middleware(['auth']);
-    Route::post('/commandes/ajouter', 'store')->name('commande.store')->middleware(['auth']);
-    Route::get('/commandes/detail/{commandeId}', 'show')->name('commande.show')->middleware(['auth']);
-    Route::get('/commandes/modifier/{commandeId}', 'edit')->name('commande.edit')->middleware(['auth']);
-    Route::post('/commandes/modifier/{commandeId}', 'update')->name('commande.update')->middleware(['auth']);
-    Route::post('/commandes/archiver/{commandeId}', 'archiver')->name('commande.archiver')->middleware(['auth']);
-    Route::post('/commandes/desarchiver/{commandeId}', 'desarchiver')->name('commande.desarchiver')->middleware(['auth']);
-    Route::get('/commande/telecharger/{commande_id}', 'telecharger')->name('commande.telecharger');
-    Route::post('/commande/envoyer-mail/{commande_id}', 'envoyer_mail')->name('commande.envoyer_mail');
+// Routes pour les commandes
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('commandes')->group(function () {
+        Route::get('/', [CommandeController::class, 'index'])->name('commande.index');
+        Route::get('/archives', [CommandeController::class, 'archives'])->name('commande.archives');
+        Route::get('/create', [CommandeController::class, 'create'])->name('commande.create');
+        Route::post('/store', [CommandeController::class, 'store'])->name('commande.store');
+        Route::get('/{commande}/show', [CommandeController::class, 'show'])->name('commande.show');
+        Route::get('/{commande}/edit', [CommandeController::class, 'edit'])->name('commande.edit');
+        Route::put('/{commande}/update', [CommandeController::class, 'update'])->name('commande.update');
+        Route::post('/{commande}/archiver', [CommandeController::class, 'archiver'])->name('commande.archiver');
+        Route::post('/{commande}/desarchiver', [CommandeController::class, 'desarchiver'])->name('commande.desarchiver');       
+        Route::post('/{commande}/envoyer-mail', [CommandeController::class, 'envoyer_mail'])->name('commande.envoyer_mail');
+    });
 });
+Route::get('/commandes/telecharger/{commandeId}', [CommandeController::class, 'telecharger'])->name('commande.telecharger');
 
 
 // Prestations
