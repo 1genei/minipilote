@@ -63,4 +63,11 @@ class Commande extends Model
         $numero = intval(substr($dernierNumero, 4)) + 1;
         return 'CMD-' . str_pad($numero, 6, '0', STR_PAD_LEFT);
     }
+
+    /**
+     * Retourne le devis lié à la commande
+     */
+    public function devi(){
+        return $this->belongsTo(Devi::class);
+    }
 }

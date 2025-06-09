@@ -354,7 +354,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/store', [CommandeController::class, 'store'])->name('commande.store');
         Route::get('/{commande}/show', [CommandeController::class, 'show'])->name('commande.show');
         Route::get('/{commande}/edit', [CommandeController::class, 'edit'])->name('commande.edit');
-        Route::put('/{commande}/update', [CommandeController::class, 'update'])->name('commande.update');
+        Route::post('/{commande}/update', [CommandeController::class, 'update'])->name('commande.update');
         Route::post('/{commande}/archiver', [CommandeController::class, 'archiver'])->name('commande.archiver');
         Route::post('/{commande}/desarchiver', [CommandeController::class, 'desarchiver'])->name('commande.desarchiver');       
         Route::post('/{commande}/envoyer-mail', [CommandeController::class, 'envoyer_mail'])->name('commande.envoyer_mail');
@@ -420,5 +420,9 @@ Route::get('/contacts/search/individu', [ContactController::class, 'searchIndivi
 Route::post('/contacts/quick-add', [ContactController::class, 'quickAdd'])
     ->name('contact.quick-add')
     ->middleware('auth');
+
+// Routes pour la création de commande à partir d'un devis
+Route::get('/commande/createfromdevis/{devis_id}', [CommandeController::class, 'createfromdevis'])->name('commande.createfromdevis');
+Route::post('/commande/storefromdevis/{devis_id}', [CommandeController::class, 'storefromdevis'])->name('commande.storefromdevis');
 
 require __DIR__ . '/auth.php';

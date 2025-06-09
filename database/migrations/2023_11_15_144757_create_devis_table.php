@@ -30,7 +30,6 @@ return new class extends Migration
             $table->double('montant_remise_total')->nullable();
             $table->integer('collaborateur_id')->nullable();
             $table->integer('client_prospect_id')->nullable();
-            $table->text('palier')->nullable();
             $table->text('url_pdf')->nullable();
             $table->boolean('archive')->default(false);
             

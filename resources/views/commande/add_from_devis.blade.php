@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Crypt;
                             <li class="breadcrumb-item active">Ajouter</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Modifier la commande {{ $commande->numero_commande }}</h4>
+                    <h4 class="page-title" style="font-size: 1.2rem;">Créer une commande à partir du <a href="{{ route('devis.show', Crypt::encrypt($devis->id)) }}" target="_blank" style="color: #000;">devis {{ $devis->numero_devis }}</a></h4>
                 </div>
             </div>
             <div class="col-12">
@@ -71,15 +71,15 @@ use Illuminate\Support\Facades\Crypt;
                         @endif
                         
                         
-                        <form action="{{ route('commande.update', Crypt::encrypt($commande->id)) }}" method="POST">
+                        <form action="{{ route('commande.store') }}" method="POST">
                             @csrf
                             <div class="row">
                                 <div class="col-sm-6">
-
+                                    <input type="hidden" name="devi_id" value="{{ $devis->id }}">
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label">Numéro de commande <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="numero_commande" value="{{ $commande->numero_commande }}" required>
+                                            <input type="text" class="form-control" name="numero_commande" value="{{ $numero_commande }}" required>
                                             @if ($errors->has('numero_commande'))
                                                 <span class="text-danger">{{ $errors->first('numero_commande') }}</span>
                                             @endif
@@ -87,7 +87,7 @@ use Illuminate\Support\Facades\Crypt;
         
                                         <div class="col-md-6">
                                             <label class="form-label">Date de commande <span class="text-danger">*</span></label>
-                                            <input type="date" class="form-control" name="date_commande" value="{{ $commande->date_commande }}" required>
+                                            <input type="date" class="form-control" name="date_commande" value="{{ date('Y-m-d') }}" required>
                                         </div>
                                     </div>
 
@@ -95,12 +95,11 @@ use Illuminate\Support\Facades\Crypt;
                                         <div class="col-md-6">
                                             <label class="form-label">Client/Prospect <span class="text-danger">*</span>
                                                 <span class="badge bg-danger">
-                                                    {{ $commande->client?->type == 'individu' ? $commande->client?->individu->nom . ' ' . $commande->client?->individu->prenom : $commande->client?->entite->raison_sociale }}
+                                                    {{ $devis->client_prospect()->type == 'individu' ? $devis->client_prospect()->individu->nom . ' ' . $devis->client_prospect()->individu->prenom : $devis->client_prospect()->entite->raison_sociale }}
                                                 </span>
                                             </label>
                                             <select class="form-control select2" data-toggle="select2" name="client_prospect_id" id="client_prospect_id" required>
-                                                <option value="{{ $commande->client_prospect_id }}">{{ $commande->client?->nom . ' ' . $commande->client?->prenom }}</option>
-                                                <option value="">Sélectionnez un client/prospect</option>
+                                                <option value="{{ $devis->client_prospect_id }}">{{ $devis->client_prospect()->type == 'individu' ? $devis->client_prospect()->individu->nom . ' ' . $devis->client_prospect()->individu->prenom : $devis->client_prospect()->entite->raison_sociale }}</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -117,13 +116,12 @@ use Illuminate\Support\Facades\Crypt;
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label">Date de réalisation prévue</label>
-                                            <input type="date" class="form-control" value="{{ $commande->date_realisation_prevue }}" name="date_realisation_prevue">
+                                            <input type="date" class="form-control" value="" name="date_realisation_prevue">
                                         </div>
         
                                         <div class="col-md-6">
                                             <label class="form-label">Mode de paiement <span class="text-danger">*</span></label>
                                             <select class="form-select" name="mode_paiement" required>
-                                                <option value="{{ $commande->mode_paiement }}">{{ $commande->mode_paiement }}</option>
                                                 <option value="Carte bancaire">Carte bancaire</option>
                                                 <option value="Espèce">Espèce</option>
                                                 <option value="Chèque">Chèque</option>
@@ -137,7 +135,6 @@ use Illuminate\Support\Facades\Crypt;
                                         <div class="col-md-6">
                                             <label class="form-label">Provenance</label>
                                             <select class="form-select" name="provenance">
-                                                <option value="{{ $commande->origine_commande }}">{{ $commande->origine_commande }}</option>
                                                 <option value="">...</option>
                                                 <option value="Site web">Site web</option>
                                                 <option value="Wonderbox">Wonderbox</option>
@@ -153,11 +150,11 @@ use Illuminate\Support\Facades\Crypt;
                                     <div class="row mb-3"> 
                                         <div class="col-md-6">
                                             <label class="form-label">Numéro de commande provenance</label>
-                                            <input type="text" class="form-control" value="{{ $commande->numero_origine }}" name="numero_commande_provenance">
+                                            <input type="text" class="form-control" value="" name="numero_commande_provenance">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Date de commande provenance</label>
-                                            <input type="date" class="form-control" value="{{ $commande->date_origine_commande }}" name="date_commande_provenance">
+                                            <input type="date" class="form-control" value="" name="date_commande_provenance">
                                         </div>
                                     </div>
 
@@ -170,7 +167,7 @@ use Illuminate\Support\Facades\Crypt;
                                                 <div class="col-md-12">
                                                     <label class="form-label">Statut de la commande</label>
                                                     <select class="form-select" name="statut">
-                                                        <option value="{{ $commande->statut_commande }}">{{ $commande->statut_commande }}</option>
+                                                        <option value="A planifier">A planifier</option>
                                                         <option value="A planifier">A planifier</option>
                                                         <option value="Planifiée">Planifiée</option>
                                                         <option value="Exécutée">Exécutée</option>
@@ -184,7 +181,6 @@ use Illuminate\Support\Facades\Crypt;
                                                 <div class="col-md-12">
                                                     <label class="form-label">Statut de paiement</label>
                                                     <select class="form-select" name="statut_paiement">
-                                                        <option value="{{ $commande->statut_paiement }}">{{ $commande->statut_paiement }}</option>
                                                         <option value="A payer">A payer</option>
                                                         <option value="Payée">Payée</option>
                                                         <option value="Partiellement payée">Partiellement payée</option>
@@ -197,8 +193,7 @@ use Illuminate\Support\Facades\Crypt;
                                             <div class="row mb-3" style="margin-top: 20px; background-color: #bacbdb; padding: 10px;">
                                                 <div class="col-md-12">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="no_tva" name="no_tva" 
-                                                        {{ $commande->sans_tva ? 'checked' : '' }}>
+                                                        <input type="checkbox" class="form-check-input" id="no_tva" name="no_tva" >
                                                         <label class="form-check-label" for="no_tva">Ne pas facturer la TVA</label>
                                                     </div>
                                                 </div>
@@ -311,7 +306,7 @@ use Illuminate\Support\Facades\Crypt;
                                                             @php
                                                                 $y = 0;
                                                             @endphp
-                                                            @foreach($commande->produits as $produit)
+                                                            @foreach($devis->produits as $produit)
                                                                 @php 
                                                                     $y = $loop->iteration; 
                                                                     $contact_beneficiaire = $produit->pivot->beneficiaire_id ? App\Models\Contact::find($produit->pivot->beneficiaire_id) : '';       
@@ -424,14 +419,14 @@ use Illuminate\Support\Facades\Crypt;
                                                     
                                                         <select class="form-select type_reduction_globale" id="type_reduction_globale" name="type_reduction_globale">
                                                             <option value=""></option>
-                                                            <option value="pourcentage" {{ $commande->type_remise == 'pourcentage' ? 'selected' : '' }}>%</option>
-                                                            <option value="montant" {{ $commande->type_remise == 'montant' ? 'selected' : '' }}>EUR</option>
+                                                            <option value="pourcentage" {{ $devis->type_remise == 'pourcentage' ? 'selected' : '' }}>%</option>
+                                                            <option value="montant" {{ $devis->type_remise == 'montant' ? 'selected' : '' }}>EUR</option>
                                                         </select>
                                                     </div>
                                                 
                                                     <div class="col-auto">
                                                         <label for="reduction_globale"> </label>
-                                                        <input class="form-control reduction_total" type="number" step="0.01" min="0" value="{{ $commande->remise }}" id="reduction_globale" name="reduction_globale"  @if($commande->remise == 0) readonly @endif >
+                                                        <input class="form-control reduction_total" type="number" step="0.01" min="0" value="{{ $devis->remise }}" id="reduction_globale" name="reduction_globale"  @if($devis->remise == 0) readonly @endif >
                                                     </div>
                                                     
                                                     <div class="col-auto">
@@ -451,7 +446,7 @@ use Illuminate\Support\Facades\Crypt;
                             <div class="row">
                                 <div class="col-12 text-end">
                                     <a href="{{ route('commande.index') }}" class="btn btn-light btn-lg me-2">Annuler</a>
-                                    <button type="submit" class="btn btn-success btn-lg">Modifier la commande</button>
+                                    <button type="submit" class="btn btn-primary btn-lg">Créer la commande</button>
                                 </div>
                             </div>
                         </form>

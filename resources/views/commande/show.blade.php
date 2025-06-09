@@ -127,6 +127,7 @@
                                     <th scope="row">TVA :</th>
                                     <td>{{ $commande->sans_tva ? 'Non applicable' : 'Applicable' }}</td>
                                 </tr>
+                                
                             </tbody>
                         </table>
                     </div>
@@ -183,6 +184,16 @@
                                     <th scope="row">Date d'origine :</th>
                                     <td>{{ $commande->date_origine_commande ? \Carbon\Carbon::parse($commande->date_origine_commande)->format('d/m/Y') : 'Non spécifiée' }}</td>
                                 </tr>
+                                @if($commande->devi_id)
+                                <tr>
+                                    <th scope="row" class="text-primary">provenant du devis :</th>
+                                    <td>
+                                        <a href="{{ route('devis.show', Crypt::encrypt($commande->devi_id)) }}" class="text-primary" target="_blank" style="font-size: 16px;">
+                                            n° {{ $commande->devi?->numero_devis }}
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>

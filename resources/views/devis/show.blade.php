@@ -61,6 +61,9 @@
                 <button class="btn btn-danger archive_devis" data-href="{{ route('devis.archiver', Crypt::encrypt($devis->id)) }}">
                     <i class="mdi mdi-archive-arrow-down me-1"></i> Archiver le devis
                 </button>
+                <a href="{{ route('commande.createfromdevis', Crypt::encrypt($devis->id)) }}" class="btn btn-warning me-2">
+                    <i class="mdi mdi-file-replace me-1"></i> Transformer en commande
+                </a>
             @else
                 <button class="btn btn-success desarchiver_devis" data-href="{{ route('devis.desarchiver', Crypt::encrypt($devis->id)) }}">
                     <i class="mdi mdi-archive-arrow-up me-1"></i> Désarchiver le devis
@@ -246,6 +249,49 @@
                 </div>
             </div>
         </div>
+
+        <!-- Commandes générées -->
+        @if($devis->commandes?->count() > 0)
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-3">Commandes générées à partir de ce devis</h4>
+                    <div class="table-responsive">
+                        <table class="table table-centered mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>N° Commande</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                    <th>Montant TTC</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($devis->commandes as $commande)
+                                    <tr>
+                                        <td>{{ $commande->numero_commande }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($commande->date_commande)->format('d/m/Y') }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ $commande->statut_commande == 'Annulée' ? 'danger' : ($commande->statut_commande == 'Exécutée' ? 'success' : 'info') }}">
+                                                {{ $commande->statut_commande }}
+                                            </span>
+                                        </td>
+                                        <td>{{ number_format($commande->net_a_payer, 2, ',', ' ') }} €</td>
+                                        <td>
+                                            <a href="{{ route('commande.show', Crypt::encrypt($commande->id)) }}" class="btn btn-info btn-sm">
+                                                <i class="mdi mdi-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 

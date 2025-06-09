@@ -450,7 +450,7 @@
         var produits = @json($produits);
         var tab_produits = [];
         var liste_produits = "";
-        var y = {{ count(json_decode($devis->palier)) }};
+        var y = {{ $y }};
         
         $("#produit").empty();
         produits.forEach(function(produit) {

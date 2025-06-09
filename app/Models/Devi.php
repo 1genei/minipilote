@@ -45,4 +45,11 @@ class Devi extends Model
         
         return $collaborateur;
     }
+
+    /**
+     * Retourne les commandes liées au devis
+     */
+    public function commandes(){
+        return $this->hasMany(Commande::class);
+    }
 }

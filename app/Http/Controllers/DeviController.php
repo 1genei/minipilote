@@ -71,9 +71,9 @@ class DeviController extends Controller
     {
         try {
             DB::beginTransaction();
-
+        
             // Validation des données
-            $request->validate([
+        $request->validate([
                 'numero_devis' => 'required|unique:devis,numero_devis',
                 'client_prospect_id' => 'required',
             ]);
@@ -138,6 +138,17 @@ class DeviController extends Controller
                     $tab["remise"] = $remise;
                     $tab_produits[] = $tab;
 
+                    //ajout des produits au devis
+                    $devis->produits()->attach($request->{"produit$i"}, [
+                        'quantite' => $quantite,
+                        'prix_unitaire' => $prix_unitaire,
+                        'montant_ht' => $montant_ht_final,
+                        'montant_ttc' => $montant_ttc,
+                        'montant_tva' => $montant_tva,
+                        'taux_tva' => $taux_tva,
+                        'remise' => $remise,
+                        'taux_remise' => $taux_remise,
+                    ]);
                     // Mise à jour des totaux
                     $montant_ht_total += $montant_ht_final;
                     $montant_ttc_total += $montant_ttc;
@@ -250,7 +261,7 @@ class DeviController extends Controller
     {
         try {
             DB::beginTransaction();
-
+        
             $devis = Devi::where('id', Crypt::decrypt($devis_id))->first();
             
             // Validation des données
@@ -281,7 +292,7 @@ class DeviController extends Controller
 
             // Traitement des produits
             $i = 1;
-            $tab_produits = [];
+        $tab_produits = [];
 
             // dd($request->all());
 
@@ -375,11 +386,11 @@ class DeviController extends Controller
             ]);
 
             // Génération du PDF
-            $this->generer_pdf_devis($devis->id, $tab_produits);
-
+        $this->generer_pdf_devis($devis->id, $tab_produits);
+        
             DB::commit();
-            return redirect()->route('devis.index')->with('success', 'Devis modifié avec succès');
-
+        return redirect()->route('devis.index')->with('success', 'Devis modifié avec succès');
+        
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()
