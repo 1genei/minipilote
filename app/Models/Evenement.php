@@ -74,4 +74,11 @@ class Evenement extends Model
         
         return $recette - $depenses ;
     }
+
+    /**
+     * Retourne les plannings liés à l'événement
+     */
+    public function plannings(){
+        return $this->hasMany(Planning::class);
+    }
 }

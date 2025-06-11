@@ -30,6 +30,7 @@ use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\ContactImportController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\PlanningController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -135,9 +136,19 @@ Route::controller(CircuitController::class)->group(function () {
     Route::post('/circuits/desarchiver/{circuitId}', 'desarchiver')->name('circuit.desarchiver')->middleware(['auth']);
 });
 
-
-
-
+// Planning
+Route::controller(PlanningController::class)->group(function () {
+    Route::get('/planning', 'index')->name('planning.index')->middleware(['auth']);
+    Route::get('/planning/events', 'getEvents')->name('planning.events')->middleware(['auth']);
+    
+    // Routes pour les modèles de planning
+    Route::get('/parametres/planning', 'indexModeles')->name('parametre.planning.index')->middleware(['auth']);
+    Route::get('/parametres/planning/archives', 'indexArchives')->name('parametre.planning.archives')->middleware(['auth']);
+    Route::post('/parametres/planning', 'store')->name('parametre.planning.store')->middleware(['auth']);
+    Route::put('/parametres/planning/{planning}', 'update')->name('parametre.planning.update')->middleware(['auth']);
+    Route::get('/parametres/planning/{planning}/archiver', 'archiver')->name('parametre.planning.archiver')->middleware(['auth']);
+    Route::get('/parametres/planning/{planning}/restaurer', 'restaurer')->name('parametre.planning.restaurer')->middleware(['auth']);
+});
 
 // Categorieproduit
 Route::controller(CategorieproduitController::class)->group(function () {
@@ -424,5 +435,11 @@ Route::post('/contacts/quick-add', [ContactController::class, 'quickAdd'])
 // Routes pour la création de commande à partir d'un devis
 Route::get('/commande/createfromdevis/{devis_id}', [CommandeController::class, 'createfromdevis'])->name('commande.createfromdevis');
 Route::post('/commande/storefromdevis/{devis_id}', [CommandeController::class, 'storefromdevis'])->name('commande.storefromdevis');
+
+// Routes pour le planning
+Route::prefix('planning')->group(function () {
+    Route::get('/', [PlanningController::class, 'index'])->name('planning.index');
+    Route::get('/events', [PlanningController::class, 'getEvents'])->name('planning.events');
+});
 
 require __DIR__ . '/auth.php';

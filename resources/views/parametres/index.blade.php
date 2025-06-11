@@ -68,6 +68,12 @@
                                     <span class="d-none d-lg-block">Application</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('parametre.planning.index') }}" class="nav-link rounded-0">
+                                    <i class="mdi mdi-calendar-clock font-18"></i>
+                                    <span class="d-none d-lg-block">Planning</span>
+                                </a>
+                            </li>
                         </ul>
 
                         <div class="tab-content">

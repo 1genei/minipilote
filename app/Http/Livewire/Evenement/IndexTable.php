@@ -4,8 +4,8 @@ namespace App\Http\Livewire\Evenement;
 
 use App\Models\Evenement;
 use App\Models\User;
-use Crypt;
-use Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -119,23 +119,7 @@ final class IndexTable extends PowerGridComponent
             })
             ->addColumn('circuit_id', function (Evenement $model) {
                 return  '<span class="badge bg-warning text-white font-bold py-1 px-2 fs-6">'.$model->circuit->nom.'</span>';
-            })
-            ->addColumn('description')
-            
-            ->addColumn('notes')
-            // ->addColumn('date_evenement', fn (Evenement $model) =>  $model->date_evenement  )
-            ->addColumn('user', function (Evenement $model) {        
-                
-                $user = User::where('id', $model->user_id)->first();
-                $contact = $user?->contact;
-                $individu = $contact?->individu;
-                
-                return  '<span >'.$individu?->nom.' '.$individu?->prenom.'</span>';
-            })
-            ->addColumn('created_date', function (Evenement $model) {          
-                return $model->created_at->format('d/m/Y H:i:s');
             });
-            // ->addColumn('statut');
     }
 
     /*
@@ -161,9 +145,7 @@ final class IndexTable extends PowerGridComponent
             Column::make('Date de début', 'date_debut',)->searchable()->sortable(),
             Column::make('Date de fin', 'date_fin')->searchable()->sortable(),
             Column::make('Circuit', 'circuit_id')->searchable()->sortable(),
-            Column::make('Description', 'description')->searchable()->sortable(),
             Column::make('Statut', 'statut')->searchable()->sortable(),
-            Column::make('Date d\'ajout', 'created_date')->searchable()->sortable(),
             // Column::make('Actions')
 
         ];

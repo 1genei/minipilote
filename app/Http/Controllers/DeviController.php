@@ -82,7 +82,7 @@ class DeviController extends Controller
             $montant_ht_total = 0;
             $montant_ttc_total = 0;
             $montant_tva_total = 0;
-            $montant_remise_total = 0;
+        $montant_remise_total = 0;
 
             // Création du devis
             $devis = Devi::create([
@@ -262,7 +262,7 @@ class DeviController extends Controller
         try {
             DB::beginTransaction();
         
-            $devis = Devi::where('id', Crypt::decrypt($devis_id))->first();
+        $devis = Devi::where('id', Crypt::decrypt($devis_id))->first();
             
             // Validation des données
             $request->validate([

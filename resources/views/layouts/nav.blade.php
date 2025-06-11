@@ -194,10 +194,14 @@
             </li>
         @endcan
 
-        
-
-
-
+        {{-- @can('permission', 'afficher-planning') --}}
+            <li class="side-nav-item {{ request()->routeIs('planning.*') ? 'menuitem-active' : '' }}">
+                <a href="{{ route('planning.index') }}" class="side-nav-link">
+                    <i class="mdi mdi-calendar-clock"></i>
+                    <span> Planning </span>
+                </a>
+            </li>
+        {{-- @endcan --}}
 
         @can('permission', 'afficher-produit')
             <li
