@@ -31,6 +31,7 @@ use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\ContactImportController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PlanningController;
+use App\Http\Controllers\ModelevoitureController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -441,5 +442,10 @@ Route::prefix('planning')->group(function () {
     Route::get('/', [PlanningController::class, 'index'])->name('planning.index');
     Route::get('/events', [PlanningController::class, 'getEvents'])->name('planning.events');
 });
+
+// Routes pour les modèles de voiture
+Route::post('/modelevoiture/store', [ModelevoitureController::class, 'store'])->name('modelevoiture.store');
+Route::post('/modelevoiture/update/{id}', [ModelevoitureController::class, 'update'])->name('modelevoiture.update');
+Route::delete('/modelevoiture/destroy/{id}', [ModelevoitureController::class, 'destroy'])->name('modelevoiture.destroy');
 
 require __DIR__ . '/auth.php';

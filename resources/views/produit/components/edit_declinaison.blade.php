@@ -10,13 +10,13 @@
 
             <div class="col-6">
                 <div class="mb-3">
-                    <label for="tva_id" class="form-label">Taxe</label>
+                    <label for="tva_id" class="form-label">TVA</label>
                     <select wire:model.defer="tva_id" name="tva_id" id="tva_id"
                         class="form-select select2">
                         @foreach ($tvas as $tva)
                             <option value="{{ $tva->id }}">{{ $tva->nom }}</option>
                         @endforeach
-                        <option value="">Aucune taxe</option>
+                        <option value="">sans tva</option>
                     </select>
                 </div>
             </div>
@@ -124,6 +124,8 @@
                                         data-quantite="{{ $proddecli->stock?->quantite }}"
                                         data-quantite_min="{{ $proddecli->stock?->quantite_min }}"
                                         data-seuil_alerte="{{ $proddecli->stock?->seuil_alerte }}"
+                                        data-modelevoiture_id="{{ $proddecli->modelevoiture_id }}"
+                                        data-circuit_id="{{ $proddecli->circuit_id }}"
                                         data-bs-toggle="modal" data-bs-target="#edit-declinaison"
                                         class="action-icon edit-declinaison text-success" style="cursor: pointer;">
                                         <i class="mdi mdi-square-edit-outline"></i>

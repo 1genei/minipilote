@@ -40,7 +40,7 @@ public $quantite_min_vente;
 public $gerer_stock;
 public $seuil_alerte_stock;
 public $caracteristiques;
-public $voitures;
+public $modelevoitures;
 public $circuits;
     
     public function render()

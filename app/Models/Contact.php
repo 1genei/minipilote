@@ -87,13 +87,33 @@ class Contact extends Model
         return $this->belongsToMany(Tag::class, 'contact_tag', 'contact_id', 'tag_id');
     }
 
+    /**
+     * Retourne les notes liées au contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function notes()
     {
         return $this->hasMany(Note::class);
     }
 
+    /**
+     * Retourne le secteur d'activité lié au contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function secteurActivite()
     {
         return $this->belongsTo(SecteurActivite::class);
+    }
+
+    /**
+     * Retourne les événements liés au contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function evenements()
+    {
+        return $this->belongsToMany(Evenement::class, 'contact_evenement', 'contact_id', 'evenement_id');
     }
 }

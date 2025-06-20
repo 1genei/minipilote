@@ -35,6 +35,7 @@
             @endif
         </div>
     </div>
+    @include('layouts.nav_parametre')
 
     <div class="row">
         <div class="col-12">
@@ -43,7 +44,7 @@
                     <div class="row mb-2">
                         <div class="col-sm-5">
                             <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#add-model-modal">
-                                <i class="mdi mdi-plus-circle me-2"></i> Ajouter un modèle
+                                <i class="mdi mdi-plus-circle me-2"></i> Ajouter un modèle de planning
                             </button>
                         </div>
                         <div class="col-sm-7">

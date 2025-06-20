@@ -14,7 +14,7 @@ class Evenement extends Model
      * @var array
      */
     protected $guarded = [];
-    protected $casts  = ['date_debut' => 'date', 'date_fin' => 'date'];
+    // protected $casts  = ['date_debut' => 'date', 'date_fin' => 'date'];
 
     
     /*
@@ -80,5 +80,21 @@ class Evenement extends Model
      */
     public function plannings(){
         return $this->hasMany(Planning::class);
+    }
+
+    /**
+     * Retourne les contacts liés à l'événement
+     */
+    public function contacts()
+    {
+        return $this->belongsToMany(Contact::class, 'contact_evenement', 'evenement_id', 'contact_id');
+    }
+
+    /**
+     * Retourne les véhicules liés à l'événement
+     */
+    public function voitures()
+    {
+        return $this->belongsToMany(Voiture::class, 'evenement_voiture', 'evenement_id', 'voiture_id');
     }
 }

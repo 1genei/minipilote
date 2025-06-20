@@ -12,11 +12,11 @@ use App\Models\Valeurcaracteristique;
 use App\Models\Tva;
 use App\Models\Voiture;
 use App\Models\Circuit;
+use App\Models\Modelevoiture;
 
-
-use Crypt;
-use Auth;
-use DB;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -38,7 +38,7 @@ class ProduitController extends Controller
     
     
     /**
-     * Display a listing of the resource.
+     * Page d'accueil du module produit
      */
     public function index()
     {
@@ -49,7 +49,7 @@ class ProduitController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Page d'ajout d'un produit
      */
     public function create()
     {
@@ -61,10 +61,10 @@ class ProduitController extends Controller
         $tva_principale = Tva::where('est_principal', true)->first();
         $valeur_tva = $tva_principale->taux;
         $caracteristiques = Caracteristique::where('archive',false)->get();
-        $voitures = Voiture::where('archive',false)->get();
+        $modelevoitures = Modelevoiture::all();
         $circuits = Circuit::where('archive',false)->get();
         
-        return view('produit.add', compact('categories','marques', 'tvas','tva_principale','valeur_tva','caracteristiques','voitures','circuits'));
+        return view('produit.add', compact('categories','marques', 'tvas','tva_principale','valeur_tva','caracteristiques','modelevoitures','circuits'));
         
     }
 
@@ -74,85 +74,88 @@ class ProduitController extends Controller
     public function store(Request $request)
     {
         
-        
-  
-        if($request->type == "declinaison"){
+ 
+        try{
             
-            $produit = Produit::create([
-                "nom" => $request->nom,
-                "type" => "simple",
-                "a_declinaison" => true,
-                "nature" => $request->nature,
-                "description" => $request->description,
-                "reference" => $request->reference,
-                "user_id" => Auth::user()->id,
-                "marque_id" => $request->marque,              
-                "tva_id" => $request->tva_id,             
-            ]);
-            
-          
-            $this->generer_declinaison($request, $produit->id);
-            
-            
-        }
-        
-        else{
-        
-            $produit = Produit::create([
-                "nom" => $request->nom,
-                "type" => "simple",
-                "nature" => $request->nature,
-                "description" => $request->description,
-                "reference" => $request->reference,
-                "user_id" => Auth::user()->id,
-                "marque_id" => $request->marque,
-                "prix_vente_ht" => $request->prix_vente_ht,
-                "prix_vente_ttc" => $request->prix_vente_ttc,
-                "tva_id" => $request->tva_id,
-                // "prix_vente_max_ht" => $request->prix_vente_max_ht,
-                // "prix_vente_max_ttc" => $request->prix_vente_max_ttc,
-                "prix_achat_ht" => $request->prix_achat_ht,
-                "prix_achat_ttc" => $request->prix_achat_ttc,
-                // "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht,
-                // "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc,
-                "gerer_stock" => $request->gerer_stock ? true : false,
-             
-            ]);
-            
-            // stock
-            if( $request->gerer_stock){
-            
-                $stock = Stock::create([
-                    "produit_id" => $produit->id,
-                    "quantite" => $request->quantite,
-                    "quantite_min" => $request->quantite_min_vente,
-                    "seuil_alerte" => $request->seuil_alerte_stock,
-                   
+            DB::beginTransaction();
+
+            if($request->type == "declinaison"){
+                
+                $produit = Produit::create([
+                    "nom" => $request->nom,
+                    "type" => "simple",
+                    "a_declinaison" => true,
+                    "nature" => $request->nature,
+                    "description" => $request->description,
+                    "reference" => $request->reference,
+                    "user_id" => Auth::user()->id,
+                    "marque_id" => $request->marque,              
+                    "tva_id" => $request->tva_id,             
                 ]);
                 
+            
+                $this->generer_declinaison($request, $produit->id);
+                
+                
             }
-        }
-        
-        
-        if($request->categories_id){
-            $produit->categorieproduits()->attach($request->categories_id);
-        }
-        
+            
+            else{
+            
+                $produit = Produit::create([
+                    "nom" => $request->nom,
+                    "type" => "simple",
+                    "nature" => $request->nature,
+                    "description" => $request->description,
+                    "reference" => $request->reference,
+                    "user_id" => Auth::user()->id,
+                    "marque_id" => $request->marque,
+                    "prix_vente_ht" => $request->prix_vente_ht,
+                    "prix_vente_ttc" => $request->prix_vente_ttc,
+                    "tva_id" => $request->tva_id,
+                    "prix_achat_ht" => $request->prix_achat_ht,
+                    "prix_achat_ttc" => $request->prix_achat_ttc,
+                    "gerer_stock" => $request->gerer_stock ? true : false,
+                
+                ]);
+                
+                // stock
+                if( $request->gerer_stock){
+                
+                    $stock = Stock::create([
+                        "produit_id" => $produit->id,
+                        "quantite" => $request->quantite,
+                        "quantite_min" => $request->quantite_min_vente,
+                        "seuil_alerte" => $request->seuil_alerte_stock,
+                    
+                    ]);
+                    
+                }
+            }
+            
+            
+            if($request->categories_id){
+                $produit->categorieproduits()->attach($request->categories_id);
+            }
+            
 
-        if($request->hasFile('fiche_technique')){
-         
-            $filename = 'fiche_technique_'.$produit->id.'.pdf';
-            $produit->fiche_technique = $filename;
-            $request->fiche_technique->storeAs('public/fiche_technique',$filename);
-            $produit->update();            
+            if($request->hasFile('fiche_technique')){
+            
+                $filename = 'fiche_technique_'.$produit->id.'.pdf';
+                $produit->fiche_technique = $filename;
+                $request->fiche_technique->storeAs('public/fiche_technique',$filename);
+                $produit->update();            
+            }
+            
+            
+            if($request->images){
+            
+                $this->savePhoto( $request, $produit->id);
+            }
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Erreur lors de l\'ajout du produit');
         }
-        
-        
-        if($request->images){
-        
-            $this->savePhoto( $request, $produit->id);
-        }
-        
         
         return redirect()->route('produit.index')->with('ok', 'Nouveau produit ajouté');
     }
@@ -182,10 +185,10 @@ class ProduitController extends Controller
         $tvas = Tva::where('archive', false)->get();
         $tva_principale = Tva::where('est_principal', true)->first();
         $valeur_tva = $tva_principale->taux;
-        $voitures = Voiture::where('archive',false)->get();
+        $modelevoitures = Modelevoiture::all();
         $circuits = Circuit::where('archive',false)->get();
         
-        return view('produit.edit', compact('categories', 'produit','marques','caracteristiques','tvas','tva_principale','valeur_tva','voitures','circuits'));
+        return view('produit.edit', compact('categories', 'produit','marques','caracteristiques','tvas','tva_principale','valeur_tva','modelevoitures','circuits'));
  
     }
 
@@ -462,99 +465,103 @@ class ProduitController extends Controller
     */
     public function generer_declinaison(Request $request, $produit_id){
      
-        $produit_parent = Produit::where('id', $produit_id)->first();
-         
-            $valeurids = [];
-            foreach ($request->all() as $key => $value) {
-                if(str_contains($key, "valeurNom" ) ){                    
-                    array_push($valeurids, $value);
-                    
-                }         
-            }
+        try{
+            DB::beginTransaction();
+            $produit_parent = Produit::where('id', $produit_id)->first();
             
-          
-            $combinaisons =  $this->genererCombinaisons($valeurids);          
-            
-           
-            $voitures = $request->voitures;
-            $circuits = $request->circuits;
-            
-            $combinaison_voiture_circuit = [];
-            
-            foreach ($circuits as $circuit_id) {
-                
-                $circuitModel = Circuit::where('id', $circuit_id)->first();
-                
-                foreach ($voitures as $voiture_id) {
-                    $voitureModel = Voiture::where('id', $voiture_id)->first();
-                    
-                    $nom_produit_temp = $produit_parent->nom.'-'.$voitureModel->nom.'-'.$circuitModel->nom;
-                    $prix_produit_temp =  $voitureModel->prix_vente_kilometrique * $circuitModel->distance;
-                 
-                    $combinaison_voiture_circuit[] = [
-                        "nom_produit" => $nom_produit_temp,
-                        "prix_produit" => $prix_produit_temp,
-                        "voiture_id" => $voiture_id,
-                        "circuit_id" => $circuit_id,
-                    ];
+                $valeurids = [];
+                foreach ($request->all() as $key => $value) {
+                    if(str_contains($key, "valeurNom" ) ){                    
+                        array_push($valeurids, $value);
+                        
+                    }         
                 }
                 
-            }
             
+                $combinaisons =  $this->genererCombinaisons($valeurids);          
             
-            foreach ($combinaisons as $combinaison) {
+                $modelevoitures = $request->modelevoitures;
+                $circuits = $request->circuits;
                 
-                $nomcaracteristique = $this->generer_nom_caracteristique($combinaison);
+                $combinaison_voiture_circuit = [];
                 
-                foreach ($combinaison_voiture_circuit as $combi_v_c) {
-                   
-                   
-                    //    On calcul le nombre de tours total de la combianaison  
-                    $nb_tours = 0;
-                    foreach ($combinaison as $combi) {
-                        $valeurcaract = Valeurcaracteristique::where('id', $combi)->first();
-                        $nb_tours += $valeurcaract->valeur;
+                foreach ($circuits as $circuit_id) {
+                    
+                    $circuit = Circuit::where('id', $circuit_id)->first();
+                    
+                    foreach ($modelevoitures as $modelevoiture_id) {
+                        $modelevoitureModel = Modelevoiture::where('id', $modelevoiture_id)->first();
+                        
+                        $nom_produit_temp = $produit_parent->nom.'-'.$modelevoitureModel->nom.'-'.$circuit->nom;
+                        $prix_produit_temp =  $modelevoitureModel->prix_vente_kilometrique * $circuit->distance;
+                    
+                        $combinaison_voiture_circuit[] = [
+                            "nom_produit" => $nom_produit_temp,
+                            "prix_produit" => $prix_produit_temp,
+                            "modelevoiture_id" => $modelevoiture_id,
+                            "circuit_id" => $circuit_id,
+                        ];
                     }
-                  
-                    // $nb_tours = array_sum($combinaison);
-
-                    // $cartacteristique 
-                    $nom_produit_temp = $combi_v_c["nom_produit"]." / $nomcaracteristique";
-                    $prix_produit_temp = $combi_v_c["prix_produit"];
-                    $voiture_id = $combi_v_c["voiture_id"];
-                    $circuit_id = $combi_v_c["circuit_id"];
                     
-                    $prix_declinaison_ttc = round($prix_produit_temp * $nb_tours,2);
-                    $prix_declinaison_ht = round($prix_declinaison_ttc / (1 + ($produit_parent->tva->taux / 100)),2);
+                }
                 
-                    $produit_decli = Produit::create([
+                
+                foreach ($combinaisons as $combinaison) {
                     
-                        "nom" => $nom_produit_temp,
-                        "type" => "declinaison",
-                        "produit_id" => $produit_parent->id,
-                        "nature" => $produit_parent->nature,
-                        "description" => $produit_parent->description,
-                        "reference" => $produit_parent->reference,
-                        "user_id" => Auth::user()->id,
-                        "marque_id" => $produit_parent->marque,
-                        "voiture_id" => $voiture_id,
-                        "circuit_id" => $circuit_id,
-                        "prix_vente_ht" => $prix_declinaison_ht,
-                        "prix_vente_ttc" => $prix_declinaison_ttc,
-                        "tva_id" => $produit_parent->tva_id,
-                        // "prix_achat_ht" => $produit_parent->prix_achat_ht,
-                        // "prix_achat_ttc" => $produit_parent->prix_achat_ttc,
-                      
-                    ]);
+                    $nomcaracteristique = $this->generer_nom_caracteristique($combinaison);
+                    
+                    foreach ($combinaison_voiture_circuit as $combi_v_c) {
+                    
+                    
+                        //    On calcul le nombre de tours total de la combianaison  
+                        $nb_tours = 0;
+                        foreach ($combinaison as $combi) {
+                            $valeurcaract = Valeurcaracteristique::where('id', $combi)->first();
+                            $nb_tours += $valeurcaract->valeur;
+                        }
+                    
+                        // $nb_tours = array_sum($combinaison);
 
-                    $produit_decli->valeurcaracteristiques()->attach($combinaison, ['voiture_id' => $voiture_id, 'circuit_id' => $circuit_id]);
-                    if($request->categories_id){
-                        $produit_decli->categorieproduits()->attach($request->categories_id);
+                        // $cartacteristique 
+                        $nom_produit_temp = $combi_v_c["nom_produit"]." / $nomcaracteristique";
+                        $prix_produit_temp = $combi_v_c["prix_produit"];
+                        $modelevoiture_id = $combi_v_c["modelevoiture_id"];
+                        $circuit_id = $combi_v_c["circuit_id"];
+                        
+                        $prix_declinaison_ttc = round($prix_produit_temp * $nb_tours,2);
+                        $prix_declinaison_ht = round($prix_declinaison_ttc / (1 + ($produit_parent->tva->taux / 100)),2);
+                    
+                        $produit_decli = Produit::create([
+                        
+                            "nom" => $nom_produit_temp,
+                            "type" => "declinaison",
+                            "produit_id" => $produit_parent->id,
+                            "nature" => $produit_parent->nature,
+                            "description" => $produit_parent->description,
+                            "reference" => $produit_parent->reference,
+                            "user_id" => Auth::user()->id,
+                            "marque_id" => $produit_parent->marque,
+                            "modelevoiture_id" => $modelevoiture_id,
+                            "circuit_id" => $circuit_id,
+                            "prix_vente_ht" => $prix_declinaison_ht,
+                            "prix_vente_ttc" => $prix_declinaison_ttc,
+                            "tva_id" => $produit_parent->tva_id,
+                        
+                        ]);
+
+                        $produit_decli->valeurcaracteristiques()->attach($combinaison, ['modelevoiture_id' => $modelevoiture_id, 'circuit_id' => $circuit_id]);
+                        if($request->categories_id){
+                            $produit_decli->categorieproduits()->attach($request->categories_id);
+                        }
                     }
                 }
+                DB::commit();
+                return true;
+                
+            }catch(\Exception $e){
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Erreur lors de la génération des déclinaisons');
             }
-            
-          return true;
           
         }
     
@@ -565,20 +572,21 @@ class ProduitController extends Controller
     function genererCombinaisons($GAB) {
     
         $combinations = [[]];
-    
+     
         foreach ($GAB as $tab) {
             $temp = [];
             foreach ($combinations as $combination) {
                 $temp[] = $combination;
+                
                 foreach ($tab as $value) {
                     $temp[] = array_merge($combination, [$value]);
                 }
             }
             
             $combinations = $temp;
-    
+           
         }
-        
+      
         // $combinations = array_filter($combinations, function($value) { return $value !== []; });
         $combinaisons = array_shift($combinations);
         return $combinations;
@@ -618,61 +626,74 @@ class ProduitController extends Controller
      */
     public function store_declinaison(Request $request)
     {
-    
-        $produit = Produit::where('id', $request->produit_id)->first();
+        try{
+            DB::beginTransaction();
         
+            $produit = Produit::where('id', $request->produit_id)->first();
+            
 
-        $produitdecli = Produit::create([
-            "nom" => $produit->nom,
-            "produit_id" => $produit->id,
-            "fournisseur_id" => $produit->fournisseur_id,
-            "description" => $produit->description,
-            "reference" => $produit->reference,
-            "fiche_technique" => $produit->fiche_technique,
-            "user_id" => Auth::user()->id,
-            "prix_vente_ht" => $request->prix_vente_ht_decli,
-            "type" => "declinaison",
-            "prix_vente_ttc" => $request->prix_vente_ttc_decli,
-            // "prix_vente_max_ht" => $request->prix_vente_max_ht_decli,
-            // "prix_vente_max_ttc" => $request->prix_vente_max_ttc_decli,
-            "prix_achat_ht" => $request->prix_achat_ht_decli,
-            "prix_achat_ttc" => $request->prix_achat_ttc_decli,
-            // "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht_decli,
-            // "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc_decli,
-            "gerer_stock" => $request->gerer_stock_decli ? true : false,     
-        ]);
-        
-       
-       // On réccupère les ids des valeurs des caractéristiques
-        $valeurids = [];
-        foreach ($request->all() as $key => $value) {
-            if(str_contains($key, "valeurNom" ) && $value != null ){
-               $valeurids [] = $value;            
-            }         
-        }
-        
-        
-        if(sizeof($valeurids) > 0 ){
-            $produitdecli->valeurcaracteristiques()->attach($valeurids);
-        }
-        
-        $produit->a_declinaison = true;
-        $produit->update();
-      
-        // stock
-        if( $request->gerer_stock_decli){
-        
-            $stock = Stock::create([
-                "produit_id" => $produitdecli->id,
-                "quantite" => $request->quantite_decli,
-                "quantite_min" => $request->quantite_min_vente_decli,
-                "seuil_alerte" => $request->seuil_alerte_stock_decli,
-               
+            $produitdecli = Produit::create([
+                "nom" => $produit->nom,
+                "produit_id" => $produit->id,
+                "modelevoiture_id" => $request->modelevoiture_id,
+                "circuit_id" => $request->circuit_id,
+                "fournisseur_id" => $produit->fournisseur_id,
+                "description" => $produit->description,
+                "reference" => $produit->reference,
+                "fiche_technique" => $produit->fiche_technique,
+                "user_id" => Auth::user()->id,
+                "prix_vente_ht" => $request->prix_vente_ht_decli,
+                "type" => "declinaison",
+                "prix_vente_ttc" => $request->prix_vente_ttc_decli,
+                // "prix_vente_max_ht" => $request->prix_vente_max_ht_decli,
+                // "prix_vente_max_ttc" => $request->prix_vente_max_ttc_decli,
+                "prix_achat_ht" => $request->prix_achat_ht_decli,
+                "prix_achat_ttc" => $request->prix_achat_ttc_decli,
+                // "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht_decli,
+                // "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc_decli,
+                "gerer_stock" => $request->gerer_stock_decli ? true : false,     
             ]);
             
-        }
         
-        return redirect()->back()->with('ok', 'Nouvelle déclinaison ajoutée');
+        // On réccupère les ids des valeurs des caractéristiques
+            $valeurids = [];
+            foreach ($request->all() as $key => $value) {
+                if(str_contains($key, "valeurNom" ) && $value != null ){
+                $valeurids [] = $value;            
+                }         
+            }
+            
+            
+            if(sizeof($valeurids) > 0 ){
+                $produitdecli->valeurcaracteristiques()->attach($valeurids, [
+                    'modelevoiture_id' => $request->modelevoiture_id,
+                    'circuit_id' => $request->circuit_id
+                ]);
+            }
+            
+            $produit->a_declinaison = true;
+            $produit->update();
+            $this->generer_declinaison($request, $produit->id);
+        
+            // stock
+            if( $request->gerer_stock_decli){
+            
+                $stock = Stock::create([
+                    "produit_id" => $produitdecli->id,
+                    "quantite" => $request->quantite_decli,
+                    "quantite_min" => $request->quantite_min_vente_decli,
+                    "seuil_alerte" => $request->seuil_alerte_stock_decli,
+                
+                ]);
+                
+            }
+            
+            DB::commit();
+            return redirect()->back()->with('ok', 'Nouvelle déclinaison ajoutée');
+        }catch(\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Erreur lors de la création de la déclinaison');
+        }
     }
     
     
@@ -693,6 +714,8 @@ class ProduitController extends Controller
         // $produitdecli->prix_achat_commerciaux_ht = $request->prix_achat_commerciaux_ht_decli;
         // $produitdecli->prix_achat_commerciaux_ttc = $request->prix_achat_commerciaux_ttc_decli;
         $produitdecli->gerer_stock = $request->gerer_stock_decli ? true : false;
+        $produitdecli->modelevoiture_id = $request->modelevoiture_id;
+        $produitdecli->circuit_id = $request->circuit_id;
 
        $produitdecli->update(); 
 
@@ -707,7 +730,10 @@ class ProduitController extends Controller
         
         if(sizeof($valeurids) > 0 ){
             $produitdecli->valeurcaracteristiques()->detach();
-            $produitdecli->valeurcaracteristiques()->attach($valeurids);
+            $produitdecli->valeurcaracteristiques()->attach($valeurids, [
+                'modelevoiture_id' => $request->modelevoiture_id,
+                'circuit_id' => $request->circuit_id
+            ]);
         }
         
       
@@ -792,12 +818,12 @@ class ProduitController extends Controller
 
         foreach ($produitdeclis as $produitdecli) {
             
-            // dd($produitdecli->valeurcaracteristiques);
+      
             $prix_declinaison_ttc = 0;
             foreach($produitdecli->valeurcaracteristiques as $valcarac){
                 if($valcarac->calcul_prix_produit){
                     
-                    $prix_declinaison_ttc += $valcarac->valeur * $produitdecli->voiture->prix_vente_kilometrique * $produitdecli->circuit->distance ;
+                    $prix_declinaison_ttc += $valcarac->valeur * $produitdecli->modelevoiture->prix_vente_kilometrique * $produitdecli->circuit->distance ;
                     // $prix_declinaison_ttc += $prix_declinaison_ht * (1 + ($produitdecli->tva->taux / 100));
                 }
                   

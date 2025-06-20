@@ -56,6 +56,69 @@
                                 @endforeach
                             </div> <!-- end .mt-2-->
 
+                            <!-- Modèles de voiture -->
+                            <div class="col-12 mt-4">
+                                <label for="nom" id="tooltip-modele"
+                                    class="form-label fs-5 mb-2 text-bold">Modèles de voiture</label>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="collapse show mt-3" id="modeleTasks">
+                                    <div class="card mb-0">
+                                        <div class="card-body">
+                                            <span class="text-dark fw-bold fs-4">Modèle</span>
+                                            <div class="mt-2" style="margin-left: 20px;">
+                                                <div class="form-check">
+                                                    <input type="radio" id="modele_aucun" name="modelevoiture_id" value="" class="form-check-input check-decli">
+                                                    <label class="form-check-label" for="modele_aucun">Aucun</label>
+                                                </div>
+                                                @foreach ($modelevoitures as $modele)
+                                                    <div class="form-check">
+                                                        <input type="radio" id="modele_{{ $modele->id }}"
+                                                            name="modelevoiture_id"
+                                                            value="{{ $modele->id }}" class="form-check-input">
+                                                        <label class="form-check-label"
+                                                            for="modele_{{ $modele->id }}">{{ $modele->nom }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div> <!-- end card-body-->
+                                    </div> <!-- end card -->
+                                </div> <!-- end .collapse-->
+                            </div> <!-- end .mt-2-->
+
+                            <!-- Circuits -->
+                            <div class="col-12 mt-4">
+                                <label for="nom" id="tooltip-circuit"
+                                    class="form-label fs-5 mb-2 text-bold">Circuits</label>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="collapse show mt-3" id="circuitTasks">
+                                    <div class="card mb-0">
+                                        <div class="card-body">
+                                            <span class="text-dark fw-bold fs-4">Circuit</span>
+                                            <div class="mt-2" style="margin-left: 20px;">
+                                                <div class="form-check">
+                                                    <input type="radio" id="circuit_aucun" name="circuit_id" value="" class="form-check-input check-decli">
+                                                    <label class="form-check-label" for="circuit_aucun">Aucun</label>
+                                                </div>
+                                                @foreach ($circuits as $circuit)
+                                                    <div class="form-check">
+                                                        <input type="radio" id="circuit_{{ $circuit->id }}"
+                                                            name="circuit_id"
+                                                            value="{{ $circuit->id }}" class="form-check-input">
+                                                        <label class="form-check-label"
+                                                            for="circuit_{{ $circuit->id }}">{{ $circuit->nom }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div> <!-- end card-body-->
+                                    </div> <!-- end card -->
+                                </div> <!-- end .collapse-->
+                            </div> <!-- end .mt-2-->
 
                         </div>
 

@@ -30,6 +30,8 @@
                 font-size: 13px;
             }
         </style>
+        @include('layouts.nav_parametre')
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card widget-inline">

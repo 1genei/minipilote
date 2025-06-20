@@ -43,7 +43,7 @@
                         <div class="card mb-0">
                             <div class="card-body">
                                 <!-- task -->
-                                <span class="text-dark fw-bold fs-4">Voitures</span>
+                                <span class="text-dark fw-bold fs-4">Modèles de voitures</span>
                                 <div class="mt-2" style="margin-left: 20px;">
                                     {{-- <div class="form-check">
                                         <input type="checkbox" id="tout_cocher_voiture" name="tout_cocher_voiture" value="" class="form-check-input check-decli">
@@ -51,13 +51,13 @@
                                             for="tout_cocher_voiture">Tout cocher
                                         </label>
                                     </div> --}}
-                                    @foreach ($voitures as $voiture)
+                                    @foreach ($modelevoitures as $modelevoiture)
                                         <div class="form-check">
-                                            <input type="checkbox" id="voiture{{ $voiture->id }}" 
-                                                name="voitures[]"
-                                                value="{{ $voiture->id }}" class="form-check-input voitures" checked>
+                                            <input type="checkbox" id="modelevoiture{{ $modelevoiture->id }}" 
+                                                name="modelevoitures[]"
+                                                value="{{ $modelevoiture->id }}" class="form-check-input modelevoitures" checked>
                                             <label class="form-check-label"
-                                                for="voiture{{ $voiture->id }}">{{ $voiture->nom }}
+                                                for="modelevoiture{{ $modelevoiture->id }}">{{ $modelevoiture->nom }}
                                             </label>
                                         </div>
                                     @endforeach
@@ -114,13 +114,13 @@
                             
                                     <div class="col-6">
                                         <div class="mb-3">
-                                            <label for="tva_id" class="form-label">Taxe</label>
+                                            <label for="tva_id" class="form-label">TVA</label>
                                             <select wire:model.defer="tva_id" name="tva_id" id="tva_id"
                                                 class="form-select select2">
                                                 @foreach ($tvas as $tva)
                                                     <option value="{{ $tva->id }}">{{ $tva->nom }}</option>
                                                 @endforeach
-                                                <option value="">Aucune taxe</option>
+                                                <option value="">sans tva</option>
                                             </select>
                                         </div>
                                     </div>
@@ -144,7 +144,7 @@ $('.check-decli').on('change', function() {
 
 // Check au moins une voiture
 $(function(){
-    var requiredCheckboxes = $('.voitures');
+    var requiredCheckboxes = $('.modelevoitures');
     requiredCheckboxes.change(function(){
   
         if(requiredCheckboxes.is(':checked')) {

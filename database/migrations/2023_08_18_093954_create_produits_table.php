@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer("produit_id")->nullable();
             $table->integer("marque_id")->nullable();
             $table->integer("voiture_id")->nullable();
+            $table->integer("modelevoiture_id")->nullable();
             $table->integer("circuit_id")->nullable();
             $table->integer("user_id")->nullable();
             $table->integer("tva_id")->nullable();

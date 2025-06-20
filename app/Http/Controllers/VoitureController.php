@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Voiture;
+use App\Models\Modelevoiture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 
@@ -14,7 +15,8 @@ class VoitureController extends Controller
     public function index()
     {
         $voitures = Voiture::where('archive', false)->get();
-        return view('parametres.voiture.index', compact('voitures'));
+        $modeles = Modelevoiture::where('archive', false)->get();
+        return view('parametres.voiture.index', compact('voitures', 'modeles'));
     }
 
     /**
@@ -35,26 +37,33 @@ class VoitureController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom' => 'required|unique:voitures,nom',
-            'cout_kilometrique' => 'required',
-            'coefficient_prix' => 'required',
-            
+            'nom' => 'required|string|max:255',
+            'modelevoiture_id' => 'nullable|exists:modelevoitures,id',
+            // 'cout_kilometrique' => 'required|numeric|min:0',
+            // 'coefficient_prix' => 'required|numeric|min:0',
+            // 'seuil_alerte_km_pneu' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_vidange' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_revision' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_courroie' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_frein' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_amortisseur' => 'nullable|numeric|min:0',
         ]);
-        
-        Voiture::create([
-            "nom" => $request->nom,
-            "cout_kilometrique" => $request->cout_kilometrique,
-            "coefficient_prix" => $request->coefficient_prix,
-            "prix_vente_kilometrique" => round($request->cout_kilometrique * $request->coefficient_prix, 2),
-            "seuil_alerte_km_pneu" => $request->seuil_alerte_km_pneu,
-            "seuil_alerte_km_vidange" => $request->seuil_alerte_km_vidange,
-            "seuil_alerte_km_revision" => $request->seuil_alerte_km_revision,
-            "seuil_alerte_km_courroie" => $request->seuil_alerte_km_courroie,
-            "seuil_alerte_km_frein" => $request->seuil_alerte_km_frein,
-            "seuil_alerte_km_amortisseur" => $request->seuil_alerte_km_amortisseur
-            
+
+        $voiture = Voiture::create([
+            'nom' => $request->nom,
+            'modelevoiture_id' => $request->modelevoiture_id,
+            // 'cout_kilometrique' => $request->cout_kilometrique,
+            // 'coefficient_prix' => $request->coefficient_prix,
+            // 'prix_vente_kilometrique' => $request->cout_kilometrique * $request->coefficient_prix,
+            // 'seuil_alerte_km_pneu' => $request->seuil_alerte_km_pneu,
+            // 'seuil_alerte_km_vidange' => $request->seuil_alerte_km_vidange,
+            // 'seuil_alerte_km_revision' => $request->seuil_alerte_km_revision,
+            // 'seuil_alerte_km_courroie' => $request->seuil_alerte_km_courroie,
+            // 'seuil_alerte_km_frein' => $request->seuil_alerte_km_frein,
+            // 'seuil_alerte_km_amortisseur' => $request->seuil_alerte_km_amortisseur,
         ]);
-        return redirect()->route('voiture.index')->with('success', 'Voiture créée avec succès.');
+
+        return redirect()->back()->with('ok', 'Voiture créée avec succès');
     }
 
     /**
@@ -70,20 +79,38 @@ class VoitureController extends Controller
     /**
      * Modifier une voiture.
      */
-    public function update(Request $request, $voiture_id)
+    public function update(Request $request, $id)
     {
-        $voiture = Voiture::where('id', Crypt::decrypt($voiture_id))->first();
-        
+        $id = Crypt::decrypt($id);
         $request->validate([
-            'nom' => 'required|unique:voitures,nom,'.$voiture->id,
-            'cout_kilometrique' => 'required',
-            'coefficient_prix' => 'required',
+            'nom' => 'required|string|max:255',
+            'modelevoiture_id' => 'nullable|exists:modelevoitures,id',
+            // 'cout_kilometrique' => 'required|numeric|min:0',
+            // 'coefficient_prix' => 'required|numeric|min:0',
+            // 'seuil_alerte_km_pneu' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_vidange' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_revision' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_courroie' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_frein' => 'nullable|numeric|min:0',
+            // 'seuil_alerte_km_amortisseur' => 'nullable|numeric|min:0',
         ]);
-        
-        $voiture->update($request->all());
-        $voiture->prix_vente_kilometrique = round($voiture->cout_kilometrique * $voiture->coefficient_prix, 2);
-        $voiture->save();
-        return redirect()->route('voiture.index')->with('success', 'Voiture modifiée avec succès.');
+
+        $voiture = Voiture::findOrFail($id);
+        $voiture->update([
+            'nom' => $request->nom,
+            'modelevoiture_id' => $request->modelevoiture_id,
+            // 'cout_kilometrique' => $request->cout_kilometrique,
+            // 'coefficient_prix' => $request->coefficient_prix,
+            // 'prix_vente_kilometrique' => $request->cout_kilometrique * $request->coefficient_prix,
+            // 'seuil_alerte_km_pneu' => $request->seuil_alerte_km_pneu,
+            // 'seuil_alerte_km_vidange' => $request->seuil_alerte_km_vidange,
+            // 'seuil_alerte_km_revision' => $request->seuil_alerte_km_revision,
+            // 'seuil_alerte_km_courroie' => $request->seuil_alerte_km_courroie,
+            // 'seuil_alerte_km_frein' => $request->seuil_alerte_km_frein,
+            // 'seuil_alerte_km_amortisseur' => $request->seuil_alerte_km_amortisseur,
+        ]);
+
+        return redirect()->back()->with('ok', 'Voiture modifiée avec succès');
     }
 
     /**

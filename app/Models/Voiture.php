@@ -9,6 +9,12 @@ class Voiture extends Model
 {
     use HasFactory;
     protected $guarded =[];
-    
-    
+
+    /**
+     * Retourne le modèle de la voiture
+     */
+    public function modele()
+    {
+        return $this->belongsTo(Modelevoiture::class, 'modelevoiture_id');
+    }
 }

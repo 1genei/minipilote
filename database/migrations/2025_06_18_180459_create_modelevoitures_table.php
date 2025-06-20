@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('voitures', function (Blueprint $table) {
+        Schema::create('modelevoitures', function (Blueprint $table) {
             $table->id();
-            $table->string('nom')->nullable();
-            $table->foreignId('modelevoiture_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('nom');
             $table->double('cout_kilometrique')->nullable(); 
             $table->double('coefficient_prix')->nullable(); 
             $table->double('prix_vente_kilometrique')->nullable(); 
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('voitures');
+        Schema::dropIfExists('modelevoitures');
     }
 };

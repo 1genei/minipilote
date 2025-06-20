@@ -205,6 +205,35 @@
                                 
         
                             </div>
+                            <br>
+                            <hr style="border: 3px solid #772e7b;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="instructeurs" class="form-label">Ajoutez des instructeurs </label>
+                                        <select name="instructeurs[]" id="instructeurs" class="form-control select2" multiple>
+                                            @foreach($instructeurs as $instructeur)
+                                                <option value="{{ $instructeur->id }}" @if(collect(old('instructeurs'))->contains($instructeur->id)) selected @endif>
+                                                    {{ $instructeur->individu->prenom ?? '' }} {{ $instructeur->individu->nom ?? '' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                {{-- Ajoutez des véhicules --}}
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="voitures" class="form-label">Ajoutez des véhicules</label>
+                                        <select name="voitures[]" id="voitures" class="form-control select2" multiple>
+                                            @foreach($voitures as $voiture)
+                                                <option value="{{ $voiture->id }}" @if(collect(old('voitures'))->contains($voiture->id)) selected @endif>
+                                                    {{ $voiture->nom }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
         
                         </div>
@@ -232,7 +261,19 @@
 <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
 
 <script type="text/javascript">
-
+    $(document).ready(function() {
+        $('#instructeurs').select2({
+            placeholder: 'Sélectionnez un ou plusieurs instructeurs',
+            allowClear: true,
+            width: '100%'
+        });
+        
+        $('#voitures').select2({
+            placeholder: 'Sélectionnez un ou plusieurs véhicules',
+            allowClear: true,
+            width: '100%'
+        });
+    });
 </script>
 
 @endsection

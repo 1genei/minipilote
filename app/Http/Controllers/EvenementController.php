@@ -7,7 +7,9 @@ use  App\Models\Evenement;
 use  App\Models\Circuit;
 use  App\Models\Prestation;
 use  App\Models\Contact; 
+use  App\Models\Voiture;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 
 class EvenementController extends Controller
@@ -51,7 +53,14 @@ class EvenementController extends Controller
     public function create()
     {
         $circuits = Circuit::where('archive', 0)->get();
-        return view('evenement.add', compact('circuits'));
+        $instructeurs = Contact::where('type', 'individu')
+            ->whereHas('typecontacts', function($q) {
+                $q->where('type', 'Instructeur');
+            })
+            ->where('archive', false)
+            ->get();
+        $voitures = Voiture::where('archive', false)->get();
+        return view('evenement.add', compact('circuits', 'instructeurs', 'voitures'));
     }
     
     /*
@@ -61,7 +70,14 @@ class EvenementController extends Controller
     {
         $circuits = Circuit::where('archive', 0)->get();
         $evenement = Evenement::find(Crypt::decrypt($evenement_id));
-        return view('evenement.edit', compact('evenement', 'circuits'));
+        $instructeurs = Contact::where('type', 'individu')
+            ->whereHas('typecontacts', function($q) {
+                $q->where('type', 'Instructeur');
+            })
+            ->where('archive', false)
+            ->get();
+        $voitures = Voiture::where('archive', false)->get();
+        return view('evenement.edit', compact('evenement', 'circuits', 'instructeurs', 'voitures'));
     }
     
     /*
@@ -69,20 +85,34 @@ class EvenementController extends Controller
     */
     public function store(Request $request)
     {
-        $request->validate([
-            'nom' => 'required',
+        try {
+            DB::beginTransaction();
             
-        ]);
-        
-        $evenement = new Evenement();
-        $evenement->nom = $request->input('nom');
-        $evenement->circuit_id = $request->input('circuit_id');
-        $evenement->date_debut = $request->input('date_debut');
-        $evenement->date_fin = $request->input('date_fin');
-        $evenement->description = $request->input('description');
-        
-        $evenement->save();
-        return redirect()->route('evenement.index')->with('ok', 'Evenement enregistré avec succes.');
+            $request->validate([
+                'nom' => 'required',
+            ]);
+            
+            $evenement = new Evenement();
+            $evenement->nom = $request->input('nom');
+            $evenement->circuit_id = $request->input('circuit_id');
+            $evenement->date_debut = $request->input('date_debut');
+            $evenement->date_fin = $request->input('date_fin');
+            $evenement->description = $request->input('description');
+            $evenement->save();
+            
+            // Synchronisation des instructeurs
+            $evenement->contacts()->sync($request->input('instructeurs', []));
+            
+            // Synchronisation des véhicules
+            $evenement->voitures()->sync($request->input('voitures', []));
+            
+            DB::commit();
+            return redirect()->route('evenement.index')->with('ok', 'Evenement enregistré avec succes.');
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de l\'enregistrement: ' . $e->getMessage()])->withInput();
+        }
     }
     
     /*
@@ -90,14 +120,29 @@ class EvenementController extends Controller
     */
     public function update(Request $request, $evenement_id)
     {
-        $evenement = Evenement::find(Crypt::decrypt($evenement_id));
-        $evenement->nom = $request->input('nom');
-        $evenement->circuit_id = $request->input('circuit_id');
-        $evenement->date_debut = $request->input('date_debut');
-        $evenement->date_fin = $request->input('date_fin');
-        $evenement->description = $request->input('description');        
-        $evenement->save();
-        return redirect()->route('evenement.index')->with('ok', 'Evenement mis à jour avec succes.');
-        
+        try {
+            DB::beginTransaction();
+            
+            $evenement = Evenement::find(Crypt::decrypt($evenement_id));
+            $evenement->nom = $request->input('nom');
+            $evenement->circuit_id = $request->input('circuit_id');
+            $evenement->date_debut = $request->input('date_debut');
+            $evenement->date_fin = $request->input('date_fin');
+            $evenement->description = $request->input('description');
+            $evenement->save();
+            
+            // Synchronisation des instructeurs
+            $evenement->contacts()->sync($request->input('instructeurs', []));
+            
+            // Synchronisation des véhicules
+            $evenement->voitures()->sync($request->input('voitures', []));
+            
+            DB::commit();
+            return redirect()->route('evenement.index')->with('ok', 'Evenement mis à jour avec succes.');
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la modification: ' . $e->getMessage()])->withInput();
+        }
     }
 }

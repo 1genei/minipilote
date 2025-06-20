@@ -105,7 +105,7 @@
                         </div>
 
 
-                        <livewire:produit.edit-form :produit="$produit" :categories="$categories" :caracteristiques="$caracteristiques" :marques="$marques" :tvas="$tvas" :circuits="$circuits" :voitures="$voitures">
+                        <livewire:produit.edit-form :produit="$produit" :categories="$categories" :caracteristiques="$caracteristiques" :marques="$marques" :tvas="$tvas" :circuits="$circuits" :modelevoitures="$modelevoitures">
 
                             <style>
                                 .select2-container .select2-selection--single {
@@ -559,6 +559,24 @@
             $('#edit_quantite_decli').val(that.data('quantite'));
             $('#edit_quantite_min_vente_decli').val(that.data('quantite_min'));
             $('#edit_seuil_alerte_stock_decli').val(that.data('seuil_alerte'));
+
+            // Gestion des modèles de voiture et circuits
+            let currentModelevoitureId = that.data('modelevoiture_id');
+            let currentCircuitId = that.data('circuit_id');
+            
+            // Cocher le bon modèle de voiture
+            if (currentModelevoitureId) {
+                $('#edit_modele_' + currentModelevoitureId).prop('checked', true);
+            } else {
+                $('#edit_modele_aucun').prop('checked', true);
+            }
+            
+            // Cocher le bon circuit
+            if (currentCircuitId) {
+                $('#edit_circuit_' + currentCircuitId).prop('checked', true);
+            } else {
+                $('#edit_circuit_aucun').prop('checked', true);
+            }
 
 
             var check_declis = $('.check-decli');

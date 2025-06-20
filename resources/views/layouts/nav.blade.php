@@ -288,30 +288,12 @@
         @can('permission', 'afficher-parametre')
             <li
                 class="side-nav-item {{ $li_parametre_contact }} {{ $li_parametre_generaux }} {{ $li_parametre_produit }} ">
-                <a data-bs-toggle="collapse" href="#parametres" aria-expanded="" aria-controls="parametres"
+                <a href="{{ route('parametre.index') }}" aria-expanded="false" aria-controls="parametres"
                     class="side-nav-link">
                     <i class="uil uil-bright"></i>
                     <span>Paramètres</span>
-                    <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse @if ($li_parametre_show) show @endif" id="parametres">
-                    <ul class="side-nav-second-level">
-                        <li class="{{ $li_parametre_generaux }}"><a href="{{ route('parametre.index') }}">Généraux</a>
-                        </li>
-                        <li class="{{ $li_parametre_contact }}"> <a href="{{ route('parametre.contact') }}"> Contacts
-                            </a>
-                        </li>
-                        <li class="{{ $li_parametre_produit }}"> <a href="{{ route('parametre.produit') }}"> Catalogue
-                            </a>
-                        </li>
-                        <li class="{{ $li_parametre_voiture }}"> <a href="{{ route('voiture.index') }}"> Voitures
-                        </a>
-                        </li>
-                        <li class="{{ $li_parametre_circuit }}"> <a href="{{ route('circuit.index') }}"> Circuits
-                        </a>
-                </li>
-                    </ul>
-                </div>
+               
             </li>
         @endcan
 

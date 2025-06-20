@@ -126,25 +126,25 @@
                                                 <a href="#" class="text-body fw-bold">{{ $voiture->nom }}</a>
                                             </td>
                                             <td>
-                                                {{ number_format($voiture->prix_kilometrique, 2, ',', ' ') }}
+                                                {{ number_format($voiture->modele?->prix_kilometrique, 2, ',', ' ') }}
                                             </td>
                                             <td>
-                                                {{ $voiture->seuil_alerte_km_pneu }}
+                                                {{ $voiture->modele?->seuil_alerte_km_pneu }}
                                             </td>
                                             <td>
-                                                {{ $voiture->seuil_alerte_km_vidange }}
+                                                {{ $voiture->modele?->seuil_alerte_km_vidange }}
                                             </td>
                                             <td>
-                                                {{ $voiture->seuil_alerte_km_revision }}
+                                                {{ $voiture->modele?->seuil_alerte_km_revision }}
                                             </td>
                                             <td>
-                                                {{ $voiture->seuil_alerte_km_courroie }}
+                                                {{ $voiture->modele?->seuil_alerte_km_courroie }}
                                             </td>
                                             <td>
-                                                {{ $voiture->seuil_alerte_km_frein }}
+                                                {{ $voiture->modele?->seuil_alerte_km_frein }}
                                             </td>
                                             <td>
-                                                {{ $voiture->seuil_alerte_km_amortisseur }}
+                                                {{ $voiture->modele?->seuil_alerte_km_amortisseur }}
                                             </td>
                                             
                                             <td>

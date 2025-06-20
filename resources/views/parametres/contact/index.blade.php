@@ -20,17 +20,13 @@
                 </div>
             </div>
         </div>
-
+        @include('layouts.nav_parametre')
         <div class="row">
             <div class="col-lg-12">
                 <div class="card widget-inline">
                     <div class="card-body p-0">
                         <div class="row g-0">
-                            <div class="col-sm-4  mr-14 ">
-                                {{-- <a href="{{route('action.index')}}" type="button" class="btn btn-outline-primary"><i class="uil-arrow-left"></i> Retour</a> --}}
-                                <h4 class="modal-title" id="addActionModalLabel"> Modification de vos paramètres </h4>
-
-                            </div>
+                         
                             @if (session('ok'))
                                 <div class="col-6">
                                     <div class="alert alert-success alert-dismissible bg-success text-white text-center border-0 fade show"

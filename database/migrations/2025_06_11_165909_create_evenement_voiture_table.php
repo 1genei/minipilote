@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produit_valeurcaracteristique', function (Blueprint $table) {
+        Schema::create('evenement_voiture', function (Blueprint $table) {
             $table->id();
-            $table->integer('produit_id')->nullable();
-            $table->integer('valeurcaracteristique_id')->nullable();
-            $table->integer('caracteristique_id')->nullable();
-            $table->integer('modelevoiture_id')->nullable();
+            $table->integer('evenement_id')->nullable();
             $table->integer('voiture_id')->nullable();
-            $table->integer('circuit_id')->nullable();
-            
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('produit_valeurcaracteristique');
+        Schema::dropIfExists('evenement_voiture');
     }
 };

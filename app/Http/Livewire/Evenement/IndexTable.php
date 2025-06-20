@@ -111,14 +111,14 @@ final class IndexTable extends PowerGridComponent
            
             } )
             ->addColumn('date_debut', function (Evenement $model) {
-                return $model->date_debut;
+                return Carbon::parse($model->date_debut)->format('d/m/Y');
             })
            
             ->addColumn('date_fin', function (Evenement $model) {
-                return $model->date_fin;
+                return Carbon::parse($model->date_fin)->format('d/m/Y');
             })
             ->addColumn('circuit_id', function (Evenement $model) {
-                return  '<span class="badge bg-warning text-white font-bold py-1 px-2 fs-6">'.$model->circuit->nom.'</span>';
+                return  '<span class="badge bg-warning text-white font-bold py-1 px-2 fs-6">'.$model->circuit?->nom.'</span>';
             });
     }
 
