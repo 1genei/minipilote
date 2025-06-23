@@ -58,7 +58,7 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-9">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
@@ -127,6 +127,20 @@
                                                         ,
                                                     @endif
                                                 @endforeach
+                                            </td>
+                                            <td>
+                                                @if ($caracteristique->calcul_prix_produit)
+                                                    <span class="badge bg-success">Oui</span>
+                                                @else
+                                                    <span class="badge bg-danger">Non</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($caracteristique->calcul_prix_produit_type == "multiplier")
+                                                    <span class="badge bg-success">Multiplier</span>
+                                                @elseif ($caracteristique->calcul_prix_produit_type == "additionner")
+                                                    <span class="badge bg-danger">Additionner</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 @if ($caracteristique->archive == false)
