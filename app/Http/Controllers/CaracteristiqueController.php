@@ -6,7 +6,7 @@ use App\Models\Caracteristique;
 use App\Models\Valeurcaracteristique;
 
 use Illuminate\Http\Request;
-use Crypt;
+use Illuminate\Support\Facades\Crypt;
 
 class CaracteristiqueController extends Controller
 {
@@ -20,18 +20,6 @@ class CaracteristiqueController extends Controller
         return view('caracteristiques.index', compact('caracteristiques'));
     }
 
-    public function archives()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -44,7 +32,8 @@ class CaracteristiqueController extends Controller
         
         Caracteristique::create([
             "nom" => $request->nom,
-            "calcul_prix_produit" => $request->calcul_prix_produit == "true" ? true : false           
+            "calcul_prix_produit" => $request->calcul_prix_produit == "true" ? true : false,
+            "calcul_prix_produit_type" => $request->calcul_prix_produit_type
         ]);
         
         return redirect()->back()->with('ok','Nouvelle caractéristique ajoutée, vous pouvez ajouter ses valaurs');
@@ -92,7 +81,7 @@ class CaracteristiqueController extends Controller
         
         $caracteristique->nom = $request->nom;
         $caracteristique->calcul_prix_produit = $request->calcul_prix_produit == "true" ? true : false;
-        
+        $caracteristique->calcul_prix_produit_type = $request->calcul_prix_produit_type;
         $caracteristique->update();
         
         foreach ($caracteristique->valeurcaracteristiques as $valeurcaracteristique) {

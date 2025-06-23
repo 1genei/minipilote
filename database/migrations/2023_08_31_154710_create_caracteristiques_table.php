@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string("nom")->nullable();
             // Utiliser les valeurs de la caractéristique pour calculer le prix du produit
             $table->boolean("calcul_prix_produit")->default(false);
+            // multiplier ou additionner au prix du produit
+            $table->string("calcul_prix_produit_type")->nullable(); // multiplier ou additionner
             $table->boolean("archive")->nullable()->default(false);
             $table->timestamps();
         });

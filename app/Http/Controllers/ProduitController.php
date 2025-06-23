@@ -611,10 +611,65 @@ class ProduitController extends Controller
         }
         return $nomcaracteristique;
     }
+    
+    /**
+     * Fonction pour générer le nom d'une déclinaison
+     */
+    function generer_nom_declinaison(Request $request, $produit_parent){
         
+        // Récupérer les valeurs des caractéristiques
+        $valeurids = [];
+        foreach ($request->all() as $key => $value) {
+            if(str_contains($key, "valeurNom" ) && $value != null ){
+                $valeurids [] = $value;            
+            }         
+        }
         
+        // Générer le nom des caractéristiques
+        $nomcaracteristique = "";
+        if(sizeof($valeurids) > 0 ){
+            $nomcaracteristique = $this->generer_nom_caracteristique($valeurids);
+        }
         
+        // Récupérer le modèle de voiture
+        $nom_modele = "";
+        if($request->modelevoiture_id){
+            $modelevoiture = Modelevoiture::where('id', $request->modelevoiture_id)->first();
+            if($modelevoiture){
+                $nom_modele = $modelevoiture->nom;
+            }
+        }
         
+        // Récupérer le circuit
+        $nom_circuit = "";
+        if($request->circuit_id){
+            $circuit = Circuit::where('id', $request->circuit_id)->first();
+            if($circuit){
+                $nom_circuit = $circuit->nom;
+            }
+        }
+        
+        // Construire le nom final
+        $nom_final = $produit_parent->nom;
+        
+        if($nom_modele){
+            $nom_final .= '-'.$nom_modele;
+        }
+        
+        if($nom_circuit){
+            $nom_final .= '-'.$nom_circuit;
+        }
+        
+        if($nomcaracteristique){
+            $nom_final .= ' / '.$nomcaracteristique;
+        }
+        
+        return $nom_final;
+    }
+    
+    
+    
+    
     
     
     
@@ -631,9 +686,11 @@ class ProduitController extends Controller
         
             $produit = Produit::where('id', $request->produit_id)->first();
             
+            // Générer le nom de la déclinaison automatiquement
+            $nom_declinaison = $this->generer_nom_declinaison($request, $produit);
 
             $produitdecli = Produit::create([
-                "nom" => $produit->nom,
+                "nom" => $nom_declinaison,
                 "produit_id" => $produit->id,
                 "modelevoiture_id" => $request->modelevoiture_id,
                 "circuit_id" => $request->circuit_id,
@@ -704,7 +761,13 @@ class ProduitController extends Controller
     {
     
         $produitdecli = Produit::where('id', Crypt::decrypt($produitdeli_id))->first();
+        $produit_parent = Produit::where('id', $produitdecli->produit_id)->first();
+        
+        // Générer le nom de la déclinaison automatiquement
+        $nom_declinaison = $this->generer_nom_declinaison($request, $produit_parent);
+        
         // dd($request->all());
+        $produitdecli->nom = $nom_declinaison;
         $produitdecli->prix_vente_ht = $request->prix_vente_ht_decli;
         $produitdecli->prix_vente_ttc = $request->prix_vente_ttc_decli;
         // $produitdecli->prix_vente_max_ht = $request->prix_vente_max_ht_decli;

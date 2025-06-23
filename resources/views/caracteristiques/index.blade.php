@@ -107,6 +107,8 @@
 
                                         <th>Caractéristiques</th>
                                         <th>Valeurs</th>
+                                        <th>Utiliser pour calculer le prix du produit</th>
+                                        <th>Type de calcul</th>
                                         <th>Statut</th>
                                         <th style="width: 125px;">Action</th>
                                     </tr>
@@ -141,7 +143,10 @@
                                                 @endcan
                                                 @can('permission', 'modifier-caracteristique-produit')
                                                     <a data-href="{{ route('caracteristique.update', Crypt::encrypt($caracteristique->id)) }}"
-                                                        data-nom="{{ $caracteristique->nom }}" data-calcul_prix_produit = "{{$caracteristique->calcul_prix_produit}}" data-bs-toggle="modal"
+                                                        data-nom="{{ $caracteristique->nom }}" 
+                                                        data-calcul_prix_produit = "{{$caracteristique->calcul_prix_produit}}"
+                                                        data-calcul_prix_produit_type = "{{$caracteristique->calcul_prix_produit_type}}"
+                                                        data-bs-toggle="modal"
                                                         data-bs-target="#edit-caracteristique"
                                                         class="action-icon edit-caracteristique text-success">
                                                         <i class="mdi mdi-square-edit-outline"></i>
@@ -216,6 +221,21 @@
                                             </div>
                                         @endif
                                     </div>
+
+                                    <div id="type_calcul" style="display: none;" class="mt-2">
+                                        <select name="calcul_prix_produit_type" class="form-select">
+                                            <option value="multiplier">Multiplier par le prix du produit</option>
+                                            <option value="additionner">Additionner au prix du produit</option>
+                                        </select>
+                                        @if ($errors->has('calcul_prix_produit_type'))
+                                            <br>
+                                            <div class="alert alert-warning text-secondary " caracteristique="alert">
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <strong>{{ $errors->first('calcul_prix_produit_type') }}</strong>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                                 
                             </div>
@@ -279,6 +299,36 @@
                                         </div>
                                     @endif
                                 </div>
+
+                                <div id="edit_type_calcul" style="display: none;" class="mt-2">
+                                    <select name="calcul_prix_produit_type" class="form-select" id="edit_calcul_prix_produit_type">
+                                        <option value="multiplier">Multiplier par le prix du produit</option>
+                                        <option value="additionner">Additionner au prix du produit</option>
+                                    </select>
+                                    @if ($errors->has('calcul_prix_produit_type'))
+                                        <br>
+                                        <div class="alert alert-warning text-secondary " caracteristique="alert">
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <strong>{{ $errors->first('calcul_prix_produit_type') }}</strong>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div id="edit_type_calcul" style="display: none;" class="mt-2">
+                                    <select name="calcul_prix_produit_type" class="form-select" id="edit_calcul_prix_produit_type">
+                                        <option value="multiplier">Multiplier par le prix du produit</option>
+                                        <option value="additionner">Additionner au prix du produit</option>
+                                    </select>
+                                    @if ($errors->has('calcul_prix_produit_type'))
+                                        <br>
+                                        <div class="alert alert-warning text-secondary " caracteristique="alert">
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <strong>{{ $errors->first('calcul_prix_produit_type') }}</strong>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
 
                         </div>
@@ -299,14 +349,36 @@
 @section('script')
     {{-- Modification d'une caractéristique --}}
     <script>
+        // Gestion de l'affichage du select pour le type de calcul
+        $('#calcul_prix_produit').change(function() {
+            if($(this).is(':checked')) {
+                $('#type_calcul').show();
+            } else {
+                $('#type_calcul').hide();
+            }
+        });
+
+        $('#edit_calcul_prix_produit').change(function() {
+            if($(this).is(':checked')) {
+                $('#edit_type_calcul').show();
+            } else {
+                $('#edit_type_calcul').hide();
+            }
+        });
+
         $('.edit-caracteristique').click(function(e) {
 
             let that = $(this);
             let currentCaracteristique = that.data('nom');
             let currentCalculPrixProduit = that.data('calcul_prix_produit');
+            let currentCalculPrixProduitType = that.data('calcul_prix_produit_type');
             let currentFormAction = that.data('href');
             $('#edit_nom').val(currentCaracteristique);
             $('#edit_calcul_prix_produit').prop('checked', currentCalculPrixProduit == "1" ? true : false);
+            if(currentCalculPrixProduit == "1") {
+                $('#edit_type_calcul').show();
+                $('#edit_calcul_prix_produit_type').val(currentCalculPrixProduitType);
+            }
             $('#edit_form').attr('action', currentFormAction);
 
         })
