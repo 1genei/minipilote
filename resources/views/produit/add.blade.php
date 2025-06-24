@@ -75,6 +75,16 @@
                                         <a href="#" class="alert-link"><strong> {{ session('message') }}</strong></a>
                                     </div>
                                 @endif
+                                @if (session('error'))
+                                <div class="col-6">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white text-center border-0 fade show"
+                                        role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                        <strong> {{ session('error') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
 
 
                             </div>

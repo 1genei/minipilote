@@ -43,13 +43,23 @@
                             <div class="col-sm-2 mr-14 ">
                                 {{-- <a href="{{route('permission.index')}}" type="button" class="btn btn-outline-primary"><i class="uil-arrow-left"></i> Permissions</a> --}}
                             </div>
-                            @if (session('ok'))
+                            @if (session('message'))
                                 <div class="col-6">
                                     <div class="alert alert-success alert-dismissible bg-success text-white text-center border-0 fade show"
                                         role="alert">
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
                                             aria-label="Close"></button>
-                                        <strong> {{ session('ok') }}</strong>
+                                        <strong> {{ session('message') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                            @if (session('error'))
+                                <div class="col-6">
+                                    <div class="alert alert-danger alert-dismissible bg-danger text-white text-center border-0 fade show"
+                                        role="alert">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                        <strong> {{ session('error') }}</strong>
                                     </div>
                                 </div>
                             @endif

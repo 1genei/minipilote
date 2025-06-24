@@ -477,9 +477,8 @@ class ProduitController extends Controller
                     }         
                 }
                 
-            
                 $combinaisons =  $this->genererCombinaisons($valeurids);          
-            
+        
                 $modelevoitures = $request->modelevoitures;
                 $circuits = $request->circuits;
                 
@@ -505,22 +504,30 @@ class ProduitController extends Controller
                     
                 }
                 
-                
+            
                 foreach ($combinaisons as $combinaison) {
                     
                     $nomcaracteristique = $this->generer_nom_caracteristique($combinaison);
-                    
+                 
                     foreach ($combinaison_voiture_circuit as $combi_v_c) {
                     
-                    
-                        //    On calcul le nombre de tours total de la combianaison  
-                        $nb_tours = 0;
+                        //   On reccupère les valeurs des caractéristiques avec lequels on va calculer le prix du produit
+                        $total_valeur_multiplier = 0;
+                        $total_valeur_additionner = 0;
                         foreach ($combinaison as $combi) {
+                         
                             $valeurcaract = Valeurcaracteristique::where('id', $combi)->first();
-                            $nb_tours += $valeurcaract->valeur;
+                            $caracteristique = $valeurcaract->caracteristique;
+                            if($caracteristique?->calcul_prix_produit){
+                              
+                                if($caracteristique->calcul_prix_produit_type == "multiplier"){
+                                    $total_valeur_multiplier += $valeurcaract->valeur;
+                                }elseif($caracteristique->calcul_prix_produit_type == "additionner"){
+                                    $total_valeur_additionner += $valeurcaract->valeur;
+                                }
+                            }
                         }
                     
-                        // $nb_tours = array_sum($combinaison);
 
                         // $cartacteristique 
                         $nom_produit_temp = $combi_v_c["nom_produit"]." / $nomcaracteristique";
@@ -528,7 +535,7 @@ class ProduitController extends Controller
                         $modelevoiture_id = $combi_v_c["modelevoiture_id"];
                         $circuit_id = $combi_v_c["circuit_id"];
                         
-                        $prix_declinaison_ttc = round($prix_produit_temp * $nb_tours,2);
+                        $prix_declinaison_ttc = round($prix_produit_temp * $total_valeur_multiplier + $total_valeur_additionner,2);
                         $prix_declinaison_ht = round($prix_declinaison_ttc / (1 + ($produit_parent->tva->taux / 100)),2);
                     
                         $produit_decli = Produit::create([
@@ -677,7 +684,7 @@ class ProduitController extends Controller
     
     
      /**
-     * Création d'une déclinaison de  produit
+     * Création d'une déclinaison unique pour le  produit
      */
     public function store_declinaison(Request $request)
     {
@@ -688,6 +695,14 @@ class ProduitController extends Controller
             
             // Générer le nom de la déclinaison automatiquement
             $nom_declinaison = $this->generer_nom_declinaison($request, $produit);
+
+           
+
+            // vérifier si la déclinaison existe déjà
+            $produitdecli = Produit::where('nom', $nom_declinaison)->first();
+            if($produitdecli){
+                return redirect()->back()->with('error', 'La déclinaison existe déjà');
+            }
 
             $produitdecli = Produit::create([
                 "nom" => $nom_declinaison,
@@ -702,12 +717,8 @@ class ProduitController extends Controller
                 "prix_vente_ht" => $request->prix_vente_ht_decli,
                 "type" => "declinaison",
                 "prix_vente_ttc" => $request->prix_vente_ttc_decli,
-                // "prix_vente_max_ht" => $request->prix_vente_max_ht_decli,
-                // "prix_vente_max_ttc" => $request->prix_vente_max_ttc_decli,
                 "prix_achat_ht" => $request->prix_achat_ht_decli,
                 "prix_achat_ttc" => $request->prix_achat_ttc_decli,
-                // "prix_achat_commerciaux_ht" => $request->prix_achat_commerciaux_ht_decli,
-                // "prix_achat_commerciaux_ttc" => $request->prix_achat_commerciaux_ttc_decli,
                 "gerer_stock" => $request->gerer_stock_decli ? true : false,     
             ]);
             
@@ -730,7 +741,7 @@ class ProduitController extends Controller
             
             $produit->a_declinaison = true;
             $produit->update();
-            $this->generer_declinaison($request, $produit->id);
+            // $this->generer_declinaison($request, $produit->id);
         
             // stock
             if( $request->gerer_stock_decli){
@@ -746,7 +757,7 @@ class ProduitController extends Controller
             }
             
             DB::commit();
-            return redirect()->back()->with('ok', 'Nouvelle déclinaison ajoutée');
+            return redirect()->back()->with('message', 'Nouvelle déclinaison ajoutée');
         }catch(\Exception $e){
             DB::rollBack();
             return redirect()->back()->with('error', 'Erreur lors de la création de la déclinaison');

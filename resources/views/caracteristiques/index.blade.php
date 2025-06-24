@@ -329,20 +329,7 @@
                                     @endif
                                 </div>
 
-                                <div id="edit_type_calcul" style="display: none;" class="mt-2">
-                                    <select name="calcul_prix_produit_type" class="form-select" id="edit_calcul_prix_produit_type">
-                                        <option value="multiplier">Multiplier par le prix du produit</option>
-                                        <option value="additionner">Additionner au prix du produit</option>
-                                    </select>
-                                    @if ($errors->has('calcul_prix_produit_type'))
-                                        <br>
-                                        <div class="alert alert-warning text-secondary " caracteristique="alert">
-                                            <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="alert" aria-label="Close"></button>
-                                            <strong>{{ $errors->first('calcul_prix_produit_type') }}</strong>
-                                        </div>
-                                    @endif
-                                </div>
+                               
                             </div>
 
                         </div>
