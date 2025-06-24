@@ -11,15 +11,18 @@ use Illuminate\Support\Facades\Auth;
 
 class PlanningController extends Controller
 {
+    /*
+    * Affichage des plannings
+    * @return \Illuminate\Contracts\View\View
+    */
     public function index()
     {
         // Récupérer les commandes non archivées avec leurs produits et la relation pivot
         $commandes = Commande::with(['produits', 'client'])
             ->where('archive', false)
-            ->whereDate('date_realisation_prevue', '>=', Carbon::now()->startOfDay())
+            // ->whereDate('date_realisation_prevue', '>=', Carbon::now()->startOfDay())
             ->orderBy('date_realisation_prevue', 'asc')
             ->get();
-
         return view('planning.index', compact('commandes'));
     }
 
@@ -35,6 +38,10 @@ class PlanningController extends Controller
         ]);
     }
 
+    /*
+    * Affichage des modèles de planning
+    * @return \Illuminate\Contracts\View\View
+    */
     public function indexModeles()
     {
         $modeles = Planning::where('est_modele', true)
@@ -47,6 +54,10 @@ class PlanningController extends Controller
         return view('parametres.planning.index', compact('modeles', 'circuits'));
     }
 
+    /*
+    * Affichage des modèles de planning archivés
+    * @return \Illuminate\Contracts\View\View
+    */
     public function indexArchives()
     {
         $modeles = Planning::where('est_modele', true)
@@ -56,7 +67,11 @@ class PlanningController extends Controller
 
         return view('parametres.planning.archives', compact('modeles'));
     }
-
+    /*
+    * Création d'un modèle de planning
+    * @param Request $request
+    * @return \Illuminate\Http\RedirectResponse
+    */
     public function store(Request $request)
     {
         $request->validate([
@@ -97,6 +112,12 @@ class PlanningController extends Controller
             ->with('ok', 'Le modèle de planning a été créé avec succès.');
     }
 
+    /*
+    * Modification d'un modèle de planning
+    * @param Request $request
+    * @param Planning $planning
+    * @return \Illuminate\Http\RedirectResponse
+    */
     public function update(Request $request, Planning $planning)
     {
         $request->validate([
@@ -133,6 +154,11 @@ class PlanningController extends Controller
             ->with('ok', 'Le modèle de planning a été modifié avec succès.');
     }
 
+    /*
+    * Archivage d'un modèle de planning
+    * @param Planning $planning
+    * @return \Illuminate\Http\RedirectResponse
+    */
     public function archiver(Planning $planning)
     {
         $planning->statut = 'archive';
@@ -142,6 +168,11 @@ class PlanningController extends Controller
             ->with('ok', 'Le modèle de planning a été archivé avec succès.');
     }
 
+    /*
+    * Restauration d'un modèle de planning
+    * @param Planning $planning
+    * @return \Illuminate\Http\RedirectResponse
+    */
     public function restaurer(Planning $planning)
     {
         $planning->statut = 'actif';

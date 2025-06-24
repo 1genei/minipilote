@@ -107,7 +107,7 @@ final class IndexTable extends PowerGridComponent
         return PowerGrid::columns()
       
             ->addColumn('nom', function (Evenement $model) {          
-                return  '<span class="badge bg-info text-white font-bold py-1 px-2 fs-6">'.$model->nom.'</span>';
+                return  '<a href="'.route('evenement.show', Crypt::encrypt($model->id)).'" class="badge bg-info text-white font-bold py-1 px-2 fs-6">'.$model->nom.' <i class="mdi mdi-link"></i></a>';
            
             } )
             ->addColumn('date_debut', function (Evenement $model) {
@@ -119,6 +119,20 @@ final class IndexTable extends PowerGridComponent
             })
             ->addColumn('circuit_id', function (Evenement $model) {
                 return  '<span class="badge bg-warning text-white font-bold py-1 px-2 fs-6">'.$model->circuit?->nom.'</span>';
+            })
+            ->addColumn('recette', function(Evenement $model) {
+                return '<span class="badge bg-success">'.number_format($model->recette(), 2, ',', ' ').' €</span>';
+            })
+            ->addColumn('depenses', function(Evenement $model) {
+                return '<span class="badge bg-danger">'.number_format($model->montantDepenses(), 2, ',', ' ').' €</span>';
+            })
+            ->addColumn('marge', function(Evenement $model) {
+                $marge = $model->benefices();
+                $class = $marge >= 0 ? 'primary' : 'danger';
+                return '<span class="badge bg-'.$class.'">'.number_format($marge, 2, ',', ' ').' €</span>';
+            })
+            ->addColumn('prestations_count', function(Evenement $model) {
+                return '<span class="badge bg-secondary">'.$model->prestations->count().'</span>';
             });
     }
 
@@ -145,8 +159,10 @@ final class IndexTable extends PowerGridComponent
             Column::make('Date de début', 'date_debut',)->searchable()->sortable(),
             Column::make('Date de fin', 'date_fin')->searchable()->sortable(),
             Column::make('Circuit', 'circuit_id')->searchable()->sortable(),
-            Column::make('Statut', 'statut')->searchable()->sortable(),
-            // Column::make('Actions')
+            Column::make('Prestations', 'prestations_count'),
+            Column::make('Recettes', 'recette'),
+            Column::make('Dépenses', 'depenses'),
+            Column::make('Marge', 'marge'),
 
         ];
         

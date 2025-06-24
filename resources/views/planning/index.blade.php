@@ -7,7 +7,7 @@
         display: flex;
         gap: 20px;
         padding: 20px;
-        height: calc(100vh - 150px);
+        height: calc(100vh - 100px);
     }
 
     .commandes-list {
@@ -135,6 +135,66 @@
         padding: 20px;
         color: #6c757d;
     }
+
+    .planning-scroll-x {
+        overflow-x: auto;
+        width: 100%;
+    }
+    table.planning-table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 1200px;
+    }
+    .planning-table th, .planning-table td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+    }
+    .planning-table th {
+        background-color: #f0f0f0;
+    }
+    .hour-col {
+        width: 60px;
+        min-width: 60px;
+    }
+    .minute-col {
+        width: 40px;
+        min-width: 40px;
+    }
+    .car-col {
+        min-width: 180px;
+    }
+    .prestation-cell.droppable {
+        background: #f8fafd;
+        min-width: 120px;
+        transition: background 0.2s;
+    }
+    .prestation-cell.droppable.drag-over {
+        background: #e3f2fd;
+    }
+    .produit-item[draggable="true"] {
+        cursor: grab;
+        background: #fff;
+        border: 1.5px solid #727cf5;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        box-shadow: 0 2px 6px rgba(114,124,245,0.08);
+        transition: box-shadow 0.2s, background 0.2s;
+    }
+    .produit-item.dragging {
+        opacity: 0.5;
+        box-shadow: 0 4px 12px rgba(114,124,245,0.25);
+    }
+    .planned-produit {
+        background: #e3f0ff;
+        border: 2px solid #3d73dd;
+        color: #1a237e;
+        border-radius: 6px;
+        padding: 6px 10px;
+        margin: 2px 0;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(61,115,221,0.10);
+    }
 </style>
 @endsection
 
@@ -156,6 +216,10 @@
             </div>
         </div>
     </div>
+
+
+
+    
 
     <div class="planning-container">
         <!-- Liste des commandes -->
@@ -207,25 +271,51 @@
         </div>
 
         <!-- Grille du planning -->
-        <div class="planning-grid">
-            <div class="planning-header">
-                @for($hour = 9; $hour <= 20; $hour++)
-                    @for($minute = 0; $minute < 60; $minute += 20)
-                        <div class="time-slot">
-                            {{ sprintf('%02d:%02d', $hour, $minute) }}
-                        </div>
-                    @endfor
-                @endfor
-            </div>
-            <div class="planning-body">
-                @for($hour = 9; $hour <= 20; $hour++)
-                    @for($minute = 0; $minute < 60; $minute += 20)
-                        <div class="time-column">
-                            <div class="time-cell" data-time="{{ sprintf('%02d:%02d', $hour, $minute) }}"></div>
-                        </div>
-                    @endfor
-                @endfor
-            </div>
+        @php
+            $creneaux = [];
+            for($hour=9; $hour<=12; $hour++) {
+                foreach([0,20,40] as $minute) {
+                    $creneaux[] = [
+                        'hour' => $hour,
+                        'minute' => sprintf('%02d', $minute)
+                    ];
+                }
+            }
+            $voitures = ['MITJET', 'BMW', 'GINETTA', 'AUDI'];
+        @endphp
+        <div class="planning-scroll-x">
+            <table class="planning-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="hour-col" style="vertical-align:middle;">Heure</th>
+                        <th rowspan="2" class="minute-col" style="vertical-align:middle;">Minute</th>
+                        @foreach($voitures as $voiture)
+                            <th colspan="2" class="car-col">Voiture {{ $voiture }}</th>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        @foreach($voitures as $voiture)
+                            <th style="width:120px">Instructeur</th>
+                            <th>Prestation</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($creneaux as $i => $creneau)
+                        <tr>
+                            {{-- Affiche l'heure uniquement sur la première ligne du bloc d'une heure --}}
+                            @if($i % 3 == 0)
+                                <td rowspan="3" class="hour-col" style="vertical-align:middle;font-weight:bold;font-size:16px;">{{ $creneau['hour'] }}h</td>
+                            @endif
+                            <td class="minute-col">{{ $creneau['minute'] }}</td>
+                            @foreach($voitures as $voiture)
+                                <td class="instructeur-cell" data-voiture="{{ $voiture }}" data-hour="{{ $creneau['hour'] }}" data-minute="{{ $creneau['minute'] }}"></td>
+                                <td class="prestation-cell droppable" data-voiture="{{ $voiture }}" data-hour="{{ $creneau['hour'] }}" data-minute="{{ $creneau['minute'] }}"></td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -233,4 +323,41 @@
 
 @section('script')
 <script src="{{ asset('assets/js/planning.js') }}"></script>
+<script>
+// Drag & Drop de base
+let dragged = null;
+
+document.querySelectorAll('.produit-item[draggable="true"]').forEach(item => {
+    item.addEventListener('dragstart', function(e) {
+        dragged = this;
+        this.classList.add('dragging');
+    });
+    item.addEventListener('dragend', function(e) {
+        dragged = null;
+        this.classList.remove('dragging');
+    });
+});
+
+document.querySelectorAll('.prestation-cell.droppable').forEach(cell => {
+    cell.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    });
+    cell.addEventListener('dragleave', function(e) {
+        this.classList.remove('drag-over');
+    });
+    cell.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        if (dragged) {
+            // On clone le produit pour garder l'original dans la liste
+            let clone = dragged.cloneNode(true);
+            clone.classList.add('planned-produit');
+            clone.classList.remove('dragging');
+            clone.setAttribute('draggable', 'false');
+            this.appendChild(clone);
+        }
+    });
+});
+</script>
 @endsection 
