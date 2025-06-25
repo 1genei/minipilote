@@ -37,10 +37,11 @@ class EvenementController extends Controller
     */
     public function show($evenement_id)
     {
-        $evenement = Evenement::find(Crypt::decrypt($evenement_id));
+        $evenement = Evenement::with(['prestations', 'depenses', 'circuit'])
+            ->find(Crypt::decrypt($evenement_id));
         
         $derniere_prestation = Prestation::orderBy('created_at', 'desc')->first();
-        $prochain_numero_prestation = $derniere_prestation->numero + 1;
+        $prochain_numero_prestation = $derniere_prestation ? $derniere_prestation->numero + 1 : 1;
         $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
         $contactclients = Contact::where('archive', false)->get();
         
