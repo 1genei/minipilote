@@ -62,7 +62,17 @@ class Evenement extends Model
     * Retourne le montant du bénéfices de l'evenement
     */
     public function benefices(){
-        return $this->recette() - $this->montantDepenses();
+        
+        $depenses = $this->depenses;
+        $total_depenses = 0;
+        foreach($depenses as $depense){
+            $total_depenses += $depense->montant;
+        }
+        
+        $recette = $this->prestations?->sum('montant_ttc');
+        $depenses = $this->depenses?->sum('montant');
+        
+        return $recette - $depenses ;
     }
 
     /**

@@ -7,13 +7,6 @@
 @section('title', 'Evènement')
 
 @section('content')
-    @php
-        // Calculer les montants une seule fois pour éviter les appels multiples
-        $recette = $evenement->recette();
-        $depenses = $evenement->montantDepenses();
-        $benefices = $evenement->benefices();
-    @endphp
-    
     <div class="content">
 
         <!-- start page title -->
@@ -116,14 +109,14 @@
                             <p>
                                 <i class="mdi mdi-square text-success"></i> <span class="fs-5"> Recettes </span>
                                 <span
-                                    class="float-end fw-bold fs-14">{{ number_format($recette, 2, ',', ' ') }}
+                                    class="float-end fw-bold fs-14">{{ number_format($evenement->recette(), 2, ',', ' ') }}
                                     €</span>
                             </p>
 
                             <p>
                                 <i class="mdi mdi-square text-danger"></i> <span class="fs-5"> Charges </span>
                                 <span
-                                    class="float-end fw-bold fs-14">{{ number_format($depenses, 2, ',', ' ') }}
+                                    class="float-end fw-bold fs-14">{{ number_format($evenement->montantDepenses(), 2, ',', ' ') }}
                                     €
                                 </span>
                             </p>
@@ -132,7 +125,7 @@
                             <p>
                                 <i class="mdi mdi-square text-primary"></i> <span class="fs-5"> Marge nette </span>
                                 <span class="float-end fw-bold fs-4">
-                                    {{ number_format($benefices, 2, ',', ' ') }} €
+                                    {{ number_format($evenement->benefices(), 2, ',', ' ') }} €
                                 </span>
                             </p>
 
@@ -413,8 +406,11 @@
 
     {{-- Stats Finances --}}
     <script>
-        var recettes = {{ $recette }};
-        var depesenses = {{ $depenses }};
+        var recettes = "{{ $evenement->recette() }}";
+        var depesenses = "{{ $evenement->montantDepenses() }}";
+
+        recettes = parseInt(recettes);
+        depesenses = parseInt(depesenses);
 
         colors = ["#10c469", "#3d73dd"];
         (dataColors = $("#simple-donut").data("colors")) && (colors = dataColors.split(","));
