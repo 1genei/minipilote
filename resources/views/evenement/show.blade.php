@@ -72,10 +72,10 @@
 
                         <h4 class="mb-0 mt-2">{{ $evenement->nom }}
                             @if ($evenement->date_debut == $evenement->date_fin)
-                                <span class="text-primary"> {{ Carbon::parse($evenement->date_debut)->format('d/m/Y') }} </span>
+                                <span class="text-primary"> {{ \Carbon\Carbon::parse($evenement->date_debut)->format('d/m/Y') }} </span>
                             @else
-                                <span class="text-primary"> {{ Carbon::parse($evenement->date_debut)->format('d/m/Y') }} -
-                                    {{ Carbon::parse($evenement->date_fin)->format('d/m/Y') }} </span>
+                                <span class="text-primary"> {{ \Carbon\Carbon::parse($evenement->date_debut)->format('d/m/Y') }} -
+                                    {{ \Carbon\Carbon::parse($evenement->date_fin)->format('d/m/Y') }} </span>
                             @endif
                             <a href="{{ route('evenement.edit', Crypt::encrypt($evenement->id)) }}" class="text-muted"><i
                                     class="mdi mdi-square-edit-outline ms-2"></i></a>
