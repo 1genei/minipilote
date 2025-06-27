@@ -41,11 +41,11 @@ class EvenementController extends Controller
         
         $derniere_prestation = Prestation::orderBy('created_at', 'desc')->first();
         $prochain_numero_prestation = $derniere_prestation->numero + 1;
-        $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
-        $contactclients = Contact::where('archive', false)->get();
-        
-        dd($evenement,$prochain_numero_prestation,$beneficiaires,$contactclients);
-        return view('evenement.show', compact('evenement', 'prochain_numero_prestation','beneficiaires', 'contactclients'));
+        // $beneficiaires = Contact::where([['archive', false], ['type', 'individu']])->get();
+        // $contactclients = Contact::where('archive', false)->get();
+     
+        // dd($beneficiaires,$contactclients);
+        return view('evenement.show', compact('evenement', 'prochain_numero_prestation'));
     }
     
     /*

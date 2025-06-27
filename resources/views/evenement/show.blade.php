@@ -198,7 +198,7 @@
         </div>
         <!-- end row-->
         {{-- @include('contact.add_interlocuteur')     --}}
-        @include('prestation.add_modal_presta_evenement')
+        {{-- @include('prestation.add_modal_presta_evenement') --}}
 
     </div> <!-- End Content -->
 
