@@ -250,9 +250,12 @@
                         @can('permission', 'afficher-devis')
                             <li> <a href="{{route('devis.index')}}"> Devis </a></li>
                         @endcan
-                        {{-- @can('permission', 'afficher-commande') --}}
+                        @can('permission', 'afficher-commande')
                             <li> <a href="{{route('commande.index')}}"> Commandes </a></li>
-                        {{-- @endcan --}}
+                        @endcan
+                        @can('permission', 'afficher-facture')
+                            <li> <a href="{{route('facture.index')}}"> Factures </a></li>
+                        @endcan
                     </ul>
                 </div>
             </li>

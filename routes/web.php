@@ -32,6 +32,7 @@ use App\Http\Controllers\ContactImportController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\ModelevoitureController;
+use App\Http\Controllers\FactureController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -447,5 +448,28 @@ Route::prefix('planning')->group(function () {
 Route::post('/modelevoiture/store', [ModelevoitureController::class, 'store'])->name('modelevoiture.store');
 Route::post('/modelevoiture/update/{id}', [ModelevoitureController::class, 'update'])->name('modelevoiture.update');
 Route::delete('/modelevoiture/destroy/{id}', [ModelevoitureController::class, 'destroy'])->name('modelevoiture.destroy');
+
+// Factures
+Route::controller(FactureController::class)->group(function () {
+    Route::get('/factures', 'index')->name('facture.index')->middleware(['auth']);
+    Route::get('/factures/archives', 'archives')->name('facture.archives')->middleware(['auth']);
+    Route::get('/factures/create', 'create')->name('facture.create')->middleware(['auth']);
+    Route::post('/factures/store', 'store')->name('facture.store')->middleware(['auth']);
+    Route::get('/factures/{facture}/show', 'show')->name('facture.show')->middleware(['auth']);
+    Route::get('/factures/{facture}/edit', 'edit')->name('facture.edit')->middleware(['auth']);
+    Route::post('/factures/{facture}/update', 'update')->name('facture.update')->middleware(['auth']);
+    Route::put('/factures/{facture}/archive', 'archive')->name('facture.archive')->middleware(['auth']);
+    Route::post('/factures/{facture}/restore', 'restore')->name('facture.restore')->middleware(['auth']);
+    Route::delete('/factures/{facture}/destroy', 'destroy')->name('facture.destroy')->middleware(['auth']);
+    
+    // Routes spéciales
+    Route::get('/factures/create-from-commande/{commandeId}', 'createFromCommande')->name('facture.create-from-commande')->middleware(['auth']);
+    Route::post('/factures/create-multiple', 'createMultiple')->name('facture.create-multiple')->middleware(['auth']);
+    Route::post('/factures/{facture}/marquer-payee', 'marquerPayee')->name('facture.marquer-payee')->middleware(['auth']);
+    Route::get('/factures/{facture}/pdf', 'generatePDF')->name('facture.pdf')->middleware(['auth']);
+    
+    // API routes
+    Route::get('/api/factures/commandes-non-facturees/{clientId}', 'getCommandesNonFacturees')->name('facture.api.commandes-non-facturees')->middleware(['auth']);
+});
 
 require __DIR__ . '/auth.php';

@@ -47,7 +47,7 @@ class CommandeController extends Controller
             ->count();
             
         // Commandes non payées
-        $commandes_non_payees = Commande::whereIn('statut_paiement', ['non_paye', 'partiel'])
+        $commandes_non_payees = Commande::whereIn('statut_paiement', ['attente paiement', 'partiellement payée'])
             ->where('archive', false)
             ->get();
             

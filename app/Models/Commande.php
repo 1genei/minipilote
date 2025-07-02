@@ -70,4 +70,12 @@ class Commande extends Model
     public function devi(){
         return $this->belongsTo(Devi::class);
     }
+
+    /**
+     * Retourne les factures liées à la commande
+     */
+    public function factures()
+    {
+        return $this->hasMany(Facture::class);
+    }
 }
