@@ -15,14 +15,20 @@ return new class extends Migration
             $table->id();
             $table->string("raison_sociale")->nullable();
             $table->string("numero_siret")->nullable();
+            $table->string("numero_rcs")->nullable();
+            $table->string("ville_rcs")->nullable();
             $table->string("logo")->nullable();
             $table->string("capital")->nullable();
             $table->string("forme_juridique")->nullable();
             $table->string("gerant")->nullable();
             $table->string("numero_tva")->nullable();
             $table->string("email")->nullable();
+            $table->string("indicatif")->nullable();
             $table->string("telephone")->nullable();
-            
+            $table->string("banque")->nullable();
+            $table->string("iban")->nullable();
+            $table->string("bic")->nullable();
+            $table->string("rib")->nullable();
             $table->string("numero_voie")->nullable();
             $table->string("nom_voie")->nullable();
             $table->string("complement_voie")->nullable();
@@ -38,7 +44,7 @@ return new class extends Migration
             $table->string("escalier")->nullable();
             $table->string("etage")->nullable();
             $table->string("porte")->nullable();
-            
+            $table->text("notes")->nullable();
             
             $table->boolean("est_societe_principale")->nullable()->default(false);
             $table->boolean("archive")->nullable()->default(false);

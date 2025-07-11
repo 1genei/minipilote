@@ -280,20 +280,11 @@ final class IndexTable extends PowerGridComponent
                     ];
                 }),
 
-            Button::add('Modifier')
-                ->bladeComponent('button-edit', function(Facture $facture) {
-                    return [
-                        'route' => route('facture.edit', Crypt::encrypt($facture->id)),
-                        'tooltip' => "Modifier",
-                        'permission' => Gate::allows('permission', 'modifier-facture'),
-                    ];
-                }),
-
             Button::add('PDF')
-                ->bladeComponent('button-edit', function(Facture $facture) {
+                ->bladeComponent('button-pdf', function(Facture $facture) {
                     return [
                         'route' => route('facture.pdf', Crypt::encrypt($facture->id)),
-                        'tooltip' => "Générer PDF",
+                        'tooltip' => "Télécharger Facture",
                         'permission' => Gate::allows('permission', 'modifier-facture'),
                     ];
                 }),

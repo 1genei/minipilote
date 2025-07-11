@@ -186,9 +186,9 @@
         </table>
     </div>
 
-    <div class="net-a-payer">
+    {{-- <div class="net-a-payer">
         NET À PAYER : {{ number_format($commande->net_a_payer, 2, ',', ' ') }} €
-    </div>
+    </div> --}}
 
     <div class="footer">
         Sarl VENZINI - SIRET : XXXXXXXX - TVA : FRXXXXXXXXX<br>

@@ -40,6 +40,12 @@ class SocieteController extends Controller
             "ville" => $request->ville,
             "pays" => $request->pays,
             "notes" => $request->notes,
+            'banque' => $request->banque,
+            'iban' => $request->iban,
+            'bic' => $request->bic,
+            'rib' => $request->rib,
+            'numero_rcs' => $request->numero_rcs,
+            'ville_rcs' => $request->ville_rcs,
             'est_societe_principale' => false,
             'archive' => false
         ]);
@@ -68,6 +74,7 @@ class SocieteController extends Controller
         $societe->gerant = $request->gerant;
         $societe->numero_tva = $request->numero_tva;
         $societe->email = $request->email;
+        $societe->indicatif = $request->indicatif;
         $societe->telephone = $request->telephone;
         $societe->numero_voie = $request->numero_voie;
         $societe->nom_voie = $request->nom_voie;
@@ -76,7 +83,12 @@ class SocieteController extends Controller
         $societe->ville = $request->ville;
         $societe->pays = $request->pays;
         $societe->notes = $request->notes;
-   
+        $societe->banque = $request->banque;
+        $societe->iban = $request->iban;
+        $societe->bic = $request->bic;
+        $societe->rib = $request->rib;
+        $societe->numero_rcs = $request->numero_rcs;
+        $societe->ville_rcs = $request->ville_rcs;
         $societe->update();
         
         return redirect()->route('parametre.index')->with('message', 'Société modifiée');

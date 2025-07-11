@@ -144,27 +144,7 @@ class Facture extends Model
         return $montantPaye > 0 && $montantPaye < $this->net_a_payer;
     }
 
-    /**
-     * Générer le numéro de facture automatiquement
-     */
-    public function genererNumero()
-    {
-        $prefix = 'FACT';
-        $annee = date('Y');
-        $derniereFacture = self::whereYear('created_at', $annee)
-            ->where('numero', 'like', $prefix . $annee . '%')
-            ->orderBy('numero', 'desc')
-            ->first();
-
-        if ($derniereFacture) {
-            $dernierNumero = (int) substr($derniereFacture->numero, -4);
-            $nouveauNumero = $dernierNumero + 1;
-        } else {
-            $nouveauNumero = 1;
-        }
-
-        return $prefix . $annee . str_pad($nouveauNumero, 4, '0', STR_PAD_LEFT);
-    }
+   
 
     /**
      * Obtenir le prochain numéro de facture cliente (commence à 1500)

@@ -181,6 +181,39 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                            <div class="mb-3">
+                                                <label for="banque" class="form-label">Banque</label>
+                                                <input type="text" id="banque" name="banque" class="form-control" value="{{ old('banque') ? old('banque') : '' }}">
+                                                @if ($errors->has('banque'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary" role="alert">
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('banque') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="bic" class="form-label">BIC</label>
+                                                <input type="text" id="bic" name="bic" class="form-control" value="{{ old('bic') ? old('bic') : '' }}">
+                                                @if ($errors->has('bic'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary" role="alert">
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('bic') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="numero_rcs" class="form-label">Numéro RCS</label>
+                                                <input type="text" id="numero_rcs" name="numero_rcs" class="form-control" value="{{ old('numero_rcs') ? old('numero_rcs') : '' }}">
+                                                @if ($errors->has('numero_rcs'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary" role="alert">
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('numero_rcs') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
 
                                         </div>
 
@@ -332,6 +365,43 @@
                                                         <button type="button" class="btn-close btn-close-white"
                                                             data-bs-dismiss="alert" aria-label="Close"></button>
                                                         <strong>{{ $errors->first('capital') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                           
+                                            <div class="mb-3">
+                                                <label for="iban" class="form-label">IBAN</label>
+                                                <input type="text" id="iban" name="iban" class="form-control" value="{{ old('iban') ? old('iban') : '' }}">
+                                                @if ($errors->has('iban'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary" role="alert">
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('iban') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="rib" class="form-label">RIB</label>
+                                                <input type="text" id="rib" name="rib" class="form-control" value="{{ old('rib') ? old('rib') : '' }}">
+                                                @if ($errors->has('rib'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary" role="alert">
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('rib') }}</strong>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                           
+                                            <div class="mb-3">
+                                                <label for="ville_rcs" class="form-label">Ville RCS</label>
+                                                <input type="text" id="ville_rcs" name="ville_rcs" class="form-control" value="{{ old('ville_rcs') ? old('ville_rcs') : '' }}">
+                                                @if ($errors->has('ville_rcs'))
+                                                    <br>
+                                                    <div class="alert alert-warning text-secondary" role="alert">
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{{ $errors->first('ville_rcs') }}</strong>
                                                     </div>
                                                 @endif
                                             </div>

@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        
+        // Nettoyer les fichiers temporaires de prévisualisation toutes les 6 heures
+        $schedule->command('clean:temp-files --hours=6')->monthly();
     }
 
     /**

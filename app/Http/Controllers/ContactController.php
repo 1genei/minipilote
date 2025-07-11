@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 use App\Models\SecteurActivite;
-
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -240,7 +240,7 @@ class ContactController extends Controller
                         $contact->tags()->sync($tagIds);
                     }
                 } catch (\Exception $e) {
-                    \Log::error('Erreur lors de la synchronisation des tags : ' . $e->getMessage());
+                    Log::error('Erreur lors de la synchronisation des tags : ' . $e->getMessage());
                     // Continue l'exécution même si les tags échouent
                 }
 
@@ -510,7 +510,7 @@ class ContactController extends Controller
                         $contact->tags()->sync($tagIds);
                     }
                 } catch (\Exception $e) {
-                    \Log::error('Erreur lors de la synchronisation des tags : ' . $e->getMessage());
+                    Log::error('Erreur lors de la synchronisation des tags : ' . $e->getMessage());
                     // Continue l'exécution même si les tags échouent
                 }
         } else {
@@ -608,7 +608,7 @@ class ContactController extends Controller
         }else{
             
             $contact = $this->store($request, true);
-            $entite->individus()->attach($contact->individu->id, ['poste' => $request->poste] );
+            $entite->individus()->attach($contact->individu?->id, ['poste' => $request->poste] );
         
             // $entite->individus()->syncWithoutDetaching($contact->individu->id);
         }

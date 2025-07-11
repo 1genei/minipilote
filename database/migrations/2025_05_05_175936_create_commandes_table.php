@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('evenement_id')->nullable();
             $table->integer('devi_id')->nullable();
+            $table->integer('facture_id')->nullable();
             $table->string('numero_commande');
             $table->string('nom_commande')->nullable();
             $table->date('date_commande')->nullable();
