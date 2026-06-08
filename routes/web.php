@@ -454,7 +454,8 @@ Route::controller(FactureController::class)->group(function () {
     Route::get('/factures', 'index')->name('facture.index')->middleware(['auth']);
     Route::get('/factures/archives', 'archives')->name('facture.archives')->middleware(['auth']);
     Route::get('/factures/create', 'create')->name('facture.create')->middleware(['auth']);
-    Route::post('/factures/store', 'store')->name('facture.store')->middleware(['auth']);
+    Route::get('/factures/edit/{factureId}', 'edit')->name('facture.edit')->middleware(['auth']);
+    Route::post('/factures/store', 'store')->name('facture.store')->middleware(['auth']);    
     Route::post('/factures/preview', 'previewPDF')->name('facture.preview')->middleware(['auth']);
     Route::get('/factures/preview/show', 'showPreview')->name('facture.preview.show')->middleware(['auth']);
     Route::post('/factures/preview/validate', 'validatePreview')->name('facture.preview.validate')->middleware(['auth']);
@@ -466,6 +467,7 @@ Route::controller(FactureController::class)->group(function () {
     
     // Routes spéciales
     Route::get('/factures/create-from-commande/{commandeId}', 'createFromCommande')->name('facture.create-from-commande')->middleware(['auth']);
+    Route::post('/factures/validate-from-commande', 'validateFromCommande')->name('facture.validateFromCommande')->middleware(['auth']);
     // Route::post('/factures/create-multiple', 'createMultiple')->name('facture.create-multiple')->middleware(['auth']);
     Route::post('/factures/{facture}/marquer-payee', 'marquerPayee')->name('facture.marquer-payee')->middleware(['auth']);
     Route::get('/factures/{facture}/pdf', 'generatePDF')->name('facture.pdf')->middleware(['auth']);

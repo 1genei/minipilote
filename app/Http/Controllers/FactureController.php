@@ -65,6 +65,123 @@ class FactureController extends Controller
         ));
     }
 
+     /**
+     * Prévisualisation de la facture à partir d'une commande
+     */
+    public function createFromCommande($commandeId)
+    {
+        $commande = Commande::findOrFail(Crypt::decrypt($commandeId));
+        $societePrincipale = Societe::where('est_societe_principale', true)->first();
+        $tvas = Tva::all();
+        $prochain_numero = Facture::getProchainNumeroFactureClient();
+
+        // Préremplir les données pour le formulaire
+        $factureData = [
+            'numero' => $prochain_numero,
+            'date' => now()->format('Y-m-d'),
+            'type' => 'client',
+            'client_id' => $commande->client_prospect_id, // Correction : utiliser client_prospect_id
+            'commande_id' => $commande->id,
+            'montant_ht' => $commande->montant_ht,
+            'montant_tva' => $commande->montant_tva,
+            'montant_ttc' => $commande->montant_ttc,
+            'description' => 'Facture pour la commande N°' . $commande->numero_commande,
+        ];
+
+        // Générer le PDF de prévisualisation
+        $facture = new Facture($factureData);
+        $facture->statut = 'brouillon';
+        $facture->statut_paiement = 'attente paiement';
+        $facture->net_a_payer = $commande->montant_ttc;
+        $facture->montant_restant_a_payer = $commande->montant_ttc;
+        $facture->user_id = Auth::id();
+        $preview = true;
+
+        $pdf = PDF::loadView('facture.pdf', [
+            'facture' => $facture,
+            'preview' => $preview,
+            'societePrincipale' => $societePrincipale
+        ]);
+        $pdf->setPaper('A4');
+        $tempPath = 'temp/factures/preview-commande-' . time() . '.pdf';
+        Storage::disk('public')->put($tempPath, $pdf->output());
+
+        // Stocker les données en session pour validation
+        session([
+            'facture_preview_commande_data' => $factureData,
+            'facture_preview_commande_pdf' => $tempPath,
+            'facture_preview_commande_id' => $commande->id
+        ]);
+
+        return view('facture.preview_commande', [
+            'factureData' => $factureData,
+            'commande' => $commande,
+            'pdfUrl' => asset('storage/' . $tempPath),
+            'societePrincipale' => $societePrincipale,
+            'tvas' => $tvas
+        ]);
+    }
+
+    /**
+     * Valider la prévisualisation et créer la facture depuis une commande
+     */
+    public function validateFromCommande(Request $request)
+    {
+        $data = $request->validate([
+            'numero' => 'required',
+            'date' => 'required|date',
+            'description' => 'nullable|string',
+        ]);
+        $factureData = session('facture_preview_commande_data');
+        $commandeId = session('facture_preview_commande_id');
+        if (!$factureData || !$commandeId) {
+            return redirect()->route('commande.show', Crypt::encrypt($commandeId))->with('error', 'Aucune prévisualisation disponible');
+        }
+        $commande = Commande::findOrFail($commandeId);
+        $facture = new Facture();
+        $facture->numero = $data['numero'];
+        $facture->date = $data['date'];
+        $facture->type = 'client';
+        $facture->client_id = $commande->client_prospect_id; // Correction : utiliser client_prospect_id
+        $facture->commande_id = $commande->id;
+        $facture->montant_ht = $commande->montant_ht;
+        $facture->montant_tva = $commande->montant_tva;
+        $facture->montant_ttc = $commande->montant_ttc;
+        $facture->net_a_payer = $commande->montant_ttc;
+        $facture->montant_restant_a_payer = $commande->montant_ttc;
+        $facture->palier = $commande->palier;
+        $facture->description = $data['description'] ?? ('Facture pour la commande N°' . $commande->numero_commande);
+        $facture->user_id = Auth::id();
+        $facture->statut = 'brouillon';
+        $facture->statut_paiement = 'attente paiement';
+        $facture->calculerMontants();
+        $facture->save();
+
+        // Générer le PDF de la facture
+        $societePrincipale = Societe::where('est_societe_principale', true)->first();
+        try {
+            $pdf = PDF::loadView('facture.pdf', [
+                'facture' => $facture,
+                'preview' => false,
+                'societePrincipale' => $societePrincipale
+            ]);
+            $pdf->setPaper('A4');
+            
+            $finalPdfPath = 'factures/facture-' . $facture->id . '.pdf';
+            Storage::disk('public')->put($finalPdfPath, $pdf->output());
+            $facture->url_pdf = $finalPdfPath;
+            $facture->save();
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la génération du PDF final : ' . $e->getMessage());
+        }
+
+        // Nettoyer la session
+        session()->forget(['facture_preview_commande_data', 'facture_preview_commande_pdf', 'facture_preview_commande_id']);
+
+        return redirect()->route('facture.show', Crypt::encrypt($facture->id))
+            ->with('success', 'Facture créée avec succès');
+    }
+
     /**
      * Récupérer les données de prévisualisation à restaurer
      */

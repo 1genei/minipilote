@@ -72,13 +72,20 @@
                 <i class="mdi mdi-email-send me-1"></i> Envoyer par email
             </button>
             <a href="{{ route('commande.telecharger', Crypt::encrypt($commande->id)) }}" class="btn btn-info me-2">
-                <i class="mdi mdi-download me-1"></i> Télécharger PDF
+                <i class="mdi mdi-download me-1"></i> Télécharger commande
             </a>
             @if($commande->statut_commande !== 'Annulée' && !$commande->archive)
-                <a href="{{ route('facture.create-from-commande', Crypt::encrypt($commande->id)) }}" class="btn btn-warning">
-                    <i class="mdi mdi-file-document-plus me-1"></i> Créer facture
-                </a>
+                @if($commande->facture_id == null)
+                    <a href="{{ route('facture.create-from-commande', Crypt::encrypt($commande->id)) }}" class="btn btn-warning">
+                        <i class="mdi mdi-file-document-plus me-1"></i> Créer facture
+                    </a>
+                @else
+                    <a href="{{ route('facture.show', Crypt::encrypt($commande->facture_id)) }}" class="btn btn-info">
+                        <i class="mdi mdi-file-document-plus me-1"></i> Voir facture
+                    </a>
+                @endif
             @endif
+            
         </div>
         <div class="col-sm-4">
             <div class="card" style="background-color: rgb(88 96 133) !important">

@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /chemin/vers/minipilote && php artisan route:list --quiet 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
