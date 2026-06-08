@@ -42,6 +42,12 @@ L'application tourne via XAMPP (Apache + MySQL). Pas de suite de tests active.
 - **Microsoft O365 OAuth** via `Autho365Controller`
 - Base de données : MySQL via XAMPP, base `minipilote`, utilisateur `root` sans mot de passe
 
+## Méthode de travail
+
+**Toujours suivre l'ordre : Explorer → Planifier → Implémenter**
+
+Avant de coder, explorer les fichiers concernés et expliquer ce qui va être touché (fichiers, méthodes, tables) avant de commencer la moindre modification.
+
 ## Règles absolues
 
 1. **IDs chiffrés** : TOUJOURS `Crypt::encrypt()` en sortie, `Crypt::decrypt()` en entrée dans les URLs — ne jamais exposer un ID brut

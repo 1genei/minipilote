@@ -266,11 +266,31 @@
             allowClear: true,
             width: '100%'
         });
-        
         $('#voitures').select2({
             placeholder: 'Sélectionnez un ou plusieurs véhicules',
             allowClear: true,
             width: '100%'
+        });
+
+        // Initialiser le min de date_fin depuis date_debut au chargement
+        const debutInit = $('#date_debut').val();
+        if (debutInit) $('#date_fin').attr('min', debutInit);
+
+        $('#date_debut').on('change', function() {
+            const debut = $(this).val();
+            $('#date_fin').attr('min', debut);
+            if ($('#date_fin').val() && $('#date_fin').val() < debut) {
+                $('#date_fin').val(debut);
+            }
+        });
+
+        $('form').on('submit', function(e) {
+            const debut = $('#date_debut').val();
+            const fin   = $('#date_fin').val();
+            if (debut && fin && fin < debut) {
+                e.preventDefault();
+                Swal.fire('Erreur', 'La date de fin doit être supérieure ou égale à la date de début.', 'error');
+            }
         });
     });
 </script>

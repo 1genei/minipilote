@@ -37,7 +37,9 @@ class EvenementController extends Controller
     */
     public function show($evenement_id)
     {
-        $evenement = Evenement::find(Crypt::decrypt($evenement_id));
+        $evenement = Evenement::with(['circuit', 'plannings' => function ($q) {
+            $q->where('est_archive', false)->orderBy('date', 'asc');
+        }])->find(Crypt::decrypt($evenement_id));
         
         $derniere_prestation = Prestation::orderBy('created_at', 'desc')->first();
         $prochain_numero_prestation = $derniere_prestation->numero + 1;
@@ -90,7 +92,9 @@ class EvenementController extends Controller
             DB::beginTransaction();
             
             $request->validate([
-                'nom' => 'required',
+                'nom'        => 'required',
+                'date_debut' => 'nullable|date',
+                'date_fin'   => 'nullable|date|after_or_equal:date_debut',
             ]);
             
             $evenement = new Evenement();
@@ -121,9 +125,15 @@ class EvenementController extends Controller
     */
     public function update(Request $request, $evenement_id)
     {
+        $request->validate([
+            'nom'        => 'required',
+            'date_debut' => 'nullable|date',
+            'date_fin'   => 'nullable|date|after_or_equal:date_debut',
+        ]);
+
         try {
             DB::beginTransaction();
-            
+
             $evenement = Evenement::find(Crypt::decrypt($evenement_id));
             $evenement->nom = $request->input('nom');
             $evenement->circuit_id = $request->input('circuit_id');

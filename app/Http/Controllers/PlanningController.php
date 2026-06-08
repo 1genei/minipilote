@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Commande;
 use App\Models\Circuit;
+use App\Models\Evenement;
 use App\Models\Planning;
+use App\Models\User;
+use App\Models\Voiture;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class PlanningController extends Controller
 {
@@ -17,13 +21,106 @@ class PlanningController extends Controller
     */
     public function index()
     {
-        // Récupérer les commandes non archivées avec leurs produits et la relation pivot
+        return view('planning.index');
+    }
+
+    public function create()
+    {
+        $evenements = Evenement::where('archive', false)
+            ->where(function ($q) {
+                $q->whereNull('date_fin')
+                  ->orWhere('date_fin', '>=', Carbon::today());
+            })
+            ->orderBy('date_debut', 'asc')
+            ->get();
+
+        $circuits  = Circuit::orderBy('nom')->get();
+        $voitures  = Voiture::where('archive', false)->orderBy('nom')->get();
+        $modeles   = Planning::where('est_modele', true)->where('statut', 'actif')->get();
+        $users     = User::where('archive', false)->with('contact.individu')->orderBy('email')->get();
+
+        $selectedEvenementId = null;
+        if (request('evenement_id')) {
+            try {
+                $selectedEvenementId = Crypt::decrypt(request('evenement_id'));
+            } catch (\Exception $e) {
+                // ID invalide, on ignore
+            }
+        }
+
+        return view('planning.create', compact('evenements', 'circuits', 'voitures', 'modeles', 'users', 'selectedEvenementId'));
+    }
+
+    public function storePlanning(Request $request)
+    {
+        $request->validate([
+            'nom'       => 'required|string|max:255',
+            'date'      => 'required|date',
+            'heure_debut' => 'required',
+            'heure_fin'   => 'required',
+            'duree_session' => 'required|integer|min:1',
+            'nb_creneau_par_session' => 'required|integer|min:1',
+        ]);
+
+        $planning = new Planning();
+        $planning->nom              = $request->nom;
+        $planning->evenement_id     = $request->evenement_id ?: null;
+        $planning->circuit_id       = $request->circuit_id ?: null;
+        $planning->date             = $request->date;
+        $planning->heure_debut      = $request->heure_debut;
+        $planning->heure_fin        = $request->heure_fin;
+        $planning->duree_session    = $request->duree_session;
+        $planning->nb_creneau_par_session  = $request->nb_creneau_par_session;
+        $planning->nb_tour_max_par_session = $request->nb_tour_max_par_session;
+        $planning->a_pause          = $request->has('a_pause');
+        $planning->heure_debut_pause = $request->heure_debut_pause ?: null;
+        $planning->heure_fin_pause  = $request->heure_fin_pause ?: null;
+        $planning->statut           = $request->statut ?? 'brouillon';
+        $planning->notes            = $request->notes;
+        $planning->est_modele       = false;
+        $planning->user_id          = Auth::id();
+        $planning->save();
+
+        if ($request->filled('voitures')) {
+            $planning->voitures()->sync($request->voitures);
+        }
+
+        if ($request->filled('instructeurs')) {
+            $planning->instructeurs()->sync($request->instructeurs);
+        }
+
+        return redirect()->route('planning.edit', Crypt::encrypt($planning->id))
+            ->with('ok', 'Planning créé avec succès.');
+    }
+
+    public function edit($id)
+    {
+        $planning = Planning::with(['circuit', 'evenement', 'voitures', 'instructeurs'])->findOrFail(Crypt::decrypt($id));
+
         $commandes = Commande::with(['produits', 'client'])
             ->where('archive', false)
-            // ->whereDate('date_realisation_prevue', '>=', Carbon::now()->startOfDay())
             ->orderBy('date_realisation_prevue', 'asc')
             ->get();
-        return view('planning.index', compact('commandes'));
+
+        return view('planning.edit', compact('planning', 'commandes'));
+    }
+
+    public function archiverPlanning($id)
+    {
+        $planning = Planning::findOrFail(Crypt::decrypt($id));
+        $planning->est_archive = true;
+        $planning->save();
+
+        return redirect()->route('planning.index')
+            ->with('ok', 'Le planning a été archivé.');
+    }
+
+    public function destroy($id)
+    {
+        $planning = Planning::findOrFail(Crypt::decrypt($id));
+        $planning->delete();
+
+        return response()->json(['ok' => true]);
     }
 
     public function getEvents(Request $request)

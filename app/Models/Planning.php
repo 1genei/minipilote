@@ -31,5 +31,17 @@ class Planning extends Model
         return $this->belongsTo(User::class);
     }
 
-   
+    /**
+     * Retourne les voitures du planning
+     */
+    public function voitures(){
+        return $this->belongsToMany(Voiture::class, 'planning_voiture', 'planning_id', 'voiture_id');
+    }
+
+    /**
+     * Retourne les instructeurs du planning
+     */
+    public function instructeurs(){
+        return $this->belongsToMany(User::class, 'planning_user', 'planning_id', 'user_id');
+    }
 }

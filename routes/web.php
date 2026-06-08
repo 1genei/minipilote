@@ -141,14 +141,19 @@ Route::controller(CircuitController::class)->group(function () {
 // Planning
 Route::controller(PlanningController::class)->group(function () {
     Route::get('/planning', 'index')->name('planning.index')->middleware(['auth']);
+    Route::get('/planning/create', 'create')->name('planning.create')->middleware(['auth']);
+    Route::post('/planning', 'storePlanning')->name('planning.store')->middleware(['auth']);
     Route::get('/planning/events', 'getEvents')->name('planning.events')->middleware(['auth']);
-    
+    Route::get('/planning/{id}/edit', 'edit')->name('planning.edit')->middleware(['auth']);
+    Route::get('/planning/{id}/archiver', 'archiverPlanning')->name('planning.archiver')->middleware(['auth']);
+    Route::delete('/planning/{id}', 'destroy')->name('planning.destroy')->middleware(['auth']);
+
     // Routes pour les modèles de planning
     Route::get('/parametres/planning', 'indexModeles')->name('parametre.planning.index')->middleware(['auth']);
     Route::get('/parametres/planning/archives', 'indexArchives')->name('parametre.planning.archives')->middleware(['auth']);
     Route::post('/parametres/planning', 'store')->name('parametre.planning.store')->middleware(['auth']);
     Route::put('/parametres/planning/{planning}', 'update')->name('parametre.planning.update')->middleware(['auth']);
-    Route::get('/parametres/planning/{planning}/archiver', 'archiver')->name('parametre.planning.archiver')->middleware(['auth']);
+    Route::get('/parametres/planning/{planning}/archiver', 'archiver')->name('parametre.planning.archiver.modele')->middleware(['auth']);
     Route::get('/parametres/planning/{planning}/restaurer', 'restaurer')->name('parametre.planning.restaurer')->middleware(['auth']);
 });
 
@@ -438,11 +443,6 @@ Route::post('/contacts/quick-add', [ContactController::class, 'quickAdd'])
 Route::get('/commande/createfromdevis/{devis_id}', [CommandeController::class, 'createfromdevis'])->name('commande.createfromdevis');
 Route::post('/commande/storefromdevis/{devis_id}', [CommandeController::class, 'storefromdevis'])->name('commande.storefromdevis');
 
-// Routes pour le planning
-Route::prefix('planning')->group(function () {
-    Route::get('/', [PlanningController::class, 'index'])->name('planning.index');
-    Route::get('/events', [PlanningController::class, 'getEvents'])->name('planning.events');
-});
 
 // Routes pour les modèles de voiture
 Route::post('/modelevoiture/store', [ModelevoitureController::class, 'store'])->name('modelevoiture.store');

@@ -141,8 +141,6 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-
-
                             <li class="nav-item">
                                 <a href="#prestation" data-bs-toggle="tab" aria-expanded="false"
                                     class="nav-link rounded-0 active">
@@ -150,8 +148,16 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#charge" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 ">
+                                <a href="#charge" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
                                     Charges globales
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#plannings" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
+                                    Plannings
+                                    @if($evenement->plannings->count())
+                                        <span class="badge bg-primary ms-1">{{ $evenement->plannings->count() }}</span>
+                                    @endif
                                 </a>
                             </li>
                         </ul>
@@ -189,7 +195,62 @@
                                     'depenses' => $evenement->depenses,
                                 ])
 
-                            </div> <!-- end tab-pane -->
+                            </div> <!-- end tab-pane charges -->
+
+                            <div class="tab-pane" id="plannings">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted small">{{ $evenement->plannings->count() }} planning(s)</span>
+                                    @can('permission', 'ajouter-planning')
+                                        <a href="{{ route('planning.create', ['evenement_id' => Crypt::encrypt($evenement->id)]) }}"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="mdi mdi-plus-circle me-1"></i> Créer un planning
+                                        </a>
+                                    @endcan
+                                </div>
+                                <hr class="mt-0">
+
+                                @forelse($evenement->plannings as $planning)
+                                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                        <div>
+                                            <span class="fw-semibold">{{ $planning->nom }}</span>
+                                            @if($planning->date)
+                                                <span class="text-muted ms-2 small">
+                                                    {{ \Carbon\Carbon::parse($planning->date)->format('d/m/Y') }}
+                                                </span>
+                                            @endif
+                                            @if($planning->heure_debut && $planning->heure_fin)
+                                                <span class="text-muted ms-2 small">
+                                                    {{ $planning->heure_debut }} – {{ $planning->heure_fin }}
+                                                </span>
+                                            @endif
+                                            @if($planning->statut)
+                                                @php
+                                                    $badgeClass = match($planning->statut) {
+                                                        'actif'     => 'bg-success',
+                                                        'brouillon' => 'bg-secondary',
+                                                        default     => 'bg-secondary',
+                                                    };
+                                                @endphp
+                                                <span class="badge {{ $badgeClass }} ms-1">{{ ucfirst($planning->statut) }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            @can('permission', 'modifier-planning')
+                                                <a href="{{ route('planning.edit', Crypt::encrypt($planning->id)) }}"
+                                                   class="btn btn-sm btn-outline-primary"
+                                                   title="Ouvrir le planning">
+                                                    <i class="mdi mdi-calendar-edit"></i>
+                                                </a>
+                                            @endcan
+                                        </div>
+                                    </div>
+                                @empty
+                                    <p class="text-muted text-center py-3">
+                                        <i class="mdi mdi-calendar-blank me-1"></i>
+                                        Aucun planning pour cet événement.
+                                    </p>
+                                @endforelse
+                            </div> <!-- end tab-pane plannings -->
 
                         </div> <!-- end tab-content -->
                     </div> <!-- end card body -->
