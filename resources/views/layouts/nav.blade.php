@@ -41,51 +41,49 @@
     document.documentElement.style.setProperty('--mp-rail-w', w);
 })();
 
-document.addEventListener('alpine:init', function () {
-    Alpine.data('mpNav', function (activeId) {
-        return {
-            expanded: localStorage.getItem('mpMode') === 'expanded',
-            openSec:  {},
-            flyItem:  null,
-            flyTop:   0,
-            flyTimer: null,
+window.mpNav = function(activeId) {
+    return {
+        expanded: localStorage.getItem('mpMode') === 'expanded',
+        openSec:  {},
+        flyItem:  null,
+        flyTop:   0,
+        flyTimer: null,
 
-            init() {
-                if (activeId) this.openSec[activeId] = true;
-                this._applyWidth();
-            },
-            _applyWidth() {
-                var w = this.expanded ? '256px' : '96px';
-                document.documentElement.style.setProperty('--mp-rail-w', w);
-            },
-            toggle() {
-                this.expanded = !this.expanded;
-                this._applyWidth();
-                localStorage.setItem('mpMode', this.expanded ? 'expanded' : 'rail');
-                if (!this.expanded) this.flyItem = null;
-            },
-            toggleSec(id) {
-                if (!this.expanded) return;
-                this.openSec[id] = !this.openSec[id];
-            },
-            hover(event, id) {
-                if (this.expanded) { this.flyItem = null; return; }
-                clearTimeout(this.flyTimer);
-                if (!id) { this.flyItem = null; return; }
-                var rect = event.currentTarget.getBoundingClientRect();
-                this.flyTop = rect.top;
-                this.flyItem = id;
-            },
-            leave() {
-                var self = this;
-                self.flyTimer = setTimeout(function(){ self.flyItem = null; }, 180);
-            },
-            cancelLeave() {
-                clearTimeout(this.flyTimer);
-            },
-        };
-    });
-});
+        init() {
+            if (activeId) this.openSec[activeId] = true;
+            this._applyWidth();
+        },
+        _applyWidth() {
+            var w = this.expanded ? '256px' : '96px';
+            document.documentElement.style.setProperty('--mp-rail-w', w);
+        },
+        toggle() {
+            this.expanded = !this.expanded;
+            this._applyWidth();
+            localStorage.setItem('mpMode', this.expanded ? 'expanded' : 'rail');
+            if (!this.expanded) this.flyItem = null;
+        },
+        toggleSec(id) {
+            if (!this.expanded) return;
+            this.openSec[id] = !this.openSec[id];
+        },
+        hover(event, id) {
+            if (this.expanded) { this.flyItem = null; return; }
+            clearTimeout(this.flyTimer);
+            if (!id) { this.flyItem = null; return; }
+            var rect = event.currentTarget.getBoundingClientRect();
+            this.flyTop = rect.top;
+            this.flyItem = id;
+        },
+        leave() {
+            var self = this;
+            self.flyTimer = setTimeout(function(){ self.flyItem = null; }, 180);
+        },
+        cancelLeave() {
+            clearTimeout(this.flyTimer);
+        },
+    };
+};
 </script>
 
 <style>

@@ -30,6 +30,9 @@
 <div class="rightbar-overlay"></div>
 <!-- /End-bar -->
 
+<!-- Alpine.js v3 — chargé avant Livewire pour que window.Alpine soit disponible -->
+<script src="{{ asset('assets/js/alpine.min.js') }}"></script>
+
 @livewireScripts
 
 <!-- bundle -->
