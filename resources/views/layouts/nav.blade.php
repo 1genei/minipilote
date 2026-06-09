@@ -65,7 +65,9 @@ window.mpNav = function(activeId) {
         },
         toggleSec(id) {
             if (!this.expanded) return;
-            this.openSec[id] = !this.openSec[id];
+            var wasOpen = !!this.openSec[id];
+            this.openSec = {};
+            if (!wasOpen) this.openSec[id] = true;
         },
         hover(event, id) {
             if (this.expanded) { this.flyItem = null; return; }
@@ -114,7 +116,7 @@ body[data-layout=detached] .leftside-menu,
     min-width: var(--mp-rail-w) !important;
     max-width: none !important;
     margin: 0 !important; padding: 0 !important;
-    background: #fff !important;
+    background: #ececec !important;
     border-right: 1px solid var(--ink-100) !important;
     transition: width .18s ease !important;
     overflow: visible !important;
