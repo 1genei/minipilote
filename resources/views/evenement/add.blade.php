@@ -258,8 +258,6 @@
 
 @section('script')
 
-<script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
-
 <script type="text/javascript">
     $(document).ready(function() {
         $('#instructeurs').select2({
@@ -273,21 +271,12 @@
             width: '100%'
         });
 
-        // date_fin >= date_debut
-        $('#date_debut').on('change', function() {
-            const debut = $(this).val();
-            $('#date_fin').attr('min', debut);
-            if ($('#date_fin').val() && $('#date_fin').val() < debut) {
-                $('#date_fin').val(debut);
-            }
-        });
-
         $('form').on('submit', function(e) {
             const debut = $('#date_debut').val();
             const fin   = $('#date_fin').val();
             if (debut && fin && fin < debut) {
                 e.preventDefault();
-                Swal.fire('Erreur', 'La date de fin doit être supérieure ou égale à la date de début.', 'error');
+                Swal.fire('Erreur de date', 'La date de fin doit être supérieure ou égale à la date de début.', 'error');
             }
         });
     });

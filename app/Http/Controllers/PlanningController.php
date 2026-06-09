@@ -54,12 +54,19 @@ class PlanningController extends Controller
     public function storePlanning(Request $request)
     {
         $request->validate([
-            'nom'       => 'required|string|max:255',
-            'date'      => 'required|date',
-            'heure_debut' => 'required',
-            'heure_fin'   => 'required',
-            'duree_session' => 'required|integer|min:1',
+            'nom'                    => 'required|string|max:255',
+            'date'                   => 'required|date',
+            'heure_debut'            => 'required',
+            'heure_fin'              => 'required',
+            'duree_session'          => 'required|integer|min:1',
             'nb_creneau_par_session' => 'required|integer|min:1',
+            'voitures'               => 'required|array|min:1',
+            'instructeurs'           => 'required|array|min:1',
+        ], [
+            'voitures.required'     => 'Sélectionnez au moins une voiture.',
+            'voitures.min'          => 'Sélectionnez au moins une voiture.',
+            'instructeurs.required' => 'Sélectionnez au moins un instructeur.',
+            'instructeurs.min'      => 'Sélectionnez au moins un instructeur.',
         ]);
 
         $planning = new Planning();
@@ -103,6 +110,63 @@ class PlanningController extends Controller
             ->get();
 
         return view('planning.edit', compact('planning', 'commandes'));
+    }
+
+    public function editInfo($id)
+    {
+        $planning = Planning::with(['circuit', 'evenement', 'voitures', 'instructeurs'])->findOrFail(Crypt::decrypt($id));
+
+        $evenements = Evenement::where('archive', false)
+            ->orderBy('date_debut', 'asc')
+            ->get();
+        $circuits  = Circuit::orderBy('nom')->get();
+        $voitures  = Voiture::where('archive', false)->orderBy('nom')->get();
+        $users     = User::where('archive', false)->with('contact.individu')->orderBy('email')->get();
+
+        return view('planning.edit-info', compact('planning', 'evenements', 'circuits', 'voitures', 'users'));
+    }
+
+    public function updatePlanning(Request $request, $id)
+    {
+        $planning = Planning::findOrFail(Crypt::decrypt($id));
+
+        $request->validate([
+            'nom'                    => 'required|string|max:255',
+            'date'                   => 'required|date',
+            'heure_debut'            => 'required',
+            'heure_fin'              => 'required',
+            'duree_session'          => 'required|integer|min:1',
+            'nb_creneau_par_session' => 'required|integer|min:1',
+            'voitures'               => 'required|array|min:1',
+            'instructeurs'           => 'required|array|min:1',
+        ], [
+            'voitures.required'     => 'Sélectionnez au moins une voiture.',
+            'voitures.min'          => 'Sélectionnez au moins une voiture.',
+            'instructeurs.required' => 'Sélectionnez au moins un instructeur.',
+            'instructeurs.min'      => 'Sélectionnez au moins un instructeur.',
+        ]);
+
+        $planning->nom                     = $request->nom;
+        $planning->evenement_id            = $request->evenement_id ?: null;
+        $planning->circuit_id              = $request->circuit_id ?: null;
+        $planning->date                    = $request->date;
+        $planning->heure_debut             = $request->heure_debut;
+        $planning->heure_fin               = $request->heure_fin;
+        $planning->duree_session           = $request->duree_session;
+        $planning->nb_creneau_par_session  = $request->nb_creneau_par_session;
+        $planning->nb_tour_max_par_session = $request->nb_tour_max_par_session;
+        $planning->a_pause                 = $request->has('a_pause');
+        $planning->heure_debut_pause       = $request->heure_debut_pause ?: null;
+        $planning->heure_fin_pause         = $request->heure_fin_pause ?: null;
+        $planning->statut                  = $request->statut ?? 'brouillon';
+        $planning->notes                   = $request->notes;
+        $planning->save();
+
+        $planning->voitures()->sync($request->voitures ?? []);
+        $planning->instructeurs()->sync($request->instructeurs ?? []);
+
+        return redirect()->route('planning.edit', Crypt::encrypt($planning->id))
+            ->with('ok', 'Planning modifié avec succès.');
     }
 
     public function archiverPlanning($id)

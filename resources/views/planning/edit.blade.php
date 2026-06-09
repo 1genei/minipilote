@@ -228,24 +228,29 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body py-2">
-                    <div class="d-flex gap-4 flex-wrap align-items-center">
-                        @if($planning->heure_debut && $planning->heure_fin)
-                            <span><i class="mdi mdi-clock-outline me-1"></i>{{ $planning->heure_debut }} – {{ $planning->heure_fin }}</span>
-                        @endif
-                        @if($planning->duree_session)
-                            <span><i class="mdi mdi-timer-outline me-1"></i>Créneau : {{ $planning->duree_session }} min</span>
-                        @endif
-                        @if($planning->nb_creneau_par_session)
-                            <span><i class="mdi mdi-format-list-numbered me-1"></i>{{ $planning->nb_creneau_par_session }} créneaux/session</span>
-                        @endif
-                        @if($planning->a_pause && $planning->heure_debut_pause && $planning->heure_fin_pause)
-                            <span class="badge bg-warning text-dark"><i class="mdi mdi-coffee me-1"></i>Pause {{ $planning->heure_debut_pause }} – {{ $planning->heure_fin_pause }}</span>
-                        @endif
-                        @if($planning->statut)
-                            <span class="badge bg-info">{{ ucfirst($planning->statut) }}</span>
-                        @endif
-                        <a href="{{ route('planning.index') }}" class="btn btn-sm btn-secondary ms-auto">
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{{ route('planning.index') }}" class="btn btn-sm btn-secondary">
                             <i class="mdi mdi-arrow-left me-1"></i> Retour
+                        </a>
+                        <div class="d-flex gap-4 flex-wrap align-items-center flex-grow-1 ms-2">
+                            @if($planning->heure_debut && $planning->heure_fin)
+                                <span><i class="mdi mdi-clock-outline me-1"></i>{{ $planning->heure_debut }} – {{ $planning->heure_fin }}</span>
+                            @endif
+                            @if($planning->duree_session)
+                                <span><i class="mdi mdi-timer-outline me-1"></i>Créneau : {{ $planning->duree_session }} min</span>
+                            @endif
+                            @if($planning->nb_creneau_par_session)
+                                <span><i class="mdi mdi-format-list-numbered me-1"></i>{{ $planning->nb_creneau_par_session }} créneaux/session</span>
+                            @endif
+                            @if($planning->a_pause && $planning->heure_debut_pause && $planning->heure_fin_pause)
+                                <span class="badge bg-warning text-dark"><i class="mdi mdi-coffee me-1"></i>Pause {{ $planning->heure_debut_pause }} – {{ $planning->heure_fin_pause }}</span>
+                            @endif
+                            @if($planning->statut)
+                                <span class="badge bg-info">{{ ucfirst($planning->statut) }}</span>
+                            @endif
+                        </div>
+                        <a href="{{ route('planning.editInfo', Crypt::encrypt($planning->id)) }}" class="btn btn-sm btn-primary">
+                            <i class="mdi mdi-pencil me-1"></i> Modifier
                         </a>
                     </div>
                 </div>

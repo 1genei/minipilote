@@ -145,6 +145,8 @@ Route::controller(PlanningController::class)->group(function () {
     Route::post('/planning', 'storePlanning')->name('planning.store')->middleware(['auth']);
     Route::get('/planning/events', 'getEvents')->name('planning.events')->middleware(['auth']);
     Route::get('/planning/{id}/edit', 'edit')->name('planning.edit')->middleware(['auth']);
+    Route::get('/planning/{id}/edit-info', 'editInfo')->name('planning.editInfo')->middleware(['auth']);
+    Route::put('/planning/{id}/update-info', 'updatePlanning')->name('planning.updatePlanning')->middleware(['auth']);
     Route::get('/planning/{id}/archiver', 'archiverPlanning')->name('planning.archiver')->middleware(['auth']);
     Route::delete('/planning/{id}', 'destroy')->name('planning.destroy')->middleware(['auth']);
 
