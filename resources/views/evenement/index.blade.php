@@ -46,8 +46,20 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header bg-light">
-                        <h4 class="header-title">Liste des évènements</h4>
-              
+                        <ul class="nav nav-tabs card-header-tabs" id="onglets-evenements" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="tab-en-cours" type="button" role="tab"
+                                    onclick="changerOngletEvenement('en_cours', this)">
+                                    <i class="mdi mdi-calendar-clock me-1"></i> En cours / à venir
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tab-passes" type="button" role="tab"
+                                    onclick="changerOngletEvenement('passes', this)">
+                                    <i class="mdi mdi-calendar-check me-1"></i> Passés
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                     <div class="card-body">
                         @if (session('ok'))
@@ -79,6 +91,14 @@
     <script src="{{ asset('assets/js/sweetalert2.all.js') }}"></script>
 
     <script>
+        function changerOngletEvenement(onglet, el) {
+            document.querySelectorAll('#onglets-evenements .nav-link').forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            el.classList.add('active');
+            Livewire.emit('filtrerOnglet', onglet);
+        }
+
         // Archiver
         $(function() {
             $.ajaxSetup({

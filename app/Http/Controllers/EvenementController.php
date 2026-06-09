@@ -24,12 +24,11 @@ class EvenementController extends Controller
     }
     
     /*
-    * Archive des évènements
+    * Archives des évènements
     */
-    public function archive()
+    public function archives()
     {
-        $evenements = Evenement::where('archive', 1)->get();
-        return view('evenement.archive', compact('evenements'));
+        return view('evenement.archives');
     }
     
     /*
@@ -120,6 +119,28 @@ class EvenementController extends Controller
         }
     }
     
+    /*
+    * Archiver un évènement
+    */
+    public function archive($evenement_id)
+    {
+        $evenement = Evenement::findOrFail(Crypt::decrypt($evenement_id));
+        $evenement->archive = true;
+        $evenement->save();
+        return response()->json(['success' => true]);
+    }
+
+    /*
+    * Désarchiver un évènement
+    */
+    public function unarchive($evenement_id)
+    {
+        $evenement = Evenement::findOrFail(Crypt::decrypt($evenement_id));
+        $evenement->archive = false;
+        $evenement->save();
+        return response()->json(['success' => true]);
+    }
+
     /*
     * Mettre à jour un evenement
     */
