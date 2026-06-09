@@ -6,6 +6,7 @@ use App\Models\Commande;
 use App\Models\Circuit;
 use App\Models\Evenement;
 use App\Models\Planning;
+use App\Models\PlanningCreneau;
 use App\Models\User;
 use App\Models\Voiture;
 use Illuminate\Http\Request;
@@ -109,7 +110,38 @@ class PlanningController extends Controller
             ->orderBy('date_realisation_prevue', 'asc')
             ->get();
 
-        return view('planning.edit', compact('planning', 'commandes'));
+        // Creneaux indexés par "voiture_id.heure" pour accès rapide en vue
+        $creneaux = PlanningCreneau::where('planning_id', $planning->id)
+            ->get()
+            ->keyBy(fn($c) => $c->voiture_id . '.' . $c->heure);
+
+        return view('planning.edit', compact('planning', 'commandes', 'creneaux'));
+    }
+
+    public function sauvegarderCreneau(Request $request, $id)
+    {
+        $planningId = Crypt::decrypt($id);
+
+        $request->validate([
+            'voiture_id'   => 'required|integer',
+            'heure'        => 'required|string|max:5',
+            'nb_pilotage'  => 'nullable|integer|min:0',
+            'nb_bp'        => 'nullable|integer|min:0',
+        ]);
+
+        PlanningCreneau::updateOrCreate(
+            [
+                'planning_id' => $planningId,
+                'voiture_id'  => $request->voiture_id,
+                'heure'       => $request->heure,
+            ],
+            [
+                'nb_pilotage' => $request->nb_pilotage,
+                'nb_bp'       => $request->nb_bp,
+            ]
+        );
+
+        return response()->json(['ok' => true]);
     }
 
     public function editInfo($id)

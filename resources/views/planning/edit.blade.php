@@ -172,6 +172,33 @@
     .prestation-cell.droppable.drag-over {
         background: #e3f2fd;
     }
+    .col-tours {
+        width: 62px;
+        min-width: 62px;
+        text-align: center;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+    .tours-cell {
+        width: 62px;
+        min-width: 62px;
+        text-align: center;
+        padding: 2px;
+    }
+    .input-tours {
+        width: 54px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 13px;
+        padding: 2px 4px;
+        background: #fff;
+    }
+    .input-tours:focus {
+        outline: none;
+        border-color: #727cf5;
+        background: #f0f0ff;
+    }
     .produit-item[draggable="true"] {
         cursor: grab;
         background: #fff;
@@ -313,7 +340,7 @@
             $heureFin   = $planning->heure_fin   ? (int) explode(':', $planning->heure_fin)[0]   : 12;
             $duree      = $planning->duree_session ?? 20;
 
-            $creneaux = [];
+            $slots = [];
             for ($hour = $heureDebut; $hour <= $heureFin; $hour++) {
                 $minute = 0;
                 while ($minute < 60) {
@@ -325,7 +352,7 @@
                         && $slotTime < $planning->heure_fin_pause;
 
                     if (!$isPause) {
-                        $creneaux[] = ['hour' => $hour, 'minute' => sprintf('%02d', $minute)];
+                        $slots[] = ['hour' => $hour, 'minute' => sprintf('%02d', $minute)];
                     }
                     $minute += $duree;
                 }
@@ -344,34 +371,60 @@
                         <th rowspan="2" class="minute-col" style="vertical-align:middle;">Minute</th>
                         @if($voitures->count())
                             @foreach($voitures as $voiture)
-                                <th colspan="2" class="car-col">{{ $voiture->nom }}</th>
+                                <th colspan="4" class="car-col">{{ $voiture->nom }}</th>
                             @endforeach
                         @else
-                            <th colspan="2" class="car-col text-muted">Aucune voiture</th>
+                            <th colspan="4" class="car-col text-muted">Aucune voiture</th>
                         @endif
                     </tr>
                     <tr>
                         @foreach($voitures as $voiture)
                             <th style="width:120px">Instructeur</th>
                             <th>Prestation</th>
+                            <th class="col-tours" title="Tours pilotage">Pilotage</th>
+                            <th class="col-tours" title="Tours baptême">BP</th>
                         @endforeach
                     </tr>
                 </thead>
                 <tbody>
                     @php $prevHour = null; @endphp
-                    @foreach($creneaux as $i => $creneau)
+                    @foreach($slots as $i => $creneau)
                         <tr>
                             @if($creneau['hour'] !== $prevHour)
                                 @php
-                                    $count = collect($creneaux)->where('hour', $creneau['hour'])->count();
+                                    $count = collect($slots)->where('hour', $creneau['hour'])->count();
                                     $prevHour = $creneau['hour'];
                                 @endphp
                                 <td rowspan="{{ $count }}" class="hour-col" style="vertical-align:middle;font-weight:bold;font-size:16px;">{{ $creneau['hour'] }}h</td>
                             @endif
                             <td class="minute-col">{{ $creneau['minute'] }}</td>
                             @foreach($voitures as $voiture)
+                                @php
+                                    $heure = sprintf('%02d:%s', $creneau['hour'], $creneau['minute']);
+                                    $key   = $voiture->id . '.' . $heure;
+                                    $nbPilotage = $creneaux[$key]->nb_pilotage ?? '';
+                                    $nbBp       = $creneaux[$key]->nb_bp ?? '';
+                                @endphp
                                 <td class="instructeur-cell" data-voiture="{{ $voiture->id }}" data-hour="{{ $creneau['hour'] }}" data-minute="{{ $creneau['minute'] }}"></td>
                                 <td class="prestation-cell droppable" data-voiture="{{ $voiture->id }}" data-hour="{{ $creneau['hour'] }}" data-minute="{{ $creneau['minute'] }}"></td>
+                                <td class="tours-cell">
+                                    <input type="number" class="input-tours input-pilotage"
+                                        min="0" max="99"
+                                        data-voiture="{{ $voiture->id }}"
+                                        data-heure="{{ $heure }}"
+                                        data-champ="nb_pilotage"
+                                        value="{{ $nbPilotage }}"
+                                        placeholder="—">
+                                </td>
+                                <td class="tours-cell">
+                                    <input type="number" class="input-tours input-bp"
+                                        min="0" max="99"
+                                        data-voiture="{{ $voiture->id }}"
+                                        data-heure="{{ $heure }}"
+                                        data-champ="nb_bp"
+                                        value="{{ $nbBp }}"
+                                        placeholder="—">
+                                </td>
                             @endforeach
                         </tr>
                     @endforeach
@@ -385,6 +438,9 @@
 @section('script')
 <script src="{{ asset('assets/js/planning.js') }}"></script>
 <script>
+const urlSauvegarderCreneau = "{{ route('planning.sauvegarderCreneau', Crypt::encrypt($planning->id)) }}";
+const csrfToken = "{{ csrf_token() }}";
+
 let dragged = null;
 
 document.querySelectorAll('.produit-item[draggable="true"]').forEach(item => {
@@ -416,6 +472,39 @@ document.querySelectorAll('.prestation-cell.droppable').forEach(cell => {
             clone.setAttribute('draggable', 'false');
             this.appendChild(clone);
         }
+    });
+});
+
+// Sauvegarde AJAX des colonnes Pilotage et BP au blur
+document.querySelectorAll('.input-tours').forEach(function(input) {
+    input.addEventListener('change', function() {
+        const voitureId = this.dataset.voiture;
+        const heure     = this.dataset.heure;
+        const champ     = this.dataset.champ;
+        const valeur    = this.value === '' ? null : parseInt(this.value, 10);
+
+        const row = this.closest('tr');
+        const autreChamp = champ === 'nb_pilotage' ? 'nb_bp' : 'nb_pilotage';
+        const autreInput = row.querySelector(`.input-tours[data-voiture="${voitureId}"][data-heure="${heure}"][data-champ="${autreChamp}"]`);
+        const autreValeur = autreInput && autreInput.value !== '' ? parseInt(autreInput.value, 10) : null;
+
+        const body = {
+            voiture_id: voitureId,
+            heure:      heure,
+        };
+        body[champ] = valeur;
+        body[autreChamp] = autreValeur;
+
+        fetch(urlSauvegarderCreneau, {
+            method:  'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            body: JSON.stringify(body),
+        }).then(function(r) {
+            if (!r.ok) console.error('Erreur sauvegarde créneau');
+        });
     });
 });
 </script>
