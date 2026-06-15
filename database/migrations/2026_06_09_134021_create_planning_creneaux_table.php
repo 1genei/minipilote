@@ -24,9 +24,9 @@ return new class extends Migration
             $table->boolean('decharge')->default(false);
             $table->timestamps();
 
-            $table->foreign('planning_id')->references('id')->on('plannings')->nullOnDelete();
-            $table->foreign('voiture_id')->references('id')->on('voitures')->nullOnDelete();
-            $table->foreign('instructeur_id')->references('id')->on('contacts')->nullOnDelete();
+            // $table->foreign('planning_id')->references('id')->on('plannings')->nullOnDelete();
+            // $table->foreign('voiture_id')->references('id')->on('voitures')->nullOnDelete();
+            // $table->foreign('instructeur_id')->references('id')->on('contacts')->nullOnDelete();
 
             $table->unique(['planning_id', 'voiture_id', 'heure']);
         });
