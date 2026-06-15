@@ -140,7 +140,7 @@
 
                                        
                                     </div>
-                                    <div class="row mb-3"> 
+                                    <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label">Numéro de commande provenance</label>
                                             <input type="text" class="form-control" name="numero_commande_provenance">
@@ -148,6 +148,20 @@
                                         <div class="col-md-6">
                                             <label class="form-label">Date de commande provenance</label>
                                             <input type="date" class="form-control" name="date_commande_provenance">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" name="description" rows="2" placeholder="Description de la commande...">{{ old('description') }}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Préférence roulage</label>
+                                            <textarea class="form-control" name="preference_roulage" rows="2" placeholder="Préférences ou consignes de roulage...">{{ old('preference_roulage') }}</textarea>
                                         </div>
                                     </div>
 
@@ -493,7 +507,12 @@
                     
                     if(nom_produit != "" && nom_produit !== undefined) {
                         y++;
-                        
+
+                        var clientData = $('#client_prospect_id').select2('data');
+                        var clientBadge = (clientData && clientData.length && clientData[0].id)
+                            ? `<span class="badge bg-secondary ms-1 default-client-badge">${clientData[0].text}</span>`
+                            : '';
+
                         var fieldHTML = `
                             <div class="row gy-2 gx-2 align-items-center field${y}"> 
                                 <div class="col-4">
@@ -531,7 +550,7 @@
                                     <input class="form-control reduction actualiser" type="number" step="0.01" min="0" id="reduction${y}" name="reduction${y}" readonly >
                                 </div>
                                 <div class="col-2">
-                                    <label for="beneficiaire${y}">Bénéficiaire : </label>
+                                    <label for="beneficiaire${y}">Bénéficiaire : ${clientBadge}</label>
                                     <select class="form-control select2" id="beneficiaire${y}" name="beneficiaire${y}">
                                         <option value="">Sélectionnez un bénéficiaire</option>
                                     </select>
@@ -547,7 +566,14 @@
                         
                         // Initialiser select2 sur le nouveau champ bénéficiaire
                         initContactsSelect2('#beneficiaire' + y);
-                        
+
+                        // Masquer le badge client quand un bénéficiaire est choisi, réafficher si effacé
+                        $(`#beneficiaire${y}`).on('select2:select', function() {
+                            $(this).closest('.row').find('.default-client-badge').hide();
+                        }).on('select2:clear', function() {
+                            $(this).closest('.row').find('.default-client-badge').show();
+                        });
+
                         // Initialiser select2 sur le nouveau champ produit
                         $(`#produit${y}`).select2({
                             placeholder: "Sélectionnez un produit",

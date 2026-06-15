@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('facture_id')->nullable();
             $table->string('numero_commande');
             $table->string('nom_commande')->nullable();
+            $table->text('description')->nullable();
+            $table->text('preference_roulage')->nullable();
             $table->date('date_commande')->nullable();
             $table->integer('duree_validite')->nullable();
             $table->date('date_realisation_prevue')->nullable();
@@ -41,6 +43,8 @@ return new class extends Migration
             $table->string('origine_commande')->nullable();
             $table->string('numero_origine')->nullable();
             $table->date('date_origine_commande')->nullable();
+            $table->boolean('realisee')->default(false);
+            $table->text('commentaire_planning')->nullable();
             $table->boolean('archive')->default(false);
             $table->timestamps();
         });

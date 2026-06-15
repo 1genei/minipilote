@@ -26,6 +26,13 @@
     @yield('css')
 
     @livewireStyles
+
+    <style>
+        .page-title-box                   { padding: 2px 0 !important; }
+        .page-title-box .page-title       { line-height: 28px !important; font-size: 13px !important; margin: 4px 0 !important; }
+        .page-title-box .page-title-right { margin-top: 0 !important; }
+        .page-title-box .breadcrumb       { padding-top: 0 !important; margin-bottom: 0 !important; }
+    </style>
 </head>
 
 <body class="loading" data-layout-color="light" data-layout="detached" data-rightbar-onstart="true">

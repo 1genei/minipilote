@@ -38,7 +38,8 @@ final class IndexTable extends PowerGridComponent
     {
         return PowerGrid::columns()
             ->addColumn('nom', function (Planning $model) {
-                return '<span class="fw-semibold">' . e($model->nom ?? '-') . '</span>';
+                $url = route('planning.edit', Crypt::encrypt($model->id));
+                return '<a href="' . $url . '" class="fw-semibold text-decoration-none">' . e($model->nom ?? '-') . '</a>';
             })
             ->addColumn('date', function (Planning $model) {
                 return $model->date

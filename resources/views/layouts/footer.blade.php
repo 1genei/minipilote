@@ -1,3 +1,9 @@
+<style>
+    .footer {
+    padding: 0px 24px 20px;
+}
+</style>
+
 <!-- Footer Start -->
 <footer class="footer">
     <div class="container-fluid">

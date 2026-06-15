@@ -53,7 +53,7 @@ class Evenement extends Model
     * Retourne le montant des depenses de l'evenement
     */
     public function montantDepenses(){
-        return $this->depenses()->sum('montant');
+        return $this->depenses()->sum('montant_ttc');
     }
 
     /*

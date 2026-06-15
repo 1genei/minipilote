@@ -50,7 +50,9 @@ window.mpNav = function(activeId) {
         flyTimer: null,
 
         init() {
-            if (activeId) this.openSec[activeId] = true;
+            // Pré-initialiser toutes les clés pour qu'Alpine les tracke dès le départ
+            this.openSec = { utilisateurs: false, contacts: false, catalogue: false, affaires: false };
+            if (activeId && this.openSec.hasOwnProperty(activeId)) this.openSec[activeId] = true;
             this._applyWidth();
         },
         _applyWidth() {
@@ -66,7 +68,8 @@ window.mpNav = function(activeId) {
         toggleSec(id) {
             if (!this.expanded) return;
             var wasOpen = !!this.openSec[id];
-            this.openSec = {};
+            // Muter l'objet existant (ne jamais le remplacer — Alpine perd le tracking)
+            Object.keys(this.openSec).forEach(function(k) { this.openSec[k] = false; }, this);
             if (!wasOpen) this.openSec[id] = true;
         },
         hover(event, id) {
@@ -83,6 +86,12 @@ window.mpNav = function(activeId) {
         },
         cancelLeave() {
             clearTimeout(this.flyTimer);
+        },
+        railEnter() {
+            if (this.expanded) return;
+            clearTimeout(this.flyTimer);
+            var self = this;
+            self.flyTimer = setTimeout(function() { self.flyItem = null; }, 80);
         },
     };
 };
@@ -233,6 +242,7 @@ body[data-layout=detached] .leftside-menu,
 
 /* ===== FLYOUT ===== */
 .mp-flyout {
+    display: none; /* Alpine override via inline :style */
     position: fixed; left: var(--mp-rail-w); z-index: 9999;
     min-width: 200px;
     background: #fff; border: 1px solid var(--ink-100); border-radius: 12px;
@@ -269,6 +279,13 @@ body { font-size: 12px !important; }
 .btn { font-size: 12px; }
 .dropdown-menu { font-size: 12px; }
 .page-title-box .page-title { font-size: 12px; }
+
+@media (min-width: 992px) {
+  body[data-layout=detached] .container-fluid, body[data-layout=detached] .container-sm, body[data-layout=detached] .container-md, body[data-layout=detached] .container-lg, body[data-layout=detached] .container-xl, body[data-layout=detached] .container-xxl {
+    max-width: 100%;
+  }
+}
+
 </style>
 
 <div class="leftside-menu mp-sidebar"
@@ -290,7 +307,7 @@ body { font-size: 12px !important; }
     </div>
 
     {{-- SCROLL --}}
-    <div class="mp-rail-scroll">
+    <div class="mp-rail-scroll" @mouseenter="railEnter()">
 
         @can('permission', 'afficher-dashboard')
         <a href="{{ route('welcome') }}"
@@ -502,7 +519,7 @@ body { font-size: 12px !important; }
                     <path d="M12 3.4v2.3M12 18.3v2.3M5.4 5.4l1.7 1.7M16.9 16.9l1.7 1.7M3.4 12h2.3M18.3 12h2.3M5.4 18.6l1.7-1.7M16.9 7.1l1.7-1.7"/>
                 </svg>
             </span>
-            <span class="mp-item-label">Paramètres</span>
+            <span class="mp-item-label">Configurations</span>
         </a>
         @endcan
 
@@ -511,8 +528,8 @@ body { font-size: 12px !important; }
     {{-- FLYOUTS (position:fixed, rail mode seulement) --}}
 
     @can('permission', 'afficher-utilisateur')
-    <div class="mp-flyout" x-show="flyItem === 'utilisateurs'" x-cloak
-         :style="`top:${flyTop}px`"
+    <div class="mp-flyout"
+         :style="flyItem === 'utilisateurs' && !expanded ? `display:block;top:${flyTop}px` : 'display:none'"
          @mouseenter="cancelLeave()" @mouseleave="leave()">
         <div class="mp-flyout-title">Utilisateurs</div>
         <ul class="mp-flyout-list">
@@ -527,8 +544,8 @@ body { font-size: 12px !important; }
     @endcan
 
     @can('permission', 'afficher-contact')
-    <div class="mp-flyout" x-show="flyItem === 'contacts'" x-cloak
-         :style="`top:${flyTop}px`"
+    <div class="mp-flyout"
+         :style="flyItem === 'contacts' && !expanded ? `display:block;top:${flyTop}px` : 'display:none'"
          @mouseenter="cancelLeave()" @mouseleave="leave()">
         <div class="mp-flyout-title">Contacts</div>
         <ul class="mp-flyout-list">
@@ -552,8 +569,8 @@ body { font-size: 12px !important; }
     @endcan
 
     @can('permission', 'afficher-produit')
-    <div class="mp-flyout" x-show="flyItem === 'catalogue'" x-cloak
-         :style="`top:${flyTop}px`"
+    <div class="mp-flyout"
+         :style="flyItem === 'catalogue' && !expanded ? `display:block;top:${flyTop}px` : 'display:none'"
          @mouseenter="cancelLeave()" @mouseleave="leave()">
         <div class="mp-flyout-title">Catalogue</div>
         <ul class="mp-flyout-list">
@@ -566,8 +583,8 @@ body { font-size: 12px !important; }
     @endcan
 
     @can('permission', 'afficher-affaire')
-    <div class="mp-flyout" x-show="flyItem === 'affaires'" x-cloak
-         :style="`top:${flyTop}px`"
+    <div class="mp-flyout"
+         :style="flyItem === 'affaires' && !expanded ? `display:block;top:${flyTop}px` : 'display:none'"
          @mouseenter="cancelLeave()" @mouseleave="leave()">
         <div class="mp-flyout-title">Affaires</div>
         <ul class="mp-flyout-list">

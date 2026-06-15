@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('heure', 5); // format HH:MM
             $table->unsignedSmallInteger('nb_pilotage')->nullable();
             $table->unsignedSmallInteger('nb_bp')->nullable();
+            $table->boolean('cam')->default(false);
+            $table->boolean('permis')->default(false);
+            $table->boolean('decharge')->default(false);
+
             $table->timestamps();
 
             $table->foreign('planning_id')->references('id')->on('plannings')->cascadeOnDelete();

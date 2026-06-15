@@ -148,6 +148,10 @@ Route::controller(PlanningController::class)->group(function () {
     Route::get('/planning/{id}/edit-info', 'editInfo')->name('planning.editInfo')->middleware(['auth']);
     Route::put('/planning/{id}/update-info', 'updatePlanning')->name('planning.updatePlanning')->middleware(['auth']);
     Route::post('/planning/{id}/creneau', 'sauvegarderCreneau')->name('planning.sauvegarderCreneau')->middleware(['auth']);
+    Route::post('/planning/{id}/placement', 'sauvegarderPlacement')->name('planning.sauvegarderPlacement')->middleware(['auth']);
+    Route::delete('/planning/placement/{id}', 'supprimerPlacement')->name('planning.supprimerPlacement')->middleware(['auth']);
+    Route::get('/planning/{id}/export-pdf', 'exportPdf')->name('planning.exportPdf')->middleware(['auth']);
+    Route::get('/planning/{id}/export-xls', 'exportXls')->name('planning.exportXls')->middleware(['auth']);
     Route::get('/planning/{id}/archiver', 'archiverPlanning')->name('planning.archiver')->middleware(['auth']);
     Route::delete('/planning/{id}', 'destroy')->name('planning.destroy')->middleware(['auth']);
 
@@ -377,8 +381,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{commande}/edit', [CommandeController::class, 'edit'])->name('commande.edit');
         Route::post('/{commande}/update', [CommandeController::class, 'update'])->name('commande.update');
         Route::post('/{commande}/archiver', [CommandeController::class, 'archiver'])->name('commande.archiver');
-        Route::post('/{commande}/desarchiver', [CommandeController::class, 'desarchiver'])->name('commande.desarchiver');       
+        Route::post('/{commande}/desarchiver', [CommandeController::class, 'desarchiver'])->name('commande.desarchiver');
         Route::post('/{commande}/envoyer-mail', [CommandeController::class, 'envoyer_mail'])->name('commande.envoyer_mail');
+        Route::post('/{commande}/realisee', [CommandeController::class, 'toggleRealisee'])->name('commande.toggleRealisee');
+        Route::post('/{commande}/commentaire-planning', [CommandeController::class, 'sauvegarderCommentairePlanning'])->name('commande.sauvegarderCommentairePlanning');
     });
 });
 Route::get('/commandes/telecharger/{commandeId}', [CommandeController::class, 'telecharger'])->name('commande.telecharger');

@@ -8,6 +8,7 @@ class PlanningCreneau extends Model
 {
     protected $guarded = [];
     protected $table   = 'planning_creneaux';
+    protected $casts   = ['cam' => 'boolean', 'permis' => 'boolean', 'decharge' => 'boolean'];
 
     public function planning()
     {

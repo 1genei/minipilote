@@ -140,6 +140,8 @@ class CommandeController extends Controller
                 'origine_commande' => $request->provenance,
                 'numero_origine' => $request->numero_commande_provenance,
                 'date_origine_commande' => $request->date_commande_provenance,
+                'description' => $request->description,
+                'preference_roulage' => $request->preference_roulage,
                 'devi_id' => $devi_id
             ]);
            
@@ -311,7 +313,9 @@ class CommandeController extends Controller
                 'statut_paiement' => $request->statut_paiement,
                 'origine_commande' => $request->provenance,
                 'numero_origine' => $request->numero_commande_provenance,
-                'date_origine_commande' => $request->date_commande_provenance
+                'date_origine_commande' => $request->date_commande_provenance,
+                'description' => $request->description,
+                'preference_roulage' => $request->preference_roulage,
             ]);
 
             // Suppression des anciens produits
@@ -651,6 +655,8 @@ class CommandeController extends Controller
                 'origine_commande' => $request->provenance,
                 'numero_origine' => $request->numero_commande_provenance,
                 'date_origine_commande' => $request->date_commande_provenance,
+                'description' => $request->description,
+                'preference_roulage' => $request->preference_roulage,
                 'devis_id' => $devis->id
             ]);
            
@@ -741,5 +747,21 @@ class CommandeController extends Controller
                 ->withInput()
                 ->with('error', 'Erreur lors de la création de la commande : ' . $e->getMessage());
         }
+    }
+
+    public function toggleRealisee($id)
+    {
+        $commande = Commande::findOrFail(Crypt::decrypt($id));
+        $commande->realisee = !$commande->realisee;
+        $commande->save();
+        return response()->json(['ok' => true, 'realisee' => $commande->realisee]);
+    }
+
+    public function sauvegarderCommentairePlanning(Request $request, $id)
+    {
+        $commande = Commande::findOrFail(Crypt::decrypt($id));
+        $commande->commentaire_planning = $request->input('commentaire');
+        $commande->save();
+        return response()->json(['ok' => true]);
     }
 }
