@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commande;
+use App\Models\Contact;
 use App\Models\Societe;
 use App\Models\Circuit;
 use App\Models\Evenement;
@@ -129,7 +130,13 @@ class PlanningController extends Controller
             ->get()
             ->groupBy(fn($p) => $p->voiture_id . '.' . $p->heure);
 
-        return view('planning.edit', compact('planning', 'commandes', 'creneaux', 'placements'));
+        // Contacts de type Interlocuteur — pour sélection instructeur par créneau
+        $instructeurs = Contact::whereHas('typecontacts', fn($q) => $q->where('type', 'Interlocuteur'))
+            ->with(['individu', 'entite'])
+            ->orderBy('id')
+            ->get();
+
+        return view('planning.edit', compact('planning', 'commandes', 'creneaux', 'placements', 'instructeurs'));
     }
 
     public function sauvegarderCreneau(Request $request, $id)
@@ -137,21 +144,23 @@ class PlanningController extends Controller
         $planningId = Crypt::decrypt($id);
 
         $request->validate([
-            'voiture_id'   => 'required|integer',
-            'heure'        => 'required|string|max:5',
-            'nb_pilotage'  => 'nullable|integer|min:0',
-            'nb_bp'        => 'nullable|integer|min:0',
-            'cam'          => 'nullable|boolean',
-            'permis'       => 'nullable|boolean',
-            'decharge'     => 'nullable|boolean',
+            'voiture_id'     => 'required|integer',
+            'heure'          => 'required|string|max:5',
+            'nb_pilotage'    => 'nullable|integer|min:0',
+            'nb_bp'          => 'nullable|integer|min:0',
+            'cam'            => 'nullable|boolean',
+            'permis'         => 'nullable|boolean',
+            'decharge'       => 'nullable|boolean',
+            'instructeur_id' => 'nullable|integer|exists:contacts,id',
         ]);
 
         $values = [];
-        if ($request->has('nb_pilotage')) { $values['nb_pilotage'] = $request->nb_pilotage; }
-        if ($request->has('nb_bp'))       { $values['nb_bp']       = $request->nb_bp; }
-        if ($request->has('cam'))         { $values['cam']         = (bool) $request->cam; }
-        if ($request->has('permis'))      { $values['permis']      = (bool) $request->permis; }
-        if ($request->has('decharge'))    { $values['decharge']    = (bool) $request->decharge; }
+        if ($request->has('nb_pilotage'))    { $values['nb_pilotage']    = $request->nb_pilotage; }
+        if ($request->has('nb_bp'))          { $values['nb_bp']          = $request->nb_bp; }
+        if ($request->has('cam'))            { $values['cam']            = (bool) $request->cam; }
+        if ($request->has('permis'))         { $values['permis']         = (bool) $request->permis; }
+        if ($request->has('decharge'))       { $values['decharge']       = (bool) $request->decharge; }
+        if ($request->has('instructeur_id')) { $values['instructeur_id'] = $request->instructeur_id ?: null; }
 
         PlanningCreneau::updateOrCreate(
             [

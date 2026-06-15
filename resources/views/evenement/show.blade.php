@@ -11,16 +11,7 @@
 
         <!-- start page title -->
         <div class="row">
-            <div class="col-12">
-                <div class="page-title-box">
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Evènement</a></li>
-                        </ol>
-                    </div>
-                    <h4 class="page-title">Evènement - {{ $evenement->nom }}</h4>
-                </div>
-            </div>
+       
             <div class="col-12">
                 <div class="card widget-inline">
                     <div class="card-body p-0">
@@ -29,7 +20,7 @@
                             <div class="col-sm-6">
 
                                 <div class="col-sm-4 ">
-                                    <a href="{{ route('evenement.index') }}" type="button" class="btn btn-outline-primary"><i
+                                    <a href="{{ route('evenement.index') }}" type="button" class="btn btn-primary"><i
                                             class="uil-arrow-left"></i>
                                         Evènement</a>
 

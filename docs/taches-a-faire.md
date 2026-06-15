@@ -6,6 +6,7 @@
 - [ ] Détails événement : onglet "Commandes" — ajouter des commandes non réalisées dont la date prévue est comprise dans la période de l'événement (pour calculer les bénéfices)
 - [x] Détails événement : liste des plannings liés, avec boutons ajouter / modifier / supprimer
 - [x] Détails événement — ajout d'une charge : champs montant HT, TTC, TVA + case à cocher "Soumis à la TVA" (cochée par défaut ; si décochée, masquer/griser le champ TVA)
+- [x] Améliorer la page de détails, ajouter les commandes au lieu des prestations, améliorer la visibilité duplanning
 
 ## Planning — grille
 
@@ -19,6 +20,7 @@
 - [x] Mode plein écran : masquer le menu latéral gauche et afficher uniquement la grille
 - [x] Clic sur une prestation dans la grille → afficher les infos du client et du bénéficiaire
 - [ ] Télecharger leplanning en format A3, verson PDF et XLS
+- [ ] Ajouter instructeur sur le planning. quand on clique dans la case des instructeurs, il faut affichr une boite de dialogue pour sélectionner les instructeurs dans une liste deroulante 
 
 ## Commande
 
@@ -34,5 +36,5 @@
 
 ## Menu
 
-- [ ] Améliorer les couleurs
+- [x] Améliorer les couleurs
 - [ ] Réorganiser le menu

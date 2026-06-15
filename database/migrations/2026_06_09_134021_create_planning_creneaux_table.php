@@ -15,17 +15,19 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('planning_id');
             $table->unsignedBigInteger('voiture_id');
+            $table->unsignedBigInteger('instructeur_id')->nullable();
             $table->string('heure', 5); // format HH:MM
             $table->unsignedSmallInteger('nb_pilotage')->nullable();
             $table->unsignedSmallInteger('nb_bp')->nullable();
             $table->boolean('cam')->default(false);
             $table->boolean('permis')->default(false);
             $table->boolean('decharge')->default(false);
-
             $table->timestamps();
 
-            $table->foreign('planning_id')->references('id')->on('plannings')->cascadeOnDelete();
-            $table->foreign('voiture_id')->references('id')->on('voitures')->cascadeOnDelete();
+            $table->foreign('planning_id')->references('id')->on('plannings')->nullOnDelete();
+            $table->foreign('voiture_id')->references('id')->on('voitures')->nullOnDelete();
+            $table->foreign('instructeur_id')->references('id')->on('contacts')->nullOnDelete();
+
             $table->unique(['planning_id', 'voiture_id', 'heure']);
         });
     }

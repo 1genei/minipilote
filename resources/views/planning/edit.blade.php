@@ -411,6 +411,40 @@
     .modal-prest-empty { font-size: 12px; color: #aaa; font-style: italic; }
     .modal-prest-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #eee; }
 
+    /* Modal instructeur */
+    #modal-instructeur-overlay {
+        display: none;
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+    #modal-instructeur-overlay.open { display: flex; }
+    #modal-instructeur {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        padding: 24px;
+        width: 360px;
+        max-width: 95vw;
+    }
+    #modal-instructeur h6 { margin: 0 0 14px; font-weight: 600; font-size: 15px; }
+    #modal-instructeur select {
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 8px;
+        font-size: 13px;
+    }
+    #modal-instructeur select:focus { outline: none; border-color: #727cf5; }
+    .modal-instructeur-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 14px;
+    }
+
     /* Mode plein écran (F11) */
     body.mp-pleinecran .mp-topbar,
     body.mp-pleinecran .leftside-menu.mp-sidebar,
@@ -666,13 +700,37 @@
                                 @php
                                     $heure = sprintf('%02d:%s', $creneau['hour'], $creneau['minute']);
                                     $key   = $voiture->id . '.' . $heure;
-                                    $nbPilotage = $creneaux[$key]->nb_pilotage ?? '';
-                                    $nbBp       = $creneaux[$key]->nb_bp ?? '';
-                                    $cam        = $creneaux[$key]->cam ?? false;
-                                    $permis     = $creneaux[$key]->permis ?? false;
-                                    $decharge   = $creneaux[$key]->decharge ?? false;
+                                    $nbPilotage    = $creneaux[$key]->nb_pilotage ?? '';
+                                    $nbBp          = $creneaux[$key]->nb_bp ?? '';
+                                    $cam           = $creneaux[$key]->cam ?? false;
+                                    $permis        = $creneaux[$key]->permis ?? false;
+                                    $decharge      = $creneaux[$key]->decharge ?? false;
+                                    $instructeurId = $creneaux[$key]->instructeur_id ?? null;
+                                    $instructeurNom = '';
+                                    if ($instructeurId) {
+                                        $inst = $instructeurs->firstWhere('id', $instructeurId);
+                                        if ($inst) {
+                                            $infos = $inst->infos();
+                                            $instructeurNom = $infos
+                                                ? ($inst->type === 'individu'
+                                                    ? trim($infos->nom . ' ' . $infos->prenom)
+                                                    : $infos->raison_sociale)
+                                                : '';
+                                        }
+                                    }
                                 @endphp
-                                <td class="instructeur-cell" data-voiture="{{ $voiture->id }}" data-hour="{{ $creneau['hour'] }}" data-minute="{{ $creneau['minute'] }}"></td>
+                                <td class="instructeur-cell"
+                                    data-voiture="{{ $voiture->id }}"
+                                    data-hour="{{ $creneau['hour'] }}"
+                                    data-minute="{{ $creneau['minute'] }}"
+                                    data-instructeur-id="{{ $instructeurId ?? '' }}"
+                                    style="cursor:pointer;min-width:120px;">
+                                    @if($instructeurNom)
+                                        <span class="badge bg-info text-dark" style="font-size:11px;white-space:nowrap;">{{ $instructeurNom }}</span>
+                                    @else
+                                        <span class="text-muted" style="font-size:11px;">—</span>
+                                    @endif
+                                </td>
                                 <td class="prestation-cell droppable" data-voiture="{{ $voiture->id }}" data-hour="{{ $creneau['hour'] }}" data-minute="{{ $creneau['minute'] }}">
                                     @php $keyP = $voiture->id . '.' . $heure; @endphp
                                     @if(isset($placements[$keyP]))
@@ -797,6 +855,31 @@
                 <i class="mdi mdi-open-in-new me-1"></i>Voir la commande
             </a>
             <button class="btn btn-sm btn-secondary" id="btn-mp-fermer">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal sélection instructeur par créneau -->
+<div id="modal-instructeur-overlay">
+    <div id="modal-instructeur">
+        <h6><i class="mdi mdi-account-tie me-1"></i>Instructeur</h6>
+        <select id="modal-instructeur-select">
+            <option value="">— Aucun —</option>
+            @foreach($instructeurs as $inst)
+                @php
+                    $infos = $inst->infos();
+                    $nom = $infos
+                        ? ($inst->type === 'individu'
+                            ? trim($infos->nom . ' ' . $infos->prenom)
+                            : $infos->raison_sociale)
+                        : 'Contact #' . $inst->id;
+                @endphp
+                <option value="{{ $inst->id }}">{{ $nom }}</option>
+            @endforeach
+        </select>
+        <div class="modal-instructeur-actions">
+            <button class="btn btn-sm btn-secondary" id="btn-instructeur-annuler">Annuler</button>
+            <button class="btn btn-sm btn-primary" id="btn-instructeur-valider">Valider</button>
         </div>
     </div>
 </div>
@@ -1123,5 +1206,60 @@ document.querySelectorAll('.input-cam').forEach(function(input) {
         });
     });
 });
+
+// Modal sélection instructeur
+(function () {
+    var overlay  = document.getElementById('modal-instructeur-overlay');
+    var select   = document.getElementById('modal-instructeur-select');
+    var currentCell = null;
+
+    // Ouvrir en cliquant sur une cellule instructeur
+    document.addEventListener('click', function (e) {
+        var cell = e.target.closest('.instructeur-cell');
+        if (!cell) return;
+        currentCell = cell;
+        select.value = cell.dataset.instructeurId || '';
+        overlay.classList.add('open');
+        select.focus();
+    });
+
+    document.getElementById('btn-instructeur-annuler').addEventListener('click', function () {
+        overlay.classList.remove('open');
+    });
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) overlay.classList.remove('open');
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') overlay.classList.remove('open');
+    });
+
+    document.getElementById('btn-instructeur-valider').addEventListener('click', function () {
+        if (!currentCell) return;
+        var voitureId = currentCell.dataset.voiture;
+        var hour      = currentCell.dataset.hour;
+        var minute    = currentCell.dataset.minute;
+        var heure     = hour.padStart(2, '0') + ':' + minute.padStart(2, '0');
+        var instId    = select.value ? parseInt(select.value, 10) : null;
+        var instNom   = instId ? select.options[select.selectedIndex].text : '';
+
+        fetch(urlSauvegarderCreneau, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            body: JSON.stringify({ voiture_id: voitureId, heure: heure, instructeur_id: instId }),
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            if (!data.ok) { console.error('Erreur sauvegarde instructeur'); return; }
+            currentCell.dataset.instructeurId = instId || '';
+            if (instNom) {
+                currentCell.innerHTML = '<span class="badge bg-info text-dark" style="font-size:11px;white-space:nowrap;">' + instNom + '</span>';
+            } else {
+                currentCell.innerHTML = '<span class="text-muted" style="font-size:11px;">—</span>';
+            }
+            overlay.classList.remove('open');
+        })
+        .catch(function () { console.error('Erreur réseau instructeur'); });
+    });
+})();
 </script>
 @endsection

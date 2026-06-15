@@ -102,8 +102,8 @@ window.mpNav = function(activeId) {
 
 /* ===== CSS VARIABLES ===== */
 :root {
-    --mp-accent:      #2d1b5e;
-    --mp-accent-tint: #ece8f6;
+    --mp-accent:      #2563eb;
+    --mp-accent-tint: #eff6ff;
     --mp-on-accent:   #fff;
     --ink-900: #15131c;
     --ink-700: #3a3543;
@@ -201,14 +201,14 @@ body[data-layout=detached] .leftside-menu,
 
 /* ---- Fidèle: active state ---- */
 .mp-item.is-active {
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(21,19,28,.10), 0 0 0 1px rgba(21,19,28,.05);
+    background: var(--mp-accent);
+    box-shadow: 0 2px 8px rgba(37,99,235,.35);
 }
-.mp-item.is-active .mp-item-tile { color: var(--mp-accent); }
-.mp-item.is-active .mp-item-label { color: var(--ink-900); font-weight: 700; }
+.mp-item.is-active .mp-item-tile { color: #fff; }
+.mp-item.is-active .mp-item-label { color: #fff; font-weight: 700; }
 .mp-item.is-active::before {
     content: ""; position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
-    width: 3px; height: 22px; border-radius: 3px; background: var(--mp-accent);
+    width: 3px; height: 22px; border-radius: 3px; background: rgba(255,255,255,.7);
 }
 
 /* ===== EXPANDED MODE (row) ===== */
