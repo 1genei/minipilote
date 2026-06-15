@@ -18,9 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('beneficiaire_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('planning_id')->references('id')->on('plannings')->onDelete('cascade');
-            $table->foreign('commande_id')->references('id')->on('commandes')->onDelete('cascade');
-            $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
+            // $table->foreign('planning_id')->references('id')->on('plannings')->onDelete('cascade');
+            // $table->foreign('commande_id')->references('id')->on('commandes')->onDelete('cascade');
+            // $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
         });
     }
 
