@@ -385,6 +385,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/{commande}/envoyer-mail', [CommandeController::class, 'envoyer_mail'])->name('commande.envoyer_mail');
         Route::post('/{commande}/realisee', [CommandeController::class, 'toggleRealisee'])->name('commande.toggleRealisee');
         Route::post('/{commande}/commentaire-planning', [CommandeController::class, 'sauvegarderCommentairePlanning'])->name('commande.sauvegarderCommentairePlanning');
+        Route::post('/produit/{id}/realisee', [CommandeController::class, 'toggleProduitRealisee'])->name('commande.toggleProduitRealisee');
     });
 });
 Route::get('/commandes/telecharger/{commandeId}', [CommandeController::class, 'telecharger'])->name('commande.telecharger');

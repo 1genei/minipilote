@@ -310,18 +310,15 @@
         padding-top: 8px;
         border-top: 1px solid #e3e3e3;
     }
-    .commande-realisee-label {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 12px;
-        color: #555;
-        cursor: pointer;
-        user-select: none;
-    }
-    .input-realisee { accent-color: #198754; cursor: pointer; }
     .commande-card.realisee-card { opacity: 0.6; }
     .commande-card.realisee-card .commande-numero { text-decoration: line-through; }
+    .commande-progression { margin: 4px 0 6px; }
+    .commande-progression .prog-header { display:flex; justify-content:space-between; font-size:10px; color:#888; margin-bottom:2px; }
+    .commande-progression .prog-track { background:#e9ecef; border-radius:4px; height:5px; }
+    .commande-progression .prog-bar { background:#198754; border-radius:4px; height:5px; transition:width 0.3s; }
+    .produit-item-inner { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+    .input-produit-realisee { width:14px; height:14px; cursor:pointer; accent-color:#198754; flex-shrink:0; }
+    .produit-item.est-realisee { opacity:0.55; text-decoration:line-through; }
     .btn-commentaire {
         position: relative;
         background: none;
@@ -545,7 +542,13 @@
             </div>
 
             @forelse($commandes as $commande)
-                <div class="commande-card">
+                @php
+                    $nbTotal     = $commande->produits->count();
+                    $nbRealisees = $commande->produits->filter(fn($p) => $p->pivot->realisee)->count();
+                    $pct         = $nbTotal > 0 ? round($nbRealisees / $nbTotal * 100) : 0;
+                    $toutesFaites = $nbTotal > 0 && $nbRealisees === $nbTotal;
+                @endphp
+                <div class="commande-card {{ $toutesFaites ? 'realisee-card' : '' }}" data-commande-id="{{ $commande->id }}">
                     <div class="commande-numero">
                         Commande N°{{ $commande->numero_commande }}
                         @if($commande->client)
@@ -556,19 +559,36 @@
                             </small>
                         @endif
                     </div>
+                    <div class="commande-progression">
+                        <div class="prog-header">
+                            <span>Réalisation</span>
+                            <span class="prog-label">{{ $nbRealisees }}/{{ $nbTotal }}</span>
+                        </div>
+                        <div class="prog-track">
+                            <div class="prog-bar" style="width:{{ $pct }}%"></div>
+                        </div>
+                    </div>
                     @php
                         $commandeHasCamera = $commande->produits->contains(
                             fn($p) => str_contains(mb_strtolower($p->nom), 'caméra') || str_contains(mb_strtolower($p->nom), 'camera')
                         );
                     @endphp
                     @foreach($commande->produits as $produit)
-                        <div class="produit-item"
+                        <div class="produit-item {{ $produit->pivot->realisee ? 'est-realisee' : '' }}"
                              draggable="true"
                              data-produit-id="{{ $produit->id }}"
                              data-commande-id="{{ $commande->id }}"
                              data-beneficiaire-id="{{ $produit->pivot->beneficiaire_id ?? '' }}"
                              data-has-camera="{{ $commandeHasCamera ? '1' : '0' }}">
-                            <div>{{ $produit->nom }}</div>
+                            <div class="produit-item-inner">
+                                <span>{{ $produit->nom }}</span>
+                                <input type="checkbox"
+                                    class="input-produit-realisee"
+                                    data-pivot-id="{{ Crypt::encrypt($produit->pivot->id) }}"
+                                    data-commande-card-id="{{ $commande->id }}"
+                                    title="Marquer comme réalisée"
+                                    {{ $produit->pivot->realisee ? 'checked' : '' }}>
+                            </div>
                             @if($produit->pivot->beneficiaire_id)
                                 @php
                                     $beneficiaire = App\Models\Contact::find($produit->pivot->beneficiaire_id);
@@ -584,12 +604,6 @@
                         </div>
                     @endforeach
                     <div class="commande-actions">
-                        <label class="commande-realisee-label">
-                            <input type="checkbox" class="input-realisee"
-                                data-id="{{ Crypt::encrypt($commande->id) }}"
-                                {{ $commande->realisee ? 'checked' : '' }}>
-                            Réalisée
-                        </label>
                         <button class="btn-commentaire"
                             data-id="{{ Crypt::encrypt($commande->id) }}"
                             data-commentaire="{{ e($commande->commentaire_planning ?? '') }}"
@@ -901,9 +915,9 @@
 @section('script')
 <script src="{{ asset('assets/js/planning.js') }}"></script>
 <script>
-const urlSauvegarderCreneau     = "{{ route('planning.sauvegarderCreneau', Crypt::encrypt($planning->id)) }}";
-const urlToggleRealisee         = "{{ route('commande.toggleRealisee', '__ID__') }}";
-const urlSauvegarderCommentaire = "{{ route('commande.sauvegarderCommentairePlanning', '__ID__') }}";
+const urlSauvegarderCreneau       = "{{ route('planning.sauvegarderCreneau', Crypt::encrypt($planning->id)) }}";
+const urlToggleProduitRealisee    = "{{ route('commande.toggleProduitRealisee', '__ID__') }}";
+const urlSauvegarderCommentaire   = "{{ route('commande.sauvegarderCommentairePlanning', '__ID__') }}";
 const urlSauvegarderPlacement = "{{ route('planning.sauvegarderPlacement', Crypt::encrypt($planning->id)) }}";
 const urlSupprimerPlacement   = "{{ route('planning.supprimerPlacement', '__ID__') }}";
 const csrfToken = "{{ csrf_token() }}";
@@ -1080,22 +1094,28 @@ document.querySelectorAll('.input-tours').forEach(function(input) {
     });
 })();
 
-// Checkbox "Réalisée"
-document.querySelectorAll('.input-realisee').forEach(function(cb) {
-    cb.addEventListener('change', function() {
-        var card = this.closest('.commande-card');
-        var url  = urlToggleRealisee.replace('__ID__', this.dataset.id);
-        fetch(url, {
-            method: 'POST',
-            headers: { 'X-CSRF-TOKEN': csrfToken },
-        }).then(r => r.json()).then(data => {
-            if (data.ok) {
-                card.classList.toggle('realisee-card', data.realisee);
-            }
-        });
-    });
-    // état initial
-    if (cb.checked) cb.closest('.commande-card').classList.add('realisee-card');
+// Checkbox réalisée par prestation
+document.addEventListener('change', function(e) {
+    var cb = e.target.closest('.input-produit-realisee');
+    if (!cb) return;
+    e.stopPropagation();
+    var url = urlToggleProduitRealisee.replace('__ID__', cb.dataset.pivotId);
+    var item = cb.closest('.produit-item');
+    fetch(url, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': csrfToken },
+    }).then(function(r) { return r.json(); }).then(function(data) {
+        if (!data.ok) return;
+        if (item) item.classList.toggle('est-realisee', data.realisee);
+        var card = cb.closest('.commande-card');
+        if (!card) return;
+        var progBar   = card.querySelector('.prog-bar');
+        var progLabel = card.querySelector('.prog-label');
+        var pct = data.nb_total > 0 ? Math.round(data.nb_realisees / data.nb_total * 100) : 0;
+        if (progBar)   progBar.style.width = pct + '%';
+        if (progLabel) progLabel.textContent = data.nb_realisees + '/' + data.nb_total;
+        card.classList.toggle('realisee-card', data.nb_realisees === data.nb_total && data.nb_total > 0);
+    }).catch(function() { console.error('Erreur toggle prestation réalisée'); });
 });
 
 // Modal commentaire planning

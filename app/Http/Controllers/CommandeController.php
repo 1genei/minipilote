@@ -757,6 +757,22 @@ class CommandeController extends Controller
         return response()->json(['ok' => true, 'realisee' => $commande->realisee]);
     }
 
+    public function toggleProduitRealisee($id)
+    {
+        $pivotId  = Crypt::decrypt($id);
+        $pivot    = DB::table('commande_produit')->where('id', $pivotId)->first();
+        if (!$pivot) return response()->json(['ok' => false], 404);
+
+        $nouvelle = !$pivot->realisee;
+        DB::table('commande_produit')->where('id', $pivotId)->update(['realisee' => $nouvelle]);
+
+        $commandeId  = $pivot->commande_id;
+        $nbTotal     = DB::table('commande_produit')->where('commande_id', $commandeId)->count();
+        $nbRealisees = DB::table('commande_produit')->where('commande_id', $commandeId)->where('realisee', true)->count();
+
+        return response()->json(['ok' => true, 'realisee' => $nouvelle, 'nb_realisees' => $nbRealisees, 'nb_total' => $nbTotal]);
+    }
+
     public function sauvegarderCommentairePlanning(Request $request, $id)
     {
         $commande = Commande::findOrFail(Crypt::decrypt($id));

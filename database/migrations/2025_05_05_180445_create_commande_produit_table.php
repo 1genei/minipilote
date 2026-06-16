@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('taux_tva')->nullable();
             $table->double('remise')->nullable();
             $table->double('taux_remise')->nullable();
+            $table->boolean('realisee')->default(false);
             $table->timestamps();
         });
     }

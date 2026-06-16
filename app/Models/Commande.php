@@ -44,6 +44,7 @@ class Commande extends Model
     {
         return $this->belongsToMany(Produit::class, 'commande_produit')
             ->withPivot([
+                'id',
                 'quantite',
                 'prix_unitaire',
                 'montant_tva',
@@ -52,7 +53,8 @@ class Commande extends Model
                 'taux_tva',
                 'remise',
                 'taux_remise',
-                'beneficiaire_id'
+                'beneficiaire_id',
+                'realisee',
             ])
             ->withTimestamps();
     }
